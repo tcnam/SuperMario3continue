@@ -1,3 +1,4 @@
+
 #include <iostream>
 #include <fstream>
 #include<stdio.h>
@@ -8,6 +9,7 @@
 #include "Textures.h"
 #include "Sprites.h"
 #include "Portal.h"
+#include "Terrain.h"
 
 using namespace std;
 
@@ -28,11 +30,13 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath):
 #define SCENE_SECTION_ANIMATIONS 4
 #define SCENE_SECTION_ANIMATION_SETS	5
 #define SCENE_SECTION_OBJECTS	6
+#define SCENE_SECTION_TERRAIN	7
 
 #define OBJECT_TYPE_MARIO	0
 #define OBJECT_TYPE_BRICK	1
 #define OBJECT_TYPE_GOOMBA	2
 #define OBJECT_TYPE_KOOPAS	3
+
 
 #define OBJECT_TYPE_PORTAL	50
 
@@ -130,7 +134,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 	//DebugOut(L"--> %s\n",ToWSTR(line).c_str());
 
-	if (tokens.size() < 3) return; // skip invalid lines - an object set must have at least id, x, y
+	if (tokens.size() < 4) return; // skip invalid lines - an object set must have at least id, x, y
 
 	int object_type = atoi(tokens[0].c_str());
 	float x = atof(tokens[1].c_str());
@@ -141,7 +145,6 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	CAnimationSets * animation_sets = CAnimationSets::GetInstance();
 
 	CGameObject *obj = NULL;
-
 	switch (object_type)
 	{
 	case OBJECT_TYPE_MARIO:
@@ -170,14 +173,27 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		DebugOut(L"[ERR] Invalid object type: %d\n", object_type);
 		return;
 	}
-
+	
 	// General object setup
 	obj->SetPosition(x, y);
-
 	LPANIMATION_SET ani_set = animation_sets->Get(ani_set_id);
-
 	obj->SetAnimationSet(ani_set);
 	objects.push_back(obj);
+}
+void CPlayScene::_ParseSection_TERRAIN(string line)
+{
+	vector<string> tokens = split(line);
+
+	if (tokens.size() < 3) return;
+	float x = atof(tokens[0].c_str());
+	float y = atof(tokens[1].c_str());
+	int sprite_id = atoi(tokens[2].c_str());
+	CTerrain* terr = new CTerrain();
+
+	terr->SetPosition(x, y);
+	LPSPRITE sprites = CSprites::GetInstance()->Get(sprite_id);
+	terr->SetSprite(sprites);
+	terrains.push_back(terr);
 }
 
 void CPlayScene::Load()
@@ -206,6 +222,9 @@ void CPlayScene::Load()
 			section = SCENE_SECTION_ANIMATION_SETS; continue; }
 		if (line == "[OBJECTS]") { 
 			section = SCENE_SECTION_OBJECTS; continue; }
+		if (line == "[TERRAINS]"){
+			section = SCENE_SECTION_TERRAIN; continue;
+		}
 		if (line[0] == '[') { section = SCENE_SECTION_UNKNOWN; continue; }	
 
 		//
@@ -217,7 +236,8 @@ void CPlayScene::Load()
 			case SCENE_SECTION_SPRITES: _ParseSection_SPRITES(line); break;
 			case SCENE_SECTION_ANIMATIONS: _ParseSection_ANIMATIONS(line); break;
 			case SCENE_SECTION_ANIMATION_SETS: _ParseSection_ANIMATION_SETS(line); break;
-			case SCENE_SECTION_OBJECTS: _ParseSection_OBJECTS(line); break;
+			case SCENE_SECTION_OBJECTS: _ParseSection_OBJECTS(line);break;
+			case SCENE_SECTION_TERRAIN: _ParseSection_TERRAIN(line); break;
 		}
 	}
 
@@ -231,7 +251,7 @@ void CPlayScene::Load()
 void CPlayScene::Update(DWORD dt)
 {
 	// We know that Mario is the first object in the list hence we won't add him into the colliable object list
-	// TO-DO: This is a "dirty" way, need a more organized way 
+	// TO-DO: This is a "dirty" way, need a moref organized way 
 
 	vector<LPGAMEOBJECT> coObjects;
 	for (size_t i = 1; i < objects.size(); i++)
@@ -255,7 +275,7 @@ void CPlayScene::Update(DWORD dt)
 	CGame *game = CGame::GetInstance();
 	if (cx > game->GetScreenWidth() / 2)
 	{
-		CGame::GetInstance()->SetCamPos(round(cx-game->GetScreenWidth()/2),-game->GetScreenHeight());
+		CGame::GetInstance()->SetCamPos(round(cx-game->GetScreenWidth()/2),round(cy-game->GetScreenHeight()/2));
 	}
 	/*else if (py % game->GetScreenHeight() > game->GetScreenHeight() / 6 * 5)
 	{
@@ -267,8 +287,11 @@ void CPlayScene::Update(DWORD dt)
 
 void CPlayScene::Render()
 {
+	for (int i = 0; i < terrains.size(); i++)
+		terrains[i]->Draw(terrains[i]->GetPositionX(),terrains[i]->GetPositionY(),255);
 	for (int i = 0; i < objects.size(); i++)
 		objects[i]->Render();
+	
 }
 
 /*
