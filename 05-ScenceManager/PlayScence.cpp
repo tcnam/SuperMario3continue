@@ -275,7 +275,7 @@ void CPlayScene::Update(DWORD dt)
 	CGame *game = CGame::GetInstance();
 	if (cx > game->GetScreenWidth() / 2)
 	{
-		CGame::GetInstance()->SetCamPos(round(cx-game->GetScreenWidth()/2),round(cy-game->GetScreenHeight()/2));
+		CGame::GetInstance()->SetCamPos(round(cx-game->GetScreenWidth()/2),-game->GetScreenHeight());
 	}
 	/*else if (py % game->GetScreenHeight() > game->GetScreenHeight() / 6 * 5)
 	{
@@ -317,6 +317,7 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 	{
 	case DIK_SPACE:
 		mario->SetState(MARIO_STATE_JUMP);
+		//mario->SetState(MARIO_STATE_FALL);
 		break;
 	case DIK_A: 
 		mario->Reset();
@@ -324,17 +325,24 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 	}
 }
 
+
 void CPlayScenceKeyHandler::KeyState(BYTE *states)
 {
 	CGame *game = CGame::GetInstance();
 	CMario *mario = ((CPlayScene*)scence)->GetPlayer();
-
+	int currentstate = mario->GetState();
 	// disable control key when Mario die 
-	if (mario->GetState() == MARIO_STATE_DIE) return;
-	if (game->IsKeyDown(DIK_RIGHT))
+	if (currentstate == MARIO_STATE_DIE) return;
+	else if (game->IsKeyDown(DIK_LSHIFT)&& game->IsKeyDown(DIK_LEFT))
+		mario->SetState(MARIO_STATE_RUNNING_LEFT);
+	else if (game->IsKeyDown(DIK_LSHIFT) && game->IsKeyDown(DIK_RIGHT))
+		mario->SetState(MARIO_STATE_RUNNING_RIGHT);
+	else if (game->IsKeyDown(DIK_RIGHT))
 		mario->SetState(MARIO_STATE_WALKING_RIGHT);
 	else if (game->IsKeyDown(DIK_LEFT))
 		mario->SetState(MARIO_STATE_WALKING_LEFT);
+	
 	else
 		mario->SetState(MARIO_STATE_IDLE);
+	
 }

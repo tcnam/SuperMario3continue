@@ -1,7 +1,8 @@
 #pragma once
 #include "GameObject.h"
 
-#define MARIO_WALKING_SPEED		0.15f 
+#define MARIO_WALKING_SPEED		0.1f 
+#define MARIO_RUNNING_SPEED		0.3f
 //0.1f
 #define MARIO_JUMP_SPEED_Y		0.5f
 #define MARIO_JUMP_DEFLECT_SPEED 0.2f
@@ -11,8 +12,12 @@
 #define MARIO_STATE_IDLE			0
 #define MARIO_STATE_WALKING_RIGHT	100
 #define MARIO_STATE_WALKING_LEFT	200
+#define MARIO_STATE_RUNNING_RIGHT	101
+#define MARIO_STATE_RUNNING_LEFT	201
 #define MARIO_STATE_JUMP			300
+#define MARIO_STATE_FALL			301
 #define MARIO_STATE_DIE				400
+
 
 #define MARIO_ANI_BIG_IDLE_RIGHT		0
 #define MARIO_ANI_BIG_IDLE_LEFT			1
@@ -46,7 +51,11 @@ class CMario : public CGameObject
 
 	float start_x;			// initial position of Mario at scene
 	float start_y; 
-public: 
+	
+public:
+	bool isWalking;
+	bool isJumping;
+
 	CMario(float x = 0.0f, float y = 0.0f);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *colliable_objects = NULL);
 	virtual void Render();
