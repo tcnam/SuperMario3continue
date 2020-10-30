@@ -131,26 +131,34 @@ void CMario::Render()
 		ani = MARIO_ANI_DIE;
 	if (level == MARIO_LEVEL_BIG)
 	{
-		if (vx == 0 && vy >= 0)
-		{
-			if (nx > 0)
-				ani = MARIO_ANI_BIG_IDLE_RIGHT;
+			if (state==MARIO_STATE_IDLE)/*(vx == 0 && vy >= 0)*/
+			{
+				if (nx > 0)
+					ani = MARIO_ANI_BIG_IDLE_RIGHT;
+				else
+					ani = MARIO_ANI_BIG_IDLE_LEFT;
+			}
+			else if (state==MARIO_STATE_RUNNING_RIGHT||state==MARIO_STATE_WALKING_RIGHT)
+				ani = MARIO_ANI_BIG_WALKING_RIGHT;
+			else if (state == MARIO_STATE_RUNNING_LEFT || state == MARIO_STATE_WALKING_LEFT)/*(vy >= 0 && nx < 0)*/
+				ani = MARIO_ANI_BIG_WALKING_LEFT;
+			else if (state==MARIO_STATE_JUMP)/*(vy < 0)*/
+			{
+				if (nx > 0)
+					ani = MARIO_ANI_BIG_JUMP_RIGHT;
+				else
+					ani = MARIO_ANI_BIG_JUMP_LEFT;
+			}
+			else if (state == MARIO_STATE_CHANGEDIRECTION)
+			{
+				if (nx > 0)
+					ani = MARIO_ANI_BIG_CHANGE_RIGHT;
+				else
+					ani = MARIO_ANI_BIG_CHANGE_LEFT;
+			}
 			else
-				ani = MARIO_ANI_BIG_IDLE_LEFT;
-		}
-		else if (vx > 0 && vy >= 0 && nx > 0)
-			ani = MARIO_ANI_BIG_WALKING_RIGHT;
-		else if (vx < 0 && vy >= 0 && nx < 0)
-			ani = MARIO_ANI_BIG_WALKING_LEFT;
-		else if (vy < 0)
-		{
-			if (nx > 0)
-				ani = MARIO_ANI_BIG_JUMP_RIGHT;
-			else
-				ani = MARIO_ANI_BIG_JUMP_LEFT;
-		}
-		else
-			ani = MARIO_ANI_SMALL_IDLE_LEFT;
+				ani = MARIO_ANI_SMALL_IDLE_LEFT;
+		
 	}
 	else if (level == MARIO_LEVEL_SMALL)
 	{
@@ -194,10 +202,7 @@ void CMario::SetState(int state)
 		Left();
 		Run();
 		break;	
-	case MARIO_STATE_CHANGE_LEFT:
-		ChangeDirection();
-		break;
-	case MARIO_STATE_CHANGE_RIGHT:
+	case MARIO_STATE_CHANGEDIRECTION:
 		ChangeDirection();
 		break;
 	case MARIO_STATE_JUMP:
@@ -233,14 +238,17 @@ void CMario::Stop()
 {
 	vx = 0;
 	isOnGround = true;
+	//changeDirection = false;
 }
 void CMario::Left()
 {
 	nx = -1;
+	//changeDirection = false;
 }
 void CMario::Right()
 {
 	nx = 1;
+	//changeDirection = false;
 }
 void CMario::Walk()
 {
@@ -252,6 +260,7 @@ void CMario::Run()
 }
 void CMario::ChangeDirection()
 {
+	//changeDirection = true;
 	nx = -nx;
 }
 void CMario::Jump()

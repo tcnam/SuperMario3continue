@@ -332,12 +332,12 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 	// disable control key when Mario die 
 	
 	if (mario->GetState() == MARIO_STATE_DIE) return;
-	else if (game->IsKeyDown(DIK_LSHIFT) && game->IsKeyDown(DIK_LEFT))
+	else if (game->IsKeyDown(DIK_LSHIFT) && game->IsKeyDown(DIK_LEFT) && !game->IsKeyDown(DIK_RIGHT))
 	{
 		if (mario->previousstate == MARIO_STATE_RUNNING_RIGHT || mario->previousstate == MARIO_STATE_WALKING_RIGHT)
 		{
 			mario->changeDirection = true;
-			mario->SetState(MARIO_STATE_CHANGE_LEFT);
+			mario->SetState(MARIO_STATE_CHANGEDIRECTION);
 		}			
 		else
 		{
@@ -345,12 +345,12 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 			mario->SetState(MARIO_STATE_RUNNING_LEFT);
 		}			
 	}		
-	else if (game->IsKeyDown(DIK_LSHIFT) && game->IsKeyDown(DIK_RIGHT))
+	else if (game->IsKeyDown(DIK_LSHIFT) && game->IsKeyDown(DIK_RIGHT)&&!game->IsKeyDown(DIK_LEFT))
 	{
 		if (mario->previousstate == MARIO_STATE_RUNNING_LEFT || mario->previousstate == MARIO_STATE_WALKING_LEFT)
 		{
 			mario->changeDirection = true;
-			mario->SetState(MARIO_STATE_CHANGE_RIGHT);
+			mario->SetState(MARIO_STATE_CHANGEDIRECTION);
 		}			
 		else
 		{
@@ -359,12 +359,12 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 		}			
 	}
 		
-	else if (game->IsKeyDown(DIK_RIGHT))
+	else if (game->IsKeyDown(DIK_RIGHT) && !game->IsKeyDown(DIK_LEFT))
 	{
 		if (mario->previousstate == MARIO_STATE_RUNNING_LEFT || mario->previousstate == MARIO_STATE_WALKING_LEFT)
 		{
 			mario->changeDirection = true;
-			mario->SetState(MARIO_STATE_CHANGE_RIGHT);
+			mario->SetState(MARIO_STATE_CHANGEDIRECTION);
 		}
 		else
 		{
@@ -373,12 +373,12 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 
 		}
 	}
-	else if (game->IsKeyDown(DIK_LEFT))
+	else if (game->IsKeyDown(DIK_LEFT)&& !game->IsKeyDown(DIK_RIGHT))
 	{
 		if (mario->previousstate == MARIO_STATE_RUNNING_RIGHT || mario->previousstate == MARIO_STATE_WALKING_RIGHT)
 		{
 			mario->changeDirection = true;
-			mario->SetState(MARIO_STATE_CHANGE_LEFT);
+			mario->SetState(MARIO_STATE_CHANGEDIRECTION);
 		}			
 		else
 		{

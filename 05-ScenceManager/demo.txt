@@ -198,9 +198,9 @@
 #walk left small
 503	10031	100	10032	100	10033	100
 #change direction right
-504	10004	1000
+504	10004	100	10004	100
 #change direction left
-505	10014	1000
+505	10014	100	10014	100
 #jump right
 506	10005	100
 #jump left 
