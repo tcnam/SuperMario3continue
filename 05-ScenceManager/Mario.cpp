@@ -7,6 +7,7 @@
 
 #include "Goomba.h"
 #include "Portal.h"
+#include"Brick.h"
 
 CMario::CMario(float x, float y) : CGameObject()
 {
@@ -15,7 +16,6 @@ CMario::CMario(float x, float y) : CGameObject()
 	previousstate = MARIO_STATE_IDLE;
 	SetState(previousstate);
 	isMoving = false;
-	isOnGround = true;
 	changeDirection = false;
 
 	start_x = x; 
@@ -117,6 +117,11 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 				CPortal *p = dynamic_cast<CPortal *>(e->obj);
 				CGame::GetInstance()->SwitchScene(p->GetSceneId());
 			}
+			else if (static_cast<CBrick*>(e->obj))
+			{
+				if (e->ny < 0)
+					CMario::isOnGround = true;
+			}//Check if mario was on ground
 		}
 	}
 
@@ -237,7 +242,6 @@ void CMario::GetBoundingBox(float &left, float &top, float &right, float &bottom
 void CMario::Stop()
 {
 	vx = 0;
-	isOnGround = true;
 	//changeDirection = false;
 }
 void CMario::Left()
@@ -265,10 +269,10 @@ void CMario::ChangeDirection()
 }
 void CMario::Jump()
 {
-	if (isOnGround ==false)
+	if (isOnGround ==false)//allow mario to jump only when on ground
 		return;
 	vy=-MARIO_JUMP_SPEED_Y;
-	//isJumping = true;
+	isOnGround = false;
 }
 
 /*
