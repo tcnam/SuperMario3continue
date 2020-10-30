@@ -317,7 +317,6 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 	{
 	case DIK_SPACE:
 		mario->SetState(MARIO_STATE_JUMP);
-		//mario->SetState(MARIO_STATE_FALL);
 		break;
 	case DIK_A: 
 		mario->Reset();
@@ -330,19 +329,67 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 {
 	CGame *game = CGame::GetInstance();
 	CMario *mario = ((CPlayScene*)scence)->GetPlayer();
-	int currentstate = mario->GetState();
 	// disable control key when Mario die 
-	if (currentstate == MARIO_STATE_DIE) return;
-	else if (game->IsKeyDown(DIK_LSHIFT)&& game->IsKeyDown(DIK_LEFT))
-		mario->SetState(MARIO_STATE_RUNNING_LEFT);
+	
+	if (mario->GetState() == MARIO_STATE_DIE) return;
+	else if (game->IsKeyDown(DIK_LSHIFT) && game->IsKeyDown(DIK_LEFT))
+	{
+		if (mario->previousstate == MARIO_STATE_RUNNING_RIGHT || mario->previousstate == MARIO_STATE_WALKING_RIGHT)
+		{
+			mario->changeDirection = true;
+			mario->SetState(MARIO_STATE_CHANGE_LEFT);
+		}			
+		else
+		{
+			mario->changeDirection = false;
+			mario->SetState(MARIO_STATE_RUNNING_LEFT);
+		}			
+	}		
 	else if (game->IsKeyDown(DIK_LSHIFT) && game->IsKeyDown(DIK_RIGHT))
-		mario->SetState(MARIO_STATE_RUNNING_RIGHT);
+	{
+		if (mario->previousstate == MARIO_STATE_RUNNING_LEFT || mario->previousstate == MARIO_STATE_WALKING_LEFT)
+		{
+			mario->changeDirection = true;
+			mario->SetState(MARIO_STATE_CHANGE_RIGHT);
+		}			
+		else
+		{
+			mario->changeDirection = false;
+			mario->SetState(MARIO_STATE_RUNNING_RIGHT);
+		}			
+	}
+		
 	else if (game->IsKeyDown(DIK_RIGHT))
-		mario->SetState(MARIO_STATE_WALKING_RIGHT);
+	{
+		if (mario->previousstate == MARIO_STATE_RUNNING_LEFT || mario->previousstate == MARIO_STATE_WALKING_LEFT)
+		{
+			mario->changeDirection = true;
+			mario->SetState(MARIO_STATE_CHANGE_RIGHT);
+		}
+		else
+		{
+			mario->changeDirection = false;
+			mario->SetState(MARIO_STATE_WALKING_RIGHT);
+
+		}
+	}
 	else if (game->IsKeyDown(DIK_LEFT))
-		mario->SetState(MARIO_STATE_WALKING_LEFT);
-	
+	{
+		if (mario->previousstate == MARIO_STATE_RUNNING_RIGHT || mario->previousstate == MARIO_STATE_WALKING_RIGHT)
+		{
+			mario->changeDirection = true;
+			mario->SetState(MARIO_STATE_CHANGE_LEFT);
+		}			
+		else
+		{
+			mario->changeDirection = false;
+			mario->SetState(MARIO_STATE_WALKING_LEFT);
+		}
+	}
 	else
+	{
+		mario->changeDirection = false;
 		mario->SetState(MARIO_STATE_IDLE);
-	
+	}		
+	mario->previousstate = mario->GetState();	
 }

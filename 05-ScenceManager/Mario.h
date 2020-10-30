@@ -14,8 +14,9 @@
 #define MARIO_STATE_WALKING_LEFT	200
 #define MARIO_STATE_RUNNING_RIGHT	101
 #define MARIO_STATE_RUNNING_LEFT	201
+#define MARIO_STATE_CHANGE_RIGHT	102
+#define MARIO_STATE_CHANGE_LEFT		202
 #define MARIO_STATE_JUMP			300
-#define MARIO_STATE_FALL			301
 #define MARIO_STATE_DIE				400
 
 
@@ -28,8 +29,12 @@
 #define MARIO_ANI_BIG_WALKING_LEFT			5
 #define MARIO_ANI_SMALL_WALKING_RIGHT		6
 #define MARIO_ANI_SMALL_WALKING_LEFT		7
+#define MARIO_ANI_BIG_CHANGE_RIGHT			8
+#define MARIO_ANI_BIG_CHANGE_LEFT			9
+#define MARIO_ANI_BIG_JUMP_RIGHT			10
+#define MARIO_ANI_BIG_JUMP_LEFT				11
 
-#define MARIO_ANI_DIE				8
+#define MARIO_ANI_DIE				20
 
 #define	MARIO_LEVEL_SMALL	1
 #define	MARIO_LEVEL_BIG		2
@@ -53,12 +58,23 @@ class CMario : public CGameObject
 	float start_y; 
 	
 public:
-	bool isWalking;
-	bool isJumping;
+	bool isMoving;
+	bool changeDirection;
+	bool isOnGround;
+	int previousstate;
 
 	CMario(float x = 0.0f, float y = 0.0f);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *colliable_objects = NULL);
 	virtual void Render();
+	void Stop();
+	void Walk();
+	void Run();
+	void Jump();
+	void Right();
+	void Left();
+	void JumpLeft();
+	void JumpRight();
+	void ChangeDirection();
 
 	void SetState(int state);
 	void SetLevel(int l) { level = l; }
