@@ -71,8 +71,6 @@ public:
 	void Jump();
 	void Right();
 	void Left();
-	void JumpLeft();
-	void JumpRight();
 	void ChangeDirection();
 
 	void SetState(int state);

@@ -7,7 +7,8 @@
 
 #include "Goomba.h"
 #include "Portal.h"
-#include"Brick.h"
+#include "Brick.h"
+#include "BountyBrick.h"
 
 CMario::CMario(float x, float y) : CGameObject()
 {
@@ -117,7 +118,19 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 				CPortal *p = dynamic_cast<CPortal *>(e->obj);
 				CGame::GetInstance()->SwitchScene(p->GetSceneId());
 			}
-			else if (static_cast<CBrick*>(e->obj))
+			else if (dynamic_cast<CBountyBrick*>(e->obj))
+			{
+				CBountyBrick* bountybrick = static_cast<CBountyBrick*>(e->obj);
+				if (e->ny > 0)
+				{
+					if (bountybrick->GetState() != BOUNTYBRICK_STATE_EMPTY)
+					{
+						bountybrick->SetState(BOUNTYBRICK_STATE_EMPTY);
+					}
+				}
+
+			}
+			else if (dynamic_cast<CBrick*>(e->obj))
 			{
 				if (e->ny < 0)
 					CMario::isOnGround = true;
@@ -136,25 +149,25 @@ void CMario::Render()
 		ani = MARIO_ANI_DIE;
 	if (level == MARIO_LEVEL_BIG)
 	{
-			if (state==MARIO_STATE_IDLE)/*(vx == 0 && vy >= 0)*/
+			if (state==MARIO_STATE_IDLE && vx == 0 && vy >= 0)
 			{
 				if (nx > 0)
 					ani = MARIO_ANI_BIG_IDLE_RIGHT;
 				else
 					ani = MARIO_ANI_BIG_IDLE_LEFT;
 			}
-			else if (state==MARIO_STATE_RUNNING_RIGHT||state==MARIO_STATE_WALKING_RIGHT)
+			else if /*(state==MARIO_STATE_RUNNING_RIGHT||state==MARIO_STATE_WALKING_RIGHT)*/(vy >= 0 && nx > 0)
 				ani = MARIO_ANI_BIG_WALKING_RIGHT;
-			else if (state == MARIO_STATE_RUNNING_LEFT || state == MARIO_STATE_WALKING_LEFT)/*(vy >= 0 && nx < 0)*/
+			else if /*(state == MARIO_STATE_RUNNING_LEFT || state == MARIO_STATE_WALKING_LEFT)*/(vy >= 0 && nx < 0)
 				ani = MARIO_ANI_BIG_WALKING_LEFT;
-			else if (state==MARIO_STATE_JUMP)/*(vy < 0)*/
+			else if /*(state==MARIO_STATE_JUMP)*/(vy < 0)
 			{
 				if (nx > 0)
 					ani = MARIO_ANI_BIG_JUMP_RIGHT;
 				else
 					ani = MARIO_ANI_BIG_JUMP_LEFT;
 			}
-			else if (state == MARIO_STATE_CHANGEDIRECTION)
+			else if (changeDirection==true)
 			{
 				if (nx > 0)
 					ani = MARIO_ANI_BIG_CHANGE_RIGHT;
