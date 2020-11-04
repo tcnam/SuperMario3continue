@@ -9,6 +9,8 @@
 #include "Portal.h"
 #include "Brick.h"
 #include "BountyBrick.h"
+#include "HiddenObject.h"
+
 
 CMario::CMario(float x, float y) : CGameObject()
 {
@@ -18,21 +20,106 @@ CMario::CMario(float x, float y) : CGameObject()
 	SetState(previousstate);
 	isMoving = false;
 	changeDirection = false;
+	isOnGround = false;
 
 	start_x = x; 
 	start_y = y; 
 	this->x = x; 
 	this->y = y; 
 }
+/*void CMario::CollisionWithBrick(vector<LPGAMEOBJECT>* coObject)
+{
+	vector<LPCOLLISIONEVENT> coEvents;
+	vector<LPCOLLISIONEVENT> coEventsResult;
+
+	coEvents.clear();
+	vector<LPGAMEOBJECT> BrickObjects;
+	BrickObjects.clear();
+	for (UINT i = 0; i < coObject->size(); i++)
+		if (coObject->at(i)->GetType() == OBJECT_TYPE_BRICK)
+			BrickObjects.push_back(coObject->at(i));
+	CalcPotentialCollisions(&BrickObjects, coEvents);
+	if (coEvents.size() == 0)
+	{
+		x += dx;
+		y += dy;
+	}
+	else
+	{
+		float min_tx, min_ty, nx = 0, ny;
+		float rdx = 0;
+		float rdy = 0;
+		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
+		x += min_tx * dx + nx * 0.4f;
+		y += min_ty * dy + ny * 0.4f;
+
+		if (nx != 0) vx = 0;
+		if (ny != 0) vy = 0;
+		for (UINT i = 0; i < coEventsResult.size(); i++)
+		{
+			LPCOLLISIONEVENT e = coEventsResult[i];
+			if (e->ny < 0)
+				CMario::isOnGround = true;
+			//Check if mario was on ground
+		}
+	}
+}
+void CMario::CollisionWithBountyBrick(vector<LPGAMEOBJECT>* coObject)
+{
+	vector<LPCOLLISIONEVENT> coEvents;
+	vector<LPCOLLISIONEVENT> coEventsResult;
+
+	coEvents.clear();
+	vector<LPGAMEOBJECT> BountyBrickObjects;
+	BountyBrickObjects.clear();
+	for (UINT i = 0; i < coObject->size(); i++)
+		if (coObject->at(i)->GetType() == OBJECT_TYPE_BOUNTYBRICK)
+			BountyBrickObjects.push_back(coObject->at(i));
+	CalcPotentialCollisions(&BountyBrickObjects, coEvents);
+	if (coEvents.size() == 0)
+	{
+		x += dx;
+		y += dy;
+	}
+	else
+	{
+		float min_tx, min_ty, nx = 0, ny;
+		float rdx = 0;
+		float rdy = 0;
+		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
+		x += min_tx * dx + nx * 0.4f;
+		y += min_ty * dy + ny * 0.4f;
+
+		if (nx != 0) vx = 0;
+		if (ny != 0) vy = 0;
+		for (UINT i = 0; i < coEventsResult.size(); i++)
+		{
+			LPCOLLISIONEVENT e = coEventsResult[i];
+			if (e->ny < 0)
+				CMario::isOnGround = true;
+			else if (e->ny > 0)
+			{
+				if (e->obj->GetState() != BOUNTYBRICK_STATE_EMPTY)
+					e->obj->SetState(BOUNTYBRICK_STATE_EMPTY);
+			}
+				
+			
+		}
+	}
+}*/
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
 	// Calculate dx, dy 
 	CGameObject::Update(dt);
-
+	
 	// Simple fall down
 	vy += MARIO_GRAVITY*dt;
-
+	/*if(CMario::GetState()==MARIO_STATE_JUMP)
+		CollisionWithBountyBrick(coObjects);
+	else
+		CollisionWithBrick(coObjects);
+	*/
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
 
@@ -67,13 +154,12 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		// how to push back Mario if collides with a moving objects, what if Mario is pushed this way into another object?
 		//if (rdx != 0 && rdx!=dx)
 		//	x += nx*abs(rdx); 
-		
 		// block every object first!
 		x += min_tx*dx + nx*0.4f;
 		y += min_ty*dy + ny*0.4f;
 
 		if (nx!=0) vx = 0;
-		if (ny!=0) vy = 0;
+		if (ny<0) vy = 0;	
 
 
 		//
@@ -123,12 +209,25 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 				CBountyBrick* bountybrick = static_cast<CBountyBrick*>(e->obj);
 				if (e->ny > 0)
 				{
+					vy = 0;
 					if (bountybrick->GetState() != BOUNTYBRICK_STATE_EMPTY)
 					{
 						bountybrick->SetState(BOUNTYBRICK_STATE_EMPTY);
 					}
 				}
+				else if (e->ny < 0)
+					CMario:isOnGround = true;
 
+			}
+			else if (dynamic_cast<CHiddenObject*>(e->obj))
+			{
+				if (e->ny < 0)
+					CMario::isOnGround = true;
+				else if (e->ny > 0)
+				{
+					y += dy;
+					x += dx;
+				}
 			}
 			else if (dynamic_cast<CBrick*>(e->obj))
 			{
@@ -160,7 +259,7 @@ void CMario::Render()
 				ani = MARIO_ANI_BIG_WALKING_RIGHT;
 			else if /*(state == MARIO_STATE_RUNNING_LEFT || state == MARIO_STATE_WALKING_LEFT)*/(vy >= 0 && nx < 0)
 				ani = MARIO_ANI_BIG_WALKING_LEFT;
-			else if /*(state==MARIO_STATE_JUMP)*/(vy < 0)
+			else if (state==MARIO_STATE_JUMP||CMario::isOnGround==false)
 			{
 				if (nx > 0)
 					ani = MARIO_ANI_BIG_JUMP_RIGHT;
@@ -287,6 +386,7 @@ void CMario::Jump()
 	vy=-MARIO_JUMP_SPEED_Y;
 	isOnGround = false;
 }
+
 
 /*
 	Reset Mario status to the beginning state of a scene

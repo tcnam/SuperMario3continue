@@ -77,6 +77,11 @@ public:
 	void SetLevel(int l) { level = l; }
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount(); }
 
+	void CollisionWithBrick(vector<LPGAMEOBJECT>* coObject = NULL);
+	void CollisionWithBountyBrick(vector<LPGAMEOBJECT>* coObject = NULL);
+	void CollisionWithEnemy(vector<LPGAMEOBJECT>* coObject = NULL);
+	void CollisionWithTerrain(vector<LPGAMEOBJECT>* coObject = NULL);
+	void CollisionWithBounty(vector<LPGAMEOBJECT>* coObject = NULL);
 	void Reset();
 
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom);

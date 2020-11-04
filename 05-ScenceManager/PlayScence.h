@@ -7,8 +7,9 @@
 #include "Mario.h"
 #include "Goomba.h"
 #include "Koopas.h"
-#include"BountyBrick.h"
-#include"Terrain.h"
+#include "BountyBrick.h"
+#include "HiddenObject.h"
+#include "Terrain.h"
 
 
 

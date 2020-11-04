@@ -25,9 +25,6 @@
     <Filter Include="Object\GameObject">
       <UniqueIdentifier>{9db24c9c-34b6-4527-995d-e0c2f3ddbe92}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Object\Terrain">
-      <UniqueIdentifier>{d2a2a68f-6813-4891-a367-72bdfac52268}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Object\GameObject\Mario">
       <UniqueIdentifier>{ec54773f-bbe8-47d9-8bd0-3b077e4c0201}</UniqueIdentifier>
     </Filter>
@@ -45,6 +42,9 @@
     </Filter>
     <Filter Include="Object\GameObject\Enemy\Goomba">
       <UniqueIdentifier>{38b1c751-3729-4e12-a201-974dc762db41}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Terrain">
+      <UniqueIdentifier>{4c0d4155-a3b6-4639-9b2b-ef185bc5d852}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -75,9 +75,6 @@
     <ClCompile Include="GameObject.cpp">
       <Filter>Object\GameObject</Filter>
     </ClCompile>
-    <ClCompile Include="Terrain.cpp">
-      <Filter>Object\Terrain</Filter>
-    </ClCompile>
     <ClCompile Include="Mario.cpp">
       <Filter>Object\GameObject\Mario</Filter>
     </ClCompile>
@@ -95,6 +92,12 @@
     </ClCompile>
     <ClCompile Include="Portal.cpp">
       <Filter>Object\GameObject\Portal</Filter>
+    </ClCompile>
+    <ClCompile Include="HiddenObject.cpp">
+      <Filter>Object\GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Terrain.cpp">
+      <Filter>Terrain</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -125,9 +128,6 @@
     <ClInclude Include="GameObject.h">
       <Filter>Object\GameObject</Filter>
     </ClInclude>
-    <ClInclude Include="Terrain.h">
-      <Filter>Object\Terrain</Filter>
-    </ClInclude>
     <ClInclude Include="Mario.h">
       <Filter>Object\GameObject\Mario</Filter>
     </ClInclude>
@@ -145,6 +145,12 @@
     </ClInclude>
     <ClInclude Include="Portal.h">
       <Filter>Object\GameObject\Portal</Filter>
+    </ClInclude>
+    <ClInclude Include="HiddenObject.h">
+      <Filter>Object\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Terrain.h">
+      <Filter>Terrain</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

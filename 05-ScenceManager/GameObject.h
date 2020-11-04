@@ -11,6 +11,12 @@
 using namespace std;
 
 #define ID_TEX_BBOX -100		// special texture to draw object bounding box
+#define OBJECT_TYPE_MARIO	0
+#define OBJECT_TYPE_BRICK	1
+#define OBJECT_TYPE_GOOMBA	2
+#define OBJECT_TYPE_KOOPAS	3
+#define OBJECT_TYPE_BOUNTYBRICK	4
+#define OBJECT_TYPE_HIDDENOBJECT	5
 
 class CGameObject; 
 typedef CGameObject * LPGAMEOBJECT;
@@ -45,6 +51,8 @@ class CGameObject
 {
 public:
 
+	int type;
+
 	float x; 
 	float y;
 
@@ -67,7 +75,8 @@ public:
 	void SetSpeed(float vx, float vy) { this->vx = vx, this->vy = vy; }
 	void GetPosition(float &x, float &y) { x = this->x; y = this->y; }
 	void GetSpeed(float &vx, float &vy) { vx = this->vx; vy = this->vy; }
-
+	void SetType(int type) { this->type = type; }
+	int GetType() { return this->type; }
 	int GetState() { return this->state; }
 
 	void RenderBoundingBox();
