@@ -1,6 +1,7 @@
 # id	file_path	transparent_color_r	g	b
 [TEXTURES]
 0	textures\mario.png	255	255	255
+10	textures\enemies.png	3	26	110
 20	textures\tiles.png	4	193	170
 30	textures\tile.png	255	128	192
 
@@ -47,6 +48,26 @@
 10034	6	0	20	15	0
 # jump left
 10035	35	80	51	95	0
+# TAIL MARIO
+#idle right
+10041	243	634	264	662	0
+#walk
+10042	272	634	294	662	0
+10043	303	634	324	661	0
+#change direction to right
+10044	425	633	441	663	0
+#jump right
+10045	392	754	415	781	0
+#idle left
+10051	182	634	203	662	0
+#walk
+10052	152	634	174	662	0
+10053	122	634	143	661	0
+#change direction to left
+10054	5	633	21	663	0
+#jump left
+10055	31	754	54	781	0
+
 #WEAK BRICK
 30000	52	52	68	68	20
 30001	69	52	85	68	20
@@ -81,7 +102,11 @@
 40010	1	52	17	68	20
 #EMPTY BRICK
 40050	188	52	204	68	20
-
+#GOOMBA
+70001	5	14	21	29	10
+70002	25	14	41	29	10
+#die
+70003	45	21	61	29	10
 
 # UPPER LEFT PLANT
 50000	137	1	153	17	30
@@ -248,9 +273,29 @@
 510	10025	100
 #jump left small
 511	10035	100
+#idle tail right
+512	10041	100
+#idle tail left
+513	10051	100
+#walk right tail
+514	10041	100	10042	100	10043	100
+#walk left tail
+515	10051	100	10052	100	10053	100
+#change direction right tail
+516	10044	100
+#change direction left tail
+517	10054	100
+#jump right tail
+518	10045	100
+#jump left tail
+519	10055	100
 #die
 599	10099	100
-
+# ==== GOOMBA  =========
+# walk
+701	70001	100	70002	100
+# die
+702	70003	100
 # ==== UPPER CENTER GROUND BRICK =========
 600	40000	100
 # ==== LOWER CENTER GROUND BRICK =========
@@ -308,7 +353,9 @@
 #
 [ANIMATION_SETS]
 # MARIO
-1	400	401	402	403	500	501	502	503	504	505	506	507	508	509	510	511	599
+1	400	401	402	403	500	501	502	503	504	505	506	507	508	509	510	511	512	513	514	515	516	517	518	519	599
+# GOOMBA
+3	701	702
 # UPPER CENTER GROUND BRICK
 20	600
 # LOWER CENTER GROUND BRICK
@@ -365,6 +412,9 @@
 # type: 0 = Mario , 1 = Brick, 2 = Goomba, 3 = Koopas, 4 = Bounty Brick, 5=Hidden Object
 # MARIO
 0	17	-50	1
+# GOOMBA
+2	480	-32	3
+2	120	-80	3
 # HIDDEN OBJECT
 5	240	-64	0	48	1
 5	272	-96	0	48	1

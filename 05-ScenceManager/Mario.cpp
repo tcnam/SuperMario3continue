@@ -14,7 +14,7 @@
 
 CMario::CMario(float x, float y) : CGameObject()
 {
-	level = MARIO_LEVEL_BIG;
+	level = MARIO_LEVEL_TAIL;
 	untouchable = 0;
 	SetState(MARIO_STATE_IDLE);
 	isOnGround = false;
@@ -24,86 +24,7 @@ CMario::CMario(float x, float y) : CGameObject()
 	this->x = x; 
 	this->y = y; 
 }
-/*void CMario::CollisionWithBrick(vector<LPGAMEOBJECT>* coObject)
-{
-	vector<LPCOLLISIONEVENT> coEvents;
-	vector<LPCOLLISIONEVENT> coEventsResult;
 
-	coEvents.clear();
-	vector<LPGAMEOBJECT> BrickObjects;
-	BrickObjects.clear();
-	for (UINT i = 0; i < coObject->size(); i++)
-		if (coObject->at(i)->GetType() == OBJECT_TYPE_BRICK)
-			BrickObjects.push_back(coObject->at(i));
-	CalcPotentialCollisions(&BrickObjects, coEvents);
-	if (coEvents.size() == 0)
-	{
-		x += dx;
-		y += dy;
-	}
-	else
-	{
-		float min_tx, min_ty, nx = 0, ny;
-		float rdx = 0;
-		float rdy = 0;
-		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
-		x += min_tx * dx + nx * 0.4f;
-		y += min_ty * dy + ny * 0.4f;
-
-		if (nx != 0) vx = 0;
-		if (ny != 0) vy = 0;
-		for (UINT i = 0; i < coEventsResult.size(); i++)
-		{
-			LPCOLLISIONEVENT e = coEventsResult[i];
-			if (e->ny < 0)
-				CMario::isOnGround = true;
-			//Check if mario was on ground
-		}
-	}
-}
-void CMario::CollisionWithBountyBrick(vector<LPGAMEOBJECT>* coObject)
-{
-	vector<LPCOLLISIONEVENT> coEvents;
-	vector<LPCOLLISIONEVENT> coEventsResult;
-
-	coEvents.clear();
-	vector<LPGAMEOBJECT> BountyBrickObjects;
-	BountyBrickObjects.clear();
-	for (UINT i = 0; i < coObject->size(); i++)
-		if (coObject->at(i)->GetType() == OBJECT_TYPE_BOUNTYBRICK)
-			BountyBrickObjects.push_back(coObject->at(i));
-	CalcPotentialCollisions(&BountyBrickObjects, coEvents);
-	if (coEvents.size() == 0)
-	{
-		x += dx;
-		y += dy;
-	}
-	else
-	{
-		float min_tx, min_ty, nx = 0, ny;
-		float rdx = 0;
-		float rdy = 0;
-		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
-		x += min_tx * dx + nx * 0.4f;
-		y += min_ty * dy + ny * 0.4f;
-
-		if (nx != 0) vx = 0;
-		if (ny != 0) vy = 0;
-		for (UINT i = 0; i < coEventsResult.size(); i++)
-		{
-			LPCOLLISIONEVENT e = coEventsResult[i];
-			if (e->ny < 0)
-				CMario::isOnGround = true;
-			else if (e->ny > 0)
-			{
-				if (e->obj->GetState() != BOUNTYBRICK_STATE_EMPTY)
-					e->obj->SetState(BOUNTYBRICK_STATE_EMPTY);
-			}
-				
-			
-		}
-	}
-}*/
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
@@ -209,7 +130,10 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 					vy = 0;
 					if (bountybrick->GetState() != BOUNTYBRICK_STATE_EMPTY)
 					{
+						float x, y;
+						bountybrick->GetPosition(x, y);
 						bountybrick->SetState(BOUNTYBRICK_STATE_EMPTY);
+						bountybrick->SetPosition(round(x), round(y -5));
 					}
 				}
 				else if (e->ny < 0)
@@ -243,35 +167,35 @@ void CMario::Render()
 	int ani = -1;
 	if (state == MARIO_STATE_DIE)
 		ani = MARIO_ANI_DIE;
-	if (level == MARIO_LEVEL_BIG)
+	else if (level == MARIO_LEVEL_BIG)
 	{
-			if (state==MARIO_STATE_IDLE && vx == 0 && vy >= 0)
-			{
-				if (nx > 0)
-					ani = MARIO_ANI_BIG_IDLE_RIGHT;
-				else
-					ani = MARIO_ANI_BIG_IDLE_LEFT;
-			}
-			else if (state==MARIO_STATE_RUNNING_RIGHT||state==MARIO_STATE_WALKING_RIGHT)/*(vy >= 0 && nx > 0)*/
-				ani = MARIO_ANI_BIG_WALKING_RIGHT;
-			else if (state == MARIO_STATE_RUNNING_LEFT || state == MARIO_STATE_WALKING_LEFT)/*(vy >= 0 && nx < 0)*/
-				ani = MARIO_ANI_BIG_WALKING_LEFT;
-			else if (state==MARIO_STATE_JUMP||CMario::isOnGround==false)
-			{
-				if (nx > 0)
-					ani = MARIO_ANI_BIG_JUMP_RIGHT;
-				else
-					ani = MARIO_ANI_BIG_JUMP_LEFT;
-			}
-			else if (state==MARIO_STATE_CHANGERIGHT)
-			{
-					ani = MARIO_ANI_BIG_CHANGE_RIGHT;	
-			}
-			else if(state==MARIO_STATE_CHANGELEFT)
-				ani = MARIO_ANI_BIG_CHANGE_LEFT;
-			//else
-				//ani = MARIO_ANI_SMALL_IDLE_LEFT;
-		
+		if (state == MARIO_STATE_IDLE && vx == 0 && vy >= 0)
+		{
+			if (nx > 0)
+				ani = MARIO_ANI_BIG_IDLE_RIGHT;
+			else
+				ani = MARIO_ANI_BIG_IDLE_LEFT;
+		}
+		else if (state == MARIO_STATE_RUNNING_RIGHT || state == MARIO_STATE_WALKING_RIGHT)/*(vy >= 0 && nx > 0)*/
+			ani = MARIO_ANI_BIG_WALKING_RIGHT;
+		else if (state == MARIO_STATE_RUNNING_LEFT || state == MARIO_STATE_WALKING_LEFT)/*(vy >= 0 && nx < 0)*/
+			ani = MARIO_ANI_BIG_WALKING_LEFT;
+		else if (state == MARIO_STATE_JUMP || CMario::isOnGround == false)
+		{
+			if (nx > 0)
+				ani = MARIO_ANI_BIG_JUMP_RIGHT;
+			else
+				ani = MARIO_ANI_BIG_JUMP_LEFT;
+		}
+		else if (state == MARIO_STATE_CHANGERIGHT)
+		{
+			ani = MARIO_ANI_BIG_CHANGE_RIGHT;
+		}
+		else if (state == MARIO_STATE_CHANGELEFT)
+			ani = MARIO_ANI_BIG_CHANGE_LEFT;
+		//else
+			//ani = MARIO_ANI_SMALL_IDLE_LEFT;
+
 	}
 	else if (level == MARIO_LEVEL_SMALL)
 	{
@@ -282,7 +206,7 @@ void CMario::Render()
 			else
 				ani = MARIO_ANI_SMALL_IDLE_LEFT;
 		}
-		else if (state==MARIO_STATE_RUNNING_RIGHT||state==MARIO_STATE_WALKING_RIGHT) /*(vy >= 0 && nx > 0)*/
+		else if (state == MARIO_STATE_RUNNING_RIGHT || state == MARIO_STATE_WALKING_RIGHT) /*(vy >= 0 && nx > 0)*/
 			ani = MARIO_ANI_SMALL_WALKING_RIGHT;
 		else if (state == MARIO_STATE_RUNNING_LEFT || state == MARIO_STATE_WALKING_LEFT) /*(vy >= 0 && nx < 0)*/
 			ani = MARIO_ANI_SMALL_WALKING_LEFT;
@@ -293,13 +217,43 @@ void CMario::Render()
 			else
 				ani = MARIO_ANI_SMALL_JUMP_LEFT;
 		}
-		else if (state==MARIO_STATE_CHANGERIGHT)
+		else if (state == MARIO_STATE_CHANGERIGHT)
 		{
-				ani = MARIO_ANI_SMALL_CHANGE_RIGHT;
-				
+			ani = MARIO_ANI_SMALL_CHANGE_RIGHT;
+
 		}
-		else if(state==MARIO_STATE_CHANGELEFT)
+		else if (state == MARIO_STATE_CHANGELEFT)
 			ani = MARIO_ANI_SMALL_CHANGE_LEFT;
+		//else
+			//ani = MARIO_ANI_SMALL_IDLE_LEFT;
+	}
+	else if (level == MARIO_LEVEL_TAIL)
+	{
+		if (state == MARIO_STATE_IDLE && vx == 0 && vy >= 0)
+		{
+			if (nx > 0)
+				ani = MARIO_ANI_TAIL_IDLE_RIGHT;
+			else
+				ani = MARIO_ANI_TAIL_IDLE_LEFT;
+		}
+		else if (state == MARIO_STATE_RUNNING_RIGHT || state == MARIO_STATE_WALKING_RIGHT) /*(vy >= 0 && nx > 0)*/
+			ani = MARIO_ANI_TAIL_WALKING_RIGHT;
+		else if (state == MARIO_STATE_RUNNING_LEFT || state == MARIO_STATE_WALKING_LEFT) /*(vy >= 0 && nx < 0)*/
+			ani = MARIO_ANI_TAIL_WALKING_LEFT;
+		else if (state == MARIO_STATE_JUMP || CMario::isOnGround == false)
+		{
+			if (nx > 0)
+				ani = MARIO_ANI_TAIL_JUMP_RIGHT;
+			else
+				ani = MARIO_ANI_TAIL_JUMP_LEFT;
+		}
+		else if (state == MARIO_STATE_CHANGERIGHT)
+		{
+			ani = MARIO_ANI_TAIL_CHANGE_RIGHT;
+
+		}
+		else if (state == MARIO_STATE_CHANGELEFT)
+			ani = MARIO_ANI_TAIL_CHANGE_LEFT;
 		//else
 			//ani = MARIO_ANI_SMALL_IDLE_LEFT;
 	}
@@ -309,7 +263,7 @@ void CMario::Render()
 
 	animation_set->at(ani)->Render(x, y, alpha);
 
-	//RenderBoundingBox();
+	RenderBoundingBox();
 }
 
 void CMario::SetState(int state)
@@ -357,18 +311,26 @@ void CMario::SetState(int state)
 
 void CMario::GetBoundingBox(float &left, float &top, float &right, float &bottom)
 {
-	left = x;
+	
 	top = y; 
 
 	if (level==MARIO_LEVEL_BIG)
 	{
+		left = x;
 		right = x + MARIO_BIG_BBOX_WIDTH;
 		bottom = y + MARIO_BIG_BBOX_HEIGHT;
 	}
-	else
+	else if(level==MARIO_LEVEL_SMALL)
 	{
+		left = x;
 		right = x + MARIO_SMALL_BBOX_WIDTH;
 		bottom = y + MARIO_SMALL_BBOX_HEIGHT;
+	}
+	else if (level == MARIO_LEVEL_TAIL)
+	{
+		left = x + 6;
+		right = x+6 + MARIO_TAIL_BBOX_WIDTH;
+		bottom = y + MARIO_TAIL_BBOX_HEIGHT;
 	}
 }
 void CMario::Stop()

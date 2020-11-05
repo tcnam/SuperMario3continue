@@ -122,6 +122,7 @@ void CGameObject::FilterCollision(
 }
 
 
+
 void CGameObject::RenderBoundingBox()
 {
 	D3DXVECTOR3 p(x, y, 0);
