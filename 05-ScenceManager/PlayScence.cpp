@@ -345,56 +345,69 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 	// disable control key when Mario die 
 	
 	if (mario->GetState() == MARIO_STATE_DIE) return;
-	else if (game->IsKeyDown(DIK_LSHIFT) && game->IsKeyDown(DIK_LEFT) && !game->IsKeyDown(DIK_RIGHT))
+	else if (game->IsKeyDown(DIK_LEFT) && !game->IsKeyDown(DIK_RIGHT))
 	{
+		mario->SetTimeMovingLeft(GetTickCount());
 		if (GetTickCount()-mario->GetTimeMovingRight()>180)
 		{
-			mario->SetState(MARIO_STATE_CHANGELEFT);
+			if (game->IsKeyDown(DIK_LSHIFT))
+			{
+				mario->SetState(MARIO_STATE_RUNNING_LEFT);
+			}
+			else
+				mario->SetState(MARIO_STATE_WALKING_LEFT);
 		}			
 		else
 		{
-			mario->SetTimeMovingLeft(GetTickCount());
-			mario->SetState(MARIO_STATE_RUNNING_LEFT);
+			mario->SetState(MARIO_STATE_CHANGELEFT);
 		}			
 	}		
-	else if (game->IsKeyDown(DIK_LSHIFT) && game->IsKeyDown(DIK_RIGHT)&&!game->IsKeyDown(DIK_LEFT))
+	/*else if (game->IsKeyDown(DIK_LSHIFT) && game->IsKeyDown(DIK_RIGHT)&&!game->IsKeyDown(DIK_LEFT))
 	{
+		mario->SetTimeMovingRight(GetTickCount());
 		if (GetTickCount()-mario->GetTimeMovingLeft()>180)
 		{
 			mario->SetState(MARIO_STATE_CHANGERIGHT);
 		}			
 		else
 		{
-			mario->SetTimeMovingRight(GetTickCount());
+			
 			mario->SetState(MARIO_STATE_RUNNING_RIGHT);
 		}			
-	}
+	}*/
 		
 	else if (game->IsKeyDown(DIK_RIGHT) && !game->IsKeyDown(DIK_LEFT))
 	{
+		mario->SetTimeMovingRight(GetTickCount());
 		if (GetTickCount()-mario->GetTimeMovingLeft()>180)
 		{
-			mario->SetState(MARIO_STATE_CHANGERIGHT);
+			if (game->IsKeyDown(DIK_LSHIFT))
+			{
+				mario->SetState(MARIO_STATE_RUNNING_RIGHT);
+			}
+			else
+				mario->SetState(MARIO_STATE_WALKING_RIGHT);
 		}
 		else
 		{
-			mario->SetTimeMovingRight(GetTickCount());
-			mario->SetState(MARIO_STATE_WALKING_RIGHT);
+			
+			mario->SetState(MARIO_STATE_CHANGERIGHT);
 
 		}
 	}
-	else if (game->IsKeyDown(DIK_LEFT)&& !game->IsKeyDown(DIK_RIGHT))
+	/*else if (game->IsKeyDown(DIK_LEFT)&& !game->IsKeyDown(DIK_RIGHT))
 	{
+		mario->SetTimeMovingLeft(GetTickCount());
 		if (GetTickCount()-mario->GetTimeMovingRight()>180)
 		{
 			mario->SetState(MARIO_STATE_CHANGELEFT);
 		}			
 		else
 		{
-			mario->SetTimeMovingLeft(GetTickCount());
+			
 			mario->SetState(MARIO_STATE_WALKING_LEFT);
 		}
-	}
+	}*/
 	else
 	{
 		mario->SetState(MARIO_STATE_IDLE);

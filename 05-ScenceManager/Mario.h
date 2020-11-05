@@ -2,7 +2,7 @@
 #include "GameObject.h"
 
 #define MARIO_WALKING_SPEED		0.1f 
-#define MARIO_RUNNING_SPEED		0.3f
+#define MARIO_RUNNING_SPEED		0.2f
 //0.1f
 #define MARIO_JUMP_SPEED_Y		0.5f
 #define MARIO_JUMP_DEFLECT_SPEED 0.2f

@@ -14,7 +14,7 @@
 
 CMario::CMario(float x, float y) : CGameObject()
 {
-	level = MARIO_LEVEL_SMALL;
+	level = MARIO_LEVEL_BIG;
 	untouchable = 0;
 	SetState(MARIO_STATE_IDLE);
 	isOnGround = false;
@@ -252,9 +252,9 @@ void CMario::Render()
 				else
 					ani = MARIO_ANI_BIG_IDLE_LEFT;
 			}
-			else if /*(state==MARIO_STATE_RUNNING_RIGHT||state==MARIO_STATE_WALKING_RIGHT)*/(vy >= 0 && nx > 0)
+			else if (state==MARIO_STATE_RUNNING_RIGHT||state==MARIO_STATE_WALKING_RIGHT)/*(vy >= 0 && nx > 0)*/
 				ani = MARIO_ANI_BIG_WALKING_RIGHT;
-			else if /*(state == MARIO_STATE_RUNNING_LEFT || state == MARIO_STATE_WALKING_LEFT)*/(vy >= 0 && nx < 0)
+			else if (state == MARIO_STATE_RUNNING_LEFT || state == MARIO_STATE_WALKING_LEFT)/*(vy >= 0 && nx < 0)*/
 				ani = MARIO_ANI_BIG_WALKING_LEFT;
 			else if (state==MARIO_STATE_JUMP||CMario::isOnGround==false)
 			{
@@ -282,9 +282,9 @@ void CMario::Render()
 			else
 				ani = MARIO_ANI_SMALL_IDLE_LEFT;
 		}
-		else if /*(state==MARIO_STATE_RUNNING_RIGHT||state==MARIO_STATE_WALKING_RIGHT)*/ (vy >= 0 && nx > 0)
+		else if (state==MARIO_STATE_RUNNING_RIGHT||state==MARIO_STATE_WALKING_RIGHT) /*(vy >= 0 && nx > 0)*/
 			ani = MARIO_ANI_SMALL_WALKING_RIGHT;
-		else if /*(state == MARIO_STATE_RUNNING_LEFT || state == MARIO_STATE_WALKING_LEFT)*/ (vy >= 0 && nx < 0)
+		else if (state == MARIO_STATE_RUNNING_LEFT || state == MARIO_STATE_WALKING_LEFT) /*(vy >= 0 && nx < 0)*/
 			ani = MARIO_ANI_SMALL_WALKING_LEFT;
 		else if (state == MARIO_STATE_JUMP || CMario::isOnGround == false)
 		{
@@ -336,9 +336,11 @@ void CMario::SetState(int state)
 		break;	
 	case MARIO_STATE_CHANGERIGHT:
 		ChangeDirectionRight();
+		//Walk();
 		break;
 	case MARIO_STATE_CHANGELEFT:
 		ChangeDirectionLeft();
+		//Walk();
 		break;
 	case MARIO_STATE_JUMP:
 		// TODO: need to check if Mario is *current* on a platform before allowing to jump again
