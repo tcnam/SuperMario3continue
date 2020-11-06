@@ -61,13 +61,19 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 					rdx = c->dx;
 				}
 			}
-			if (c->t < min_ty && c->ny != 0)
+			if (c->ny > 0)
+				return;
+			else
 			{
-				min_ty = c->t;
-				ny = c->ny;
-				min_iy = i;
-				rdy = c->dy;
+				if (c->t < min_ty )
+				{
+					min_ty = c->t;
+					ny = c->ny;
+					min_iy = i;
+					rdy = c->dy;
+				}
 			}
+			
 
 			if (min_ix >= 0) coEventsResult.push_back(coEvents[min_ix]);
 			if (min_iy >= 0) coEventsResult.push_back(coEvents[min_iy]);

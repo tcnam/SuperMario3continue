@@ -352,10 +352,10 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 		{
 			if (game->IsKeyDown(DIK_LSHIFT))
 			{
-				mario->SetTimeRunningLeft(GetTickCount());
-				if (GetTickCount() - mario->GetTimeRunningLeft() > 800&&mario->GetTimeRunningLeft()!=-1)
+
+				//if (GetTickCount() - mario->GetTimeRunningLeft() > 2000)
 					mario->SetState(MARIO_STATE_RUNNINGFAST_LEFT);
-				else
+				//else
 				{					
 					mario->SetState(MARIO_STATE_RUNNING_LEFT);
 					
@@ -391,13 +391,12 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 		{
 			if (game->IsKeyDown(DIK_LSHIFT))
 			{
-				mario->SetTimeRunningRight(GetTickCount());
-				if (GetTickCount() - mario->GetTimeRuningRight()>800&&mario->GetTimeRuningRight()!=-1)
-					mario->SetState(MARIO_STATE_RUNNINGFAST_LEFT);
-				else
+				//if (GetTickCount() - mario->GetTimeRuningRight()>2000)
+					//mario->SetState(MARIO_STATE_RUNNINGFAST_LEFT);
+				//else
 				{					
-					mario->SetState(MARIO_STATE_RUNNING_RIGHT);
-					
+
+					mario->SetState(MARIO_STATE_RUNNING_RIGHT);				
 				}
 					
 			}

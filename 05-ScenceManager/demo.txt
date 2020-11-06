@@ -46,7 +46,7 @@
 # change direction to right
 10024	426	0	440	15	0
 # jump right
-10025	395	80	411	95	0
+10025	395	80	411	95	0	
 # idle small left
 10031	187	0	198	15	0
 # walk

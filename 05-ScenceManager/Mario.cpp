@@ -30,14 +30,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
 	// Calculate dx, dy 
 	CGameObject::Update(dt);
-	
 	// Simple fall down
 	vy += MARIO_GRAVITY*dt;
-	/*if(CMario::GetState()==MARIO_STATE_JUMP)
-		CollisionWithBountyBrick(coObjects);
-	else
-		CollisionWithBrick(coObjects);
-	*/
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
 
@@ -53,6 +47,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		untouchable_start = 0;
 		untouchable = 0;
 	}
+
 
 	// No collision occured, proceed normally
 	if (coEvents.size()==0)
@@ -77,9 +72,15 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		y += min_ty*dy + ny*0.4f;
 
 		if (nx!=0) vx = 0;
-		if (ny<0) vy = 0;	
-
-
+		if (ny < 0)
+		{
+			vy = 0;
+			//isOnGround = true;
+		}
+		/*else
+		{
+			isOnGround = false;
+		}*/
 		//
 		// Collision logic with other objects
 		//
@@ -137,14 +138,14 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 					}
 				}
 				else if (e->ny < 0)
-					CMario:isOnGround = true;
+					isOnGround = true;
 
 			}
 			else if (dynamic_cast<CHiddenObject*>(e->obj))
 			{
 				if (e->ny < 0)
-					CMario::isOnGround = true;
-				else if (e->ny > 0)
+					isOnGround = true;
+				if (e->ny > 0)
 				{
 					y += dy;
 					x += dx;
@@ -153,7 +154,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 			else if (dynamic_cast<CBrick*>(e->obj))
 			{
 				if (e->ny < 0)
-					CMario::isOnGround = true;
+					isOnGround = true;
 			}//Check if mario was on ground
 		}
 	}
@@ -176,9 +177,9 @@ void CMario::Render()
 			else
 				ani = MARIO_ANI_BIG_IDLE_LEFT;
 		}
-		else if (state == MARIO_STATE_RUNNING_RIGHT || state == MARIO_STATE_WALKING_RIGHT)/*(vy >= 0 && nx > 0)*/
+		else if (state == MARIO_STATE_RUNNING_RIGHT || state == MARIO_STATE_WALKING_RIGHT&&vy>=0)/*(vy >= 0 && nx > 0)*/
 			ani = MARIO_ANI_BIG_WALKING_RIGHT;
-		else if (state == MARIO_STATE_RUNNING_LEFT || state == MARIO_STATE_WALKING_LEFT)/*(vy >= 0 && nx < 0)*/
+		else if (state == MARIO_STATE_RUNNING_LEFT || state == MARIO_STATE_WALKING_LEFT&&vy>=0)/*(vy >= 0 && nx < 0)*/
 			ani = MARIO_ANI_BIG_WALKING_LEFT;
 		else if (state == MARIO_STATE_JUMP || CMario::isOnGround == false)
 		{
@@ -322,11 +323,9 @@ void CMario::SetState(int state)
 		RunFast();
 	case MARIO_STATE_CHANGERIGHT:
 		ChangeDirectionRight();
-		//Walk();
 		break;
 	case MARIO_STATE_CHANGELEFT:
 		ChangeDirectionLeft();
-		//Walk();
 		break;
 	case MARIO_STATE_JUMP:
 		// TODO: need to check if Mario is *current* on a platform before allowing to jump again
@@ -391,17 +390,16 @@ void CMario::GetBoundingBox(float &left, float &top, float &right, float &bottom
 void CMario::Stop()
 {
 	vx = 0;
-	//changeDirection = false;
 }
 void CMario::Left()
 {
 	nx = -1;
-	//changeDirection = false;
+
 }
 void CMario::Right()
 {
 	nx = 1;
-	//changeDirection = false;
+
 }
 void CMario::Walk()
 {
@@ -409,7 +407,12 @@ void CMario::Walk()
 }
 void CMario::Run()
 {
+
 	vx = MARIO_RUNNING_SPEED * nx;
+	/*if (nx > 0)
+		CMario::SetTimeRunningRight(GetTickCount());
+	else if (nx < 0)
+		CMario::SetTimeRunningLeft(GetTickCount());*/
 }
 void CMario::RunFast()
 {
@@ -417,7 +420,6 @@ void CMario::RunFast()
 }
 void CMario::ChangeDirectionRight()
 {
-	//changeDirection = true;
 	nx = 1;
 }
 void CMario::ChangeDirectionLeft()
