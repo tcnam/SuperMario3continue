@@ -345,14 +345,22 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 	// disable control key when Mario die 
 	
 	if (mario->GetState() == MARIO_STATE_DIE) return;
-	else if (game->IsKeyDown(DIK_LEFT) && !game->IsKeyDown(DIK_RIGHT))
+	else if (game->IsKeyDown(DIK_LEFT) && !game->IsKeyDown(DIK_RIGHT))//left
 	{
 		mario->SetTimeMovingLeft(GetTickCount());
-		if (GetTickCount()-mario->GetTimeMovingRight()>180)
+		if (GetTickCount()-mario->GetTimeMovingRight()>200)
 		{
 			if (game->IsKeyDown(DIK_LSHIFT))
 			{
-				mario->SetState(MARIO_STATE_RUNNING_LEFT);
+				mario->SetTimeRunningLeft(GetTickCount());
+				if (GetTickCount() - mario->GetTimeRunningLeft() > 800&&mario->GetTimeRunningLeft()!=-1)
+					mario->SetState(MARIO_STATE_RUNNINGFAST_LEFT);
+				else
+				{					
+					mario->SetState(MARIO_STATE_RUNNING_LEFT);
+					
+				}
+					
 			}
 			else
 				mario->SetState(MARIO_STATE_WALKING_LEFT);
@@ -376,14 +384,22 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 		}			
 	}*/
 		
-	else if (game->IsKeyDown(DIK_RIGHT) && !game->IsKeyDown(DIK_LEFT))
+	else if (game->IsKeyDown(DIK_RIGHT) && !game->IsKeyDown(DIK_LEFT))//right
 	{
 		mario->SetTimeMovingRight(GetTickCount());
-		if (GetTickCount()-mario->GetTimeMovingLeft()>180)
+		if (GetTickCount()-mario->GetTimeMovingLeft()>200)
 		{
 			if (game->IsKeyDown(DIK_LSHIFT))
 			{
-				mario->SetState(MARIO_STATE_RUNNING_RIGHT);
+				mario->SetTimeRunningRight(GetTickCount());
+				if (GetTickCount() - mario->GetTimeRuningRight()>800&&mario->GetTimeRuningRight()!=-1)
+					mario->SetState(MARIO_STATE_RUNNINGFAST_LEFT);
+				else
+				{					
+					mario->SetState(MARIO_STATE_RUNNING_RIGHT);
+					
+				}
+					
 			}
 			else
 				mario->SetState(MARIO_STATE_WALKING_RIGHT);

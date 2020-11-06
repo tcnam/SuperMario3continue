@@ -36,15 +36,47 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	}
 	else
 	{
-		float min_tx, min_ty, nx=0 , ny;
+		float min_tx, min_ty, nx=0 , ny=0;
 		float rdx = 0;
 		float rdy = 0;
-		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny,rdx,rdy);
+		
+		min_tx = 1.0f;
+		min_ty = 1.0f;
+		int min_ix = -1;
+		int min_iy = -1;
+		coEventsResult.clear();
+
+		for (UINT i = 0; i < coEvents.size(); i++)
+		{
+			LPCOLLISIONEVENT c = coEvents[i];
+			if (c->nx * vx > 0)
+				return;
+			else
+			{
+				if (c->t < min_tx)
+				{
+					min_tx = c->t;
+					nx = c->nx;
+					min_ix = i;
+					rdx = c->dx;
+				}
+			}
+			if (c->t < min_ty && c->ny != 0)
+			{
+				min_ty = c->t;
+				ny = c->ny;
+				min_iy = i;
+				rdy = c->dy;
+			}
+
+			if (min_ix >= 0) coEventsResult.push_back(coEvents[min_ix]);
+			if (min_iy >= 0) coEventsResult.push_back(coEvents[min_iy]);
+		}
 		x += min_tx * dx + nx * 0.4f;
 		y += min_ty * dy + ny * 0.4f;
 
 		if (nx != 0) vx = -vx;
-		if (ny < 0) vy = 0;
+		if (ny != 0) vy = 0;
 	}
 	for (UINT i = 0; i < coEvents.size(); i++)
 		delete coEvents[i];

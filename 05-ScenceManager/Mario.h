@@ -3,21 +3,24 @@
 
 #define MARIO_WALKING_SPEED		0.1f 
 #define MARIO_RUNNING_SPEED		0.2f
+#define MARIO_RUNNINGFAST_SPEED	0.4f
 //0.1f
 #define MARIO_JUMP_SPEED_Y		0.5f
 #define MARIO_JUMP_DEFLECT_SPEED 0.2f
 #define MARIO_GRAVITY			0.002f		//0.00095f
 #define MARIO_DIE_DEFLECT_SPEED	 0.5f
 
-#define MARIO_STATE_IDLE			0
-#define MARIO_STATE_WALKING_RIGHT	100
-#define MARIO_STATE_WALKING_LEFT	200
-#define MARIO_STATE_RUNNING_RIGHT	101
-#define MARIO_STATE_RUNNING_LEFT	201
-#define MARIO_STATE_CHANGERIGHT		102
-#define MARIO_STATE_CHANGELEFT		202
-#define MARIO_STATE_JUMP			300
-#define MARIO_STATE_DIE				400
+#define MARIO_STATE_IDLE				0
+#define MARIO_STATE_WALKING_RIGHT		100
+#define MARIO_STATE_WALKING_LEFT		200
+#define MARIO_STATE_RUNNING_RIGHT		101
+#define MARIO_STATE_RUNNING_LEFT		201
+#define MARIO_STATE_CHANGERIGHT			102
+#define MARIO_STATE_CHANGELEFT			202
+#define MARIO_STATE_RUNNINGFAST_RIGHT	103
+#define MARIO_STATE_RUNNINGFAST_LEFT	203
+#define MARIO_STATE_JUMP				300
+#define MARIO_STATE_DIE					400
 
 	
 #define MARIO_ANI_BIG_IDLE_RIGHT			0
@@ -44,6 +47,17 @@
 #define MARIO_ANI_TAIL_CHANGE_LEFT			21
 #define MARIO_ANI_TAIL_JUMP_RIGHT			22
 #define MARIO_ANI_TAIL_JUMP_LEFT			23
+#define MARIO_ANI_FIRE_IDLE_RIGHT			24
+#define MARIO_ANI_FIRE_IDLE_LEFT			25
+#define MARIO_ANI_FIRE_WALKING_RIGHT		26
+#define MARIO_ANI_FIRE_WALKING_LEFT			27
+#define MARIO_ANI_FIRE_CHANGE_RIGHT			28
+#define MARIO_ANI_FIRE_CHANGE_LEFT			29
+#define MARIO_ANI_FIRE_JUMP_RIGHT			30
+#define MARIO_ANI_FIRE_JUMP_LEFT			31
+
+#define MARIO_ANI_BIG_RUNNING_RIGHT			32
+#define MARIO_ANI_BIG_RUNNING_LEFT			33
 
 
 #define MARIO_ANI_DIE						24
@@ -51,6 +65,7 @@
 #define	MARIO_LEVEL_SMALL	1
 #define	MARIO_LEVEL_BIG		2
 #define MARIO_LEVEL_TAIL	3
+#define MARIO_LEVEL_FIRE	4
 
 #define MARIO_BIG_BBOX_WIDTH  15
 #define MARIO_BIG_BBOX_HEIGHT 27
@@ -60,6 +75,9 @@
 
 #define MARIO_TAIL_BBOX_WIDTH	15
 #define MARIO_TAIL_BBOX_HEIGHT	28
+
+#define MARIO_FIRE_BBOX_WIDTH	15
+#define MARIO_FIRE_BBOX_HEIGHT	27
 
 #define MARIO_UNTOUCHABLE_TIME 5000
 
@@ -74,6 +92,8 @@ class CMario : public CGameObject
 	float start_y; 
 	DWORD StartMovingLeft;
 	DWORD StartMovingRight;
+	DWORD StartRunningLeft;
+	DWORD StartRunningRight;
 
 	
 public:
@@ -85,6 +105,7 @@ public:
 	void Stop();
 	void Walk();
 	void Run();
+	void RunFast();
 	void Jump();
 	void Right();
 	void Left();
@@ -95,10 +116,16 @@ public:
 	void SetTimeMovingLeft(DWORD t) { this->StartMovingLeft = t; }
 	DWORD GetTimeMovingRight() { return StartMovingRight; }
 	DWORD GetTimeMovingLeft() { return StartMovingLeft; }
+
+	void SetTimeRunningRight(DWORD t) { this->StartRunningRight = t; }
+	void SetTimeRunningLeft(DWORD t) { this->StartRunningLeft = t; }
+	DWORD GetTimeRuningRight() { return StartRunningRight; }
+	DWORD GetTimeRunningLeft() { return StartRunningLeft; }
+
 	void SetState(int state);
 	void SetLevel(int l) { level = l; }
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount(); }
 	void Reset();
-
+	void GetBoundingBoxTailLevel(float& left, float& top, float& right, float& bottom);
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom);
 };

@@ -14,7 +14,7 @@
 
 CMario::CMario(float x, float y) : CGameObject()
 {
-	level = MARIO_LEVEL_TAIL;
+	level = MARIO_LEVEL_BIG;
 	untouchable = 0;
 	SetState(MARIO_STATE_IDLE);
 	isOnGround = false;
@@ -167,7 +167,7 @@ void CMario::Render()
 	int ani = -1;
 	if (state == MARIO_STATE_DIE)
 		ani = MARIO_ANI_DIE;
-	else if (level == MARIO_LEVEL_BIG)
+	else if (level == MARIO_LEVEL_BIG)					//big
 	{
 		if (state == MARIO_STATE_IDLE && vx == 0 && vy >= 0)
 		{
@@ -193,11 +193,13 @@ void CMario::Render()
 		}
 		else if (state == MARIO_STATE_CHANGELEFT)
 			ani = MARIO_ANI_BIG_CHANGE_LEFT;
-		//else
-			//ani = MARIO_ANI_SMALL_IDLE_LEFT;
+		else if (state == MARIO_STATE_RUNNINGFAST_RIGHT)
+			ani = MARIO_ANI_BIG_RUNNING_RIGHT;
+		else if (state == MARIO_STATE_RUNNINGFAST_LEFT)
+			ani = MARIO_ANI_BIG_RUNNING_LEFT;
 
 	}
-	else if (level == MARIO_LEVEL_SMALL)
+	else if (level == MARIO_LEVEL_SMALL)				//small
 	{
 		if (state == MARIO_STATE_IDLE && vx == 0 && vy >= 0)
 		{
@@ -224,10 +226,8 @@ void CMario::Render()
 		}
 		else if (state == MARIO_STATE_CHANGELEFT)
 			ani = MARIO_ANI_SMALL_CHANGE_LEFT;
-		//else
-			//ani = MARIO_ANI_SMALL_IDLE_LEFT;
 	}
-	else if (level == MARIO_LEVEL_TAIL)
+	else if (level == MARIO_LEVEL_TAIL)					//tail
 	{
 		if (state == MARIO_STATE_IDLE && vx == 0 && vy >= 0)
 		{
@@ -254,8 +254,34 @@ void CMario::Render()
 		}
 		else if (state == MARIO_STATE_CHANGELEFT)
 			ani = MARIO_ANI_TAIL_CHANGE_LEFT;
-		//else
-			//ani = MARIO_ANI_SMALL_IDLE_LEFT;
+	}
+	else if (level == MARIO_LEVEL_FIRE)					//fire
+	{
+		if (state == MARIO_STATE_IDLE && vx == 0 && vy >= 0)
+		{
+			if (nx > 0)
+				ani = MARIO_ANI_FIRE_IDLE_RIGHT;
+			else
+				ani = MARIO_ANI_FIRE_IDLE_LEFT;
+		}
+		else if (state == MARIO_STATE_RUNNING_RIGHT || state == MARIO_STATE_WALKING_RIGHT) /*(vy >= 0 && nx > 0)*/
+			ani = MARIO_ANI_FIRE_WALKING_RIGHT;
+		else if (state == MARIO_STATE_RUNNING_LEFT || state == MARIO_STATE_WALKING_LEFT) /*(vy >= 0 && nx < 0)*/
+			ani = MARIO_ANI_FIRE_WALKING_LEFT;
+		else if (state == MARIO_STATE_JUMP || CMario::isOnGround == false)
+		{
+			if (nx > 0)
+				ani = MARIO_ANI_FIRE_JUMP_RIGHT;
+			else
+				ani = MARIO_ANI_FIRE_JUMP_LEFT;
+		}
+		else if (state == MARIO_STATE_CHANGERIGHT)
+		{
+			ani = MARIO_ANI_FIRE_CHANGE_RIGHT;
+
+		}
+		else if (state == MARIO_STATE_CHANGELEFT)
+			ani = MARIO_ANI_FIRE_CHANGE_LEFT;
 	}
 
 	int alpha = 255;
@@ -263,7 +289,7 @@ void CMario::Render()
 
 	animation_set->at(ani)->Render(x, y, alpha);
 
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 void CMario::SetState(int state)
@@ -280,6 +306,9 @@ void CMario::SetState(int state)
 		Right();
 		Run();
 		break;
+	case MARIO_STATE_RUNNINGFAST_RIGHT:
+		Right();
+		RunFast();
 	case MARIO_STATE_WALKING_LEFT: 
 		Left();
 		Walk();
@@ -288,6 +317,9 @@ void CMario::SetState(int state)
 		Left();
 		Run();
 		break;	
+	case MARIO_STATE_RUNNINGFAST_LEFT:
+		Left();
+		RunFast();
 	case MARIO_STATE_CHANGERIGHT:
 		ChangeDirectionRight();
 		//Walk();
@@ -308,29 +340,52 @@ void CMario::SetState(int state)
 		break;
 	}
 }
+void CMario::GetBoundingBoxTailLevel(float& left, float& top, float& right, float& bottom)
+{
+	if (nx > 0)
+	{
+		left = x + 7;
+		right = left + MARIO_TAIL_BBOX_WIDTH;
+	}		
+	else
+	{
+		left = x;
+		right = x + MARIO_TAIL_BBOX_WIDTH;
+	}
+		
+	
+	top = y;
+	bottom = y + MARIO_TAIL_BBOX_HEIGHT;
+}
 
 void CMario::GetBoundingBox(float &left, float &top, float &right, float &bottom)
 {
 	
-	top = y; 
 
 	if (level==MARIO_LEVEL_BIG)
 	{
 		left = x;
+		top = y;
 		right = x + MARIO_BIG_BBOX_WIDTH;
 		bottom = y + MARIO_BIG_BBOX_HEIGHT;
 	}
 	else if(level==MARIO_LEVEL_SMALL)
 	{
 		left = x;
+		top = y;
 		right = x + MARIO_SMALL_BBOX_WIDTH;
 		bottom = y + MARIO_SMALL_BBOX_HEIGHT;
 	}
 	else if (level == MARIO_LEVEL_TAIL)
 	{
-		left = x + 6;
-		right = x+6 + MARIO_TAIL_BBOX_WIDTH;
-		bottom = y + MARIO_TAIL_BBOX_HEIGHT;
+		CMario::GetBoundingBoxTailLevel(left, top, right, bottom);
+	}
+	else if (level == MARIO_LEVEL_FIRE)
+	{
+		left = x;
+		top = y;
+		right = x + MARIO_BIG_BBOX_WIDTH;
+		bottom = y + MARIO_BIG_BBOX_HEIGHT;
 	}
 }
 void CMario::Stop()
@@ -356,6 +411,10 @@ void CMario::Run()
 {
 	vx = MARIO_RUNNING_SPEED * nx;
 }
+void CMario::RunFast()
+{
+	vx = MARIO_RUNNINGFAST_SPEED * nx;
+}
 void CMario::ChangeDirectionRight()
 {
 	//changeDirection = true;
@@ -380,7 +439,7 @@ void CMario::Jump()
 void CMario::Reset()
 {
 	SetState(MARIO_STATE_IDLE);
-	SetLevel(MARIO_LEVEL_BIG);
+	SetLevel(MARIO_LEVEL_TAIL);
 	SetPosition(start_x, start_y);
 	SetSpeed(0, 0);
 }
