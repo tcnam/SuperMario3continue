@@ -6,6 +6,7 @@
 #include "Game.h"
 
 #include "Goomba.h"
+#include "Koopas.h"
 #include "Portal.h"
 #include "Brick.h"
 #include "BountyBrick.h"
@@ -118,6 +119,34 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 					}
 				}
 			} // if Goomba
+			else if (dynamic_cast<CKoopas*>(e->obj))
+			{
+				CKoopas* koopas = dynamic_cast<CKoopas*>(e->obj);
+				if (e->ny < 0)
+				{
+					if (koopas->GetState() != KOOPAS_STATE_DIE)
+					{
+						koopas->SetState(KOOPAS_STATE_DIE);
+						vy = -MARIO_JUMP_DEFLECT_SPEED;
+					}
+				}
+				else if (e->nx != 0)
+				{
+					if (untouchable == 0)
+					{
+						if (koopas->GetState() != KOOPAS_STATE_DIE)
+						{
+							if (level > MARIO_LEVEL_SMALL)
+							{
+								level = MARIO_LEVEL_SMALL;
+								StartUntouchable();
+							}
+							else
+								SetState(MARIO_STATE_DIE);
+						}
+					}
+				}
+			}
 			else if (dynamic_cast<CPortal *>(e->obj))
 			{
 				CPortal *p = dynamic_cast<CPortal *>(e->obj);
@@ -166,9 +195,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 void CMario::Render()
 {
 	int ani = -1;
-	if (state == MARIO_STATE_DIE)
-		ani = MARIO_ANI_DIE;
-	else if (level == MARIO_LEVEL_BIG)					//big
+	
+	if (level == MARIO_LEVEL_BIG)					//big
 	{
 		if (state == MARIO_STATE_IDLE && vx == 0 && vy >= 0)
 		{
@@ -181,7 +209,7 @@ void CMario::Render()
 			ani = MARIO_ANI_BIG_WALKING_RIGHT;
 		else if (state == MARIO_STATE_RUNNING_LEFT || state == MARIO_STATE_WALKING_LEFT&&vy>=0)/*(vy >= 0 && nx < 0)*/
 			ani = MARIO_ANI_BIG_WALKING_LEFT;
-		else if (state == MARIO_STATE_JUMP || CMario::isOnGround == false)
+		else if (state == MARIO_STATE_JUMP || CMario::isOnGround == false||vy<0)
 		{
 			if (nx > 0)
 				ani = MARIO_ANI_BIG_JUMP_RIGHT;
@@ -202,18 +230,20 @@ void CMario::Render()
 	}
 	else if (level == MARIO_LEVEL_SMALL)				//small
 	{
-		if (state == MARIO_STATE_IDLE && vx == 0 && vy >= 0)
+		if (state == MARIO_STATE_DIE)
+			ani = MARIO_ANI_DIE;
+		else if (state == MARIO_STATE_IDLE && vx == 0 && vy >= 0)
 		{
 			if (nx > 0)
 				ani = MARIO_ANI_SMALL_IDLE_RIGHT;
 			else
 				ani = MARIO_ANI_SMALL_IDLE_LEFT;
 		}
-		else if (state == MARIO_STATE_RUNNING_RIGHT || state == MARIO_STATE_WALKING_RIGHT) /*(vy >= 0 && nx > 0)*/
+		else if (state == MARIO_STATE_RUNNING_RIGHT || state == MARIO_STATE_WALKING_RIGHT && vy >= 0) /*(vy >= 0 && nx > 0)*/
 			ani = MARIO_ANI_SMALL_WALKING_RIGHT;
-		else if (state == MARIO_STATE_RUNNING_LEFT || state == MARIO_STATE_WALKING_LEFT) /*(vy >= 0 && nx < 0)*/
+		else if (state == MARIO_STATE_RUNNING_LEFT || state == MARIO_STATE_WALKING_LEFT && vy >= 0) /*(vy >= 0 && nx < 0)*/
 			ani = MARIO_ANI_SMALL_WALKING_LEFT;
-		else if (state == MARIO_STATE_JUMP || CMario::isOnGround == false)
+		else if (state == MARIO_STATE_JUMP || CMario::isOnGround == false || vy < 0)
 		{
 			if (nx > 0)
 				ani = MARIO_ANI_SMALL_JUMP_RIGHT;
@@ -237,11 +267,11 @@ void CMario::Render()
 			else
 				ani = MARIO_ANI_TAIL_IDLE_LEFT;
 		}
-		else if (state == MARIO_STATE_RUNNING_RIGHT || state == MARIO_STATE_WALKING_RIGHT) /*(vy >= 0 && nx > 0)*/
+		else if (state == MARIO_STATE_RUNNING_RIGHT || state == MARIO_STATE_WALKING_RIGHT && vy >= 0) /*(vy >= 0 && nx > 0)*/
 			ani = MARIO_ANI_TAIL_WALKING_RIGHT;
-		else if (state == MARIO_STATE_RUNNING_LEFT || state == MARIO_STATE_WALKING_LEFT) /*(vy >= 0 && nx < 0)*/
+		else if (state == MARIO_STATE_RUNNING_LEFT || state == MARIO_STATE_WALKING_LEFT && vy >= 0) /*(vy >= 0 && nx < 0)*/
 			ani = MARIO_ANI_TAIL_WALKING_LEFT;
-		else if (state == MARIO_STATE_JUMP || CMario::isOnGround == false)
+		else if (state == MARIO_STATE_JUMP || CMario::isOnGround == false || vy < 0)
 		{
 			if (nx > 0)
 				ani = MARIO_ANI_TAIL_JUMP_RIGHT;
@@ -265,11 +295,11 @@ void CMario::Render()
 			else
 				ani = MARIO_ANI_FIRE_IDLE_LEFT;
 		}
-		else if (state == MARIO_STATE_RUNNING_RIGHT || state == MARIO_STATE_WALKING_RIGHT) /*(vy >= 0 && nx > 0)*/
+		else if (state == MARIO_STATE_RUNNING_RIGHT || state == MARIO_STATE_WALKING_RIGHT && vy >= 0) /*(vy >= 0 && nx > 0)*/
 			ani = MARIO_ANI_FIRE_WALKING_RIGHT;
-		else if (state == MARIO_STATE_RUNNING_LEFT || state == MARIO_STATE_WALKING_LEFT) /*(vy >= 0 && nx < 0)*/
+		else if (state == MARIO_STATE_RUNNING_LEFT || state == MARIO_STATE_WALKING_LEFT && vy >= 0) /*(vy >= 0 && nx < 0)*/
 			ani = MARIO_ANI_FIRE_WALKING_LEFT;
-		else if (state == MARIO_STATE_JUMP || CMario::isOnGround == false)
+		else if (state == MARIO_STATE_JUMP || CMario::isOnGround == false || vy < 0)
 		{
 			if (nx > 0)
 				ani = MARIO_ANI_FIRE_JUMP_RIGHT;
@@ -430,7 +460,7 @@ void CMario::Jump()
 {
 	if (isOnGround ==false)//allow mario to jump only when on ground
 		return;
-	vy=-MARIO_JUMP_SPEED_Y;
+	vy =- MARIO_JUMP_SPEED_Y;
 	isOnGround = false;
 }
 

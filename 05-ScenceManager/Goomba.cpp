@@ -23,7 +23,7 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	vector<LPGAMEOBJECT> BrickObjects;
 	BrickObjects.clear();
 	for (UINT i = 0; i < coObjects->size(); i++)
-		if (coObjects->at(i)->GetType() == OBJECT_TYPE_BRICK)
+		if (coObjects->at(i)->GetType() == OBJECT_TYPE_BRICK/*|| coObjects->at(i)->GetType() == OBJECT_TYPE_GOOMBA*/)
 			BrickObjects.push_back(coObjects->at(i));
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
@@ -36,14 +36,15 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	}
 	else
 	{
-		float min_tx, min_ty, nx=0 , ny=0;
+		float min_tx, min_tyduong,min_tyam, nx=0 , ny=0;
 		float rdx = 0;
 		float rdy = 0;
 		
 		min_tx = 1.0f;
-		min_ty = 1.0f;
+		min_tyduong = min_tyam=1.0f;
 		int min_ix = -1;
-		int min_iy = -1;
+		int min_iyduong = -1;
+		int min_iyam = -1;
 		coEventsResult.clear();
 
 		for (UINT i = 0; i < coEvents.size(); i++)
@@ -62,27 +63,48 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 				}
 			}
 			if (c->ny > 0)
-				return;
+			{
+				if (c->t < min_tyduong)
+				{
+					min_tyduong = c->t;
+					ny = c->ny;
+					min_iyduong = i;
+					rdy = c->dy;
+				}
+			}				
 			else
 			{
-				if (c->t < min_ty )
+				if (c->t < min_tyam )
 				{
-					min_ty = c->t;
+					min_tyam = c->t;
 					ny = c->ny;
-					min_iy = i;
+					min_iyam = i;
 					rdy = c->dy;
 				}
 			}
-			
-
 			if (min_ix >= 0) coEventsResult.push_back(coEvents[min_ix]);
-			if (min_iy >= 0) coEventsResult.push_back(coEvents[min_iy]);
+			if (min_iyduong >= 0) coEventsResult.push_back(coEvents[min_iyduong]);
+			if (min_iyam >= 0) coEventsResult.push_back(coEvents[min_iyam]);
 		}
 		x += min_tx * dx + nx * 0.4f;
-		y += min_ty * dy + ny * 0.4f;
+		y += min_tyam * dy + ny * 0.4f;
 
 		if (nx != 0) vx = -vx;
 		if (ny != 0) vy = 0;
+		/*for (UINT i = 0; i < coEventsResult.size(); i++)
+		{
+			LPCOLLISIONEVENT e = coEventsResult[i];
+
+			if (dynamic_cast<CGoomba*>(e->obj)) // if e->obj is Goomba 
+			{
+				CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
+				if (e->nx != 0)
+				{
+					goomba->vx = -goomba->vx;
+					vx = -vx;
+				}
+			}
+		}*/
 	}
 	for (UINT i = 0; i < coEvents.size(); i++)
 		delete coEvents[i];
