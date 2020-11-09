@@ -19,6 +19,7 @@ CMario::CMario(float x, float y) : CGameObject()
 	untouchable = 0;
 	SetState(MARIO_STATE_IDLE);
 	isOnGround = true;
+	isFlying = false;
 	//allowJump = true;
 	start_x = x; 
 	start_y = y; 
@@ -76,8 +77,16 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		if (ny < 0)
 		{
 			vy = 0;
-			if(!isOnGround)
+			if (!isOnGround)
+			{
 				isOnGround = true;
+				if (state != MARIO_STATE_RUNNINGFAST_LEFT && state != MARIO_STATE_RUNNINGFAST_RIGHT)
+				{
+					isRunningFastLeft = isRunningFastRight = false;
+					isFlying = false;
+				}
+			}
+				
 		}
 		/*else
 		{
@@ -378,14 +387,13 @@ void CMario::Render()
 		}
 		else
 		{	
-			if (state == MARIO_STATE_FLYRIGHT)
-				ani = MARIO_ANI_TAIL_FLYRIGHT;
-			else if (state == MARIO_STATE_FLYLEFT)
-				ani = MARIO_ANI_TAIL_FLYLEFT;
-			else if (state == MARIO_STATE_RUNNINGFAST_RIGHT)
-				ani = MARIO_ANI_TAIL_FLYRIGHT;
-			else if (state == MARIO_STATE_RUNNINGFAST_LEFT)
-				ani = MARIO_ANI_TAIL_FLYLEFT;
+			if (isFlying==true)
+			{
+				if (nx > 0)
+					ani = MARIO_ANI_TAIL_FLYRIGHT;
+				else
+					ani = MARIO_ANI_TAIL_FLYLEFT;
+			}
 			else
 			{
 				if (nx > 0)
@@ -484,7 +492,6 @@ void CMario::SetState(int state)
 		break;
 	case MARIO_STATE_FLYRIGHT:
 		DebugOut(L"fly right\n");
-		Right();
 		Fly();
 		break;
 	case MARIO_STATE_WALKING_LEFT: 
@@ -505,7 +512,6 @@ void CMario::SetState(int state)
 		break;
 	case MARIO_STATE_FLYLEFT:
 		DebugOut(L"fly left\n");
-		Left();
 		Fly();
 		break;
 	case MARIO_STATE_CHANGERIGHT:
@@ -518,6 +524,9 @@ void CMario::SetState(int state)
 		// TODO: need to check if Mario is *current* on a platform before allowing to jump again
 		DebugOut(L"Jump\n");
 		Jump();
+		break;
+	case MARIO_STATE_FLYFALL:
+		Fall();
 		break;
 	/*case MARIO_STATE_HIGHJUMP:
 		JumpHigh();
@@ -620,8 +629,14 @@ void CMario::Jump()
 void CMario::Fly()
 {
 	vy = -MARIO_FLY_SPEED_Y;
-	vx = MARIO_WALKING_SPEED * nx;
+	vx = MARIO_RUNNING_SPEED * nx;
 	isOnGround = false;
+}
+void CMario::Fall()
+{
+	isOnGround = false;
+	vy += MARIO_RESIST_GRAVITY * dt;
+	vx = MARIO_WALKING_SPEED * nx;
 }
 /*void CMario::JumpHigh()
 {

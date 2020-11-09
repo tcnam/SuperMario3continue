@@ -333,14 +333,28 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 		if (mario->GetLevel() == MARIO_LEVEL_TAIL)
 		{
 			if (mario->isRunningFastLeft == true)
+			{
+				mario->isFlying = true;					//for choosing sprite when fly
 				mario->SetState(MARIO_STATE_FLYLEFT);
+			}
 			else if (mario->isRunningFastRight == true)
+			{
+				mario->isFlying = true;
 				mario->SetState(MARIO_STATE_FLYRIGHT);
-			else
+			}
+			
+			else if(mario->isRunningFastLeft==false&&mario->isRunningFastRight==false)
+			{
+				//mario->isFlying = false;
 				mario->SetState(MARIO_STATE_JUMP);
+			}
+			else
+				mario->SetState(MARIO_STATE_FLYFALL);
+				
 		}
 		else
 		{
+			//mario->isFlying = false;
 			mario->SetState(MARIO_STATE_JUMP);
 		}		
 		break;
@@ -387,21 +401,18 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 				}					
 				else
 				{
-					mario->isRunningFastLeft = false;
 					mario->isRunningLeft = true;
 					mario->SetState(MARIO_STATE_RUNNING_LEFT);
 				}
 			}
 			else
 			{
-				mario->isRunningFastLeft = false;
 				mario->isRunningLeft = false;
 				mario->SetState(MARIO_STATE_WALKING_LEFT);
 			}				
 		}			
 		else
 		{
-			mario->isRunningFastLeft = false;
 			mario->isRunningLeft = false;
 			mario->SetState(MARIO_STATE_CHANGELEFT);
 		}			
@@ -425,21 +436,18 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 				}					
 				else
 				{
-					mario->isRunningFastRight = false;
 					mario->isRunningRight = true;
 					mario->SetState(MARIO_STATE_RUNNING_RIGHT);
 				}
 			}
 			else
 			{
-				mario->isRunningFastRight = false;
 				mario->isRunningRight = false;
 				mario->SetState(MARIO_STATE_WALKING_RIGHT);
 			}				
 		}
 		else
 		{
-			mario->isRunningFastRight = false;
 			mario->isRunningRight = false;
 			mario->SetState(MARIO_STATE_CHANGERIGHT);
 		}

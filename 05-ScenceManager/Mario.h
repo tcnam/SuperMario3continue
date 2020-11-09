@@ -2,14 +2,15 @@
 #include "GameObject.h"
 
 #define MARIO_WALKING_SPEED		0.1f 
-#define MARIO_RUNNING_SPEED		0.2f
+#define MARIO_RUNNING_SPEED		0.3f
 #define MARIO_RUNNINGFAST_SPEED	0.4f
 //0.1f
 #define MARIO_JUMP_SPEED_Y		0.5f
 #define MARIO_JUMPHIGH_SPEED_Y	0.7f
 #define MARIO_FLY_SPEED_Y		0.3f
 #define MARIO_JUMP_DEFLECT_SPEED 0.2f
-#define MARIO_GRAVITY			0.002f		//0.00095f
+#define MARIO_GRAVITY			0.002f
+#define MARIO_RESIST_GRAVITY	0.001f	//0.00095f
 #define MARIO_DIE_DEFLECT_SPEED	 0.3f
 #define MARIO_DX_RUNNING_LIMIT		256
 
@@ -26,6 +27,7 @@
 #define MARIO_STATE_HIGHJUMP			301
 #define MARIO_STATE_FLYRIGHT			302
 #define MARIO_STATE_FLYLEFT				303
+#define MARIO_STATE_FLYFALL				304
 #define MARIO_STATE_DIE					400
 
 	
@@ -126,6 +128,8 @@ public:
 	bool isRunningFastRight;
 	bool isRunningFastLeft;
 
+	bool isFlying;
+
 	CMario(float x = 0.0f, float y = 0.0f);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *colliable_objects = NULL);
 	virtual void Render();
@@ -138,6 +142,7 @@ public:
 	void Left();
 	void RunFast();
 	void Fly();
+	void Fall();
 	void ChangeDirectionRight();
 	void ChangeDirectionLeft();
 
