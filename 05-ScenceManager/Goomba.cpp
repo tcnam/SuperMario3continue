@@ -9,7 +9,6 @@ void CGoomba::GetBoundingBox(float &left, float &top, float &right, float &botto
 	left = x;
 	top = y;
 	right = x + GOOMBA_BBOX_WIDTH;
-
 	if (state == GOOMBA_STATE_DIE)
 		bottom = y + GOOMBA_BBOX_HEIGHT_DIE;
 	else 	
@@ -28,7 +27,8 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
 	coEvents.clear();
-	CalcPotentialCollisions(&BrickObjects, coEvents);
+	//if(state!=GOOMBA_STATE_DIE)
+		CalcPotentialCollisions(&BrickObjects, coEvents);	
 	if (coEvents.size() == 0)
 	{
 		x += dx;
@@ -36,15 +36,14 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	}
 	else
 	{
-		float min_tx, min_tyduong,min_tyam, nx=0 , ny=0;
+		float min_tx, min_ty, nx=0 , ny=0;
 		float rdx = 0;
 		float rdy = 0;
 		
 		min_tx = 1.0f;
-		min_tyduong = min_tyam=1.0f;
+		min_ty=1.0f;
 		int min_ix = -1;
-		int min_iyduong = -1;
-		int min_iyam = -1;
+		int min_iy = -1;
 		coEventsResult.clear();
 
 		for (UINT i = 0; i < coEvents.size(); i++)
@@ -62,64 +61,27 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 					rdx = c->dx;
 				}
 			}
-			if (c->ny > 0)
+			if (c->ny < 0)
 			{
-				if (c->t < min_tyduong)
+				if (c->t < min_ty)
 				{
-					min_tyduong = c->t;
+					min_ty = c->t;
 					ny = c->ny;
-					min_iyduong = i;
-					rdy = c->dy;
-				}
-			}				
-			else
-			{
-				if (c->t < min_tyam )
-				{
-					min_tyam = c->t;
-					ny = c->ny;
-					min_iyam = i;
+					min_iy = i;
 					rdy = c->dy;
 				}
 			}
 			if (min_ix >= 0) coEventsResult.push_back(coEvents[min_ix]);
-			if (min_iyduong >= 0) coEventsResult.push_back(coEvents[min_iyduong]);
-			if (min_iyam >= 0) coEventsResult.push_back(coEvents[min_iyam]);
+			if (min_iy >= 0) coEventsResult.push_back(coEvents[min_iy]);
 		}
 		x += min_tx * dx + nx * 0.4f;
-		y += min_tyam * dy + ny * 0.4f;
+		y += min_ty * dy + ny * 0.4f;
 
-		if (nx != 0) vx = -vx;
-		if (ny != 0) vy = 0;
-		/*for (UINT i = 0; i < coEventsResult.size(); i++)
-		{
-			LPCOLLISIONEVENT e = coEventsResult[i];
-
-			if (dynamic_cast<CGoomba*>(e->obj)) // if e->obj is Goomba 
-			{
-				CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
-				if (e->nx != 0)
-				{
-					goomba->vx = -goomba->vx;
-					vx = -vx;
-				}
-			}
-		}*/
+		if (nx != 0) vx=-vx;
+		if (ny < 0) vy = 0;
 	}
 	for (UINT i = 0; i < coEvents.size(); i++)
 		delete coEvents[i];
-	//
-	// TO-DO: make sure Goomba can interact with the world and to each of them too!
-	// 
-
-
-	/*if (vx < 0 && x < 0) {
-		x = 0; vx = -vx;
-	}
-
-	if (vx > 0 && x > 290) {
-		x = 290; vx = -vx;
-	}*/
 }
 
 void CGoomba::Render()
@@ -140,11 +102,11 @@ void CGoomba::SetState(int state)
 	switch (state)
 	{
 		case GOOMBA_STATE_DIE:
-			y += GOOMBA_BBOX_HEIGHT - GOOMBA_BBOX_HEIGHT_DIE + 1;
+			y += GOOMBA_BBOX_HEIGHT - GOOMBA_BBOX_HEIGHT_DIE ;
 			vx = 0;
 			vy = 0;
 			break;
-		case GOOMBA_STATE_WALKING: 
+		case GOOMBA_STATE_WALKING:
 			vx = -GOOMBA_WALKING_SPEED;
 	}
 }

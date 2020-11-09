@@ -286,7 +286,7 @@ void CPlayScene::Update(DWORD dt)
 	{
 		cx -= game->GetScreenWidth()/2;
 		cy -= game->GetScreenHeight()/2;
-		if (cy > -game->GetScreenHeight()*2)
+		if (cy > -game->GetScreenHeight()*3/2)
 			cy = -game->GetScreenHeight();
 		CGame::GetInstance()->SetCamPos(round(cx),round(cy));
 	}
@@ -323,18 +323,41 @@ void CPlayScene::Unload()
 
 void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 {
-	//DebugOut(L"[INFO] KeyDown: %d\n", KeyCode);
+	DebugOut(L"[INFO] KeyDown: %d\n", KeyCode);
 
 	CMario *mario = ((CPlayScene*)scence)->GetPlayer();
 	switch (KeyCode)
 	{
 	case DIK_SPACE:
-		mario->SetState(MARIO_STATE_JUMP);
+		//mario->allowJump = false;
+		if (mario->GetLevel() == MARIO_LEVEL_TAIL)
+		{
+			if (mario->isRunningFastLeft == true)
+				mario->SetState(MARIO_STATE_FLYLEFT);
+			else if (mario->isRunningFastRight == true)
+				mario->SetState(MARIO_STATE_FLYRIGHT);
+			else
+				mario->SetState(MARIO_STATE_JUMP);
+		}
+		else
+		{
+			mario->SetState(MARIO_STATE_JUMP);
+		}		
 		break;
 	case DIK_A: 
 		mario->Reset();
 		break;
 	}
+}
+void CPlayScenceKeyHandler::OnKeyUp(int KeyCode)
+{
+	/*CMario* mario = ((CPlayScene*)scence)->GetPlayer();
+	switch (KeyCode)
+	{
+	case DIK_SPACE:
+		mario->allowJump = true;
+		break;
+	}*/
 }
 
 
@@ -345,83 +368,92 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 	// disable control key when Mario die 
 	
 	if (mario->GetState() == MARIO_STATE_DIE) return;
-	else if (game->IsKeyDown(DIK_LEFT) && !game->IsKeyDown(DIK_RIGHT))//left
+	if (game->IsKeyDown(DIK_LEFT) && !game->IsKeyDown(DIK_RIGHT))//left
 	{
 		mario->SetTimeMovingLeft(GetTickCount());
+		
 		if (GetTickCount()-mario->GetTimeMovingRight()>200)
 		{
+			mario->isRunningRight = false;		
 			if (game->IsKeyDown(DIK_LSHIFT))
 			{
-
-				//if (GetTickCount() - mario->GetTimeRunningLeft() > 2000)
+				if (mario->isRunningLeft == false)
+					mario->SetTimeRunningLeft(GetTickCount());
+				if (GetTickCount() - mario->GetTimeRunningLeft() > 1000 )
+				{
+					mario->isRunningLeft = true;
 					mario->SetState(MARIO_STATE_RUNNINGFAST_LEFT);
-				//else
-				{					
+					mario->isRunningFastLeft = true;
+				}					
+				else
+				{
+					mario->isRunningFastLeft = false;
+					mario->isRunningLeft = true;
 					mario->SetState(MARIO_STATE_RUNNING_LEFT);
-					
 				}
-					
 			}
 			else
+			{
+				mario->isRunningFastLeft = false;
+				mario->isRunningLeft = false;
 				mario->SetState(MARIO_STATE_WALKING_LEFT);
+			}				
 		}			
 		else
 		{
+			mario->isRunningFastLeft = false;
+			mario->isRunningLeft = false;
 			mario->SetState(MARIO_STATE_CHANGELEFT);
 		}			
 	}		
-	/*else if (game->IsKeyDown(DIK_LSHIFT) && game->IsKeyDown(DIK_RIGHT)&&!game->IsKeyDown(DIK_LEFT))
-	{
-		mario->SetTimeMovingRight(GetTickCount());
-		if (GetTickCount()-mario->GetTimeMovingLeft()>180)
-		{
-			mario->SetState(MARIO_STATE_CHANGERIGHT);
-		}			
-		else
-		{
-			
-			mario->SetState(MARIO_STATE_RUNNING_RIGHT);
-		}			
-	}*/
-		
 	else if (game->IsKeyDown(DIK_RIGHT) && !game->IsKeyDown(DIK_LEFT))//right
 	{
 		mario->SetTimeMovingRight(GetTickCount());
+		
 		if (GetTickCount()-mario->GetTimeMovingLeft()>200)
 		{
+			mario->isRunningLeft = false;
 			if (game->IsKeyDown(DIK_LSHIFT))
 			{
-				//if (GetTickCount() - mario->GetTimeRuningRight()>2000)
-					//mario->SetState(MARIO_STATE_RUNNINGFAST_LEFT);
-				//else
-				{					
-
-					mario->SetState(MARIO_STATE_RUNNING_RIGHT);				
+				if (mario->isRunningRight == false)
+					mario->SetTimeRunningRight(GetTickCount());
+				if (GetTickCount() - mario->GetTimeRuningRight() > 1000 )
+				{
+					mario->isRunningRight = true;
+					mario->SetState(MARIO_STATE_RUNNINGFAST_RIGHT);	
+					mario->isRunningFastRight = true;
+				}					
+				else
+				{
+					mario->isRunningFastRight = false;
+					mario->isRunningRight = true;
+					mario->SetState(MARIO_STATE_RUNNING_RIGHT);
 				}
-					
 			}
 			else
+			{
+				mario->isRunningFastRight = false;
+				mario->isRunningRight = false;
 				mario->SetState(MARIO_STATE_WALKING_RIGHT);
+			}				
 		}
 		else
 		{
-			
+			mario->isRunningFastRight = false;
+			mario->isRunningRight = false;
 			mario->SetState(MARIO_STATE_CHANGERIGHT);
-
 		}
 	}
-	/*else if (game->IsKeyDown(DIK_LEFT)&& !game->IsKeyDown(DIK_RIGHT))
+	/*else if (game->IsKeyDown(DIK_SPACE))
 	{
-		mario->SetTimeMovingLeft(GetTickCount());
-		if (GetTickCount()-mario->GetTimeMovingRight()>180)
-		{
-			mario->SetState(MARIO_STATE_CHANGELEFT);
-		}			
+		mario->SetTimeJump(GetTickCount());
+		
+		if (GetTickCount() - mario->GetTimeJump() >100)
+			mario->SetState(MARIO_STATE_HIGHJUMP);
 		else
-		{
-			
-			mario->SetState(MARIO_STATE_WALKING_LEFT);
-		}
+			mario->SetState(MARIO_STATE_JUMP);
+		mario->allowJump = false;
+		
 	}*/
 	else
 	{

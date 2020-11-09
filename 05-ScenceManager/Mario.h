@@ -6,9 +6,12 @@
 #define MARIO_RUNNINGFAST_SPEED	0.4f
 //0.1f
 #define MARIO_JUMP_SPEED_Y		0.5f
+#define MARIO_JUMPHIGH_SPEED_Y	0.7f
+#define MARIO_FLY_SPEED_Y		0.3f
 #define MARIO_JUMP_DEFLECT_SPEED 0.2f
 #define MARIO_GRAVITY			0.002f		//0.00095f
 #define MARIO_DIE_DEFLECT_SPEED	 0.3f
+#define MARIO_DX_RUNNING_LIMIT		256
 
 #define MARIO_STATE_IDLE				0
 #define MARIO_STATE_WALKING_RIGHT		100
@@ -20,6 +23,9 @@
 #define MARIO_STATE_RUNNINGFAST_RIGHT	103
 #define MARIO_STATE_RUNNINGFAST_LEFT	203
 #define MARIO_STATE_JUMP				300
+#define MARIO_STATE_HIGHJUMP			301
+#define MARIO_STATE_FLYRIGHT			302
+#define MARIO_STATE_FLYLEFT				303
 #define MARIO_STATE_DIE					400
 
 	
@@ -58,9 +64,18 @@
 
 #define MARIO_ANI_BIG_RUNNING_RIGHT			32
 #define MARIO_ANI_BIG_RUNNING_LEFT			33
+#define MARIO_ANI_TAIL_RUNNING_RIGHT		34
+#define MARIO_ANI_TAIL_RUNNING_LEFT			35
+#define MARIO_ANI_FIRE_RUNNING_RIGHT			36
+#define MARIO_ANI_FIRE_RUNNING_LEFT			37
+#define MARIO_ANI_SMALL_RUNNING_RIGHT		38
+#define MARIO_ANI_SMALL_RUNNING_LEFT		39
+
+#define MARIO_ANI_TAIL_FLYRIGHT				40
+#define MARIO_ANI_TAIL_FLYLEFT				41
 
 
-#define MARIO_ANI_DIE						34
+#define MARIO_ANI_DIE						41
 
 #define	MARIO_LEVEL_SMALL	1
 #define	MARIO_LEVEL_BIG		2
@@ -92,23 +107,37 @@ class CMario : public CGameObject
 	float start_y; 
 	DWORD StartMovingLeft;
 	DWORD StartMovingRight;
+
 	DWORD StartRunningLeft;
 	DWORD StartRunningRight;
+
+	DWORD StartRunningLeftFast;
+	DWORD StartRunningRightFast;
+
+	DWORD StartJump;
 
 	
 public:
 	bool isOnGround;
+	//bool allowJump;
+	bool isRunningRight;
+	bool isRunningLeft;
+
+	bool isRunningFastRight;
+	bool isRunningFastLeft;
 
 	CMario(float x = 0.0f, float y = 0.0f);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *colliable_objects = NULL);
 	virtual void Render();
 	void Stop();
 	void Walk();
-	void Run();
-	void RunFast();
+	void Run();	
 	void Jump();
+	//void JumpHigh();
 	void Right();
 	void Left();
+	void RunFast();
+	void Fly();
 	void ChangeDirectionRight();
 	void ChangeDirectionLeft();
 
@@ -122,8 +151,17 @@ public:
 	DWORD GetTimeRuningRight() { return StartRunningRight; }
 	DWORD GetTimeRunningLeft() { return StartRunningLeft; }
 
+	void SetTimeRunningFastRight(DWORD t) { this->StartRunningRightFast = t; }
+	void SetTimeRunningFastLeft(DWORD t) { this->StartRunningLeftFast = t; }
+	DWORD GetTimeRunningFastRight() { return StartRunningRightFast; }
+	DWORD GetTimeRunningFastLeft() { return StartRunningLeftFast; }
+
+	void SetTimeJump(DWORD t) { this->StartJump = t; }
+	DWORD GetTimeJump() { return StartJump; }
+
 	void SetState(int state);
 	void SetLevel(int l) { level = l; }
+	int GetLevel() { return level; }
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount(); }
 	void Reset();
 	void GetBoundingBoxTailLevel(float& left, float& top, float& right, float& bottom);

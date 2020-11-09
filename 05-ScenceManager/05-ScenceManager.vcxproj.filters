@@ -37,14 +37,14 @@
     <Filter Include="Object\GameObject\Enemy">
       <UniqueIdentifier>{3c1d2036-67b6-45c6-ae18-1ca68a7ba795}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Object\GameObject\Enemy\Koopas">
-      <UniqueIdentifier>{cc7bc873-a9f6-4862-aed6-ebcbf6d96c0f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Object\GameObject\Enemy\Goomba">
       <UniqueIdentifier>{38b1c751-3729-4e12-a201-974dc762db41}</UniqueIdentifier>
     </Filter>
     <Filter Include="Terrain">
       <UniqueIdentifier>{4c0d4155-a3b6-4639-9b2b-ef185bc5d852}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\GameObject\Enemy\Koopas">
+      <UniqueIdentifier>{cc7bc873-a9f6-4862-aed6-ebcbf6d96c0f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
