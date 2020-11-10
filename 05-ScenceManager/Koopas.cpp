@@ -46,19 +46,52 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		float rdy = 0;
 
 		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
-		/*LPCOLLISIONEVENT ey = coEvents[min_ty];
-		if (dynamic_cast<CBrick*>(ey->obj))
-		{
-
-		}
-		LPCOLLISIONEVENT ex = coEvents[min_tx];*/
 
 		x += min_tx * dx + nx * 0.4f;
 		y += min_ty * dy + ny * 0.4f;
-		if (nx != 0) vx = -vx;
+		//if (nx != 0) vx = -vx;
 		if (ny < 0)
 		{
 			vy = 0;
+		}
+		for (UINT i = 0; i < coEventsResult.size(); i++)
+		{
+			LPCOLLISIONEVENT e = coEventsResult[i];
+			if (nx != 0)
+			{
+				if (dynamic_cast<CBrick*>(e->obj))
+				{
+					vx = -vx;
+				}
+				else if (dynamic_cast<CBountyBrick*>(e->obj))
+				{
+					vx=-vx;
+				}
+				else if (dynamic_cast<CHiddenObject*>(e->obj))
+				{
+					if (state != KOOPAS_STATE_WALKING)
+					{
+						x += dx;
+						y += dy;
+					}
+					else
+						vx = -vx;					
+				}
+				else if (dynamic_cast<CGoomba*>(e->obj))
+				{
+					if (state != KOOPAS_STATE_WALKING)
+					{
+						x += dx;
+						//y += dy;
+						CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
+						if (goomba->GetState() != GOOMBA_STATE_DIE)
+							goomba->SetState(GOOMBA_STATE_DIE);
+					}
+					else
+						vx = -vx;
+					
+				}
+			}
 		}
 	}
 }

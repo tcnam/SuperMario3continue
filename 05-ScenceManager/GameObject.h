@@ -18,6 +18,8 @@ using namespace std;
 #define OBJECT_TYPE_BOUNTYBRICK	4
 #define OBJECT_TYPE_HIDDENOBJECT	5
 
+#define WEAPON_TYPE_FIREBALL		6
+
 class CGameObject; 
 typedef CGameObject * LPGAMEOBJECT;
 
@@ -79,14 +81,15 @@ public:
 	void SetType(int type) { this->type = type; }
 	int GetType() { return this->type; }
 	int GetState() { return this->state; }
+	void SetDirectionnx(int nx) { this->nx = nx; }
 
 	void RenderBoundingBox();
 
 	void SetAnimationSet(LPANIMATION_SET ani_set) { animation_set = ani_set; }
 
 	LPCOLLISIONEVENT SweptAABBEx(LPGAMEOBJECT coO);
-	virtual void CalcPotentialCollisions(vector<LPGAMEOBJECT> *coObjects, vector<LPCOLLISIONEVENT> &coEvents);
-	virtual void FilterCollision(
+	void CalcPotentialCollisions(vector<LPGAMEOBJECT> *coObjects, vector<LPCOLLISIONEVENT> &coEvents);
+	void FilterCollision(
 		vector<LPCOLLISIONEVENT> &coEvents, 
 		vector<LPCOLLISIONEVENT> &coEventsResult, 
 		float &min_tx, 

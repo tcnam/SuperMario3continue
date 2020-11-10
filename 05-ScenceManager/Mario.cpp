@@ -20,6 +20,7 @@ CMario::CMario(float x, float y) : CGameObject()
 	SetState(MARIO_STATE_IDLE);
 	isOnGround = true;
 	isFlying = false;
+	isAttacking = false;
 	//allowJump = true;
 	start_x = x; 
 	start_y = y; 
@@ -80,6 +81,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 			if (!isOnGround)
 			{
 				isOnGround = true;
+				isFlyFall = false;
 				if (state != MARIO_STATE_RUNNINGFAST_LEFT && state != MARIO_STATE_RUNNINGFAST_RIGHT)
 				{
 					isRunningFastLeft = isRunningFastRight = false;
@@ -394,6 +396,13 @@ void CMario::Render()
 				else
 					ani = MARIO_ANI_TAIL_FLYLEFT;
 			}
+			else if (isFlyFall==true)			//animation not working
+			{
+				if (nx > 0)
+					ani = MARIO_ANI_SMALL_JUMP_RIGHT;
+				else
+					ani = MARIO_ANI_SMALL_JUMP_LEFT;
+			}
 			else
 			{
 				if (nx > 0)
@@ -427,7 +436,14 @@ void CMario::Render()
 				ani = MARIO_ANI_FIRE_WALKING_LEFT;
 			else if (state == MARIO_STATE_RUNNINGFAST_LEFT)
 				ani = MARIO_ANI_FIRE_WALKING_LEFT;
-
+			
+			else if (isAttacking==true)
+			{
+				if (nx > 0)
+					ani = MARIO_ANI_FIRE_ATTACK_RIGHT;
+				else
+					ani = MARIO_ANI_FIRE_ATTACK_LEFT;
+			}
 			else
 			{
 				if (nx > 0)
@@ -526,6 +542,7 @@ void CMario::SetState(int state)
 		Jump();
 		break;
 	case MARIO_STATE_FLYFALL:
+		DebugOut(L"Fly fall\n");
 		Fall();
 		break;
 	/*case MARIO_STATE_HIGHJUMP:
@@ -533,11 +550,13 @@ void CMario::SetState(int state)
 		break;*/
 	case MARIO_STATE_IDLE: 
 		Stop();
-		break;
-	
-	
+		break;	
 	case MARIO_STATE_DIE:
 		vy = -MARIO_DIE_DEFLECT_SPEED;
+		break;
+	case MARIO_STATE_ATTACK:
+		DebugOut(L"Attack\n");
+		Attack();
 		break;
 	}
 }
@@ -635,8 +654,17 @@ void CMario::Fly()
 void CMario::Fall()
 {
 	isOnGround = false;
-	vy += MARIO_RESIST_GRAVITY * dt;
+	vy = -MARIO_RESIST_GRAVITY * dt;
 	vx = MARIO_WALKING_SPEED * nx;
+}
+void CMario::Attack()
+{
+	if(FireBall==NULL)
+		FireBall = new CFireBall();	
+	FireBall->SetSpeed(FIREBALL_SPEED * nx, 0);
+	FireBall->Attack(x + 18, y , nx);
+	DebugOut(L"Fire ball was created\n");
+	//FireBall->Render();
 }
 /*void CMario::JumpHigh()
 {
@@ -655,7 +683,7 @@ void CMario::Fall()
 void CMario::Reset()
 {
 	SetState(MARIO_STATE_IDLE);
-	SetLevel(MARIO_LEVEL_TAIL);
+	SetLevel(MARIO_LEVEL_FIRE);
 	SetPosition(start_x, start_y);
 	SetSpeed(0, 0);
 }

@@ -4,6 +4,7 @@
 #include "Mario.h"
 #include "Brick.h"
 #include "HiddenObject.h"
+#include "BountyBrick.h"
 #include "Goomba.h"
 
 #define KOOPAS_WALKING_SPEED 0.03f;
@@ -26,17 +27,15 @@
 
 class CKoopas : public CGameObject
 {
+public:
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects);
 	virtual void Render();
-
 	void left();
 	void right();
 	void walk();
 	void stop();
 	void dynamic();
-
-public:
 	CKoopas();
 	virtual void SetState(int state);
 };

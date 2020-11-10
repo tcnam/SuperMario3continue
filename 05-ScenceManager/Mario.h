@@ -1,5 +1,6 @@
 #pragma once
 #include "GameObject.h"
+#include "FireBall.h"
 
 #define MARIO_WALKING_SPEED		0.1f 
 #define MARIO_RUNNING_SPEED		0.3f
@@ -10,7 +11,7 @@
 #define MARIO_FLY_SPEED_Y		0.3f
 #define MARIO_JUMP_DEFLECT_SPEED 0.2f
 #define MARIO_GRAVITY			0.002f
-#define MARIO_RESIST_GRAVITY	0.001f	//0.00095f
+#define MARIO_RESIST_GRAVITY	0.002f	//0.00095f
 #define MARIO_DIE_DEFLECT_SPEED	 0.3f
 #define MARIO_DX_RUNNING_LIMIT		256
 
@@ -23,6 +24,7 @@
 #define MARIO_STATE_CHANGELEFT			202
 #define MARIO_STATE_RUNNINGFAST_RIGHT	103
 #define MARIO_STATE_RUNNINGFAST_LEFT	203
+#define MARIO_STATE_ATTACK				500
 #define MARIO_STATE_JUMP				300
 #define MARIO_STATE_HIGHJUMP			301
 #define MARIO_STATE_FLYRIGHT			302
@@ -68,16 +70,20 @@
 #define MARIO_ANI_BIG_RUNNING_LEFT			33
 #define MARIO_ANI_TAIL_RUNNING_RIGHT		34
 #define MARIO_ANI_TAIL_RUNNING_LEFT			35
-#define MARIO_ANI_FIRE_RUNNING_RIGHT			36
+#define MARIO_ANI_FIRE_RUNNING_RIGHT		36
 #define MARIO_ANI_FIRE_RUNNING_LEFT			37
 #define MARIO_ANI_SMALL_RUNNING_RIGHT		38
 #define MARIO_ANI_SMALL_RUNNING_LEFT		39
 
 #define MARIO_ANI_TAIL_FLYRIGHT				40
 #define MARIO_ANI_TAIL_FLYLEFT				41
+#define MARIO_ANI_TAIL_FALL_FLYRIGHT		42
+#define MARIO_ANI_TAIL_FALL_FLYLEFT			43
 
+#define MARIO_ANI_FIRE_ATTACK_RIGHT			44
+#define MARIO_ANI_FIRE_ATTACK_LEFT			45
 
-#define MARIO_ANI_DIE						41
+#define MARIO_ANI_DIE						46
 
 #define	MARIO_LEVEL_SMALL	1
 #define	MARIO_LEVEL_BIG		2
@@ -107,6 +113,9 @@ class CMario : public CGameObject
 
 	float start_x;			// initial position of Mario at scene
 	float start_y; 
+
+	CFireBall* FireBall;
+
 	DWORD StartMovingLeft;
 	DWORD StartMovingRight;
 
@@ -116,7 +125,7 @@ class CMario : public CGameObject
 	DWORD StartRunningLeftFast;
 	DWORD StartRunningRightFast;
 
-	DWORD StartJump;
+	DWORD StartFly;
 
 	
 public:
@@ -128,7 +137,10 @@ public:
 	bool isRunningFastRight;
 	bool isRunningFastLeft;
 
-	bool isFlying;
+	bool isFlying;						//for identifying sprites when flying and calculate fly time
+	bool isFlyFall;						//for choosing the right sprites for jump and fall fly state	
+
+	bool isAttacking;
 
 	CMario(float x = 0.0f, float y = 0.0f);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *colliable_objects = NULL);
@@ -143,6 +155,7 @@ public:
 	void RunFast();
 	void Fly();
 	void Fall();
+	void Attack();
 	void ChangeDirectionRight();
 	void ChangeDirectionLeft();
 
@@ -161,8 +174,10 @@ public:
 	DWORD GetTimeRunningFastRight() { return StartRunningRightFast; }
 	DWORD GetTimeRunningFastLeft() { return StartRunningLeftFast; }
 
-	void SetTimeJump(DWORD t) { this->StartJump = t; }
-	DWORD GetTimeJump() { return StartJump; }
+	void SetTimeFly(DWORD t) { this->StartFly = t; }
+	DWORD GetTimeFly() { return StartFly; }
+
+	CFireBall* GetFireBall() { return this->FireBall; }
 
 	void SetState(int state);
 	void SetLevel(int l) { level = l; }

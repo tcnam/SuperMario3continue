@@ -99,6 +99,9 @@
     <ClCompile Include="Terrain.cpp">
       <Filter>Terrain</Filter>
     </ClCompile>
+    <ClCompile Include="FireBall.cpp">
+      <Filter>Object\GameObject</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animations.h">
@@ -151,6 +154,9 @@
     </ClInclude>
     <ClInclude Include="Terrain.h">
       <Filter>Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="FireBall.h">
+      <Filter>Object\GameObject</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

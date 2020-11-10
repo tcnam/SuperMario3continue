@@ -27,7 +27,7 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
 	coEvents.clear();
-	//if(state!=GOOMBA_STATE_DIE)
+	if(state!=GOOMBA_STATE_DIE)
 		CalcPotentialCollisions(&BrickObjects, coEvents);	
 	if (coEvents.size() == 0)
 	{
@@ -108,5 +108,6 @@ void CGoomba::SetState(int state)
 			break;
 		case GOOMBA_STATE_WALKING:
 			vx = -GOOMBA_WALKING_SPEED;
+
 	}
 }

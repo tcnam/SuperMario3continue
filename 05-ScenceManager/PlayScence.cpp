@@ -31,6 +31,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath):
 #define SCENE_SECTION_ANIMATION_SETS	5
 #define SCENE_SECTION_OBJECTS	6
 #define SCENE_SECTION_TERRAIN	7
+#define SCENE_SECTION_FIREBALL	8
 
 /*#define OBJECT_TYPE_MARIO	0
 #define OBJECT_TYPE_BRICK	1
@@ -144,7 +145,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	int ani_set_id = atoi(tokens[3].c_str());
 
 	CAnimationSets * animation_sets = CAnimationSets::GetInstance();
-
+	//LPANIMATION_SET ani_set = animation_sets->Get(ani_set_id);
 	CGameObject *obj = NULL;
 	switch (object_type)
 	{
@@ -155,8 +156,9 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			return;
 		}
 		obj = new CMario(x,y); 
-		player = (CMario*)obj;  
-
+		player = (CMario*)obj; 
+		fireball = player->GetFireBall();
+		//fireball->SetAnimationSet(ani_set);
 		DebugOut(L"[INFO] Player object created!\n");
 		break;
 	case OBJECT_TYPE_GOOMBA: obj = new CGoomba(); break;
@@ -164,12 +166,12 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_KOOPAS: obj = new CKoopas(); break;
 	case OBJECT_TYPE_BOUNTYBRICK: obj = new CBountyBrick(); break;
 	case OBJECT_TYPE_HIDDENOBJECT: 
-	{
-		float r = atof(tokens[4].c_str());
-		float b = atof(tokens[5].c_str());
-		obj = new CHiddenObject(x, y, r, b);
-	}
-	break;
+		{
+			float r = atof(tokens[4].c_str());
+			float b = atof(tokens[5].c_str());
+			obj = new CHiddenObject(x, y, r, b);
+		}
+		break;
 	case OBJECT_TYPE_PORTAL:
 		{	
 			float r = atof(tokens[4].c_str());
@@ -189,6 +191,16 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	obj->SetAnimationSet(ani_set);
 	objects.push_back(obj);
 }
+/*void CPlayScene::_ParseSection_FIREBALL(string line)
+{
+	vector<string> tokens = split(line);
+
+	if (tokens.size() < 1) return;
+	int ani_set_id = atoi(tokens[0].c_str());
+	CAnimationSets* animation_sets = CAnimationSets::GetInstance();
+	LPANIMATION_SET ani_set = animation_sets->Get(ani_set_id);
+	fireball->SetAnimationSet(ani_set);
+}*/
 void CPlayScene::_ParseSection_TERRAIN(string line)
 {
 	vector<string> tokens = split(line);
@@ -232,8 +244,9 @@ void CPlayScene::Load()
 		if (line == "[OBJECTS]") { 
 			section = SCENE_SECTION_OBJECTS; continue; }
 		if (line == "[TERRAINS]"){
-			section = SCENE_SECTION_TERRAIN; continue;
-		}
+			section = SCENE_SECTION_TERRAIN; continue;}
+		/*if (line == "[FIREBALL]") {
+			section = SCENE_SECTION_FIREBALL; continue;}*/
 		if (line[0] == '[') { section = SCENE_SECTION_UNKNOWN; continue; }	
 
 		//
@@ -247,6 +260,7 @@ void CPlayScene::Load()
 			case SCENE_SECTION_ANIMATION_SETS: _ParseSection_ANIMATION_SETS(line); break;
 			case SCENE_SECTION_OBJECTS: _ParseSection_OBJECTS(line);break;
 			case SCENE_SECTION_TERRAIN: _ParseSection_TERRAIN(line); break;
+			//case SCENE_SECTION_FIREBALL: _ParseSection_FIREBALL(line); break;
 		}
 	}
 
@@ -272,6 +286,9 @@ void CPlayScene::Update(DWORD dt)
 	{
 		objects[i]->Update(dt, &coObjects);
 	}
+	/*if(fireball->isFinished==false)
+		fireball->Update(dt, &coObjects);*/
+	
 
 	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
 	if (player == NULL) return; 
@@ -303,8 +320,11 @@ void CPlayScene::Render()
 	for (int i = 0; i < terrains.size(); i++)
 		terrains[i]->Draw(terrains[i]->GetPositionX(),terrains[i]->GetPositionY(),255);
 	for (int i = 0; i < objects.size(); i++)
+	{
 		objects[i]->Render();
-	
+	}	
+	/*if(fireball->isFinished==false)
+		fireball->Render();*/
 }
 
 /*
@@ -316,6 +336,7 @@ void CPlayScene::Unload()
 		delete objects[i];
 
 	objects.clear();
+	terrains.clear();
 	player = NULL;
 
 	DebugOut(L"[INFO] Scene %s unloaded! \n", sceneFilePath);
@@ -334,23 +355,42 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 		{
 			if (mario->isRunningFastLeft == true)
 			{
-				mario->isFlying = true;					//for choosing sprite when fly
-				mario->SetState(MARIO_STATE_FLYLEFT);
+				if (mario->isFlying == false)
+					mario->SetTimeFly(GetTickCount());
+				mario->isFlying = true;					
+				if (GetTickCount() - mario->GetTimeFly() < 2000)
+					mario->SetState(MARIO_STATE_FLYLEFT);
+				else
+				{
+					mario->isFlyFall = true;
+					mario->SetState(MARIO_STATE_FLYFALL);
+				}
+					
 			}
 			else if (mario->isRunningFastRight == true)
 			{
+				if (mario->isFlying == false)
+					mario->SetTimeFly(GetTickCount());
 				mario->isFlying = true;
-				mario->SetState(MARIO_STATE_FLYRIGHT);
-			}
-			
-			else if(mario->isRunningFastLeft==false&&mario->isRunningFastRight==false)
-			{
-				//mario->isFlying = false;
-				mario->SetState(MARIO_STATE_JUMP);
+				if (GetTickCount() - mario->GetTimeFly() < 2000)
+					mario->SetState(MARIO_STATE_FLYRIGHT);
+				else
+				{
+					mario->isFlyFall = true;
+					mario->SetState(MARIO_STATE_FLYFALL);
+				}
+					
 			}
 			else
-				mario->SetState(MARIO_STATE_FLYFALL);
-				
+			{
+				if (mario->isOnGround == true)
+					mario->SetState(MARIO_STATE_JUMP);
+				else
+				{
+					mario->isFlyFall = true;
+					mario->SetState(MARIO_STATE_FLYFALL);
+				}
+			}				
 		}
 		else
 		{
@@ -361,17 +401,24 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 	case DIK_A: 
 		mario->Reset();
 		break;
+	case DIK_Z:
+		if (mario->GetLevel() == MARIO_LEVEL_FIRE)
+		{
+			mario->isAttacking = true;
+			mario->SetState(MARIO_STATE_ATTACK);
+		}
+		break;
 	}
 }
 void CPlayScenceKeyHandler::OnKeyUp(int KeyCode)
 {
-	/*CMario* mario = ((CPlayScene*)scence)->GetPlayer();
+	CMario* mario = ((CPlayScene*)scence)->GetPlayer();
 	switch (KeyCode)
 	{
-	case DIK_SPACE:
-		mario->allowJump = true;
+	case DIK_Z:
+		mario->isAttacking = false;
 		break;
-	}*/
+	}
 }
 
 
@@ -389,7 +436,7 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 		if (GetTickCount()-mario->GetTimeMovingRight()>200)
 		{
 			mario->isRunningRight = false;		
-			if (game->IsKeyDown(DIK_LSHIFT))
+			if (game->IsKeyDown(DIK_Z))
 			{
 				if (mario->isRunningLeft == false)
 					mario->SetTimeRunningLeft(GetTickCount());
@@ -424,7 +471,7 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 		if (GetTickCount()-mario->GetTimeMovingLeft()>200)
 		{
 			mario->isRunningLeft = false;
-			if (game->IsKeyDown(DIK_LSHIFT))
+			if (game->IsKeyDown(DIK_Z))
 			{
 				if (mario->isRunningRight == false)
 					mario->SetTimeRunningRight(GetTickCount());
@@ -463,7 +510,7 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 		mario->allowJump = false;
 		
 	}*/
-	else
+	else if(!game->IsKeyDown(DIK_SPACE))
 	{
 		mario->SetState(MARIO_STATE_IDLE);
 	}		
