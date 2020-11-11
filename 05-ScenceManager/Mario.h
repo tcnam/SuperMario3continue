@@ -115,6 +115,7 @@ class CMario : public CGameObject
 	float start_y; 
 
 	CFireBall* FireBall;
+	//CKoopas* Koopas;
 
 	DWORD StartMovingLeft;
 	DWORD StartMovingRight;
@@ -141,6 +142,7 @@ public:
 	bool isFlyFall;						//for choosing the right sprites for jump and fall fly state	
 
 	bool isAttacking;
+	bool isHoldingKoopas;
 
 	CMario(float x = 0.0f, float y = 0.0f);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *colliable_objects = NULL);

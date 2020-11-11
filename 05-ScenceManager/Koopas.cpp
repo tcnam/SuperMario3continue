@@ -103,17 +103,22 @@ void CKoopas::Render()
 		ani = KOOPAS_ANI_DIE;
 	}*/
 		
-	if (state == KOOPAS_STATE_WALKING)
+	if (vx == 0)
+		ani = KOOPAS_ANI_DEFENSE_STATIC;
+	else if(vx>0)
 	{
-		if (vx > 0)
+		if (state == KOOPAS_STATE_WALKING)
 			ani = KOOPAS_ANI_WALKING_RIGHT;
 		else
-			ani = KOOPAS_ANI_WALKING_LEFT;
+			ani = KOOPAS_ANI_DEFENSE_DYNAMIC;
 	}
-	else if (state == KOOPAS_ANI_DEFENSE_DYNAMIC && vx!=0)ani = KOOPAS_ANI_DEFENSE_DYNAMIC;
 	else
-		ani = KOOPAS_ANI_DEFENSE_STATIC;
-	
+	{
+		if (state == KOOPAS_STATE_WALKING)
+			ani = KOOPAS_ANI_WALKING_LEFT;
+		else
+			ani = KOOPAS_ANI_DEFENSE_DYNAMIC;
+	}
 	animation_set->at(ani)->Render(x, y);
 
 	RenderBoundingBox();

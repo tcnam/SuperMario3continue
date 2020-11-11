@@ -74,21 +74,21 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		// block every object first!
 		x += min_tx*dx + nx*0.4f;
 		y += min_ty*dy + ny*0.4f;
-		if (nx!=0) vx = 0;
 		if (ny < 0)
 		{
 			vy = 0;
+			isFlyFall = false;
+			if (state != MARIO_STATE_RUNNINGFAST_LEFT && state != MARIO_STATE_RUNNINGFAST_RIGHT)
+			{
+				isRunningFastLeft = isRunningFastRight = false;
+				isFlying = false;
+			}
 			if (!isOnGround)
 			{
 				isOnGround = true;
-				isFlyFall = false;
-				if (state != MARIO_STATE_RUNNINGFAST_LEFT && state != MARIO_STATE_RUNNINGFAST_RIGHT)
-				{
-					isRunningFastLeft = isRunningFastRight = false;
-					isFlying = false;
-				}
+
 			}
-				
+
 		}
 		/*else
 		{
@@ -100,60 +100,15 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		for (UINT i = 0; i < coEventsResult.size(); i++)
 		{
 			LPCOLLISIONEVENT e = coEventsResult[i];
-
-			if (dynamic_cast<CGoomba *>(e->obj)) // if e->obj is Goomba 
+			if (nx != 0)
 			{
-				CGoomba *goomba = dynamic_cast<CGoomba *>(e->obj);
-
-				// jump on top >> kill Goomba and deflect a bit 
-				if (e->ny < 0)
+				if (dynamic_cast<CGoomba*>(e->obj)) // if e->obj is Goomba 
 				{
-					if (goomba->GetState()!= GOOMBA_STATE_DIE)
-					{
-						
-						goomba->SetState(GOOMBA_STATE_DIE);
-						vy = -MARIO_JUMP_DEFLECT_SPEED;
-					}
-				}
-				else if (e->nx != 0)
-				{
-					if (untouchable==0)
-					{
-						if (goomba->GetState()!=GOOMBA_STATE_DIE)
-						{
-							if (level > MARIO_LEVEL_SMALL)
-							{
-								level = MARIO_LEVEL_SMALL;
-								StartUntouchable();
-							}
-							else 
-								SetState(MARIO_STATE_DIE);
-						}
-					}
-				}
-			} // if Goomba
-			else if (dynamic_cast<CKoopas*>(e->obj))
-			{
-				CKoopas* koopas = dynamic_cast<CKoopas*>(e->obj);
-				if (e->ny < 0)
-				{
-					if (koopas->GetState() != KOOPAS_STATE_DEFENSE_STATIC)
-					{
-						koopas->SetState(KOOPAS_STATE_DEFENSE_STATIC);
-						vy = -MARIO_JUMP_DEFLECT_SPEED;
-					}
-					else
-					{
-						koopas->SetState(KOOPAS_STATE_DEFENSE_DYNAMIC);
-						vy = -MARIO_JUMP_DEFLECT_SPEED;
-						
-					}
-				}
-				else if (e->nx != 0)
-				{
+					vx = 0;
+					CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
 					if (untouchable == 0)
 					{
-						if (koopas->GetState() != KOOPAS_STATE_DEFENSE_STATIC)
+						if (goomba->GetState() != GOOMBA_STATE_DIE)
 						{
 							if (level > MARIO_LEVEL_SMALL)
 							{
@@ -163,55 +118,89 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 							else
 								SetState(MARIO_STATE_DIE);
 						}
-						else 
-						{							
-							koopas->SetState(KOOPAS_STATE_DEFENSE_DYNAMIC);
-							koopas->vx = koopas->vx * nx;
+					}
+				}
+				else if (dynamic_cast<CKoopas*>(e->obj))
+				{
+					CKoopas*Koopas = dynamic_cast<CKoopas*>(e->obj);
+					vx = 0;
+					if (Koopas->GetState() != KOOPAS_STATE_DEFENSE_STATIC)
+					{
+						if (level > MARIO_LEVEL_SMALL)
+						{
+							level = MARIO_LEVEL_SMALL;
+							StartUntouchable();
+						}
+						else
+							SetState(MARIO_STATE_DIE);
+					}
+					else
+					{
+						Koopas->SetState(KOOPAS_STATE_DEFENSE_DYNAMIC);
+						Koopas->vx = -Koopas->vx * nx;
+					}
+				}
+				else if (dynamic_cast<CBrick*>(e->obj))
+				{
+					vx = 0;
+					//isRunningFastLeft = false;
+					//isRunningFastRight = false;
+				}
+				else if (dynamic_cast<CBountyBrick*>(e->obj))
+				{
+					vx = 0;
+					//isRunningFastLeft = false;
+					//isRunningFastRight = false;
+				}
+			}
+			else if (ny != 0)
+			{
+				if (ny < 0)
+				{
+					if (dynamic_cast<CGoomba*>(e->obj)) // if e->obj is Goomba 
+					{
+						CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
+						if (goomba->GetState() != GOOMBA_STATE_DIE)
+						{
+							goomba->SetState(GOOMBA_STATE_DIE);
+							vy = -MARIO_JUMP_DEFLECT_SPEED;
+						}
+					}
+					else if (dynamic_cast<CKoopas*>(e->obj))
+					{
+						CKoopas* Koopas = dynamic_cast<CKoopas*>(e->obj);
+						if (Koopas->GetState() != KOOPAS_STATE_DEFENSE_STATIC)
+						{
+							Koopas->SetState(KOOPAS_STATE_DEFENSE_STATIC);
+							vy = -MARIO_JUMP_DEFLECT_SPEED;
+						}
+						else
+						{
+							Koopas->SetState(KOOPAS_STATE_DEFENSE_DYNAMIC);
+							vy = -MARIO_JUMP_DEFLECT_SPEED;
+
 						}
 					}
 				}
-			}
-			else if (dynamic_cast<CPortal *>(e->obj))
-			{
-				CPortal *p = dynamic_cast<CPortal *>(e->obj);
-				CGame::GetInstance()->SwitchScene(p->GetSceneId());
-			}
-			else if (dynamic_cast<CBountyBrick*>(e->obj))
-			{
-				CBountyBrick* bountybrick = static_cast<CBountyBrick*>(e->obj);
-				if (e->ny > 0)
+				if (ny > 0)
 				{
-					vy = 0;
-					if (bountybrick->GetState() != BOUNTYBRICK_STATE_EMPTY)
+					if (dynamic_cast<CBrick*>(e->obj))
 					{
-						float x, y;
-						bountybrick->GetPosition(x, y);
-						bountybrick->SetState(BOUNTYBRICK_STATE_EMPTY);
-						bountybrick->SetPosition(round(x), round(y -5));
+						vy = 0;
+					}
+					else if (dynamic_cast<CBountyBrick*>(e->obj))
+					{
+						vy = 0;
+					}
+					else if (dynamic_cast<CHiddenObject*>(e->obj))
+					{
+						y += dy;
+						x += dx;
 					}
 				}
-
-
-			}
-			else if (dynamic_cast<CHiddenObject*>(e->obj))
-			{
-				if (e->ny > 0)
-				{
-					y += dy;
-					x += dx;
-				}
-				if (e->nx != 0)
-				{
-					x += dx;
-					y += dy;
-				}
-			}
-			else if (dynamic_cast<CBrick*>(e->obj))
-			{
-				if (e->ny > 0)
-					vy = 0;
 			}
 		}
+			
 	}
 	//DebugOut(L"--> %s\n", ToWSTR(nx.ToString());
 
@@ -683,7 +672,7 @@ void CMario::Attack()
 void CMario::Reset()
 {
 	SetState(MARIO_STATE_IDLE);
-	SetLevel(MARIO_LEVEL_FIRE);
+	SetLevel(MARIO_LEVEL_TAIL);
 	SetPosition(start_x, start_y);
 	SetSpeed(0, 0);
 }
