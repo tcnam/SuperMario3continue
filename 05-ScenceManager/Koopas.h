@@ -1,7 +1,6 @@
 #pragma once
 
 #include "GameObject.h"
-#include "Mario.h"
 #include "Brick.h"
 #include "HiddenObject.h"
 #include "BountyBrick.h"
@@ -18,6 +17,7 @@
 #define KOOPAS_STATE_DIE 200
 #define KOOPAS_STATE_DEFENSE_STATIC	300
 #define KOOPAS_STATE_DEFENSE_DYNAMIC	400
+#define KOOPAS_STATE_ISHOLD				500
 
 #define KOOPAS_ANI_WALKING_LEFT 0
 #define KOOPAS_ANI_WALKING_RIGHT 1
@@ -26,8 +26,10 @@
 #define KOOPAS_ANI_DEFENSE_DYNAMIC	3
 
 class CKoopas : public CGameObject
-{
+{	
 public:
+	bool isHold;
+	CKoopas();
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects);
 	virtual void Render();
@@ -35,7 +37,6 @@ public:
 	void right();
 	void walk();
 	void stop();
-	void dynamic();
-	CKoopas();
+	void dynamic();	
 	virtual void SetState(int state);
 };

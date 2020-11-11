@@ -9,6 +9,7 @@ class CFireBall :public CGameObject
 {	
 public:
 	bool isFinished;
+	bool isUsed;
 	CFireBall();
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	virtual void Render();

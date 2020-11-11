@@ -9,6 +9,8 @@ CFireBall::CFireBall()
 {
 	vx = 0;
 	vy = 0;
+	nx = -1;
+	isUsed = false;
 	isFinished = false;
 }
 
@@ -17,7 +19,8 @@ void CFireBall::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	if (isFinished == true)
 		return;
 	CGameObject::Update(dt);
-	vy += FIREBALL_GRAVITY * dt;
+	if(isUsed==true)
+		vy += FIREBALL_GRAVITY * dt;
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
 

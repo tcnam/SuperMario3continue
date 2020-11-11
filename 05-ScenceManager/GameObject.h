@@ -17,8 +17,7 @@ using namespace std;
 #define OBJECT_TYPE_KOOPAS	3
 #define OBJECT_TYPE_BOUNTYBRICK	4
 #define OBJECT_TYPE_HIDDENOBJECT	5
-
-#define WEAPON_TYPE_FIREBALL		6
+#define OBJECT_TYPE_FIREBALL		6
 
 class CGameObject; 
 typedef CGameObject * LPGAMEOBJECT;

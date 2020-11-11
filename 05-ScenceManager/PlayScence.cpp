@@ -165,6 +165,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_BRICK: obj = new CBrick(); break;
 	case OBJECT_TYPE_KOOPAS: obj = new CKoopas(); break;
 	case OBJECT_TYPE_BOUNTYBRICK: obj = new CBountyBrick(); break;
+	case OBJECT_TYPE_FIREBALL:obj = new CFireBall(); break;
 	case OBJECT_TYPE_HIDDENOBJECT: 
 		{
 			float r = atof(tokens[4].c_str());
@@ -277,14 +278,16 @@ void CPlayScene::Update(DWORD dt)
 	// TO-DO: This is a "dirty" way, need a moref organized way 
 
 	vector<LPGAMEOBJECT> coObjects;
+	vector<LPGAMEOBJECT> coFireBalls;
 	for (size_t i = 1; i < objects.size(); i++)
 	{
-		coObjects.push_back(objects[i]);
+		coObjects.push_back(objects[i]);			
 	}
 
 	for (size_t i = 0; i < objects.size(); i++)
 	{
-		objects[i]->Update(dt, &coObjects);
+			objects[i]->Update(dt, &coObjects);
+
 	}
 	/*if(fireball->isFinished==false)
 		fireball->Update(dt, &coObjects);*/
@@ -416,6 +419,8 @@ void CPlayScenceKeyHandler::OnKeyUp(int KeyCode)
 	switch (KeyCode)
 	{
 	case DIK_Z:
+		if (mario->isHoldingKoopas == true)
+			mario->isHoldingKoopas = false;
 		mario->isAttacking = false;
 		break;
 	}

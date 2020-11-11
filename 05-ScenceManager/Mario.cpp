@@ -6,7 +6,7 @@
 #include "Game.h"
 
 #include "Goomba.h"
-#include "Koopas.h"
+//#include "Koopas.h"
 #include "Portal.h"
 #include "Brick.h"
 #include "BountyBrick.h"
@@ -15,7 +15,7 @@
 
 CMario::CMario(float x, float y) : CGameObject()
 {
-	level = MARIO_LEVEL_TAIL;
+	level = MARIO_LEVEL_BIG;
 	untouchable = 0;
 	SetState(MARIO_STATE_IDLE);
 	isOnGround = true;
@@ -35,6 +35,31 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	CGameObject::Update(dt);
 	// Simple fall down
 	vy += MARIO_GRAVITY*dt;
+	if (koopas != NULL)
+	{
+		if (isHoldingKoopas == true)
+		{
+			if (level != MARIO_LEVEL_SMALL)
+			{
+				if (nx > 0)
+					koopas->SetPosition(x + 15, y + 7);
+				else
+					koopas->SetPosition(x - 16, y + 7);
+			}
+			else
+			{
+				if (nx > 0)
+					koopas->SetPosition(x + 13, y - 3);
+				else
+					koopas->SetPosition(x - 14, y - 3);
+			}			
+		}
+		else
+		{
+			koopas->SetState(KOOPAS_STATE_DEFENSE_DYNAMIC);
+			koopas = NULL;
+		}			
+	}
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
 
@@ -122,23 +147,67 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 				}
 				else if (dynamic_cast<CKoopas*>(e->obj))
 				{
-					CKoopas*Koopas = dynamic_cast<CKoopas*>(e->obj);
-					vx = 0;
-					if (Koopas->GetState() != KOOPAS_STATE_DEFENSE_STATIC)
+					CKoopas* Koopas = dynamic_cast<CKoopas*>(e->obj);
+					koopas = Koopas;	
+					if (Koopas->GetState() != KOOPAS_STATE_ISHOLD)
 					{
-						if (level > MARIO_LEVEL_SMALL)
+						vx = 0;
+						if (Koopas->GetState() != KOOPAS_STATE_DEFENSE_STATIC)
 						{
-							level = MARIO_LEVEL_SMALL;
-							StartUntouchable();
+							if (level > MARIO_LEVEL_SMALL)
+							{
+								level = MARIO_LEVEL_SMALL;
+								StartUntouchable();
+							}
+							else
+								SetState(MARIO_STATE_DIE);
 						}
 						else
-							SetState(MARIO_STATE_DIE);
+						{
+							if (state == MARIO_STATE_RUNNING_RIGHT||state==MARIO_STATE_RUNNINGFAST_RIGHT)
+							{
+								if (isHoldingKoopas == true)
+									return;
+								Koopas->SetState(KOOPAS_STATE_ISHOLD);
+								isHoldingKoopas = true;
+							}
+							else if (state == MARIO_STATE_RUNNING_LEFT||state==MARIO_STATE_RUNNINGFAST_LEFT)
+							{
+								if (isHoldingKoopas == true)
+									return;
+								Koopas->SetState(KOOPAS_STATE_ISHOLD);
+								isHoldingKoopas = true;
+							}
+							else
+							{
+								Koopas->SetState(KOOPAS_STATE_DEFENSE_DYNAMIC);
+								Koopas->vx = -Koopas->vx * nx;
+							}
+						}						
 					}
 					else
 					{
-						Koopas->SetState(KOOPAS_STATE_DEFENSE_DYNAMIC);
-						Koopas->vx = -Koopas->vx * nx;
-					}
+						if (isHoldingKoopas == true)
+						{
+							if (level != MARIO_LEVEL_SMALL)
+							{
+								if (nx < 0)
+									koopas->SetPosition(x + 15, y + 7);
+								else
+									koopas->SetPosition(x - 15, y + 7);
+							}
+							else
+							{
+								if (nx < 0)
+									koopas->SetPosition(x + 13, y - 3);
+								else
+									koopas->SetPosition(x - 14, y - 3);
+							}
+						}
+						else
+							Koopas->SetState(KOOPAS_STATE_DEFENSE_DYNAMIC);
+						
+					}	
 				}
 				else if (dynamic_cast<CBrick*>(e->obj))
 				{
@@ -151,6 +220,11 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 					vx = 0;
 					//isRunningFastLeft = false;
 					//isRunningFastRight = false;
+				}
+				else if (dynamic_cast<CHiddenObject*>(e->obj))
+				{
+					x += dx;
+					y += dy;
 				}
 			}
 			else if (ny != 0)
@@ -202,6 +276,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		}
 			
 	}
+	//DebugOut(L"x:%f/n", x);
+	//DebugOut(L"x:%f/n", y);
 	//DebugOut(L"--> %s\n", ToWSTR(nx.ToString());
 
 	// clean up collision events
@@ -649,7 +725,8 @@ void CMario::Fall()
 void CMario::Attack()
 {
 	if(FireBall==NULL)
-		FireBall = new CFireBall();	
+		FireBall = new CFireBall();
+	//for()
 	FireBall->SetSpeed(FIREBALL_SPEED * nx, 0);
 	FireBall->Attack(x + 18, y , nx);
 	DebugOut(L"Fire ball was created\n");
@@ -672,7 +749,7 @@ void CMario::Attack()
 void CMario::Reset()
 {
 	SetState(MARIO_STATE_IDLE);
-	SetLevel(MARIO_LEVEL_TAIL);
+	SetLevel(MARIO_LEVEL_BIG);
 	SetPosition(start_x, start_y);
 	SetSpeed(0, 0);
 }

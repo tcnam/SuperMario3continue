@@ -3,7 +3,7 @@
 CKoopas::CKoopas()
 {
 	right();
-	SetState(KOOPAS_STATE_WALKING);
+	SetState(KOOPAS_STATE_DEFENSE_STATIC);
 }
 
 void CKoopas::GetBoundingBox(float &left, float &top, float &right, float &bottom)
@@ -21,79 +21,89 @@ void CKoopas::GetBoundingBox(float &left, float &top, float &right, float &botto
 void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
 	CGameObject::Update(dt, coObjects);
-	vy += KOOPAS_GRAVITY * dt;
 	
-	vector<LPCOLLISIONEVENT> coEvents;
-	vector<LPCOLLISIONEVENT> coEventsResult;
-
-	coEvents.clear();
-
-	// turn off collision when die 
-	CalcPotentialCollisions(coObjects, coEvents);
-
-	// reset untouchable timer if untouchable time has passed
-	// No collision occured, proceed normally
-	if (coEvents.size() == 0)
+	if (state == KOOPAS_STATE_ISHOLD)
 	{
-		x += dx;
-		y += dy;
-		//isOnGround = false;
+		vx = 0;
+		vy = 0;
 	}
 	else
 	{
-		float min_tx, min_ty, nx = 0, ny;
-		float rdx = 0;
-		float rdy = 0;
+		vy += KOOPAS_GRAVITY * dt;
+		vector<LPCOLLISIONEVENT> coEvents;
+		vector<LPCOLLISIONEVENT> coEventsResult;
 
-		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
+		coEvents.clear();
 
-		x += min_tx * dx + nx * 0.4f;
-		y += min_ty * dy + ny * 0.4f;
-		//if (nx != 0) vx = -vx;
-		if (ny < 0)
+		// turn off collision when die 
+		CalcPotentialCollisions(coObjects, coEvents);
+
+		// reset untouchable timer if untouchable time has passed
+		// No collision occured, proceed normally
+		if (coEvents.size() == 0)
 		{
-			vy = 0;
+			x += dx;
+			y += dy;
+			//isOnGround = false;
 		}
-		for (UINT i = 0; i < coEventsResult.size(); i++)
+		else
 		{
-			LPCOLLISIONEVENT e = coEventsResult[i];
-			if (nx != 0)
+			float min_tx, min_ty, nx = 0, ny;
+			float rdx = 0;
+			float rdy = 0;
+
+			FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
+
+			x += min_tx * dx + nx * 0.4f;
+			y += min_ty * dy + ny * 0.4f;
+			//if (nx != 0) vx = -vx;
+			if (ny < 0)
 			{
-				if (dynamic_cast<CBrick*>(e->obj))
+				vy = 0;
+			}
+			for (UINT i = 0; i < coEventsResult.size(); i++)
+			{
+				LPCOLLISIONEVENT e = coEventsResult[i];
+				if (nx != 0)
 				{
-					vx = -vx;
-				}
-				else if (dynamic_cast<CBountyBrick*>(e->obj))
-				{
-					vx=-vx;
-				}
-				else if (dynamic_cast<CHiddenObject*>(e->obj))
-				{
-					if (state != KOOPAS_STATE_WALKING)
+					if (dynamic_cast<CBrick*>(e->obj))
 					{
-						x += dx;
-						y += dy;
-					}
-					else
-						vx = -vx;					
-				}
-				else if (dynamic_cast<CGoomba*>(e->obj))
-				{
-					if (state != KOOPAS_STATE_WALKING)
-					{
-						x += dx;
-						//y += dy;
-						CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
-						if (goomba->GetState() != GOOMBA_STATE_DIE)
-							goomba->SetState(GOOMBA_STATE_DIE);
-					}
-					else
 						vx = -vx;
-					
+					}
+					else if (dynamic_cast<CBountyBrick*>(e->obj))
+					{
+						vx = -vx;
+					}
+					else if (dynamic_cast<CHiddenObject*>(e->obj))
+					{
+						if (state != KOOPAS_STATE_WALKING)
+						{
+							x += dx;
+							y += dy;
+						}
+						else
+							vx = -vx;
+					}
+					else if (dynamic_cast<CGoomba*>(e->obj))
+					{
+						if (state != KOOPAS_STATE_WALKING)
+						{
+							x += dx;
+							//y += dy;
+							CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
+							if (goomba->GetState() != GOOMBA_STATE_DIE)
+								goomba->SetState(GOOMBA_STATE_DIE);
+						}
+						else
+							vx = -vx;
+
+					}
 				}
 			}
 		}
+	
 	}
+	
 }
 
 void CKoopas::Render()

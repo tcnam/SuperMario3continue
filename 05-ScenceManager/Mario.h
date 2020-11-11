@@ -1,9 +1,10 @@
 #pragma once
 #include "GameObject.h"
 #include "FireBall.h"
+#include "Koopas.h"
 
 #define MARIO_WALKING_SPEED		0.1f 
-#define MARIO_RUNNING_SPEED		0.3f
+#define MARIO_RUNNING_SPEED		0.1f
 #define MARIO_RUNNINGFAST_SPEED	0.4f
 //0.1f
 #define MARIO_JUMP_SPEED_Y		0.5f
@@ -114,8 +115,9 @@ class CMario : public CGameObject
 	float start_x;			// initial position of Mario at scene
 	float start_y; 
 
-	CFireBall* FireBall;
-	//CKoopas* Koopas;
+	CFireBall * FireBall;
+	CKoopas* koopas;
+	
 
 	DWORD StartMovingLeft;
 	DWORD StartMovingRight;
