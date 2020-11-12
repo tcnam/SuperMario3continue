@@ -84,7 +84,17 @@
 #define MARIO_ANI_FIRE_ATTACK_RIGHT			44
 #define MARIO_ANI_FIRE_ATTACK_LEFT			45
 
-#define MARIO_ANI_DIE						46
+#define MARIO_ANI_BIG_HOLDKOOPAS_IDLE_RIGHT		46
+#define MARIO_ANI_BIG_HOLDKOOPAS_WALK_RIGHT		47
+#define MARIO_ANI_BIG_HOLDKOOPAS_IDLE_LEFT		48
+#define MARIO_ANI_BIG_HOLDKOOPAS_WALK_LEFT		49
+
+#define MARIO_ANI_SMALL_HOLDKOOPAS_IDLE_RIGHT		50
+#define MARIO_ANI_SMALL_HOLDKOOPAS_WALK_RIGHT		51
+#define MARIO_ANI_SMALL_HOLDKOOPAS_IDLE_LEFT		52
+#define MARIO_ANI_SMALL_HOLDKOOPAS_WALK_LEFT		53
+
+#define MARIO_ANI_DIE						54
 
 #define	MARIO_LEVEL_SMALL	1
 #define	MARIO_LEVEL_BIG		2
@@ -114,8 +124,8 @@ class CMario : public CGameObject
 
 	float start_x;			// initial position of Mario at scene
 	float start_y; 
-
-	CFireBall * FireBall;
+	CFireBall* FireBall;
+	//vector<CFireBall*> FireBall;
 	CKoopas* koopas;
 	
 

@@ -94,7 +94,7 @@ void CPlayScene::_ParseSection_ANIMATIONS(string line)
 	LPANIMATION ani = new CAnimation();
 
 	int ani_id = atoi(tokens[0].c_str());
-	for (int i = 1; i < tokens.size(); i += 2)	// why i+=2 ?  sprite_id | frame_time  
+	for (int i = 1; i < tokens.size()-1; i =i+ 2)	// why i+=2 ?  sprite_id | frame_time  tokens.size()-1
 	{
 		int sprite_id = atoi(tokens[i].c_str());
 		int frame_time = atoi(tokens[i+1].c_str());
@@ -157,7 +157,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		}
 		obj = new CMario(x,y); 
 		player = (CMario*)obj; 
-		fireball = player->GetFireBall();
+		
 		//fireball->SetAnimationSet(ani_set);
 		DebugOut(L"[INFO] Player object created!\n");
 		break;
@@ -192,16 +192,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	obj->SetAnimationSet(ani_set);
 	objects.push_back(obj);
 }
-/*void CPlayScene::_ParseSection_FIREBALL(string line)
-{
-	vector<string> tokens = split(line);
 
-	if (tokens.size() < 1) return;
-	int ani_set_id = atoi(tokens[0].c_str());
-	CAnimationSets* animation_sets = CAnimationSets::GetInstance();
-	LPANIMATION_SET ani_set = animation_sets->Get(ani_set_id);
-	fireball->SetAnimationSet(ani_set);
-}*/
 void CPlayScene::_ParseSection_TERRAIN(string line)
 {
 	vector<string> tokens = split(line);
@@ -246,8 +237,6 @@ void CPlayScene::Load()
 			section = SCENE_SECTION_OBJECTS; continue; }
 		if (line == "[TERRAINS]"){
 			section = SCENE_SECTION_TERRAIN; continue;}
-		/*if (line == "[FIREBALL]") {
-			section = SCENE_SECTION_FIREBALL; continue;}*/
 		if (line[0] == '[') { section = SCENE_SECTION_UNKNOWN; continue; }	
 
 		//
@@ -261,7 +250,6 @@ void CPlayScene::Load()
 			case SCENE_SECTION_ANIMATION_SETS: _ParseSection_ANIMATION_SETS(line); break;
 			case SCENE_SECTION_OBJECTS: _ParseSection_OBJECTS(line);break;
 			case SCENE_SECTION_TERRAIN: _ParseSection_TERRAIN(line); break;
-			//case SCENE_SECTION_FIREBALL: _ParseSection_FIREBALL(line); break;
 		}
 	}
 
@@ -289,8 +277,6 @@ void CPlayScene::Update(DWORD dt)
 			objects[i]->Update(dt, &coObjects);
 
 	}
-	/*if(fireball->isFinished==false)
-		fireball->Update(dt, &coObjects);*/
 	
 
 	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
@@ -326,8 +312,6 @@ void CPlayScene::Render()
 	{
 		objects[i]->Render();
 	}	
-	/*if(fireball->isFinished==false)
-		fireball->Render();*/
 }
 
 /*
@@ -365,7 +349,8 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 					mario->SetState(MARIO_STATE_FLYLEFT);
 				else
 				{
-					mario->isFlyFall = true;
+					if(mario->isFlyFall==false)
+						mario->isFlyFall = true;
 					mario->SetState(MARIO_STATE_FLYFALL);
 				}
 					
@@ -379,10 +364,10 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 					mario->SetState(MARIO_STATE_FLYRIGHT);
 				else
 				{
-					mario->isFlyFall = true;
+					if (mario->isFlyFall == false)
+						mario->isFlyFall = true;
 					mario->SetState(MARIO_STATE_FLYFALL);
-				}
-					
+				}					
 			}
 			else
 			{
@@ -390,7 +375,8 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 					mario->SetState(MARIO_STATE_JUMP);
 				else
 				{
-					mario->isFlyFall = true;
+					if (mario->isFlyFall == false)
+						mario->isFlyFall = true;
 					mario->SetState(MARIO_STATE_FLYFALL);
 				}
 			}				
@@ -421,7 +407,8 @@ void CPlayScenceKeyHandler::OnKeyUp(int KeyCode)
 	case DIK_Z:
 		if (mario->isHoldingKoopas == true)
 			mario->isHoldingKoopas = false;
-		mario->isAttacking = false;
+		if(mario->isAttacking=true)
+			mario->isAttacking = false;
 		break;
 	}
 }
@@ -436,73 +423,88 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 	if (mario->GetState() == MARIO_STATE_DIE) return;
 	if (game->IsKeyDown(DIK_LEFT) && !game->IsKeyDown(DIK_RIGHT))//left
 	{
-		mario->SetTimeMovingLeft(GetTickCount());
-		
-		if (GetTickCount()-mario->GetTimeMovingRight()>200)
+		if (mario->isHoldingKoopas == true)
 		{
-			mario->isRunningRight = false;		
-			if (game->IsKeyDown(DIK_Z))
+			mario->SetState(MARIO_STATE_WALKING_LEFT);
+		}
+		else
+		{
+			mario->SetTimeMovingLeft(GetTickCount());
+			if (GetTickCount() - mario->GetTimeMovingRight() > 200)
 			{
-				if (mario->isRunningLeft == false)
-					mario->SetTimeRunningLeft(GetTickCount());
-				if (GetTickCount() - mario->GetTimeRunningLeft() > 1000 )
+				mario->isRunningRight = false;
+				if (game->IsKeyDown(DIK_Z))
 				{
-					mario->isRunningLeft = true;
-					mario->SetState(MARIO_STATE_RUNNINGFAST_LEFT);
-					mario->isRunningFastLeft = true;
-				}					
+					if (mario->isRunningLeft == false)
+						mario->SetTimeRunningLeft(GetTickCount());
+					if (GetTickCount() - mario->GetTimeRunningLeft() > 1000)
+					{
+						mario->isRunningLeft = true;
+						mario->SetState(MARIO_STATE_RUNNINGFAST_LEFT);
+						mario->isRunningFastLeft = true;
+					}
+					else
+					{
+						mario->isRunningLeft = true;
+						mario->SetState(MARIO_STATE_RUNNING_LEFT);
+					}
+				}
 				else
 				{
-					mario->isRunningLeft = true;
-					mario->SetState(MARIO_STATE_RUNNING_LEFT);
+					mario->isRunningLeft = false;
+					mario->SetState(MARIO_STATE_WALKING_LEFT);
 				}
 			}
 			else
 			{
 				mario->isRunningLeft = false;
-				mario->SetState(MARIO_STATE_WALKING_LEFT);
-			}				
-		}			
-		else
-		{
-			mario->isRunningLeft = false;
-			mario->SetState(MARIO_STATE_CHANGELEFT);
-		}			
+				mario->SetState(MARIO_STATE_CHANGELEFT);
+			}
+		}
+		
 	}		
 	else if (game->IsKeyDown(DIK_RIGHT) && !game->IsKeyDown(DIK_LEFT))//right
 	{
-		mario->SetTimeMovingRight(GetTickCount());
-		
-		if (GetTickCount()-mario->GetTimeMovingLeft()>200)
+		if (mario->isHoldingKoopas == true)
 		{
-			mario->isRunningLeft = false;
-			if (game->IsKeyDown(DIK_Z))
+			mario->SetState(MARIO_STATE_WALKING_RIGHT);
+		}
+		else
+		{
+			mario->SetTimeMovingRight(GetTickCount());
+
+			if (GetTickCount() - mario->GetTimeMovingLeft() > 200)
 			{
-				if (mario->isRunningRight == false)
-					mario->SetTimeRunningRight(GetTickCount());
-				if (GetTickCount() - mario->GetTimeRuningRight() > 1000 )
+				mario->isRunningLeft = false;
+				if (game->IsKeyDown(DIK_Z))
 				{
-					mario->isRunningRight = true;
-					mario->SetState(MARIO_STATE_RUNNINGFAST_RIGHT);	
-					mario->isRunningFastRight = true;
-				}					
+					if (mario->isRunningRight == false)
+						mario->SetTimeRunningRight(GetTickCount());
+					if (GetTickCount() - mario->GetTimeRuningRight() > 1000)
+					{
+						mario->isRunningRight = true;
+						mario->SetState(MARIO_STATE_RUNNINGFAST_RIGHT);
+						mario->isRunningFastRight = true;
+					}
+					else
+					{
+						mario->isRunningRight = true;
+						mario->SetState(MARIO_STATE_RUNNING_RIGHT);
+					}
+				}
 				else
 				{
-					mario->isRunningRight = true;
-					mario->SetState(MARIO_STATE_RUNNING_RIGHT);
+					mario->isRunningRight = false;
+					mario->SetState(MARIO_STATE_WALKING_RIGHT);
 				}
 			}
 			else
 			{
 				mario->isRunningRight = false;
-				mario->SetState(MARIO_STATE_WALKING_RIGHT);
-			}				
+				mario->SetState(MARIO_STATE_CHANGERIGHT);
+			}
 		}
-		else
-		{
-			mario->isRunningRight = false;
-			mario->SetState(MARIO_STATE_CHANGERIGHT);
-		}
+		
 	}
 	/*else if (game->IsKeyDown(DIK_SPACE))
 	{
