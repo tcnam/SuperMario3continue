@@ -20,7 +20,7 @@ void CFireBall::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		return;
 	CGameObject::Update(dt);
 	if(isUsed==true)
-		vy += FIREBALL_GRAVITY * dt;
+		vy += FIREBALL_GRAVITY*dt;
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
 
@@ -43,7 +43,7 @@ void CFireBall::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		y += min_ty * dy + ny * 0.4f;
 		if (ny < 0)
 		{
-			vy = -FIREBALL_GRAVITY;
+			vy =-FIREBALL_DEFLECT_SPEED;
 		}
 		for (UINT i = 0; i < coEventsResult.size(); i++)
 		{
@@ -96,10 +96,10 @@ void CFireBall::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	// clean up collision events
 	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
 }
-void CFireBall::Attack(float x, float y, int nx)
+void CFireBall::Attack(float vx, float vy, int nx)
 {
-	this->x = x;
-	this->y = y;
+	this->vx = vx;
+	this->vy = vy;
 	this->SetDirectionnx(nx);
 	isFinished = false;
 }

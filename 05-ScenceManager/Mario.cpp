@@ -41,17 +41,27 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		{
 			if (level != MARIO_LEVEL_SMALL)
 			{
-				if (state != MARIO_STATE_IDLE)
+				if (state != MARIO_STATE_IDLE)//when mario in state idle its x location is smaller than in others state because mario is not moving
 				{
 					if (nx > 0)
-						koopas->SetPosition(x + 13, y + 7);
+					{
+						if (level == MARIO_LEVEL_TAIL)
+							koopas->SetPosition(x + 20, y + 7);
+						else
+							koopas->SetPosition(x + 13, y + 7);
+					}
 					else
 						koopas->SetPosition(x - 14, y + 7);
 				}
 				else
 				{
 					if (nx > 0)
-						koopas->SetPosition(x + 12, y + 7);
+					{
+						if (level == MARIO_LEVEL_TAIL)
+							koopas->SetPosition(x + 19, y + 7);
+						else
+							koopas->SetPosition(x + 12, y + 7);
+					}
 					else
 						koopas->SetPosition(x - 13, y + 7);
 				}
@@ -73,6 +83,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 					else
 						koopas->SetPosition(x - 12, y - 3);
 				}
+				
 			}			
 		}
 		else
@@ -215,7 +226,12 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 							{
 
 								if (nx < 0)
-									koopas->SetPosition(x + 13, y + 7);
+								{
+									if (level == MARIO_LEVEL_TAIL)
+										koopas->SetPosition(x + 20, y + 7);
+									else
+										koopas->SetPosition(x + 13, y + 7);
+								}
 								else
 									koopas->SetPosition(x - 14, y + 7);
 							}
@@ -303,8 +319,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		}
 			
 	}
-	//DebugOut(L"x:%f/n", x);
-	//DebugOut(L"x:%f/n", y);
 	//DebugOut(L"--> %s\n", ToWSTR(nx.ToString());
 
 	// clean up collision events
@@ -509,56 +523,87 @@ void CMario::Render()
 		if (vy >= 0)
 		{
 			if (vx == 0)
-			{				
-				if (state == MARIO_STATE_CHANGELEFT)
-					ani = MARIO_ANI_TAIL_CHANGE_LEFT;
-				else if (state == MARIO_STATE_CHANGERIGHT)
-					ani = MARIO_ANI_TAIL_CHANGE_RIGHT;
-
-				else if (isFlyFall == true)			//animation not working
+			{			
+				if (isHoldingKoopas == true)
 				{
 					if (nx > 0)
-						ani = MARIO_ANI_TAIL_FALL_FLYRIGHT;
+						ani = MARIO_ANI_TAIL_HOLDKOOPAS_IDLE_RIGHT;
 					else
-						ani = MARIO_ANI_TAIL_FALL_FLYLEFT;
+						ani = MARIO_ANI_TAIL_HOLDKOOPAS_IDLE_LEFT;
 				}
-
-				else if (state == MARIO_STATE_WALKING_RIGHT)
-					ani = MARIO_ANI_TAIL_WALKING_RIGHT;
-				else if(state==MARIO_STATE_RUNNING_RIGHT)
-					ani= MARIO_ANI_TAIL_WALKING_RIGHT;
-				else if (state==MARIO_STATE_RUNNINGFAST_RIGHT)
-					ani = MARIO_ANI_TAIL_WALKING_RIGHT;
-
-				else if (state == MARIO_STATE_WALKING_LEFT)
-					ani = MARIO_ANI_TAIL_WALKING_LEFT;
-				else if (state == MARIO_STATE_RUNNING_LEFT)
-					ani = MARIO_ANI_TAIL_WALKING_LEFT;
-				else if (state == MARIO_STATE_RUNNINGFAST_LEFT)
-					ani = MARIO_ANI_TAIL_WALKING_LEFT;
-
 				else
 				{
-					if (nx > 0)
-						ani = MARIO_ANI_TAIL_IDLE_RIGHT;
+					if (state == MARIO_STATE_CHANGELEFT)
+						ani = MARIO_ANI_TAIL_CHANGE_LEFT;
+					else if (state == MARIO_STATE_CHANGERIGHT)
+						ani = MARIO_ANI_TAIL_CHANGE_RIGHT;
+
+					else if (isFlyFall == true)			//animation not working
+					{
+						if (nx > 0)
+							ani = MARIO_ANI_TAIL_FALL_FLYRIGHT;
+						else
+							ani = MARIO_ANI_TAIL_FALL_FLYLEFT;
+					}
+
+					else if (state == MARIO_STATE_WALKING_RIGHT)
+						ani = MARIO_ANI_TAIL_WALKING_RIGHT;
+					else if (state == MARIO_STATE_RUNNING_RIGHT)
+						ani = MARIO_ANI_TAIL_WALKING_RIGHT;
+					else if (state == MARIO_STATE_RUNNINGFAST_RIGHT)
+						ani = MARIO_ANI_TAIL_WALKING_RIGHT;
+
+					else if (state == MARIO_STATE_WALKING_LEFT)
+						ani = MARIO_ANI_TAIL_WALKING_LEFT;
+					else if (state == MARIO_STATE_RUNNING_LEFT)
+						ani = MARIO_ANI_TAIL_WALKING_LEFT;
+					else if (state == MARIO_STATE_RUNNINGFAST_LEFT)
+						ani = MARIO_ANI_TAIL_WALKING_LEFT;
+
 					else
-						ani = MARIO_ANI_TAIL_IDLE_LEFT;
+					{
+						if (nx > 0)
+							ani = MARIO_ANI_TAIL_IDLE_RIGHT;
+						else
+							ani = MARIO_ANI_TAIL_IDLE_LEFT;
+					}
 				}
 			}
 			else if (vx > 0)
-			{
-				if (state == MARIO_STATE_RUNNINGFAST_RIGHT)
-					ani = MARIO_ANI_TAIL_RUNNING_RIGHT;
-				else 
-					ani = MARIO_ANI_TAIL_WALKING_RIGHT;
-				
+			{				
+				if (isFlyFall == true)			//animation not working
+				{
+					ani = MARIO_ANI_TAIL_FALL_FLYRIGHT;
+				}
+				if (isHoldingKoopas == true)
+				{
+					ani = MARIO_ANI_TAIL_HOLDKOOPAS_WALK_RIGHT;
+				}
+				else
+				{
+					if (state == MARIO_STATE_RUNNINGFAST_RIGHT)
+						ani = MARIO_ANI_TAIL_RUNNING_RIGHT;
+					else
+						ani = MARIO_ANI_TAIL_WALKING_RIGHT;
+				}				
 			}
 			else
 			{
-				if (state == MARIO_STATE_RUNNINGFAST_LEFT)
-					ani = MARIO_ANI_TAIL_RUNNING_LEFT;
-				else 
-					ani = MARIO_ANI_TAIL_WALKING_LEFT;
+				if (isFlyFall == true)			//animation not working
+				{
+					ani = MARIO_ANI_TAIL_FALL_FLYLEFT;
+				}
+				if (isHoldingKoopas == true)
+				{
+					ani = MARIO_ANI_TAIL_HOLDKOOPAS_WALK_LEFT;
+				}
+				else
+				{
+					if (state == MARIO_STATE_RUNNINGFAST_LEFT)
+						ani = MARIO_ANI_TAIL_RUNNING_LEFT;
+					else
+						ani = MARIO_ANI_TAIL_WALKING_LEFT;
+				}
 			}
 		}
 		else
@@ -576,6 +621,13 @@ void CMario::Render()
 					ani = MARIO_ANI_TAIL_FALL_FLYRIGHT;
 				else
 					ani = MARIO_ANI_TAIL_FALL_FLYLEFT;
+			}
+			else if (isHoldingKoopas == true)
+			{
+				if (nx > 0)
+					ani = MARIO_ANI_TAIL_HOLDKOOPAS_IDLE_RIGHT;
+				else
+					ani = MARIO_ANI_TAIL_HOLDKOOPAS_IDLE_LEFT;
 			}
 			else
 			{
@@ -829,14 +881,33 @@ void CMario::Fall()
 {
 	isOnGround = false;
 	vy = -MARIO_RESIST_GRAVITY * dt;
-	vx = MARIO_WALKING_SPEED * nx;
+
 }
 void CMario::Attack()
 {
-	if(FireBall==NULL)
-		FireBall = new CFireBall();
-	FireBall->SetSpeed(FIREBALL_SPEED * nx, 0);
-	FireBall->Attack(x + 18, y , nx);
+	if (fireballs == NULL)
+	{
+		DebugOut(L"There arn't no fire ball");
+		return;
+	}
+	else
+	{
+		if (nx > 0)
+		{
+			fireballs->SetPosition(x + 17, y - 10);
+			fireballs->SetSpeed(0.15f, -FIREBALL_GRAVITY);
+			//fireballs->SetDirectionnx(1);
+		}		
+		else
+		{
+			fireballs->SetPosition(x - 17, y - 10);
+			fireballs->SetSpeed(-0.15f, -FIREBALL_GRAVITY);
+			//fireballs->SetDirectionnx(-1);
+		}		
+		
+		fireballs->isUsed = true;
+		fireballs->isFinished = false;
+	}
 	DebugOut(L"Fire ball was created\n");
 }
 /*void CMario::JumpHigh()
@@ -853,11 +924,33 @@ void CMario::Attack()
 /*
 	Reset Mario status to the beginning state of a scene
 */
-void CMario::Reset()
+void CMario::ResetTail()
+{
+	SetState(MARIO_STATE_IDLE);
+	SetLevel(MARIO_LEVEL_TAIL);
+	SetPosition(start_x, start_y);
+	SetSpeed(0, 0);
+}
+void CMario::ResetBig()
+{
+	SetState(MARIO_STATE_IDLE);
+	SetLevel(MARIO_LEVEL_BIG);
+	SetPosition(start_x, start_y);
+	SetSpeed(0, 0);
+}
+void CMario::ResetSmall()
+{
+	SetState(MARIO_STATE_IDLE);
+	SetLevel(MARIO_LEVEL_SMALL);
+	SetPosition(start_x, start_y);
+	SetSpeed(0, 0);
+}
+void CMario::ResetFire()
 {
 	SetState(MARIO_STATE_IDLE);
 	SetLevel(MARIO_LEVEL_FIRE);
 	SetPosition(start_x, start_y);
 	SetSpeed(0, 0);
 }
+
 

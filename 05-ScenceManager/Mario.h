@@ -4,8 +4,8 @@
 #include "Koopas.h"
 
 #define MARIO_WALKING_SPEED		0.1f 
-#define MARIO_RUNNING_SPEED		0.1f
-#define MARIO_RUNNINGFAST_SPEED	0.4f
+#define MARIO_RUNNING_SPEED		0.2f
+#define MARIO_RUNNINGFAST_SPEED	0.35f
 //0.1f
 #define MARIO_JUMP_SPEED_Y		0.5f
 #define MARIO_JUMPHIGH_SPEED_Y	0.7f
@@ -94,7 +94,12 @@
 #define MARIO_ANI_SMALL_HOLDKOOPAS_IDLE_LEFT		52
 #define MARIO_ANI_SMALL_HOLDKOOPAS_WALK_LEFT		53
 
-#define MARIO_ANI_DIE						54
+#define MARIO_ANI_TAIL_HOLDKOOPAS_IDLE_RIGHT		54
+#define MARIO_ANI_TAIL_HOLDKOOPAS_WALK_RIGHT		55
+#define MARIO_ANI_TAIL_HOLDKOOPAS_IDLE_LEFT			56
+#define MARIO_ANI_TAIL_HOLDKOOPAS_WALK_LEFT			57
+
+#define MARIO_ANI_DIE						58
 
 #define	MARIO_LEVEL_SMALL	1
 #define	MARIO_LEVEL_BIG		2
@@ -124,7 +129,7 @@ class CMario : public CGameObject
 
 	float start_x;			// initial position of Mario at scene
 	float start_y; 
-	CFireBall* FireBall;
+	CFireBall* fireballs;
 	//vector<CFireBall*> FireBall;
 	CKoopas* koopas;
 	
@@ -191,13 +196,16 @@ public:
 	void SetTimeFly(DWORD t) { this->StartFly = t; }
 	DWORD GetTimeFly() { return StartFly; }
 
-	CFireBall* GetFireBall() { return this->FireBall; }
+	void SetFireBall(CFireBall* FireBall) { fireballs = FireBall; }
 
 	void SetState(int state);
 	void SetLevel(int l) { level = l; }
 	int GetLevel() { return level; }
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount(); }
-	void Reset();
+	void ResetFire();
+	void ResetBig();
+	void ResetSmall();
+	void ResetTail();
 	void GetBoundingBoxTailLevel(float& left, float& top, float& right, float& bottom);
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom);
 };

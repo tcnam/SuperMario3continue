@@ -31,7 +31,6 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath):
 #define SCENE_SECTION_ANIMATION_SETS	5
 #define SCENE_SECTION_OBJECTS	6
 #define SCENE_SECTION_TERRAIN	7
-#define SCENE_SECTION_FIREBALL	8
 
 /*#define OBJECT_TYPE_MARIO	0
 #define OBJECT_TYPE_BRICK	1
@@ -145,7 +144,6 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	int ani_set_id = atoi(tokens[3].c_str());
 
 	CAnimationSets * animation_sets = CAnimationSets::GetInstance();
-	//LPANIMATION_SET ani_set = animation_sets->Get(ani_set_id);
 	CGameObject *obj = NULL;
 	switch (object_type)
 	{
@@ -165,7 +163,12 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_BRICK: obj = new CBrick(); break;
 	case OBJECT_TYPE_KOOPAS: obj = new CKoopas(); break;
 	case OBJECT_TYPE_BOUNTYBRICK: obj = new CBountyBrick(); break;
-	case OBJECT_TYPE_FIREBALL:obj = new CFireBall(); break;
+	case OBJECT_TYPE_FIREBALL:
+		{	
+			obj = new CFireBall();
+			player->SetFireBall((CFireBall*)obj);
+		}
+		break;
 	case OBJECT_TYPE_HIDDENOBJECT: 
 		{
 			float r = atof(tokens[4].c_str());
@@ -274,8 +277,7 @@ void CPlayScene::Update(DWORD dt)
 
 	for (size_t i = 0; i < objects.size(); i++)
 	{
-			objects[i]->Update(dt, &coObjects);
-
+		objects[i]->Update(dt, &coObjects);
 	}
 	
 
@@ -352,8 +354,7 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 					if(mario->isFlyFall==false)
 						mario->isFlyFall = true;
 					mario->SetState(MARIO_STATE_FLYFALL);
-				}
-					
+				}					
 			}
 			else if (mario->isRunningFastRight == true)
 			{
@@ -383,12 +384,20 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 		}
 		else
 		{
-			//mario->isFlying = false;
 			mario->SetState(MARIO_STATE_JUMP);
 		}		
 		break;
-	case DIK_A: 
-		mario->Reset();
+	case DIK_1: 
+		mario->ResetSmall();
+		break;
+	case DIK_2:
+		mario->ResetBig();
+		break;
+	case DIK_3:
+		mario->ResetTail();
+		break;
+	case DIK_4:
+		mario->ResetFire();
 		break;
 	case DIK_Z:
 		if (mario->GetLevel() == MARIO_LEVEL_FIRE)
@@ -517,7 +526,7 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 		mario->allowJump = false;
 		
 	}*/
-	else if(!game->IsKeyDown(DIK_SPACE))
+	else if(!game->IsKeyDown(DIK_SPACE)&&!game->IsKeyDown(DIK_Z))
 	{
 		mario->SetState(MARIO_STATE_IDLE);
 	}		

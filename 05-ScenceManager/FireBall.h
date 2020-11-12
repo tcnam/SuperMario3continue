@@ -1,7 +1,8 @@
 #pragma once
 #include"GameObject.h"
 #define FIREBALL_SPEED		0.05f
-#define FIREBALL_GRAVITY	0.05f
+#define FIREBALL_GRAVITY	0.0005f
+#define FIREBALL_DEFLECT_SPEED	0.15f
 
 #define FIREBALL_BBOX_WIDTH		8
 #define FIREBALL_BBOX_HEIGHT	8
