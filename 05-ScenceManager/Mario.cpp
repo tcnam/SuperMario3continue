@@ -108,8 +108,22 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		untouchable_start = 0;
 		untouchable = 0;
 	}
-
-
+	if (level == MARIO_LEVEL_TAIL)
+	{
+		if (GetTickCount() - Attack_start > MARIO_ATTACK_TIME_TAIL)
+		{
+			isAttacking = false;
+			Attack_start = 0;
+		}
+	}
+	else if (level == MARIO_LEVEL_FIRE)
+	{
+		if (GetTickCount() - Attack_start > MARIO_ATTACK_TIME_FIRE)
+		{
+			isAttacking = false;
+			Attack_start = 0;
+		}
+	}
 	// No collision occured, proceed normally
 	if (coEvents.size()==0)
 	{
@@ -166,91 +180,128 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 					CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
 					if (untouchable == 0)
 					{
-						if (goomba->GetState() != GOOMBA_STATE_DIE)
+						if (isAttacking == true)
 						{
-							if (level > MARIO_LEVEL_SMALL)
+							if (CMario::AABBCheck(goomba) == true)
 							{
-								level = MARIO_LEVEL_SMALL;
-								StartUntouchable();
+								if (goomba->GetState() != GOOMBA_STATE_DIE)
+									goomba->SetState(GOOMBA_STATE_DIE);
 							}
 							else
-								SetState(MARIO_STATE_DIE);
+							{
+								if (goomba->GetState() != GOOMBA_STATE_DIE)
+									goomba->SetState(GOOMBA_STATE_DIE);
+							}
 						}
+						else
+						{
+							if (goomba->GetState() != GOOMBA_STATE_DIE)
+							{
+								if (level > MARIO_LEVEL_SMALL)
+								{
+									level = MARIO_LEVEL_SMALL;
+									StartUntouchable();
+								}
+								else
+									SetState(MARIO_STATE_DIE);
+							}
+						}
+						
 					}
 				}
 				else if (dynamic_cast<CKoopas*>(e->obj))
 				{
 					CKoopas* Koopas = dynamic_cast<CKoopas*>(e->obj);
-					koopas = Koopas;	
-					if (Koopas->GetState() != KOOPAS_STATE_ISHOLD)
+					koopas = Koopas;
+					if (untouchable == 0)
 					{
-						vx = 0;
-						if (Koopas->GetState() != KOOPAS_STATE_DEFENSE_STATIC)
+						/*if (isAttacking == true)
 						{
-							if (level > MARIO_LEVEL_SMALL)
+							if (CMario::AABBCheck(Koopas) == true)
 							{
-								level = MARIO_LEVEL_SMALL;
-								StartUntouchable();
-							}
-							else
-								SetState(MARIO_STATE_DIE);
-						}
-						else
-						{
-							if (state == MARIO_STATE_RUNNING_RIGHT||state==MARIO_STATE_RUNNINGFAST_RIGHT)
-							{
-								if (isHoldingKoopas == true)
-									return;
-								Koopas->SetState(KOOPAS_STATE_ISHOLD);
-								isHoldingKoopas = true;
-							}
-							else if (state == MARIO_STATE_RUNNING_LEFT||state==MARIO_STATE_RUNNINGFAST_LEFT)
-							{
-								if (isHoldingKoopas == true)
-									return;
-								Koopas->SetState(KOOPAS_STATE_ISHOLD);
-								isHoldingKoopas = true;
+								if (Koopas->GetState() != KOOPAS_STATE_DEFENSE_STATIC)
+									Koopas->SetState(KOOPAS_STATE_DEFENSE_STATIC);
 							}
 							else
 							{
-								Koopas->SetState(KOOPAS_STATE_DEFENSE_DYNAMIC);
-								Koopas->vx = -KOOPAS_DYNAMIC_SPEED * nx;
+								if (Koopas->GetState() != KOOPAS_STATE_DEFENSE_STATIC)
+									Koopas->SetState(KOOPAS_STATE_DEFENSE_STATIC);
 							}
-						}						
-					}
-					else
-					{
-						if (isHoldingKoopas == true)
-						{
-							if (level != MARIO_LEVEL_SMALL)
+						}*/
+						//else
+						//{
+							if (Koopas->GetState() != KOOPAS_STATE_ISHOLD)
 							{
-
-								if (nx < 0)
+								vx = 0;
+								if (Koopas->GetState() != KOOPAS_STATE_DEFENSE_STATIC)
 								{
-									if (level == MARIO_LEVEL_TAIL)
-										koopas->SetPosition(x + 20, y + 7);
+									if (level > MARIO_LEVEL_SMALL)
+									{
+										level = MARIO_LEVEL_SMALL;
+										StartUntouchable();
+									}
 									else
-										koopas->SetPosition(x + 13, y + 7);
+										SetState(MARIO_STATE_DIE);
 								}
 								else
-									koopas->SetPosition(x - 14, y + 7);
+								{
+									if (state == MARIO_STATE_RUNNING_RIGHT || state == MARIO_STATE_RUNNINGFAST_RIGHT)
+									{
+										if (isHoldingKoopas == true)
+											return;
+										Koopas->SetState(KOOPAS_STATE_ISHOLD);
+										isHoldingKoopas = true;
+									}
+									else if (state == MARIO_STATE_RUNNING_LEFT || state == MARIO_STATE_RUNNINGFAST_LEFT)
+									{
+										if (isHoldingKoopas == true)
+											return;
+										Koopas->SetState(KOOPAS_STATE_ISHOLD);
+										isHoldingKoopas = true;
+									}
+									else
+									{
+										Koopas->SetState(KOOPAS_STATE_DEFENSE_DYNAMIC);
+										Koopas->vx = -KOOPAS_DYNAMIC_SPEED * nx;
+									}
+								}
 							}
 							else
 							{
-								if (nx < 0)
-									koopas->SetPosition(x + 11, y - 3);
+								if (isHoldingKoopas == true)
+								{
+									if (level != MARIO_LEVEL_SMALL)
+									{
+
+										if (nx < 0)
+										{
+											if (level == MARIO_LEVEL_TAIL)
+												koopas->SetPosition(x + 20, y + 7);
+											else
+												koopas->SetPosition(x + 13, y + 7);
+										}
+										else
+											koopas->SetPosition(x - 14, y + 7);
+									}
+									else
+									{
+										if (nx < 0)
+											koopas->SetPosition(x + 11, y - 3);
+										else
+											koopas->SetPosition(x - 13, y - 3);
+									}
+								}
 								else
-									koopas->SetPosition(x - 13, y - 3);
+								{
+									Koopas->SetState(KOOPAS_STATE_DEFENSE_DYNAMIC);
+									Koopas->vx = -KOOPAS_DYNAMIC_SPEED * nx;
+								}
+
+
 							}
-						}
-						else
-						{
-							Koopas->SetState(KOOPAS_STATE_DEFENSE_DYNAMIC);
-							Koopas->vx = -KOOPAS_DYNAMIC_SPEED * nx;
-						}
-							
+						//}
 						
-					}	
+					}
 				}
 				else if (dynamic_cast<CBrick*>(e->obj))
 				{
@@ -538,13 +589,14 @@ void CMario::Render()
 					else if (state == MARIO_STATE_CHANGERIGHT)
 						ani = MARIO_ANI_TAIL_CHANGE_RIGHT;
 
-					else if (isFlyFall == true)			//animation not working
+					else if (isFlyFall == true)			
 					{
 						if (nx > 0)
 							ani = MARIO_ANI_TAIL_FALL_FLYRIGHT;
 						else
 							ani = MARIO_ANI_TAIL_FALL_FLYLEFT;
 					}
+					
 
 					else if (state == MARIO_STATE_WALKING_RIGHT)
 						ani = MARIO_ANI_TAIL_WALKING_RIGHT;
@@ -559,7 +611,13 @@ void CMario::Render()
 						ani = MARIO_ANI_TAIL_WALKING_LEFT;
 					else if (state == MARIO_STATE_RUNNINGFAST_LEFT)
 						ani = MARIO_ANI_TAIL_WALKING_LEFT;
-
+					else if (isAttacking == true)
+					{
+						if (nx > 0)
+							ani = MARIO_ANI_TAIL_ATTACK_RIGHT;
+						else
+							ani = MARIO_ANI_TAIL_ATTACK_LEFT;
+					}
 					else
 					{
 						if (nx > 0)
@@ -571,7 +629,7 @@ void CMario::Render()
 			}
 			else if (vx > 0)
 			{				
-				if (isFlyFall == true)			//animation not working
+				if (isFlyFall == true)			
 				{
 					ani = MARIO_ANI_TAIL_FALL_FLYRIGHT;
 				}
@@ -589,7 +647,7 @@ void CMario::Render()
 			}
 			else
 			{
-				if (isFlyFall == true)			//animation not working
+				if (isFlyFall == true)			
 				{
 					ani = MARIO_ANI_TAIL_FALL_FLYLEFT;
 				}
@@ -615,7 +673,7 @@ void CMario::Render()
 				else
 					ani = MARIO_ANI_TAIL_FLYLEFT;
 			}
-			else if (isFlyFall==true)			//animation not working
+			else if (isFlyFall==true)			
 			{
 				if (nx > 0)
 					ani = MARIO_ANI_TAIL_FALL_FLYRIGHT;
@@ -708,7 +766,7 @@ void CMario::Render()
 
 	animation_set->at(ani)->Render(x, y, alpha);
 
-	//RenderBoundingBox();
+	RenderBoundingBox();
 }
 
 void CMario::SetState(int state)
@@ -801,6 +859,13 @@ void CMario::GetBoundingBoxTailLevel(float& left, float& top, float& right, floa
 	top = y;
 	bottom = y + MARIO_TAIL_BBOX_HEIGHT;
 }
+void CMario::GetBoundingBoxTailWhileAttacking(float& left, float& top, float& right, float& bottom)
+{
+	left = x;
+	top = y;
+	right = x + MARIO_TAIL_ATTACK_BBOX_WIDTH;
+	bottom = y + MARIO_TAIL_BBOX_HEIGHT;
+}
 
 void CMario::GetBoundingBox(float &left, float &top, float &right, float &bottom)
 {
@@ -820,7 +885,10 @@ void CMario::GetBoundingBox(float &left, float &top, float &right, float &bottom
 	}
 	else if (level == MARIO_LEVEL_TAIL)
 	{
-		CMario::GetBoundingBoxTailLevel(left, top, right, bottom);
+		if (isAttacking == true)
+			GetBoundingBoxTailWhileAttacking(left, top, right, bottom);
+		else
+			GetBoundingBoxTailLevel(left, top, right, bottom);
 	}
 	else if (level == MARIO_LEVEL_FIRE)
 	{
@@ -885,29 +953,37 @@ void CMario::Fall()
 }
 void CMario::Attack()
 {
-	if (fireballs == NULL)
+	if (level == MARIO_LEVEL_FIRE)
 	{
-		DebugOut(L"There arn't no fire ball");
-		return;
-	}
-	else
-	{
-		if (nx > 0)
+		if (fireballs == NULL)
 		{
-			fireballs->SetPosition(x + 17, y - 10);
-			fireballs->SetSpeed(0.15f, -FIREBALL_GRAVITY);
-			//fireballs->SetDirectionnx(1);
-		}		
+			DebugOut(L"There arn't no fire ball");
+			return;
+		}
 		else
 		{
-			fireballs->SetPosition(x - 17, y - 10);
-			fireballs->SetSpeed(-0.15f, -FIREBALL_GRAVITY);
-			//fireballs->SetDirectionnx(-1);
-		}		
-		
-		fireballs->isUsed = true;
-		fireballs->isFinished = false;
+			if (nx > 0)
+			{
+				fireballs->SetPosition(x + 17, y - 10);
+				fireballs->SetSpeed(0.15f, -FIREBALL_GRAVITY);
+				//fireballs->SetDirectionnx(1);
+			}
+			else
+			{
+				fireballs->SetPosition(x - 17, y - 10);
+				fireballs->SetSpeed(-0.15f, -FIREBALL_GRAVITY);
+				//fireballs->SetDirectionnx(-1);
+			}
+
+			fireballs->isUsed = true;
+			fireballs->isFinished = false;
+		}
 	}
+	else if (level == MARIO_LEVEL_TAIL)
+	{
+		
+	}
+	
 	DebugOut(L"Fire ball was created\n");
 }
 /*void CMario::JumpHigh()

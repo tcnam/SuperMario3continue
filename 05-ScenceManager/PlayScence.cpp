@@ -346,29 +346,29 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 			{
 				if (mario->isFlying == false)
 					mario->SetTimeFly(GetTickCount());
-				mario->isFlying = true;					
-				if (GetTickCount() - mario->GetTimeFly() < 2000)
+				mario->isFlying = true;
+				if (GetTickCount() - mario->GetTimeFly() < MARIO_FLY_TIME)
 					mario->SetState(MARIO_STATE_FLYLEFT);
 				else
 				{
-					if(mario->isFlyFall==false)
+					if (mario->isFlyFall == false)
 						mario->isFlyFall = true;
 					mario->SetState(MARIO_STATE_FLYFALL);
-				}					
+				}
 			}
 			else if (mario->isRunningFastRight == true)
 			{
 				if (mario->isFlying == false)
 					mario->SetTimeFly(GetTickCount());
 				mario->isFlying = true;
-				if (GetTickCount() - mario->GetTimeFly() < 2000)
+				if (GetTickCount() - mario->GetTimeFly() < MARIO_FLY_TIME)
 					mario->SetState(MARIO_STATE_FLYRIGHT);
 				else
 				{
 					if (mario->isFlyFall == false)
 						mario->isFlyFall = true;
 					mario->SetState(MARIO_STATE_FLYFALL);
-				}					
+				}
 			}
 			else
 			{
@@ -380,14 +380,14 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 						mario->isFlyFall = true;
 					mario->SetState(MARIO_STATE_FLYFALL);
 				}
-			}				
+			}
 		}
 		else
 		{
 			mario->SetState(MARIO_STATE_JUMP);
-		}		
+		}
 		break;
-	case DIK_1: 
+	case DIK_1:
 		mario->ResetSmall();
 		break;
 	case DIK_2:
@@ -400,11 +400,20 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 		mario->ResetFire();
 		break;
 	case DIK_Z:
-		if (mario->GetLevel() == MARIO_LEVEL_FIRE)
+		if (mario->isAttacking == true)
+			return;
+		else
 		{
-			mario->isAttacking = true;
-			mario->SetState(MARIO_STATE_ATTACK);
-		}
+			if (mario->GetLevel() == MARIO_LEVEL_FIRE)
+			{
+				mario->StartAttack();
+				mario->SetState(MARIO_STATE_ATTACK);
+			}
+			else if (mario->GetLevel() == MARIO_LEVEL_TAIL)
+			{
+				mario->StartAttack();
+			}
+		}		
 		break;
 	}
 }
@@ -416,8 +425,8 @@ void CPlayScenceKeyHandler::OnKeyUp(int KeyCode)
 	case DIK_Z:
 		if (mario->isHoldingKoopas == true)
 			mario->isHoldingKoopas = false;
-		if(mario->isAttacking=true)
-			mario->isAttacking = false;
+		//if(mario->isAttacking=true)
+			//mario->isAttacking = false;
 		break;
 	}
 }

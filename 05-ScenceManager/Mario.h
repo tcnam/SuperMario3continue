@@ -81,25 +81,27 @@
 #define MARIO_ANI_TAIL_FALL_FLYRIGHT		42
 #define MARIO_ANI_TAIL_FALL_FLYLEFT			43
 
-#define MARIO_ANI_FIRE_ATTACK_RIGHT			44
-#define MARIO_ANI_FIRE_ATTACK_LEFT			45
+#define MARIO_ANI_TAIL_ATTACK_RIGHT			44
+#define MARIO_ANI_TAIL_ATTACK_LEFT			45
+#define MARIO_ANI_FIRE_ATTACK_RIGHT			46
+#define MARIO_ANI_FIRE_ATTACK_LEFT			47
 
-#define MARIO_ANI_BIG_HOLDKOOPAS_IDLE_RIGHT		46
-#define MARIO_ANI_BIG_HOLDKOOPAS_WALK_RIGHT		47
-#define MARIO_ANI_BIG_HOLDKOOPAS_IDLE_LEFT		48
-#define MARIO_ANI_BIG_HOLDKOOPAS_WALK_LEFT		49
+#define MARIO_ANI_BIG_HOLDKOOPAS_IDLE_RIGHT		48
+#define MARIO_ANI_BIG_HOLDKOOPAS_WALK_RIGHT		49
+#define MARIO_ANI_BIG_HOLDKOOPAS_IDLE_LEFT		50
+#define MARIO_ANI_BIG_HOLDKOOPAS_WALK_LEFT		51
 
-#define MARIO_ANI_SMALL_HOLDKOOPAS_IDLE_RIGHT		50
-#define MARIO_ANI_SMALL_HOLDKOOPAS_WALK_RIGHT		51
-#define MARIO_ANI_SMALL_HOLDKOOPAS_IDLE_LEFT		52
-#define MARIO_ANI_SMALL_HOLDKOOPAS_WALK_LEFT		53
+#define MARIO_ANI_SMALL_HOLDKOOPAS_IDLE_RIGHT		52
+#define MARIO_ANI_SMALL_HOLDKOOPAS_WALK_RIGHT		53
+#define MARIO_ANI_SMALL_HOLDKOOPAS_IDLE_LEFT		54
+#define MARIO_ANI_SMALL_HOLDKOOPAS_WALK_LEFT		55
 
-#define MARIO_ANI_TAIL_HOLDKOOPAS_IDLE_RIGHT		54
-#define MARIO_ANI_TAIL_HOLDKOOPAS_WALK_RIGHT		55
-#define MARIO_ANI_TAIL_HOLDKOOPAS_IDLE_LEFT			56
-#define MARIO_ANI_TAIL_HOLDKOOPAS_WALK_LEFT			57
+#define MARIO_ANI_TAIL_HOLDKOOPAS_IDLE_RIGHT		56
+#define MARIO_ANI_TAIL_HOLDKOOPAS_WALK_RIGHT		57
+#define MARIO_ANI_TAIL_HOLDKOOPAS_IDLE_LEFT			58
+#define MARIO_ANI_TAIL_HOLDKOOPAS_WALK_LEFT			59
 
-#define MARIO_ANI_DIE						58
+#define MARIO_ANI_DIE						60
 
 #define	MARIO_LEVEL_SMALL	1
 #define	MARIO_LEVEL_BIG		2
@@ -114,12 +116,16 @@
 
 #define MARIO_TAIL_BBOX_WIDTH	15
 #define MARIO_TAIL_BBOX_HEIGHT	28
+#define MARIO_TAIL_ATTACK_BBOX_WIDTH	21;
 
 #define MARIO_FIRE_BBOX_WIDTH	15
 #define MARIO_FIRE_BBOX_HEIGHT	27
 
 #define MARIO_UNTOUCHABLE_TIME 5000
-
+#define MARIO_FLY_TIME			2000
+#define MARIO_ATTACK_TIME_TAIL	500
+#define MARIO_ATTACK_TIME_FIRE	250
+#define MARIO_FLYFALL_TIME	200
 
 class CMario : public CGameObject
 {
@@ -144,6 +150,8 @@ class CMario : public CGameObject
 	DWORD StartRunningRightFast;
 
 	DWORD StartFly;
+	DWORD FlyFall_start;
+	DWORD Attack_start;
 
 	
 public:
@@ -201,11 +209,17 @@ public:
 	void SetState(int state);
 	void SetLevel(int l) { level = l; }
 	int GetLevel() { return level; }
+
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount(); }
+	void StartFlyFall() { isFlyFall = true; FlyFall_start = GetTickCount(); }
+	void StartAttack() { isAttacking = true; Attack_start = GetTickCount(); }
+
 	void ResetFire();
 	void ResetBig();
 	void ResetSmall();
 	void ResetTail();
+
 	void GetBoundingBoxTailLevel(float& left, float& top, float& right, float& bottom);
+	void GetBoundingBoxTailWhileAttacking(float& left, float& top, float& right, float& bottom);
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom);
 };
