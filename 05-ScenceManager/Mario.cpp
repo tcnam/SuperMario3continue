@@ -31,6 +31,8 @@ CMario::CMario(float x, float y) : CGameObject()
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
+	if (vy > 0)
+		isOnGround = false;
 	// Calculate dx, dy 
 	CGameObject::Update(dt);
 	// Simple fall down
