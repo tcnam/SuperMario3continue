@@ -340,34 +340,34 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 	{
 	case DIK_SPACE:
 		//mario->allowJump = false;
-		if (mario->GetLevel() == MARIO_LEVEL_TAIL)
+		if (mario->GetLevel() == MARIO_LEVEL_TAIL)				//tail mario
 		{
 			if (mario->isRunningFastLeft == true)
 			{
-				if (mario->isFlying == false)
+				if (mario->isFlying == false)			//set time to start flying 
+				{
 					mario->SetTimeFly(GetTickCount());
-				mario->isFlying = true;
+					mario->isFlying = true;
+				}
 				if (GetTickCount() - mario->GetTimeFly() < MARIO_FLY_TIME)
 					mario->SetState(MARIO_STATE_FLYLEFT);
 				else
 				{
-					if (mario->isFlyFall == false)
-						mario->isFlyFall = true;
-					mario->SetState(MARIO_STATE_FLYFALL);
+					mario->StartFlyFall();
 				}
 			}
 			else if (mario->isRunningFastRight == true)
 			{
-				if (mario->isFlying == false)
+				if (mario->isFlying == false)			//set time to start flying 
+				{
 					mario->SetTimeFly(GetTickCount());
-				mario->isFlying = true;
+					mario->isFlying = true;
+				}
 				if (GetTickCount() - mario->GetTimeFly() < MARIO_FLY_TIME)
 					mario->SetState(MARIO_STATE_FLYRIGHT);
 				else
 				{
-					if (mario->isFlyFall == false)
-						mario->isFlyFall = true;
-					mario->SetState(MARIO_STATE_FLYFALL);
+					mario->StartFlyFall();
 				}
 			}
 			else
@@ -376,9 +376,7 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 					mario->SetState(MARIO_STATE_JUMP);
 				else
 				{
-					if (mario->isFlyFall == false)
-						mario->isFlyFall = true;
-					mario->SetState(MARIO_STATE_FLYFALL);
+					mario->StartFlyFall();
 				}
 			}
 		}
@@ -412,6 +410,7 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 			else if (mario->GetLevel() == MARIO_LEVEL_TAIL)
 			{
 				mario->StartAttack();
+				//mario->SetState(MARIO_STATE_ATTACK);
 			}
 		}		
 		break;
@@ -438,8 +437,9 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 	CMario *mario = ((CPlayScene*)scence)->GetPlayer();
 	// disable control key when Mario die 
 	
-	if (mario->GetState() == MARIO_STATE_DIE) return;
-	if (game->IsKeyDown(DIK_LEFT) && !game->IsKeyDown(DIK_RIGHT))//left
+	if (mario->GetState() == MARIO_STATE_DIE)
+		return;
+	else if (game->IsKeyDown(DIK_LEFT) && !game->IsKeyDown(DIK_RIGHT))//left
 	{
 		if (mario->isHoldingKoopas == true)
 		{

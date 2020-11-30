@@ -36,7 +36,19 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	// Calculate dx, dy 
 	CGameObject::Update(dt);
 	// Simple fall down
-	vy += MARIO_GRAVITY*dt;
+	if (isFlyFall == true)
+		vy = MARIO_RESIST_GRAVITY;
+	else
+		vy += MARIO_GRAVITY*dt;
+	
+	vector<LPCOLLISIONEVENT> coEvents;
+	vector<LPCOLLISIONEVENT> coEventsResult;
+
+	coEvents.clear();
+
+	// turn off collision when die 
+	if (state!=MARIO_STATE_DIE)
+		CalcPotentialCollisions(coObjects, coEvents);
 	if (koopas != NULL)
 	{
 		if (isHoldingKoopas == true)
@@ -67,7 +79,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 					else
 						koopas->SetPosition(x - 13, y + 7);
 				}
-				
+
 			}
 			else
 			{
@@ -85,25 +97,16 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 					else
 						koopas->SetPosition(x - 12, y - 3);
 				}
-				
-			}			
+
+			}
 		}
 		else
 		{
 			koopas->SetState(KOOPAS_STATE_DEFENSE_DYNAMIC);
 			koopas->vx = KOOPAS_DYNAMIC_SPEED * nx;
 			koopas = NULL;
-		}			
+		}
 	}
-	vector<LPCOLLISIONEVENT> coEvents;
-	vector<LPCOLLISIONEVENT> coEventsResult;
-
-	coEvents.clear();
-
-	// turn off collision when die 
-	if (state!=MARIO_STATE_DIE)
-		CalcPotentialCollisions(coObjects, coEvents);
-
 	// reset untouchable timer if untouchable time has passed
 	if ( GetTickCount() - untouchable_start > MARIO_UNTOUCHABLE_TIME) 
 	{
@@ -116,6 +119,11 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		{
 			isAttacking = false;
 			Attack_start = 0;
+		}
+		if (GetTickCount() - FlyFall_start > MARIO_FLYFALL_TIME)
+		{
+			isFlyFall = false;
+			FlyFall_start = 0;
 		}
 	}
 	else if (level == MARIO_LEVEL_FIRE)
@@ -630,14 +638,14 @@ void CMario::Render()
 				}
 			}
 			else if (vx > 0)
-			{				
-				if (isFlyFall == true)			
-				{
-					ani = MARIO_ANI_TAIL_FALL_FLYRIGHT;
-				}
+			{		
 				if (isHoldingKoopas == true)
 				{
 					ani = MARIO_ANI_TAIL_HOLDKOOPAS_WALK_RIGHT;
+				}
+				else if (isFlyFall == true)			
+				{
+					ani = MARIO_ANI_TAIL_FALL_FLYRIGHT;
 				}
 				else
 				{
@@ -649,13 +657,13 @@ void CMario::Render()
 			}
 			else
 			{
-				if (isFlyFall == true)			
-				{
-					ani = MARIO_ANI_TAIL_FALL_FLYLEFT;
-				}
 				if (isHoldingKoopas == true)
 				{
 					ani = MARIO_ANI_TAIL_HOLDKOOPAS_WALK_LEFT;
+				}
+				else if (isFlyFall == true)			
+				{
+					ani = MARIO_ANI_TAIL_FALL_FLYLEFT;
 				}
 				else
 				{
@@ -668,27 +676,20 @@ void CMario::Render()
 		}
 		else
 		{	
-			if (isFlying==true)
-			{
-				if (nx > 0)
-					ani = MARIO_ANI_TAIL_FLYRIGHT;
-				else
-					ani = MARIO_ANI_TAIL_FLYLEFT;
-			}
-			else if (isFlyFall==true)			
-			{
-				if (nx > 0)
-					ani = MARIO_ANI_TAIL_FALL_FLYRIGHT;
-				else
-					ani = MARIO_ANI_TAIL_FALL_FLYLEFT;
-			}
-			else if (isHoldingKoopas == true)
+			if (isHoldingKoopas == true)
 			{
 				if (nx > 0)
 					ani = MARIO_ANI_TAIL_HOLDKOOPAS_IDLE_RIGHT;
 				else
 					ani = MARIO_ANI_TAIL_HOLDKOOPAS_IDLE_LEFT;
 			}
+			else if (isFlying==true)
+			{
+				if (nx > 0)
+					ani = MARIO_ANI_TAIL_FLYRIGHT;
+				else
+					ani = MARIO_ANI_TAIL_FLYLEFT;
+			}			
 			else
 			{
 				if (nx > 0)
@@ -827,10 +828,10 @@ void CMario::SetState(int state)
 		DebugOut(L"Jump\n");
 		Jump();
 		break;
-	case MARIO_STATE_FLYFALL:
-		DebugOut(L"Fly fall\n");
-		Fall();
-		break;
+	//case MARIO_STATE_FLYFALL:
+	//	DebugOut(L"Fly fall\n");
+	//	Fall();
+	//	break;
 	/*case MARIO_STATE_HIGHJUMP:
 		JumpHigh();
 		break;*/
@@ -947,12 +948,18 @@ void CMario::Fly()
 	vx = MARIO_RUNNING_SPEED * nx;
 	isOnGround = false;
 }
-void CMario::Fall()
-{
-	isOnGround = false;
-	vy = -MARIO_RESIST_GRAVITY * dt;
-
-}
+//void CMario::Fall()
+//{
+//	if (isFlyFall == true)
+//		return;
+//	else
+//	{
+//		StartFlyFall();
+//		isFlyFall = true;
+//		isOnGround = false;
+//		vy = -MARIO_RESIST_GRAVITY * dt;
+//	}
+//}
 void CMario::Attack()
 {
 	if (level == MARIO_LEVEL_FIRE)
