@@ -2,10 +2,11 @@
 #include "GameObject.h"
 #include "FireBall.h"
 #include "Koopas.h"
+#include "FireFlower.h"
 
-#define MARIO_WALKING_SPEED		0.1f 
-#define MARIO_RUNNING_SPEED		0.2f
-#define MARIO_RUNNINGFAST_SPEED	0.35f
+#define MARIO_WALKING_SPEED		0.04f 
+#define MARIO_RUNNING_SPEED		0.09f
+#define MARIO_RUNNINGFAST_SPEED	0.15f
 //0.1f
 #define MARIO_JUMP_SPEED_Y		0.5f
 #define MARIO_JUMPHIGH_SPEED_Y	0.7f
@@ -17,20 +18,25 @@
 #define MARIO_DX_RUNNING_LIMIT		256
 
 #define MARIO_STATE_IDLE				0
+
 #define MARIO_STATE_WALKING_RIGHT		100
-#define MARIO_STATE_WALKING_LEFT		200
 #define MARIO_STATE_RUNNING_RIGHT		101
-#define MARIO_STATE_RUNNING_LEFT		201
 #define MARIO_STATE_CHANGERIGHT			102
-#define MARIO_STATE_CHANGELEFT			202
 #define MARIO_STATE_RUNNINGFAST_RIGHT	103
+#define MARIO_STATE_SLIDE_RIGHT			104
+
+#define MARIO_STATE_WALKING_LEFT		200
+#define MARIO_STATE_RUNNING_LEFT		201
+#define MARIO_STATE_CHANGELEFT			202
 #define MARIO_STATE_RUNNINGFAST_LEFT	203
+#define MARIO_STATE_SLIDE_LEFT			204
+
 #define MARIO_STATE_ATTACK				500
+
 #define MARIO_STATE_JUMP				300
 #define MARIO_STATE_HIGHJUMP			301
 #define MARIO_STATE_FLYRIGHT			302
 #define MARIO_STATE_FLYLEFT				303
-#define MARIO_STATE_FLYFALL				304
 #define MARIO_STATE_DIE					400
 
 	
@@ -126,6 +132,8 @@
 #define MARIO_ATTACK_TIME_TAIL	500
 #define MARIO_ATTACK_TIME_FIRE	250
 #define MARIO_FLYFALL_TIME	200
+#define MARIO_SLDIE_TIME	200
+#define MARIO_RUNTIME		1200
 
 class CMario : public CGameObject
 {
@@ -138,6 +146,7 @@ class CMario : public CGameObject
 	CFireBall* fireballs;
 	//vector<CFireBall*> FireBall;
 	CKoopas* koopas;
+	vector <CFireFlower*>FireFlowers;
 	
 
 	DWORD StartMovingLeft;
@@ -152,6 +161,7 @@ class CMario : public CGameObject
 	DWORD StartFly;
 	DWORD FlyFall_start;
 	DWORD Attack_start;
+	DWORD Slide_start;
 
 	
 public:
@@ -165,9 +175,9 @@ public:
 
 	bool isFlying;						//for identifying sprites when flying and calculate fly time
 	bool isFlyFall;						//for choosing the right sprites for jump and fall fly state	
-
 	bool isAttacking;
 	bool isHoldingKoopas;
+	bool isSliding;
 
 	CMario(float x = 0.0f, float y = 0.0f);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *colliable_objects = NULL);
@@ -181,10 +191,9 @@ public:
 	void Left();
 	void RunFast();
 	void Fly();
-	void Fall();
+	void Slide();
 	void Attack();
-	void ChangeDirectionRight();
-	void ChangeDirectionLeft();
+	void ChangeDirection();
 
 	void SetTimeMovingRight(DWORD t) { this->StartMovingRight = t; }
 	void SetTimeMovingLeft(DWORD t) { this->StartMovingLeft = t; }
@@ -205,14 +214,16 @@ public:
 	DWORD GetTimeFly() { return StartFly; }
 
 	void SetFireBall(CFireBall* FireBall) { fireballs = FireBall; }
+	void PushFireFlower(CFireFlower* FireFlower);
 
 	void SetState(int state);
 	void SetLevel(int l) { level = l; }
 	int GetLevel() { return level; }
 
-	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount(); }
-	void StartFlyFall() { isFlyFall = true; FlyFall_start = GetTickCount(); }
-	void StartAttack() { isAttacking = true; Attack_start = GetTickCount(); }
+	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount64(); }
+	void StartFlyFall() { isFlyFall = true; FlyFall_start = GetTickCount64(); }
+	void StartAttack() { isAttacking = true; Attack_start = GetTickCount64(); }
+	void StartSlide() { isSliding = true; Slide_start = GetTickCount64(); }
 
 	void ResetFire();
 	void ResetBig();

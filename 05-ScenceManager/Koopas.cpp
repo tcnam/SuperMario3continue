@@ -182,6 +182,9 @@ void CKoopas::SetState(int state)
 	case KOOPAS_STATE_DEFENSE_DYNAMIC:
 		dynamic();
 		break;
+	case KOOPAS_STATE_ISHOLD:
+		stop();
+		break;
 	}
 
 }

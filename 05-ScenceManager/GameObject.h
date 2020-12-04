@@ -18,6 +18,7 @@ using namespace std;
 #define OBJECT_TYPE_BOUNTYBRICK	4
 #define OBJECT_TYPE_HIDDENOBJECT	5
 #define OBJECT_TYPE_FIREBALL		6
+#define OBJECT_TYOE_FIREFLOWER		7
 
 class CGameObject; 
 typedef CGameObject * LPGAMEOBJECT;

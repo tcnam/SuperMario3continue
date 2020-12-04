@@ -46,6 +46,15 @@
     <Filter Include="Object\GameObject\Enemy\Koopas">
       <UniqueIdentifier>{cc7bc873-a9f6-4862-aed6-ebcbf6d96c0f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Object\GameObject\Enemy\FireFlower">
+      <UniqueIdentifier>{a8673fcc-08d8-4e7f-a0a4-4f1afb622cea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\GameObject\Mario\MarioWeapon">
+      <UniqueIdentifier>{c0d0e0cb-e29e-4ccb-82cb-e36b2bc8815b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\GameObject\Enemy\FireFlower\FireFlowerWeapon">
+      <UniqueIdentifier>{cde5a8ec-b33b-4b4c-bb19-1cedf50c6cda}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animations.cpp">
@@ -99,8 +108,14 @@
     <ClCompile Include="Terrain.cpp">
       <Filter>Terrain</Filter>
     </ClCompile>
+    <ClCompile Include="FireFlower.cpp">
+      <Filter>Object\GameObject\Enemy\FireFlower</Filter>
+    </ClCompile>
     <ClCompile Include="FireBall.cpp">
-      <Filter>Object\GameObject</Filter>
+      <Filter>Object\GameObject\Mario\MarioWeapon</Filter>
+    </ClCompile>
+    <ClCompile Include="FireBallFlower.cpp">
+      <Filter>Object\GameObject\Enemy\FireFlower\FireFlowerWeapon</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -155,8 +170,14 @@
     <ClInclude Include="Terrain.h">
       <Filter>Terrain</Filter>
     </ClInclude>
+    <ClInclude Include="FireFlower.h">
+      <Filter>Object\GameObject\Enemy\FireFlower</Filter>
+    </ClInclude>
     <ClInclude Include="FireBall.h">
-      <Filter>Object\GameObject</Filter>
+      <Filter>Object\GameObject\Mario\MarioWeapon</Filter>
+    </ClInclude>
+    <ClInclude Include="FireBallFLower.h">
+      <Filter>Object\GameObject\Enemy\FireFlower\FireFlowerWeapon</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

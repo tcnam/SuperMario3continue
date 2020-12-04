@@ -11,6 +11,7 @@
 #include "HiddenObject.h"
 #include "FireBall.h"
 #include "Terrain.h"
+#include "FireFlower.h"
 
 
 
@@ -18,7 +19,7 @@ class CPlayScene: public CScene
 {
 protected: 
 	CMario *player;					// A play scene has to have player, right? 
-
+	vector<CFireFlower*> FireFlowers;
 	vector<LPGAMEOBJECT> objects;
 
 	vector<LPTERRAIN> terrains;

@@ -18,9 +18,18 @@ CMario::CMario(float x, float y) : CGameObject()
 	level = MARIO_LEVEL_BIG;
 	untouchable = 0;
 	SetState(MARIO_STATE_IDLE);
-	isOnGround = true;
+	isOnGround = false;
+
+	isHoldingKoopas = false;
+	isFlyFall = false;
 	isFlying = false;
 	isAttacking = false;
+	isSliding = false;
+
+	isRunningLeft = false;
+	isRunningFastRight = false;
+	isRunningRight = false;
+	isRunningFastLeft = false;
 	//allowJump = true;
 	start_x = x; 
 	start_y = y; 
@@ -72,9 +81,9 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 					if (nx > 0)
 					{
 						if (level == MARIO_LEVEL_TAIL)
-							koopas->SetPosition(x + 19, y + 7);
+							koopas->SetPosition(x + 18, y + 7);
 						else
-							koopas->SetPosition(x + 12, y + 7);
+							koopas->SetPosition(x + 11, y + 7);
 					}
 					else
 						koopas->SetPosition(x - 13, y + 7);
@@ -93,7 +102,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 				else
 				{
 					if (nx > 0)
-						koopas->SetPosition(x + 10, y - 3);
+						koopas->SetPosition(x + 9, y - 3);
 					else
 						koopas->SetPosition(x - 12, y - 3);
 				}
@@ -107,20 +116,25 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 			koopas = NULL;
 		}
 	}
+	if (GetTickCount64() - Slide_start > MARIO_SLDIE_TIME)
+	{
+		Slide_start = 0;
+		isSliding = false;
+	}
 	// reset untouchable timer if untouchable time has passed
-	if ( GetTickCount() - untouchable_start > MARIO_UNTOUCHABLE_TIME) 
+	if ( GetTickCount64() - untouchable_start > MARIO_UNTOUCHABLE_TIME) 
 	{
 		untouchable_start = 0;
 		untouchable = 0;
 	}
 	if (level == MARIO_LEVEL_TAIL)
 	{
-		if (GetTickCount() - Attack_start > MARIO_ATTACK_TIME_TAIL)
+		if (GetTickCount64() - Attack_start > MARIO_ATTACK_TIME_TAIL)
 		{
 			isAttacking = false;
 			Attack_start = 0;
 		}
-		if (GetTickCount() - FlyFall_start > MARIO_FLYFALL_TIME)
+		if (GetTickCount64() - FlyFall_start > MARIO_FLYFALL_TIME)
 		{
 			isFlyFall = false;
 			FlyFall_start = 0;
@@ -128,7 +142,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	}
 	else if (level == MARIO_LEVEL_FIRE)
 	{
-		if (GetTickCount() - Attack_start > MARIO_ATTACK_TIME_FIRE)
+		if (GetTickCount64() - Attack_start > MARIO_ATTACK_TIME_FIRE)
 		{
 			isAttacking = false;
 			Attack_start = 0;
@@ -384,6 +398,27 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 
 	// clean up collision events
 	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
+	for (UINT i=0;i<FireFlowers.size();i++)
+	{
+		float xFlower, yFlower;
+		FireFlowers[i]->GetPosition(xFlower, yFlower);
+		if (x > xFlower + 16)
+		{
+			if (y < FIREFLOWER_UPPER_Y)
+				FireFlowers[i]->SetState(FIREFLOWER_STATE_RIGHT_UPPER);
+			else
+				FireFlowers[i]->SetState(FIREFLOWER_STATE_RIGHT_LOWER);
+		}
+		else
+		{
+			if (y < FIREFLOWER_UPPER_Y)
+				FireFlowers[i]->SetState(FIREFLOWER_STATE_LEFT_UPPER);
+			else
+				FireFlowers[i]->SetState(FIREFLOWER_STATE_LEFT_LOWER);
+		}
+			
+	}
+
 	
 }
 
@@ -797,6 +832,13 @@ void CMario::SetState(int state)
 		DebugOut(L"fly right\n");
 		Fly();
 		break;
+	case MARIO_STATE_SLIDE_RIGHT:
+		DebugOut(L"Slide right\n");
+		Right();		
+		Slide();
+		DebugOut(L"vx: %f\n", vx);
+		break;
+	
 	case MARIO_STATE_WALKING_LEFT: 
 		DebugOut(L"walking left\n");
 		Left();
@@ -805,7 +847,7 @@ void CMario::SetState(int state)
 	case MARIO_STATE_RUNNING_LEFT:
 		DebugOut(L"running left\n");
 		Left();
-		DebugOut(L"vx: %f\n", vx);
+		//DebugOut(L"vx: %f\n", vx);
 		Run();
 		break;	
 	case MARIO_STATE_RUNNINGFAST_LEFT:
@@ -817,21 +859,29 @@ void CMario::SetState(int state)
 		DebugOut(L"fly left\n");
 		Fly();
 		break;
+	case MARIO_STATE_SLIDE_LEFT:
+		DebugOut(L"Slide left\n");
+		Left();
+		Slide();
+		DebugOut(L"vx: %f\n", vx);
+		break;
+	
 	case MARIO_STATE_CHANGERIGHT:
-		ChangeDirectionRight();
+		DebugOut(L"Change right\n");
+		Right();
+		ChangeDirection();
 		break;
 	case MARIO_STATE_CHANGELEFT:
-		ChangeDirectionLeft();
+		DebugOut(L"Change left\n");
+		Left();
+		ChangeDirection();
 		break;
+	
 	case MARIO_STATE_JUMP:
 		// TODO: need to check if Mario is *current* on a platform before allowing to jump again
 		DebugOut(L"Jump\n");
 		Jump();
 		break;
-	//case MARIO_STATE_FLYFALL:
-	//	DebugOut(L"Fly fall\n");
-	//	Fall();
-	//	break;
 	/*case MARIO_STATE_HIGHJUMP:
 		JumpHigh();
 		break;*/
@@ -845,6 +895,8 @@ void CMario::SetState(int state)
 		DebugOut(L"Attack\n");
 		Attack();
 		break;
+
+
 	}
 }
 void CMario::GetBoundingBoxTailLevel(float& left, float& top, float& right, float& bottom)
@@ -925,13 +977,9 @@ void CMario::RunFast()
 {
 	vx = MARIO_RUNNINGFAST_SPEED * nx;
 }
-void CMario::ChangeDirectionRight()
+void CMario::ChangeDirection()
 {
-	nx = 1;
-}
-void CMario::ChangeDirectionLeft()
-{
-	nx = -1;
+	vx = 0;
 }
 void CMario::Jump()
 {
@@ -948,18 +996,28 @@ void CMario::Fly()
 	vx = MARIO_RUNNING_SPEED * nx;
 	isOnGround = false;
 }
-//void CMario::Fall()
-//{
-//	if (isFlyFall == true)
-//		return;
-//	else
-//	{
-//		StartFlyFall();
-//		isFlyFall = true;
-//		isOnGround = false;
-//		vy = -MARIO_RESIST_GRAVITY * dt;
-//	}
-//}
+void CMario :: Slide()
+{
+	if (isSliding == false)
+		return;
+	else
+	{
+		if (isRunningLeft == true)
+			vx = MARIO_RUNNING_SPEED * nx;
+		else if (isRunningRight == true)
+			vx = MARIO_RUNNING_SPEED * nx;
+		else if(isRunningFastRight == true)
+			vx = MARIO_RUNNINGFAST_SPEED * nx;
+		else if (isRunningFastLeft == true)
+			vx = MARIO_RUNNINGFAST_SPEED * nx;
+		else
+			vx = MARIO_WALKING_SPEED * nx;
+	}
+	isRunningFastLeft = false;
+	isRunningFastRight = false;
+	isRunningLeft = false;
+	isRunningRight = false;
+}
 void CMario::Attack()
 {
 	if (level == MARIO_LEVEL_FIRE)
@@ -973,13 +1031,13 @@ void CMario::Attack()
 		{
 			if (nx > 0)
 			{
-				fireballs->SetPosition(x + 17, y - 10);
+				fireballs->SetPosition(x + 16, y + 5);
 				fireballs->SetSpeed(0.15f, -FIREBALL_GRAVITY);
 				//fireballs->SetDirectionnx(1);
 			}
 			else
 			{
-				fireballs->SetPosition(x - 17, y - 10);
+				fireballs->SetPosition(x - 16, y + 5);
 				fireballs->SetSpeed(-0.15f, -FIREBALL_GRAVITY);
 				//fireballs->SetDirectionnx(-1);
 			}
@@ -994,6 +1052,10 @@ void CMario::Attack()
 	}
 	
 	DebugOut(L"Fire ball was created\n");
+}
+void CMario::PushFireFlower(CFireFlower* FireFlower)
+{
+	FireFlowers.push_back(FireFlower);
 }
 /*void CMario::JumpHigh()
 {
