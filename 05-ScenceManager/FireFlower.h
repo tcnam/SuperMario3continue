@@ -19,8 +19,9 @@
 
 #define FIREFLOWER_UPPER_Y			-96
 #define FIREFLOWER_LOWER_Y			-48
+#define FIREFLOWR_APPEAR_Y			-64
 
-#define FIREFLOWER_TIMEWAIT_FORSHOOT	1000
+#define FIREFLOWER_TIMEWAIT_FORSHOOT	5000
 
 
 
@@ -29,10 +30,14 @@ class CFireFlower : public CGameObject
 {
 public:
 	bool isShooting;
+	bool isShootFar;
+	bool isAppear;
 	DWORD Shoot_Start;
 	CFireFlower();
 	CFireBallFlower* FireBallFlower;
-	void StartShoot() { isShooting = true; Shoot_Start = GetTickCount64(); vy = 0; }
+	void StartShoot() { isShooting = true; Shoot_Start = (DWORD)GetTickCount64(); vy = 0; }
+	void Shoot();
+	void SetFireBallFlower(CFireBallFlower* fireball) { FireBallFlower = fireball; }
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	virtual void Render();

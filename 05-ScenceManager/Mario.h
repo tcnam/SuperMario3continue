@@ -3,6 +3,7 @@
 #include "FireBall.h"
 #include "Koopas.h"
 #include "FireFlower.h"
+#include"FireBallFLower.h"
 
 #define MARIO_WALKING_SPEED		0.04f 
 #define MARIO_RUNNING_SPEED		0.09f
@@ -215,15 +216,16 @@ public:
 
 	void SetFireBall(CFireBall* FireBall) { fireballs = FireBall; }
 	void PushFireFlower(CFireFlower* FireFlower);
+	void SetFireBallFlower(CFireBallFlower* FireBallFlower, CFireFlower* FireFlower) { FireFlower->SetFireBallFlower(FireBallFlower); }
 
 	void SetState(int state);
 	void SetLevel(int l) { level = l; }
 	int GetLevel() { return level; }
 
-	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount64(); }
-	void StartFlyFall() { isFlyFall = true; FlyFall_start = GetTickCount64(); }
-	void StartAttack() { isAttacking = true; Attack_start = GetTickCount64(); }
-	void StartSlide() { isSliding = true; Slide_start = GetTickCount64(); }
+	void StartUntouchable() { untouchable = 1; untouchable_start = (DWORD)GetTickCount64(); }
+	void StartFlyFall() { isFlyFall = true; FlyFall_start = (DWORD)GetTickCount64(); }
+	void StartAttack() { isAttacking = true; Attack_start = (DWORD)GetTickCount64(); }
+	void StartSlide() { isSliding = true; Slide_start = (DWORD)GetTickCount64(); }
 
 	void ResetFire();
 	void ResetBig();

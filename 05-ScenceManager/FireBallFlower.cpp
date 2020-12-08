@@ -12,12 +12,12 @@ void CFireBallFlower::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	if (isFinished == true)
 		return;
+	if (isUsed == false)
+		return;
 	CGameObject::Update(dt);
+	y += dy;
+	x += dx;
 
-}
-void CFireBallFlower::Attack(float vx, float vy, int nx)
-{
-	
 }
 void CFireBallFlower::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
@@ -28,10 +28,5 @@ void CFireBallFlower::GetBoundingBox(float& left, float& top, float& right, floa
 }
 void CFireBallFlower::Render()
 {
-	if (isFinished == true)
-		return;
-	if (nx > 0)
-		animation_set->at(0)->Render(x, y);
-	else
-		animation_set->at(1)->Render(x, y);
+	animation_set->at(1)->Render(x, y);
 }

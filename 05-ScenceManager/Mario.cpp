@@ -1,3 +1,4 @@
+#pragma once
 #include <algorithm>
 #include <assert.h>
 #include "Utils.h"
@@ -6,12 +7,11 @@
 #include "Game.h"
 
 #include "Goomba.h"
-//#include "Koopas.h"
 #include "Portal.h"
 #include "Brick.h"
 #include "BountyBrick.h"
 #include "HiddenObject.h"
-
+#include "FireBallFLower.h"
 
 CMario::CMario(float x, float y) : CGameObject()
 {
@@ -402,24 +402,48 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	{
 		float xFlower, yFlower;
 		FireFlowers[i]->GetPosition(xFlower, yFlower);
-		if (x > xFlower + 16)
+		if (FireFlowers[i]->isAppear == true)
 		{
-			if (y < FIREFLOWER_UPPER_Y)
-				FireFlowers[i]->SetState(FIREFLOWER_STATE_RIGHT_UPPER);
+			if (x > xFlower + 16)
+			{
+				if (y < FIREFLOWER_UPPER_Y)
+					FireFlowers[i]->SetState(FIREFLOWER_STATE_RIGHT_UPPER);
+				else
+					FireFlowers[i]->SetState(FIREFLOWER_STATE_RIGHT_LOWER);
+			}
 			else
-				FireFlowers[i]->SetState(FIREFLOWER_STATE_RIGHT_LOWER);
+			{
+				if (y < FIREFLOWER_UPPER_Y)
+					FireFlowers[i]->SetState(FIREFLOWER_STATE_LEFT_UPPER);
+				else
+					FireFlowers[i]->SetState(FIREFLOWER_STATE_LEFT_LOWER);
+			}
 		}
 		else
 		{
-			if (y < FIREFLOWER_UPPER_Y)
-				FireFlowers[i]->SetState(FIREFLOWER_STATE_LEFT_UPPER);
+			if (x > xFlower + 40)
+			{
+				FireFlowers[i]->SetSpeed(0, -0.015f);
+				if (y < FIREFLOWER_UPPER_Y)
+					FireFlowers[i]->SetState(FIREFLOWER_STATE_RIGHT_UPPER);
+				else
+					FireFlowers[i]->SetState(FIREFLOWER_STATE_RIGHT_LOWER);
+			}
+			else if (x < xFlower - 24)
+			{
+				FireFlowers[i]->SetSpeed(0, -0.015f);
+				if (y < FIREFLOWER_UPPER_Y)
+					FireFlowers[i]->SetState(FIREFLOWER_STATE_LEFT_UPPER);
+				else
+					FireFlowers[i]->SetState(FIREFLOWER_STATE_LEFT_LOWER);
+			}
 			else
-				FireFlowers[i]->SetState(FIREFLOWER_STATE_LEFT_LOWER);
-		}
-			
-	}
-
-	
+			{
+				FireFlowers[i]->SetSpeed(0, 0);
+			}
+				
+		}			
+	}	
 }
 
 void CMario::Render()
@@ -1031,14 +1055,14 @@ void CMario::Attack()
 		{
 			if (nx > 0)
 			{
-				fireballs->SetPosition(x + 16, y + 5);
-				fireballs->SetSpeed(0.15f, -FIREBALL_GRAVITY);
+				fireballs->SetPosition(x + FIREBALL_RELATIVE_POSITION_X, y + FIREBALL_RELATIVE_POSITION_Y);
+				fireballs->SetSpeed(FIREBALL_SPEED, -FIREBALL_GRAVITY);
 				//fireballs->SetDirectionnx(1);
 			}
 			else
 			{
-				fireballs->SetPosition(x - 16, y + 5);
-				fireballs->SetSpeed(-0.15f, -FIREBALL_GRAVITY);
+				fireballs->SetPosition(x - FIREBALL_RELATIVE_POSITION_X, y + FIREBALL_RELATIVE_POSITION_Y);
+				fireballs->SetSpeed(-FIREBALL_SPEED, -FIREBALL_GRAVITY); 
 				//fireballs->SetDirectionnx(-1);
 			}
 

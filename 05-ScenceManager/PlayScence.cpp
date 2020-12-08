@@ -30,14 +30,6 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath):CScene(id, filePath)
 #define SCENE_SECTION_ANIMATION_SETS	5
 #define SCENE_SECTION_OBJECTS	6
 #define SCENE_SECTION_TERRAIN	7
-
-/*#define OBJECT_TYPE_MARIO	0
-#define OBJECT_TYPE_BRICK	1
-#define OBJECT_TYPE_GOOMBA	2
-#define OBJECT_TYPE_KOOPAS	3
-#define OBJECT_TYPE_BOUNTYBRICK	4*/
-
-
 #define OBJECT_TYPE_PORTAL	50
 
 #define MAX_SCENE_LINE 1024
@@ -92,7 +84,7 @@ void CPlayScene::_ParseSection_ANIMATIONS(string line)
 	LPANIMATION ani = new CAnimation();
 
 	int ani_id = atoi(tokens[0].c_str());
-	for (int i = 1; i < tokens.size()-1; i =i+ 2)	// why i+=2 ?  sprite_id | frame_time  tokens.size()-1
+	for (unsigned int i = 1; i < tokens.size()-1; i =i+ 2)	// why i+=2 ?  sprite_id | frame_time  tokens.size()-1
 	{
 		int sprite_id = atoi(tokens[i].c_str());
 		int frame_time = atoi(tokens[i+1].c_str());
@@ -114,7 +106,7 @@ void CPlayScene::_ParseSection_ANIMATION_SETS(string line)
 
 	CAnimations *animations = CAnimations::GetInstance();
 
-	for (int i = 1; i < tokens.size(); i++)
+	for (unsigned int i = 1; i < tokens.size(); i++)
 	{
 		int ani_id = atoi(tokens[i].c_str());
 		
@@ -154,21 +146,25 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		}
 		obj = new CMario(x,y); 
 		player = (CMario*)obj; 
-		
-		//fireball->SetAnimationSet(ani_set);
 		DebugOut(L"[INFO] Player object created!\n");
 		break;
 	case OBJECT_TYPE_GOOMBA: obj = new CGoomba(); break;
 	case OBJECT_TYPE_BRICK: obj = new CBrick(); break;
 	case OBJECT_TYPE_KOOPAS: obj = new CKoopas(); break;
 	case OBJECT_TYPE_BOUNTYBRICK: obj = new CBountyBrick(); break;
-	case OBJECT_TYOE_FIREFLOWER:
+	case OBJECT_TYPE_FIREFLOWER:
 		{
 			obj = new CFireFlower();
 			player->PushFireFlower((CFireFlower*)obj);
 			FireFlowers.push_back((CFireFlower*)obj);
-			//FireFlowers[]
 		}
+		break;
+	case OBJECT_TYPE_FLOWER_FIREBALL:
+		obj = new CFireBallFlower();
+		DebugOut(L"flower index: %i\n", FlowerIndex);
+		player->SetFireBallFlower((CFireBallFlower*)obj, FireFlowers[FlowerIndex]);		
+		DebugOut(L"flower fire ball was loaded\n");
+		FlowerIndex++;
 		break;
 	case OBJECT_TYPE_FIREBALL:
 		{	
@@ -178,9 +174,9 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	case OBJECT_TYPE_HIDDENOBJECT: 
 		{
-			float r = (float)atof(tokens[4].c_str());
-			float b = (float)atof(tokens[5].c_str());
-			obj = new CHiddenObject(x, y, r, b);
+			int width = atoi(tokens[4].c_str());
+			int height = atoi(tokens[5].c_str());
+			obj = new CHiddenObject(x, y, width, height);
 		}
 		break;
 	case OBJECT_TYPE_PORTAL:
@@ -212,7 +208,6 @@ void CPlayScene::_ParseSection_TERRAIN(string line)
 	float y = (float)atof(tokens[1].c_str());
 	int sprite_id = atoi(tokens[2].c_str());
 	CTerrain* terr = new CTerrain();
-
 	terr->SetPosition(x, y);
 	LPSPRITE sprites = CSprites::GetInstance()->Get(sprite_id);
 	terr->SetSprite(sprites);
@@ -301,7 +296,7 @@ void CPlayScene::Update(DWORD dt)
 		cx -= game->GetScreenWidth()/2;
 		cy -= game->GetScreenHeight()/2;
 		if (cy > -game->GetScreenHeight()*3/2)
-			cy = -game->GetScreenHeight();
+			cy = (float)-game->GetScreenHeight();
 		CGame::GetInstance()->SetCamPos(round(cx),round(cy));
 	}
 	/*else if (py % game->GetScreenHeight() > game->GetScreenHeight() / 6 * 5)
@@ -309,14 +304,14 @@ void CPlayScene::Update(DWORD dt)
 		CGame::GetInstance()->SetCamPos(0, py % game->GetScreenHeight() - game->GetScreenHeight() / 6 * 5);
 	}*/
 	else
-		CGame::GetInstance()->SetCamPos(0, round(-game->GetScreenHeight()));	
+		CGame::GetInstance()->SetCamPos(0, round((float)(-game->GetScreenHeight())));	
 }
 
 void CPlayScene::Render()
 {
-	for (int i = 0; i < terrains.size(); i++)
+	for (unsigned int i = 0; i < terrains.size(); i++)
 		terrains[i]->Draw(terrains[i]->GetPositionX(),terrains[i]->GetPositionY(),255);
-	for (int i = 0; i < objects.size(); i++)
+	for (unsigned int i = 0; i < objects.size(); i++)
 	{
 		objects[i]->Render();
 	}	
@@ -327,7 +322,7 @@ void CPlayScene::Render()
 */
 void CPlayScene::Unload()
 {
-	for (int i = 0; i < objects.size(); i++)
+	for (unsigned int i = 0; i < objects.size(); i++)
 		delete objects[i];
 
 	objects.clear();
@@ -352,10 +347,10 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 			{
 				if (mario->isFlying == false)			//set time to start flying 
 				{
-					mario->SetTimeFly(GetTickCount64());
+					mario->SetTimeFly((DWORD)GetTickCount64());
 					mario->isFlying = true;
 				}
-				if (GetTickCount64() - mario->GetTimeFly() < MARIO_FLY_TIME)
+				if ((DWORD)GetTickCount64() - mario->GetTimeFly() < MARIO_FLY_TIME)
 					mario->SetState(MARIO_STATE_FLYLEFT);
 				else
 				{
@@ -366,10 +361,10 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 			{
 				if (mario->isFlying == false)			//set time to start flying 
 				{
-					mario->SetTimeFly(GetTickCount64());
+					mario->SetTimeFly((DWORD)GetTickCount64());
 					mario->isFlying = true;
 				}
-				if (GetTickCount64() - mario->GetTimeFly() < MARIO_FLY_TIME)
+				if ((DWORD)GetTickCount64() - mario->GetTimeFly() < MARIO_FLY_TIME)
 					mario->SetState(MARIO_STATE_FLYRIGHT);
 				else
 				{
@@ -465,8 +460,8 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 			if (game->IsKeyDown(DIK_Z))
 			{
 				if (mario->isRunningLeft == false)
-					mario->SetTimeRunningLeft(GetTickCount64());
-				if (GetTickCount64() - mario->GetTimeRunningLeft() > MARIO_RUNTIME)
+					mario->SetTimeRunningLeft((DWORD)GetTickCount64());
+				if ((DWORD)GetTickCount64() - mario->GetTimeRunningLeft() > MARIO_RUNTIME)
 				{
 					mario->isRunningLeft = true;
 					mario->isRunningFastLeft = true;
@@ -501,8 +496,8 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 			if (game->IsKeyDown(DIK_Z))
 			{
 				if (mario->isRunningRight == false)
-					mario->SetTimeRunningRight(GetTickCount64());
-				if (GetTickCount64() - mario->GetTimeRuningRight() > MARIO_RUNTIME)
+					mario->SetTimeRunningRight((DWORD)GetTickCount64());
+				if ((DWORD)GetTickCount64() - mario->GetTimeRuningRight() > MARIO_RUNTIME)
 				{
 					mario->isRunningRight = true;
 					mario->isRunningFastRight = true;
