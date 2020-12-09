@@ -8,6 +8,7 @@
 40	textures\enemies-2.png	0	128	128
 50	textures\flowerr.png	255	255	255
 60	textures\flowerl.png	255	255	255
+70	textures\misc1.png	166	185	255
 
 
 
@@ -188,6 +189,18 @@
 10212	180	553	188	562	1
 10213	180	574	188	582	1
 10214	198	573	206	582	1
+#COIN BOUNTY
+20000	334	100	348	116	70
+20001	294	101	302	115	70
+20002	321	101	325	115	70
+20003	372	100	382	116	70
+20004	357	100	363	116	70
+#Red mushroom
+20005	156	121	172	137	70
+#Green mushroom
+20006	286	120	302	137	70
+#Power leaf
+20007	180	123	196	137	70
 #WEAK BRICK
 30000	52	52	68	68	20
 30001	69	52	85	68	20
@@ -507,7 +520,17 @@
 560	10151	100	10152	100	10153	100	
 #die
 599	10099	100
-
+# ==== BOUNTY  =========
+# Normal coin
+200	20000	200	20001	200	20002	200	20003	200	20004	200
+# Hidden coin
+201	20001	200	20002	200	20003	200	20004	200
+# Red mushroom
+202	20005	100
+# Green mushroom
+203	20006	100
+# Super leaf
+204	20007	100
 # ==== FIRE BALL  =========
 #fire ball right
 300	10201	100	10202	100	10203	100	10204	100		
@@ -576,6 +599,10 @@
 5	300	301
 #FIRE FLOWER
 6	703	704	705	706
+#Bounty
+7	201	202	203
+#Coin
+8	200
 # UPPER CENTER GROUND BRICK
 20	600
 # LOWER CENTER GROUND BRICK
@@ -604,7 +631,7 @@
 32	612
 [OBJECTS]
 # type	x	y	ani_set_id	extra_settings per object type
-# type: 0 = Mario , 1 = Brick, 2 = Goomba, 3 = Koopas, 4 = Bounty Brick, 5=Hidden Object, 6=Fire Ball of Mario, 7=Fire Flower, 8=Fire Ball of Flower
+# type: 0 = Mario , 1 = Brick, 2 = Goomba, 3 = Koopas, 4 = Bounty Brick, 5=Hidden Object, 6=Fire Ball of Mario, 7=Fire Flower, 8=Fire Ball of Flower, 9=Bounty, 10=Coin
 # MARIO
 0	17	-50	1
 # HIDDEN OBJECT
@@ -949,6 +976,30 @@
 2	464	-32	3
 2	120	-80	3
 3	160	-80	4
+# COIN
+10	1072	-112	8
+10	1104	-144	8
+10	1136	-176	8
+10	1168	-208	8
+10	1200	-240	8
+10	1328	-352	8
+10	1344	-352	8
+10	1360	-352	8
+10	1472	-320	8
+10	1488	-320	8
+10	1536	-304	8
+10	1552	-304	8
+10	1568	-304	8
+10	1584	-304	8
+10	1616	-320	8
+10	1632	-320	8
+10	1648	-320	8
+10	1664	-320	8
+10	1696	-288	8
+10	1728	-320	8
+10	1760	-304	8
+10	1808	-336	8
+10	1840	-304	8
 [TERRAINS]
 # ---- BIG PLANT 1----
 16	-32	50002

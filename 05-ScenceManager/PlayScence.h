@@ -13,6 +13,8 @@
 #include "Terrain.h"
 #include "FireFlower.h"
 #include "FireBallFLower.h"
+#include "Coin.h"
+#include "Bounty.h"
 
 
 
@@ -22,6 +24,8 @@ protected:
 	CMario *player;					// A play scene has to have player, right? 
 	vector<CFireFlower*>FireFlowers;
 	unsigned int FlowerIndex = 0;
+
+	vector <CBounty*> bounties;
 	vector<LPGAMEOBJECT> objects;
 	vector<LPTERRAIN> terrains;
 

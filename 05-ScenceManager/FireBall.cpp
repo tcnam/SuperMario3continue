@@ -96,13 +96,6 @@ void CFireBall::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	// clean up collision events
 	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
 }
-void CFireBall::Attack(float vx, float vy, int nx)
-{
-	this->vx = vx;
-	this->vy = vy;
-	this->SetDirectionnx(nx);
-	isFinished = false;
-}
 void CFireBall::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
 	left = x;

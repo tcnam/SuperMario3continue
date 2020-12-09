@@ -20,6 +20,8 @@ using namespace std;
 #define OBJECT_TYPE_FIREBALL		6
 #define OBJECT_TYPE_FIREFLOWER		7
 #define OBJECT_TYPE_FLOWER_FIREBALL	8
+#define OBJECT_TYPE_BOUNTY			9
+#define OBJECT_TYPE_COIN			10
 
 class CGameObject; 
 typedef CGameObject * LPGAMEOBJECT;

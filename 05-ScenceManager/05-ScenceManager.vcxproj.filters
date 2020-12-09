@@ -55,6 +55,12 @@
     <Filter Include="Object\GameObject\Enemy\FireFlower\FireFlowerWeapon">
       <UniqueIdentifier>{cde5a8ec-b33b-4b4c-bb19-1cedf50c6cda}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Object\GameObject\Bounty">
+      <UniqueIdentifier>{e920dcc3-b8b6-4890-8f82-71be1ea14e62}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\GameObject\Coin">
+      <UniqueIdentifier>{51be6ea0-1c83-43ea-846d-2deffb2974dc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animations.cpp">
@@ -117,6 +123,12 @@
     <ClCompile Include="FireBallFlower.cpp">
       <Filter>Object\GameObject\Enemy\FireFlower\FireFlowerWeapon</Filter>
     </ClCompile>
+    <ClCompile Include="Bounty.cpp">
+      <Filter>Object\GameObject\Bounty</Filter>
+    </ClCompile>
+    <ClCompile Include="Coin.cpp">
+      <Filter>Object\GameObject\Coin</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animations.h">
@@ -178,6 +190,12 @@
     </ClInclude>
     <ClInclude Include="FireBallFLower.h">
       <Filter>Object\GameObject\Enemy\FireFlower\FireFlowerWeapon</Filter>
+    </ClInclude>
+    <ClInclude Include="Bounty.h">
+      <Filter>Object\GameObject\Bounty</Filter>
+    </ClInclude>
+    <ClInclude Include="Coin.h">
+      <Filter>Object\GameObject\Coin</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

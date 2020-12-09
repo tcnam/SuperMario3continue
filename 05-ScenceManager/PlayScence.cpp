@@ -152,6 +152,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_BRICK: obj = new CBrick(); break;
 	case OBJECT_TYPE_KOOPAS: obj = new CKoopas(); break;
 	case OBJECT_TYPE_BOUNTYBRICK: obj = new CBountyBrick(); break;
+	case OBJECT_TYPE_COIN: obj = new CCoin(); break;
 	case OBJECT_TYPE_FIREFLOWER:
 		{
 			obj = new CFireFlower();
