@@ -14,7 +14,10 @@ public:
 	
 	CBountyBrick();
 	CBounty* Bounty;
+	CBounty* GetBounty() { return Bounty; }
 	void SetBounty(CBounty* bounty) { this->Bounty = bounty; }
+	void SetStateBounty(int statebounty) { Bounty->SetState(statebounty); }
+	void ActivateBounty() { Bounty->isUsed = true;  }
 	//virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects = NULL);
 	virtual void Render();
 	virtual void GetBoundingBox(float& l, float& t, float& r, float& b);

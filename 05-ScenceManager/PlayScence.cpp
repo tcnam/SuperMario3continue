@@ -150,9 +150,12 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	case OBJECT_TYPE_GOOMBA: obj = new CGoomba(); break;
 	case OBJECT_TYPE_BRICK: obj = new CBrick(); break;
-	case OBJECT_TYPE_KOOPAS: obj = new CKoopas(); break;
-	case OBJECT_TYPE_BOUNTYBRICK: obj = new CBountyBrick(); break;
+	case OBJECT_TYPE_KOOPAS: obj = new CKoopas(); break;	
 	case OBJECT_TYPE_COIN: obj = new CCoin(); break;
+	case OBJECT_TYPE_BOUNTYBRICK: 
+		obj = new CBountyBrick(); 
+		bountybricks.push_back((CBountyBrick*)obj);
+		break;
 	case OBJECT_TYPE_FIREFLOWER:
 		{
 			obj = new CFireFlower();
@@ -166,6 +169,25 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		player->SetFireBallFlower((CFireBallFlower*)obj, FireFlowers[FlowerIndex]);		
 		DebugOut(L"flower fire ball was loaded\n");
 		FlowerIndex++;
+		break;
+	case OBJECT_TYPE_BOUNTY:
+		obj = new CBounty();		
+		bountybricks[BountyBrickIndex]->SetBounty((CBounty*)obj);
+		if (BountyBrickIndex == 3 || BountyBrickIndex == 5 || BountyBrickIndex == 7)
+		{
+			DebugOut(L"State of powerup%i\n", BOUNTY_STATE_POWERUP);
+			bountybricks[BountyBrickIndex]->SetStateBounty(BOUNTY_STATE_POWERUP);
+			DebugOut(L"Bounty was added to bountybrick:%i with state:%i\n", BountyBrickIndex,obj->GetState());
+		}
+		else if (BountyBrickIndex == 8)
+		{
+			DebugOut(L"State of powerup%i\n", BOUNTY_STATE_LIFEUP);
+			bountybricks[BountyBrickIndex]->SetStateBounty(BOUNTY_STATE_LIFEUP);
+			DebugOut(L"Bounty was added to bountybrick:%i with state:%i\n", BountyBrickIndex, obj->GetState());
+		}
+		else
+			bountybricks[BountyBrickIndex]->SetStateBounty(BOUNTY_STATE_COIN);
+		BountyBrickIndex++;
 		break;
 	case OBJECT_TYPE_FIREBALL:
 		{	

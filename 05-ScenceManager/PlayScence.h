@@ -22,10 +22,13 @@ class CPlayScene: public CScene
 {
 protected: 
 	CMario *player;					// A play scene has to have player, right? 
+	
 	vector<CFireFlower*>FireFlowers;
 	unsigned int FlowerIndex = 0;
 
-	vector <CBounty*> bounties;
+	vector <CBountyBrick*> bountybricks;
+	unsigned int BountyBrickIndex = 0;
+
 	vector<LPGAMEOBJECT> objects;
 	vector<LPTERRAIN> terrains;
 

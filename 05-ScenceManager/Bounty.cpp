@@ -3,6 +3,7 @@ CBounty::CBounty()
 {
 	isUsed = false;
 	isLeaf = false;
+	isActive = false;
 }
 void CBounty::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
@@ -17,11 +18,26 @@ void CBounty::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	CGameObject::Update(dt, coObjects);
 	if (isUsed == false)
 		return;
-	vy +=  BOUNTY_GRAVITY* dt;
+	if ((DWORD)GetTickCount64()-Bounty_Start>BOUNTY_ACTIVE_TIME)
+	{
+		
+		isActive = false;
+		Bounty_Start = 0;
+	}
+	else
+	{
+		if (state == BOUNTY_STATE_POWERUP || state == BOUNTY_STATE_LIFEUP)
+		{
+			vy = -BOUNTY_OTHERS_VY;
+		}
+		else
+			vy = -BOUNTY_COIN_VY;
+	}
+	vy += BOUNTY_GRAVITY * dt;
 	vector<LPGAMEOBJECT> BrickObjects;
 	BrickObjects.clear();
 	for (UINT i = 0; i < coObjects->size(); i++)
-		if (coObjects->at(i)->GetType() == OBJECT_TYPE_BRICK|| coObjects->at(i)->GetType() == OBJECT_TYPE_HIDDENOBJECT|| coObjects->at(i)->GetType()==OBJECT_TYPE_BOUNTYBRICK)
+		if (coObjects->at(i)->GetType() == OBJECT_TYPE_BRICK || coObjects->at(i)->GetType() == OBJECT_TYPE_HIDDENOBJECT || coObjects->at(i)->GetType() == OBJECT_TYPE_BOUNTYBRICK)
 			BrickObjects.push_back(coObjects->at(i));
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
@@ -78,19 +94,22 @@ void CBounty::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		if (ny < 0)
 		{
 			if (state == BOUNTY_STATE_POWERUP || state == BOUNTY_STATE_LIFEUP)
-			{				
+			{
 				vx = -BOUNTY_OTHERS_VX;
 			}
 			vy = 0;
-			
+
 		}
 	}
 	for (UINT i = 0; i < coEvents.size(); i++)
 		delete coEvents[i];
+	
 }
 
 void CBounty::Render()
 {
+	//if (isUsed == false)
+	//	return;
 	int ani = -1;
 	if (state == BOUNTY_STATE_POWERUP)
 	{
@@ -100,28 +119,30 @@ void CBounty::Render()
 			ani = BOUNTY_RED_MUSHROOM_ANI;
 	}
 	else if (state == BOUNTY_STATE_LIFEUP)
+	{
 		ani = BOUNTY_GREEN_MUSHROOM_ANI;
+	}
 	else
 		ani = BOUNTY_COIN_ANI;
 	animation_set->at(ani)->Render(x, y);
 }
 
-void CBounty::SetState(int bountytype)
+void CBounty::SetState(int state)
 {
 	CGameObject::SetState(state);
 	switch (state)
 	{
 	case BOUNTY_STATE_COIN:
-		vy = -BOUNTY_COIN_VY;
+		vy = 0;
 		vx = 0;
 		break;
 	case BOUNTY_STATE_POWERUP:
-		vy = -BOUNTY_OTHERS_VY;
+		vy = 0;
 		vx = 0;
 		break;
 	case BOUNTY_STATE_LIFEUP:
 		vx = 0;
-		vy = -BOUNTY_OTHERS_VY;
+		vy = 0;
 		break;
 
 	}

@@ -440,6 +440,9 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 					else if (dynamic_cast<CBountyBrick*>(e->obj))
 					{
 						vy = 0;
+						CBountyBrick* bountybrick = dynamic_cast<CBountyBrick*>(e->obj);
+						bountybrick->ActivateBounty();
+						bountybrick->GetBounty()->StartBounty();
 					}
 					else if (dynamic_cast<CHiddenObject*>(e->obj))
 					{
