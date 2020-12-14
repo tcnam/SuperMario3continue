@@ -155,6 +155,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_BOUNTYBRICK: 
 		obj = new CBountyBrick(); 
 		((CBountyBrick*)obj)->SetInitPosition(x, y);
+		((CBountyBrick*)obj)->SetMario(player);
 		bountybricks.push_back((CBountyBrick*)obj);
 		break;
 	case OBJECT_TYPE_FIREFLOWER:
@@ -296,14 +297,85 @@ void CPlayScene::Update(DWORD dt)
 	// TO-DO: This is a "dirty" way, need a moref organized way 
 
 	vector<LPGAMEOBJECT> coObjects;
-	for (size_t i = 1; i < objects.size(); i++)
+	vector<LPGAMEOBJECT> coObjects_Of_FireFlower_Coin_FireBallFlower;			//1: List of collidable Objects of FireFlower(or Coin, or FireBallFlower)
+	vector<LPGAMEOBJECT> coObjects_Of_Bounty;									//2: List of collidable Objects of Bounty
+	vector<LPGAMEOBJECT> coObjects_Of_Goomba;									//3: List of collidable Objects of Goomba
+	vector<LPGAMEOBJECT> coObjects_Of_Koopas;									//4: List of collidable Objects of Koopas
+	vector<LPGAMEOBJECT> coObbjects_Of_FireBall;								//5: List of collidable Objects of FireBall
+	vector<LPGAMEOBJECT> coObjects_Of_Mario;									//6: List of collidable Objects of Mario
+	vector<LPGAMEOBJECT> coObjects_Of_BountyBrick;								//7: List of collidable Objects of BountyBrick
+	
+	
+
+
+	for (size_t i = 0; i < objects.size(); i++)
 	{
-		coObjects.push_back(objects[i]);			
+		if (objects[i]->type == OBJECT_TYPE_MARIO)				//1,2,3,4,7
+		{
+			coObjects_Of_FireFlower_Coin_FireBallFlower.push_back(objects[i]);
+			coObjects_Of_Bounty.push_back(objects[i]);
+			coObjects_Of_Goomba.push_back(objects[i]);
+			coObjects_Of_Koopas.push_back(objects[i]);					
+			coObjects_Of_BountyBrick.push_back(objects[i]);
+		}
+		else if (objects[i]->type == OBJECT_TYPE_KOOPAS)			//4,5,7
+		{
+			coObjects_Of_Koopas.push_back(objects[i]);
+			coObbjects_Of_FireBall.push_back(objects[i]);
+			coObjects_Of_BountyBrick.push_back(objects[i]);
+		}
+		else if (objects[i]->type == OBJECT_TYPE_GOOMBA)		//3,4,5
+		{
+			coObjects_Of_Goomba.push_back(objects[i]);
+			coObjects_Of_Koopas.push_back(objects[i]);
+			coObbjects_Of_FireBall.push_back(objects[i]);
+		}
+		else if (objects[i]->type == OBJECT_TYPE_FIREFLOWER)	//4,5
+		{
+			coObjects_Of_Koopas.push_back(objects[i]);
+			coObbjects_Of_FireBall.push_back(objects[i]);
+		}
+		else if (objects[i]->type == OBJECT_TYPE_BRICK|| objects[i]->type==OBJECT_TYPE_HIDDENOBJECT)		//2,3,4,5,6
+		{
+			coObjects_Of_Bounty.push_back(objects[i]);									
+			coObjects_Of_Goomba.push_back(objects[i]);									
+			coObjects_Of_Koopas.push_back(objects[i]);									
+			coObbjects_Of_FireBall.push_back(objects[i]);								
+			coObjects_Of_Mario.push_back(objects[i]);									
+		}
+		else if (objects[i]->type == OBJECT_TYPE_BOUNTYBRICK)					//2,3,5
+		{
+			coObjects_Of_Bounty.push_back(objects[i]);
+			coObjects_Of_Goomba.push_back(objects[i]);
+			coObbjects_Of_FireBall.push_back(objects[i]);
+			coObjects_Of_Mario.push_back(objects[i]);
+		}
 	}
 
 	for (size_t i = 0; i < objects.size(); i++)
 	{
-		objects[i]->Update(dt, &coObjects);
+		if (objects[i]->type == OBJECT_TYPE_FLOWER_FIREBALL || objects[i]->type == OBJECT_TYPE_COIN || objects[i]->type == OBJECT_TYPE_FIREFLOWER)
+			objects[i]->Update(dt, &coObjects_Of_FireFlower_Coin_FireBallFlower);
+
+		else if (objects[i]->type == OBJECT_TYPE_BOUNTY)
+			objects[i]->Update(dt, &coObjects_Of_Bounty);
+
+		else if (objects[i]->type == OBJECT_TYPE_GOOMBA)
+			objects[i]->Update(dt, &coObjects_Of_Goomba);
+
+		else if (objects[i]->type == OBJECT_TYPE_KOOPAS)
+			objects[i]->Update(dt, &coObjects_Of_Koopas);
+
+		else if (objects[i]->type == OBJECT_TYPE_FIREBALL)
+			objects[i]->Update(dt, &coObbjects_Of_FireBall);
+
+		else if (objects[i]->type == OBJECT_TYPE_MARIO)
+			objects[i]->Update(dt, &coObjects_Of_Mario);
+
+		else if (objects[i]->type == OBJECT_TYPE_BOUNTYBRICK)
+			objects[i]->Update(dt, &coObjects_Of_BountyBrick);
+		else
+			objects[i]->Update(dt, &coObjects);
 	}
 	
 

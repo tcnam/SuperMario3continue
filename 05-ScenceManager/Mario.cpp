@@ -9,7 +9,7 @@
 #include "Goomba.h"
 #include "Portal.h"
 #include "Brick.h"
-#include "BountyBrick.h"
+//#include "BountyBrick.h"
 #include "HiddenObject.h"
 #include "FireBallFLower.h"
 
@@ -185,384 +185,388 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 				isOnGround = true;
 			}
 		}
+		else
+		{
+			vy = 0;
+		}
 		
 		//
 		// Collision logic with other objects
 		//
-		for (UINT i = 0; i < coEventsResult.size(); i++)
-		{
-			LPCOLLISIONEVENT e = coEventsResult[i];
-			if (nx != 0)
-			{
-				if (dynamic_cast<CGoomba*>(e->obj)) // if e->obj is Goomba 
-				{
-					vx = 0;
-					CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
-					if (untouchable == false)
-					{
-						if (isAttacking == true)
-						{
-							if (CMario::AABBCheck(goomba) == true)
-							{
-								if (goomba->GetState() != GOOMBA_STATE_DIE)
-								{
-									goomba->SetState(GOOMBA_STATE_DIE);
-									goomba->StartUntouchable();
-								}
-									
-							}
-							else
-							{
-								if (goomba->GetState() != GOOMBA_STATE_DIE)
-									goomba->SetState(GOOMBA_STATE_DIE);
-							}
-						}
-						else
-						{
-							if (goomba->GetState() != GOOMBA_STATE_DIE)
-							{
-								if (level > MARIO_LEVEL_SMALL)
-								{
-									level = level - 1;
-									StartUntouchable();
-								}
-								else
-									SetState(MARIO_STATE_DIE);
-							}
-						}
+	//	for (UINT i = 0; i < coEventsResult.size(); i++)
+	//	{
+	//		LPCOLLISIONEVENT e = coEventsResult[i];
+	//		if (nx != 0)
+	//		{
+	//			if (dynamic_cast<CGoomba*>(e->obj)) // if e->obj is Goomba 
+	//			{
+	//				vx = 0;
+	//				CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
+	//				if (untouchable == false)
+	//				{
+	//					if (isAttacking == true)
+	//					{
+	//						if (CMario::AABBCheck(goomba) == true)
+	//						{
+	//							if (goomba->GetState() != GOOMBA_STATE_DIE)
+	//							{
+	//								goomba->SetState(GOOMBA_STATE_DIE);
+	//								goomba->StartUntouchable();
+	//							}
+	//								
+	//						}
+	//						else
+	//						{
+	//							if (goomba->GetState() != GOOMBA_STATE_DIE)
+	//								goomba->SetState(GOOMBA_STATE_DIE);
+	//						}
+	//					}
+	//					else
+	//					{
+	//						if (goomba->GetState() != GOOMBA_STATE_DIE)
+	//						{
+	//							if (level > MARIO_LEVEL_SMALL)
+	//							{
+	//								level = level - 1;
+	//								StartUntouchable();
+	//							}
+	//							else
+	//								SetState(MARIO_STATE_DIE);
+	//						}
+	//					}
 
-					}
-				}
-				else if (dynamic_cast<CKoopas*>(e->obj))
-				{
-					CKoopas* Koopas = dynamic_cast<CKoopas*>(e->obj);
-					koopas = Koopas;
-					if (untouchable == false)
-					{
-						/*if (isAttacking == true)
-						{
-							if (CMario::AABBCheck(Koopas) == true)
-							{
-								if (Koopas->GetState() != KOOPAS_STATE_DEFENSE_STATIC)
-									Koopas->SetState(KOOPAS_STATE_DEFENSE_STATIC);
-							}
-							else
-							{
-								if (Koopas->GetState() != KOOPAS_STATE_DEFENSE_STATIC)
-									Koopas->SetState(KOOPAS_STATE_DEFENSE_STATIC);
-							}
-						}*/
-						//else
-						//{
-						if (Koopas->GetState() != KOOPAS_STATE_ISHOLD)
-						{
-							vx = 0;
-							if (Koopas->GetState() != KOOPAS_STATE_DEFENSE_STATIC)
-							{
-								if (level > MARIO_LEVEL_SMALL)
-								{
-									level = level - 1;
-									StartUntouchable();
-								}
-								else
-									SetState(MARIO_STATE_DIE);
-							}
-							else
-							{
-								if (state == MARIO_STATE_RUNNING_RIGHT || state == MARIO_STATE_RUNNINGFAST_RIGHT)
-								{
-									if (isHoldingKoopas == true)
-										return;
-									Koopas->SetState(KOOPAS_STATE_ISHOLD);
-									isHoldingKoopas = true;
-								}
-								else if (state == MARIO_STATE_RUNNING_LEFT || state == MARIO_STATE_RUNNINGFAST_LEFT)
-								{
-									if (isHoldingKoopas == true)
-										return;
-									Koopas->SetState(KOOPAS_STATE_ISHOLD);
-									isHoldingKoopas = true;
-								}
-								else
-								{
-									Koopas->SetState(KOOPAS_STATE_DEFENSE_DYNAMIC);
-									Koopas->vx = -KOOPAS_DYNAMIC_SPEED * nx;
-								}
-							}
-						}
-						else
-						{
-							if (isHoldingKoopas == true)
-							{
-								if (level != MARIO_LEVEL_SMALL)
-								{
+	//				}
+	//			}
+	//			else if (dynamic_cast<CKoopas*>(e->obj))
+	//			{
+	//				CKoopas* Koopas = dynamic_cast<CKoopas*>(e->obj);
+	//				koopas = Koopas;
+	//				if (untouchable == false)
+	//				{
+	//					/*if (isAttacking == true)
+	//					{
+	//						if (CMario::AABBCheck(Koopas) == true)
+	//						{
+	//							if (Koopas->GetState() != KOOPAS_STATE_DEFENSE_STATIC)
+	//								Koopas->SetState(KOOPAS_STATE_DEFENSE_STATIC);
+	//						}
+	//						else
+	//						{
+	//							if (Koopas->GetState() != KOOPAS_STATE_DEFENSE_STATIC)
+	//								Koopas->SetState(KOOPAS_STATE_DEFENSE_STATIC);
+	//						}
+	//					}*/
+	//					//else
+	//					//{
+	//					if (Koopas->GetState() != KOOPAS_STATE_ISHOLD)
+	//					{
+	//						vx = 0;
+	//						if (Koopas->GetState() != KOOPAS_STATE_DEFENSE_STATIC)
+	//						{
+	//							if (level > MARIO_LEVEL_SMALL)
+	//							{
+	//								level = level - 1;
+	//								StartUntouchable();
+	//							}
+	//							else
+	//								SetState(MARIO_STATE_DIE);
+	//						}
+	//						else
+	//						{
+	//							if (state == MARIO_STATE_RUNNING_RIGHT || state == MARIO_STATE_RUNNINGFAST_RIGHT)
+	//							{
+	//								if (isHoldingKoopas == true)
+	//									return;
+	//								Koopas->SetState(KOOPAS_STATE_ISHOLD);
+	//								isHoldingKoopas = true;
+	//							}
+	//							else if (state == MARIO_STATE_RUNNING_LEFT || state == MARIO_STATE_RUNNINGFAST_LEFT)
+	//							{
+	//								if (isHoldingKoopas == true)
+	//									return;
+	//								Koopas->SetState(KOOPAS_STATE_ISHOLD);
+	//								isHoldingKoopas = true;
+	//							}
+	//							else
+	//							{
+	//								Koopas->SetState(KOOPAS_STATE_DEFENSE_DYNAMIC);
+	//								Koopas->vx = -KOOPAS_DYNAMIC_SPEED * nx;
+	//							}
+	//						}
+	//					}
+	//					else
+	//					{
+	//						if (isHoldingKoopas == true)
+	//						{
+	//							if (level != MARIO_LEVEL_SMALL)
+	//							{
 
-									if (nx < 0)
-									{
-										if (level == MARIO_LEVEL_TAIL)
-											koopas->SetPosition(x + 20, y + 7);
-										else
-											koopas->SetPosition(x + 13, y + 7);
-									}
-									else
-										koopas->SetPosition(x - 14, y + 7);
-								}
-								else
-								{
-									if (nx < 0)
-										koopas->SetPosition(x + 11, y - 3);
-									else
-										koopas->SetPosition(x - 13, y - 3);
-								}
-							}
-							else
-							{
-								Koopas->SetState(KOOPAS_STATE_DEFENSE_DYNAMIC);
-								Koopas->vx = -KOOPAS_DYNAMIC_SPEED * nx;
-							}
+	//								if (nx < 0)
+	//								{
+	//									if (level == MARIO_LEVEL_TAIL)
+	//										koopas->SetPosition(x + 20, y + 7);
+	//									else
+	//										koopas->SetPosition(x + 13, y + 7);
+	//								}
+	//								else
+	//									koopas->SetPosition(x - 14, y + 7);
+	//							}
+	//							else
+	//							{
+	//								if (nx < 0)
+	//									koopas->SetPosition(x + 11, y - 3);
+	//								else
+	//									koopas->SetPosition(x - 13, y - 3);
+	//							}
+	//						}
+	//						else
+	//						{
+	//							Koopas->SetState(KOOPAS_STATE_DEFENSE_DYNAMIC);
+	//							Koopas->vx = -KOOPAS_DYNAMIC_SPEED * nx;
+	//						}
 
 
-						}
-						//}
+	//					}
+	//					//}
 
-					}
-				}
-				else if (dynamic_cast<CBrick*>(e->obj))
-				{
-					vx = 0;
-					//isRunningFastLeft = false;
-					//isRunningFastRight = false;
-				}
-				else if (dynamic_cast<CBountyBrick*>(e->obj))
-				{
-					vx = 0;
-					//isRunningFastLeft = false;
-					//isRunningFastRight = false;
-				}
-				else if (dynamic_cast<CHiddenObject*>(e->obj))
-				{
-					x += dx;
-					y += dy;
-				}
-				else if (dynamic_cast<CFireBallFlower*>(e->obj))
-				{
-					if (untouchable == false)
-					{
-						if (level > MARIO_LEVEL_SMALL)
-						{
-							StartUntouchable();
-							level = level - 1;
-						}
-						else
-							SetState(MARIO_STATE_DIE);
-					}					
-				}
-				else if (dynamic_cast<CCoin*>(e->obj))
-				{
-					CCoin* coin = dynamic_cast<CCoin*>(e->obj);
-					coin->isFinished = true;
-					x += dx;
-					y += dy;
-				}
-			}
-			else if (ny!= 0)
-			{
-				if (dynamic_cast<CCoin*>(e->obj))
-				{
-					CCoin* coin = dynamic_cast<CCoin*>(e->obj);
-					coin->isFinished = true;
-					x += dx;
-					y += dy;
+	//				}
+	//			}
+	//			else if (dynamic_cast<CBrick*>(e->obj))
+	//			{
+	//				vx = 0;
+	//				//isRunningFastLeft = false;
+	//				//isRunningFastRight = false;
+	//			}
+	//			//else if (dynamic_cast<CBountyBrick*>(e->obj))
+	//			//{
+	//			//	vx = 0;
+	//			//	//isRunningFastLeft = false;
+	//			//	//isRunningFastRight = false;
+	//			//}
+	//			else if (dynamic_cast<CHiddenObject*>(e->obj))
+	//			{
+	//				x += dx;
+	//				y += dy;
+	//			}
+	//			else if (dynamic_cast<CFireBallFlower*>(e->obj))
+	//			{
+	//				if (untouchable == false)
+	//				{
+	//					if (level > MARIO_LEVEL_SMALL)
+	//					{
+	//						StartUntouchable();
+	//						level = level - 1;
+	//					}
+	//					else
+	//						SetState(MARIO_STATE_DIE);
+	//				}					
+	//			}
+	//			else if (dynamic_cast<CCoin*>(e->obj))
+	//			{
+	//				CCoin* coin = dynamic_cast<CCoin*>(e->obj);
+	//				coin->isFinished = true;
+	//				x += dx;
+	//				y += dy;
+	//			}
+	//		}
+	//		else if (ny!= 0)
+	//		{
+	//			if (dynamic_cast<CCoin*>(e->obj))
+	//			{
+	//				CCoin* coin = dynamic_cast<CCoin*>(e->obj);
+	//				coin->isFinished = true;
+	//				x += dx;
+	//				y += dy;
 
-				}
-				if (ny< 0)
-				{
-					if (dynamic_cast<CGoomba*>(e->obj)) // if e->obj is Goomba 
-					{
-						CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
-						if (goomba->GetState() != GOOMBA_STATE_DIE)
-						{
-							goomba->SetState(GOOMBA_STATE_DIE);
-							vy = -MARIO_JUMP_DEFLECT_SPEED;
-						}
-					}
-					else if (dynamic_cast<CKoopas*>(e->obj))
-					{
-						CKoopas* Koopas = dynamic_cast<CKoopas*>(e->obj);
-						if (Koopas->GetState() != KOOPAS_STATE_DEFENSE_STATIC)
-						{
-							Koopas->SetState(KOOPAS_STATE_DEFENSE_STATIC);
-							vy = -MARIO_JUMP_DEFLECT_SPEED;
-						}
-						else
-						{
-							Koopas->SetState(KOOPAS_STATE_DEFENSE_DYNAMIC);
-							vy = -MARIO_JUMP_DEFLECT_SPEED;
+	//			}
+	//			if (ny< 0)
+	//			{
+	//				if (dynamic_cast<CGoomba*>(e->obj)) // if e->obj is Goomba 
+	//				{
+	//					CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
+	//					if (goomba->GetState() != GOOMBA_STATE_DIE)
+	//					{
+	//						goomba->SetState(GOOMBA_STATE_DIE);
+	//						vy = -MARIO_JUMP_DEFLECT_SPEED;
+	//					}
+	//				}
+	//				else if (dynamic_cast<CKoopas*>(e->obj))
+	//				{
+	//					CKoopas* Koopas = dynamic_cast<CKoopas*>(e->obj);
+	//					if (Koopas->GetState() != KOOPAS_STATE_DEFENSE_STATIC)
+	//					{
+	//						Koopas->SetState(KOOPAS_STATE_DEFENSE_STATIC);
+	//						vy = -MARIO_JUMP_DEFLECT_SPEED;
+	//					}
+	//					else
+	//					{
+	//						Koopas->SetState(KOOPAS_STATE_DEFENSE_DYNAMIC);
+	//						vy = -MARIO_JUMP_DEFLECT_SPEED;
 
-						}
-					}
-					else if (dynamic_cast<CFireBallFlower*>(e->obj))
-					{
-						if (untouchable == false)
-						{
-							if (isOnGround == true)
-							{
-								vy = 0;
-								y += min_ty * dy - ny * 0.5f;
-							}
-							if (level > MARIO_LEVEL_SMALL)
-							{
-								StartUntouchable();
-								level = level - 1;
-							}
-							else
-								SetState(MARIO_STATE_DIE);
-						}
-					}
-					else if (dynamic_cast<CFireBall*>(e->obj))
-					{
-						if (isOnGround == true)
-						{
-							vy = 0;
-							y += min_ty * dy - ny * 0.5f;
-						}
-						if (level > MARIO_LEVEL_SMALL)
-						{
-							StartUntouchable();
-							level = level - 1;
-						}
-						else
-							SetState(MARIO_STATE_DIE);
-					}
-				}
-				if (ny > 0)
-				{
-					if (dynamic_cast<CBrick*>(e->obj))
-					{
-						vy = 0;
-					}
-					else if (dynamic_cast<CBountyBrick*>(e->obj))
-					{
-						vy = 0;					
-						CBountyBrick* bountybrick = dynamic_cast<CBountyBrick*>(e->obj);
-						
-						if (bountybrick->state == BOUNTYBRICK_STATE_NORMAL)
-						{
-							bountybrick->SetSpeed(0, -BOUNTYBRICK_SPEED_Y);
-							bountybrick->state = BOUNTYBRICK_STATE_EMPTY;
+	//					}
+	//				}
+	//				else if (dynamic_cast<CFireBallFlower*>(e->obj))
+	//				{
+	//					if (untouchable == false)
+	//					{
+	//						if (isOnGround == true)
+	//						{
+	//							vy = 0;
+	//							y += min_ty * dy - ny * 0.5f;
+	//						}
+	//						if (level > MARIO_LEVEL_SMALL)
+	//						{
+	//							StartUntouchable();
+	//							level = level - 1;
+	//						}
+	//						else
+	//							SetState(MARIO_STATE_DIE);
+	//					}
+	//				}
+	//				else if (dynamic_cast<CFireBall*>(e->obj))
+	//				{
+	//					if (isOnGround == true)
+	//					{
+	//						vy = 0;
+	//						y += min_ty * dy - ny * 0.5f;
+	//					}
+	//					if (level > MARIO_LEVEL_SMALL)
+	//					{
+	//						StartUntouchable();
+	//						level = level - 1;
+	//					}
+	//					else
+	//						SetState(MARIO_STATE_DIE);
+	//				}
+	//			}
+	//			if (ny > 0)
+	//			{
+	//				if (dynamic_cast<CBrick*>(e->obj))
+	//				{
+	//					vy = 0;
+	//				}
+	//				//else if (dynamic_cast<CBountyBrick*>(e->obj))
+	//				//{
+	//				//	vy = 0;					
+	//				//	CBountyBrick* bountybrick = dynamic_cast<CBountyBrick*>(e->obj);
+	//				//	
+	//				//	if (bountybrick->state == BOUNTYBRICK_STATE_NORMAL)
+	//				//	{
+	//				//		bountybrick->SetSpeed(0, -BOUNTYBRICK_SPEED_Y);
+	//				//		bountybrick->state = BOUNTYBRICK_STATE_EMPTY;
 
-							if (level > MARIO_LEVEL_SMALL)
-								bountybrick->GetBounty()->isLeaf = true;
-							else
-								bountybrick->GetBounty()->isLeaf = false;
-							if (vx>0)
-								bountybrick->GetBounty()->isRightDirection = true;
-							else
-								bountybrick->GetBounty()->isRightDirection = false;
-							bountybrick->GetBounty()->isUsed = true;
-							bountybrick->ActivateBounty();
-						}
-						
-					}
-					else if (dynamic_cast<CHiddenObject*>(e->obj))
-					{
-						y += dy;
-						x += dx;
-					}
-					else if (dynamic_cast<CFireBallFlower*>(e->obj))
-					{
-						if (untouchable == false)
-						{
-							if (isOnGround == true)
-							{
-								vy = 0;
-								y += min_ty * dy - ny * 0.5f;
-							}
-								
-							if (level > MARIO_LEVEL_SMALL)
-							{
-								StartUntouchable();
-								level = level - 1;
-							}
-							else
-								SetState(MARIO_STATE_DIE);
-						}
-					}
-				}
-			}
-			else
-			{
-				if (dynamic_cast<CFireBallFlower*>(e->obj))
-				{
-					if (untouchable == false)
-					{
-						if (isOnGround == true)
-						{
-							vy = 0;
-							y += min_ty * dy - ny * 0.5f;
-						}
+	//				//		if (level > MARIO_LEVEL_SMALL)
+	//				//			bountybrick->GetBounty()->isLeaf = true;
+	//				//		else
+	//				//			bountybrick->GetBounty()->isLeaf = false;
+	//				//		if (vx>0)
+	//				//			bountybrick->GetBounty()->isRightDirection = true;
+	//				//		else
+	//				//			bountybrick->GetBounty()->isRightDirection = false;
+	//				//		bountybrick->GetBounty()->isUsed = true;
+	//				//		bountybrick->ActivateBounty();
+	//				//	}
+	//				//	
+	//				//}
+	//				else if (dynamic_cast<CHiddenObject*>(e->obj))
+	//				{
+	//					y += dy;
+	//					x += dx;
+	//				}
+	//				else if (dynamic_cast<CFireBallFlower*>(e->obj))
+	//				{
+	//					if (untouchable == false)
+	//					{
+	//						if (isOnGround == true)
+	//						{
+	//							vy = 0;
+	//							y += min_ty * dy - ny * 0.5f;
+	//						}
+	//							
+	//						if (level > MARIO_LEVEL_SMALL)
+	//						{
+	//							StartUntouchable();
+	//							level = level - 1;
+	//						}
+	//						else
+	//							SetState(MARIO_STATE_DIE);
+	//					}
+	//				}
+	//			}
+	//		}
+	//		else
+	//		{
+	//			if (dynamic_cast<CFireBallFlower*>(e->obj))
+	//			{
+	//				if (untouchable == false)
+	//				{
+	//					if (isOnGround == true)
+	//					{
+	//						vy = 0;
+	//						y += min_ty * dy - ny * 0.5f;
+	//					}
 
-						if (level > MARIO_LEVEL_SMALL)
-						{
-							StartUntouchable();
-							level = level - 1;
-						}
-						else
-							SetState(MARIO_STATE_DIE);
-					}
-				}
-			}
-		}
-			
-	}
-	//DebugOut(L"--> %s\n", ToWSTR(nx.ToString());
+	//					if (level > MARIO_LEVEL_SMALL)
+	//					{
+	//						StartUntouchable();
+	//						level = level - 1;
+	//					}
+	//					else
+	//						SetState(MARIO_STATE_DIE);
+	//				}
+	//			}
+	//		}
+	//	}
+	//		
+	//}
+	////DebugOut(L"--> %s\n", ToWSTR(nx.ToString());
 
-	// clean up collision events
-	for (UINT i=0;i<FireFlowers.size();i++)
-	{
-		float xFlower, yFlower;
-		FireFlowers[i]->GetPosition(xFlower, yFlower);
-		if (FireFlowers[i]->isAppear == true)
-		{
-			if (x > xFlower + 16)
-			{
-				if (y < FIREFLOWER_UPPER_Y)
-					FireFlowers[i]->SetState(FIREFLOWER_STATE_RIGHT_UPPER);
-				else
-					FireFlowers[i]->SetState(FIREFLOWER_STATE_RIGHT_LOWER);
-			}
-			else
-			{
-				if (y < FIREFLOWER_UPPER_Y)
-					FireFlowers[i]->SetState(FIREFLOWER_STATE_LEFT_UPPER);
-				else
-					FireFlowers[i]->SetState(FIREFLOWER_STATE_LEFT_LOWER);
-			}
-		}
-		else
-		{
-			if (x > xFlower + 40)
-			{
-				FireFlowers[i]->SetSpeed(0, -0.015f);
-				if (y < FIREFLOWER_UPPER_Y)
-					FireFlowers[i]->SetState(FIREFLOWER_STATE_RIGHT_UPPER);
-				else
-					FireFlowers[i]->SetState(FIREFLOWER_STATE_RIGHT_LOWER);
-			}
-			else if (x < xFlower - 24)
-			{
-				FireFlowers[i]->SetSpeed(0, -0.015f);
-				if (y < FIREFLOWER_UPPER_Y)
-					FireFlowers[i]->SetState(FIREFLOWER_STATE_LEFT_UPPER);
-				else
-					FireFlowers[i]->SetState(FIREFLOWER_STATE_LEFT_LOWER);
-			}
-			else
-			{
-				FireFlowers[i]->SetSpeed(0, 0);
-			}
-				
-		}			
+	//// clean up collision events
+	//for (UINT i=0;i<FireFlowers.size();i++)
+	//{
+	//	float xFlower, yFlower;
+	//	FireFlowers[i]->GetPosition(xFlower, yFlower);
+	//	if (FireFlowers[i]->isAppear == true)
+	//	{
+	//		if (x > xFlower + 16)
+	//		{
+	//			if (y < FIREFLOWER_UPPER_Y)
+	//				FireFlowers[i]->SetState(FIREFLOWER_STATE_RIGHT_UPPER);
+	//			else
+	//				FireFlowers[i]->SetState(FIREFLOWER_STATE_RIGHT_LOWER);
+	//		}
+	//		else
+	//		{
+	//			if (y < FIREFLOWER_UPPER_Y)
+	//				FireFlowers[i]->SetState(FIREFLOWER_STATE_LEFT_UPPER);
+	//			else
+	//				FireFlowers[i]->SetState(FIREFLOWER_STATE_LEFT_LOWER);
+	//		}
+	//	}
+	//	else
+	//	{
+	//		if (x > xFlower + 40)
+	//		{
+	//			FireFlowers[i]->SetSpeed(0, -0.015f);
+	//			if (y < FIREFLOWER_UPPER_Y)
+	//				FireFlowers[i]->SetState(FIREFLOWER_STATE_RIGHT_UPPER);
+	//			else
+	//				FireFlowers[i]->SetState(FIREFLOWER_STATE_RIGHT_LOWER);
+	//		}
+	//		else if (x < xFlower - 24)
+	//		{
+	//			FireFlowers[i]->SetSpeed(0, -0.015f);
+	//			if (y < FIREFLOWER_UPPER_Y)
+	//				FireFlowers[i]->SetState(FIREFLOWER_STATE_LEFT_UPPER);
+	//			else
+	//				FireFlowers[i]->SetState(FIREFLOWER_STATE_LEFT_LOWER);
+	//		}
+	//		else
+	//		{
+	//			FireFlowers[i]->SetSpeed(0, 0);
+	//		}
+	//			
+	//	}			
 	}	
 	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
 }

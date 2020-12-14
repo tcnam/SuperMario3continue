@@ -70,10 +70,10 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 					{
 						vx = -vx;
 					}
-					else if (dynamic_cast<CBountyBrick*>(e->obj))
+					/*else if (dynamic_cast<CBountyBrick*>(e->obj))
 					{
 						vx = -vx;
-					}
+					}*/
 					else if (dynamic_cast<CHiddenObject*>(e->obj))
 					{
 						if (state != KOOPAS_STATE_WALKING)

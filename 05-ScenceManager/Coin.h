@@ -9,6 +9,7 @@ class CCoin : public CGameObject
 public:
 	bool isFinished;
 	CCoin();
+	/*virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coOject);*/
 	virtual void Render();
 	virtual void GetBoundingBox(float& l, float& t, float& r, float& b);
 	~CCoin();

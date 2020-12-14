@@ -32,7 +32,6 @@ protected:
 	vector<LPGAMEOBJECT> objects;
 	vector<LPTERRAIN> terrains;
 
-
 	void _ParseSection_TEXTURES(string line);
 	void _ParseSection_SPRITES(string line);
 	void _ParseSection_ANIMATIONS(string line);

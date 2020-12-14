@@ -1,6 +1,7 @@
 #pragma once
 #include "GameObject.h"
 #include "Bounty.h"
+#include "Mario.h"
 
 #define BRICK_BBOX_WIDTH  16
 #define BRICK_BBOX_HEIGHT 16
@@ -13,14 +14,20 @@
 
 class CBountyBrick : public CGameObject
 {
-private:
+protected:
 	float start_x;
 	float start_y;
+	CBounty* Bounty;
+	CMario* Mario;
 public:
 	CBountyBrick();
-	CBounty* Bounty;
+
 	CBounty* GetBounty() { return Bounty; }
+	CMario* GetMario() { return Mario; }
+
 	void SetBounty(CBounty* bounty) { this->Bounty = bounty; }
+	void SetMario(CMario* mario) { this->Mario = mario; }
+
 	void SetStateBounty(int statebounty) { Bounty->SetState(statebounty); }
 	void ActivateBounty() { Bounty->isUsed = true;  }
 	void SetInitPosition(float x, float y) { start_x = x; start_y = y; }

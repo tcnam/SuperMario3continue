@@ -134,18 +134,7 @@ void CBounty::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			isCrossBoundary = true;
 			vy += BOUNTY_GRAVITY * dt;
 		}
-	}
-	vector<LPGAMEOBJECT> BrickObjects;
-	BrickObjects.clear();
-	for (UINT i = 0; i < coObjects->size(); i++)
-	{
-		if (coObjects->at(i)->GetType() == OBJECT_TYPE_BRICK
-			|| coObjects->at(i)->GetType() == OBJECT_TYPE_HIDDENOBJECT
-			|| coObjects->at(i)->GetType() == OBJECT_TYPE_BOUNTYBRICK)
-		{
-			BrickObjects.push_back(coObjects->at(i));
-		}			
-	}		
+	}	
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
 	coEvents.clear();
@@ -158,7 +147,7 @@ void CBounty::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		return;
 	}//turn off collision of bounty(state leaf) when it get over its limit boundary and begin to fall
 		
-	CalcPotentialCollisions(&BrickObjects, coEvents);
+	CalcPotentialCollisions(coObjects, coEvents);
 	if (coEvents.size() == 0)
 	{
 		x += dx;
@@ -187,10 +176,10 @@ void CBounty::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void CBounty::Render()
 {
-	if (isUsed == false)
+	/*if (isUsed == false)
 		return;
 	if (isFinised == true)
-		return;
+		return;*/
 	int ani = -1;
 	if (state == BOUNTY_STATE_POWERUP)
 	{

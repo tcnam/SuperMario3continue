@@ -3,7 +3,7 @@
 #include "GameObject.h"
 #include "Brick.h"
 #include "HiddenObject.h"
-#include "BountyBrick.h"
+//#include "BountyBrick.h"
 #include "Goomba.h"
 
 #define KOOPAS_WALKING_SPEED 0.03f;
