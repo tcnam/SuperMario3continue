@@ -27,6 +27,11 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
 	coEvents.clear();
+	if (GetTickCount64() - untouchable_start > GOOMBA_UNTOUCHABLE_TIME)
+	{
+		untouchable_start = 0;
+		untouchable = false;
+	}
 	if(state!=GOOMBA_STATE_DIE)
 		CalcPotentialCollisions(&BrickObjects, coEvents);	
 	if (coEvents.size() == 0)

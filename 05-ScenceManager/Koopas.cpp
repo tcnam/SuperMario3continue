@@ -101,8 +101,10 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 				}
 			}
 		}
-	
+		for (UINT i = 0; i < coEvents.size(); i++)
+			delete coEvents[i];
 	}
+	
 	
 }
 

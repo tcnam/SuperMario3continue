@@ -14,11 +14,16 @@
 #define GOOMBA_ANI_WALKING 0
 #define GOOMBA_ANI_DIE 1
 
+#define GOOMBA_UNTOUCHABLE_TIME		1000
+
 
 class CGoomba : public CGameObject
 {
 public:
+	bool untouchable;
+	DWORD untouchable_start;
 	CGoomba();
+	void StartUntouchable() { untouchable = true; untouchable_start = (DWORD)GetTickCount64(); }
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects);
 	virtual void Render();

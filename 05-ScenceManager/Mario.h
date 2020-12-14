@@ -140,13 +140,12 @@
 class CMario : public CGameObject
 {
 	int level;
-	int untouchable;
+	bool untouchable;
 	DWORD untouchable_start;
 
 	float start_x;			// initial position of Mario at scene
 	float start_y; 
 	CFireBall* fireballs;
-	//vector<CFireBall*> FireBall;
 	CKoopas* koopas;
 	vector <CFireFlower*>FireFlowers;
 	
@@ -223,7 +222,7 @@ public:
 	void SetLevel(int l) { level = l; }
 	int GetLevel() { return level; }
 
-	void StartUntouchable() { untouchable = 1; untouchable_start = (DWORD)GetTickCount64(); }
+	void StartUntouchable() { untouchable = true; untouchable_start = (DWORD)GetTickCount64(); }
 	void StartFlyFall() { isFlyFall = true; FlyFall_start = (DWORD)GetTickCount64(); }
 	void StartAttack() { isAttacking = true; Attack_start = (DWORD)GetTickCount64(); }
 	void StartSlide() { isSliding = true; Slide_start = (DWORD)GetTickCount64(); }

@@ -1,6 +1,8 @@
 #include "BountyBrick.h"
 CBountyBrick::CBountyBrick() :CGameObject()
 {
+	vx = 0;
+	vy = 0;
 	SetState(BOUNTYBRICK_STATE_NORMAL);
 }
 void CBountyBrick::Render()
@@ -10,6 +12,22 @@ void CBountyBrick::Render()
 	else if(state==BOUNTYBRICK_STATE_NORMAL)
 		animation_set->at(0)->Render(x, y);		//normal bounty brick animation
 	//RenderBoundingBox();
+}
+void CBountyBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+{
+	if (state == BOUNTYBRICK_STATE_NORMAL)
+		return;
+	CGameObject::Update(dt, coObjects);
+	if (y <= start_y - BOUNTYBRICK_MOVING_DISTANCE_TOBACK)
+	{
+		vy = BOUNTYBRICK_SPEED_Y;
+	}
+	else if (y > start_y)
+	{
+		y = start_y;
+		vy = 0;
+	}
+	y += dy;
 }
 
 void CBountyBrick::GetBoundingBox(float& l, float& t, float& r, float& b)

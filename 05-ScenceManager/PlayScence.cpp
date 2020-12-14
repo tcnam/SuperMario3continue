@@ -154,6 +154,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_COIN: obj = new CCoin(); break;
 	case OBJECT_TYPE_BOUNTYBRICK: 
 		obj = new CBountyBrick(); 
+		((CBountyBrick*)obj)->SetInitPosition(x, y);
 		bountybricks.push_back((CBountyBrick*)obj);
 		break;
 	case OBJECT_TYPE_FIREFLOWER:
@@ -181,12 +182,13 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		}
 		else if (BountyBrickIndex == 8)
 		{
-			DebugOut(L"State of powerup%i\n", BOUNTY_STATE_LIFEUP);
+			DebugOut(L"State of lifeup%i\n", BOUNTY_STATE_LIFEUP);
 			bountybricks[BountyBrickIndex]->SetStateBounty(BOUNTY_STATE_LIFEUP);
 			DebugOut(L"Bounty was added to bountybrick:%i with state:%i\n", BountyBrickIndex, obj->GetState());
 		}
 		else
 			bountybricks[BountyBrickIndex]->SetStateBounty(BOUNTY_STATE_COIN);
+		bountybricks[BountyBrickIndex]->GetBounty()->SetInitPosition(x, y);
 		BountyBrickIndex++;
 		break;
 	case OBJECT_TYPE_FIREBALL:

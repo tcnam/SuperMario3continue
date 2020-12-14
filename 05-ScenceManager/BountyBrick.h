@@ -8,17 +8,23 @@
 #define BOUNTYBRICK_STATE_NORMAL 0
 #define BOUNTYBRICK_STATE_EMPTY	100
 
+#define BOUNTYBRICK_MOVING_DISTANCE_TOBACK	4.00f
+#define BOUNTYBRICK_SPEED_Y					0.1f
+
 class CBountyBrick : public CGameObject
 {
+private:
+	float start_x;
+	float start_y;
 public:
-	
 	CBountyBrick();
 	CBounty* Bounty;
 	CBounty* GetBounty() { return Bounty; }
 	void SetBounty(CBounty* bounty) { this->Bounty = bounty; }
 	void SetStateBounty(int statebounty) { Bounty->SetState(statebounty); }
 	void ActivateBounty() { Bounty->isUsed = true;  }
-	//virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects = NULL);
+	void SetInitPosition(float x, float y) { start_x = x; start_y = y; }
+	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	virtual void Render();
 	virtual void GetBoundingBox(float& l, float& t, float& r, float& b);
 	void SetState(int state);
