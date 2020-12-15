@@ -151,7 +151,10 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_GOOMBA: obj = new CGoomba(); break;
 	case OBJECT_TYPE_BRICK: obj = new CBrick(); break;
 	case OBJECT_TYPE_KOOPAS: obj = new CKoopas(); break;	
-	case OBJECT_TYPE_COIN: obj = new CCoin(); break;
+	case OBJECT_TYPE_COIN: 
+		obj = new CCoin(); 
+		((CCoin*)obj)->SetMario(player);
+		break;
 	case OBJECT_TYPE_BOUNTYBRICK: 
 		obj = new CBountyBrick(); 
 		((CBountyBrick*)obj)->SetInitPosition(x, y);
@@ -173,7 +176,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		FlowerIndex++;
 		break;
 	case OBJECT_TYPE_BOUNTY:
-		obj = new CBounty();		
+		obj = new CBounty();
+		((CBounty*)obj)->SetMario(player);
 		bountybricks[BountyBrickIndex]->SetBounty((CBounty*)obj);
 		if (BountyBrickIndex == 3 || BountyBrickIndex == 5 || BountyBrickIndex == 7)
 		{
@@ -348,7 +352,7 @@ void CPlayScene::Update(DWORD dt)
 			coObjects_Of_Bounty.push_back(objects[i]);
 			coObjects_Of_Goomba.push_back(objects[i]);
 			coObbjects_Of_FireBall.push_back(objects[i]);
-			coObjects_Of_Mario.push_back(objects[i]);
+			coObjects_Of_Mario.push_back(objects[i]);					//?
 		}
 	}
 

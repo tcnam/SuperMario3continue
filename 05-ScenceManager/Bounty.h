@@ -1,6 +1,7 @@
 #pragma once
 #include "GameObject.h"
 #include "Utils.h"
+#include "Mario.h"
 
 #define BOUNTY_BBOX_WIDTH  16
 #define BOUNTY_BBOX_HEIGHT 16
@@ -13,12 +14,12 @@
 
 #define BOUNTY_COIN_VY		0.3f
 #define BOUNTY_MUSHROOM_VY	0.01f
-#define BOUNTY_MUSHROOM_VX	0.08f
+#define BOUNTY_MUSHROOM_VX	0.05f
 #define BOUNTY_LEAF_VY		0.1f
 #define BOUNTY_LEAF_VX		0.02f
 #define BOUNTY_GRAVITY		0.02f
 
-#define BOUNTY_MUSHROOM_DISTANCE_DY_TOHAVE_VX	16.00f
+#define BOUNTY_MUSHROOM_DISTANCE_DY_TOHAVE_VX	17.00f
 #define BOUNTY_LEAF_DISTANCE_DY_TOFALL			32.00f
 #define BOUNTY_LEAF_DISTANCE_DX_TOCHANGE_VX		16.00f
 #define BOUNTY_COIN_DISTANCE_DY_TOFALL			64.00f
@@ -35,6 +36,7 @@ private:
 	float start_x;
 	float start_y;
 public:
+	CMario* Mario;
 	bool isLeaf;						//determide powerup is Leaf or red mushroom
 	bool isUsed;						//determide if bounty was activated by bounty brick
 	bool isCrossBoundary;				//determide if bounty crossed its limit boundary
@@ -42,6 +44,8 @@ public:
 	bool isRightDirection;				//determide bounty powerup will move to right or left, true:right, false:left
 	CBounty();
 	void SetInitPosition(float x, float y) { start_x = x; start_y = y; }
+	void SetMario(CMario* mario) { Mario = mario; }
+	CMario* GetMario() { return Mario; }
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	virtual void Render();
 	virtual void GetBoundingBox(float& l, float& t, float& r, float& b);

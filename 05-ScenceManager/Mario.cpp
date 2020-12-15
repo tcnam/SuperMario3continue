@@ -185,17 +185,34 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 				isOnGround = true;
 			}
 		}
-		else
-		{
-			vy = 0;
-		}
 		
 		//
 		// Collision logic with other objects
 		//
-	//	for (UINT i = 0; i < coEventsResult.size(); i++)
-	//	{
-	//		LPCOLLISIONEVENT e = coEventsResult[i];
+		for (UINT i = 0; i < coEventsResult.size(); i++)
+		{
+			LPCOLLISIONEVENT e = coEventsResult[i];
+			if (dynamic_cast<CHiddenObject*>(e->obj))
+			{
+				if (ny > 0)
+				{
+					y += dy;
+					x += dx;
+				}
+				if (nx != 0)
+				{
+					x += dx;
+					y += dy;
+				}
+			}
+			else if (dynamic_cast<CBrick*>(e->obj))
+			{
+				if (nx != 0)
+				{
+					vx = 0;
+				}
+			}
+		}
 	//		if (nx != 0)
 	//		{
 	//			if (dynamic_cast<CGoomba*>(e->obj)) // if e->obj is Goomba 
@@ -1178,21 +1195,25 @@ void CMario::Attack()
 		}
 		else
 		{
-			if (nx > 0)
+			if (fireballs->isFinished == true)
 			{
-				fireballs->SetPosition(x + FIREBALL_RELATIVE_POSITION_X, y + FIREBALL_RELATIVE_POSITION_Y);
-				fireballs->SetSpeed(FIREBALL_SPEED, -FIREBALL_GRAVITY);
-				//fireballs->SetDirectionnx(1);
-			}
-			else
-			{
-				fireballs->SetPosition(x - FIREBALL_RELATIVE_POSITION_X, y + FIREBALL_RELATIVE_POSITION_Y);
-				fireballs->SetSpeed(-FIREBALL_SPEED, -FIREBALL_GRAVITY); 
-				//fireballs->SetDirectionnx(-1);
-			}
+				if (nx > 0)
+				{
+					fireballs->SetPosition(x + FIREBALL_RELATIVE_POSITION_X, y + FIREBALL_RELATIVE_POSITION_Y);
+					fireballs->SetSpeed(FIREBALL_SPEED, -FIREBALL_GRAVITY);
+					//fireballs->SetDirectionnx(1);
+				}
+				else
+				{
+					fireballs->SetPosition(x - FIREBALL_RELATIVE_POSITION_X, y + FIREBALL_RELATIVE_POSITION_Y);
+					fireballs->SetSpeed(-FIREBALL_SPEED, -FIREBALL_GRAVITY);
+					//fireballs->SetDirectionnx(-1);
+				}
 
-			fireballs->isUsed = true;
-			fireballs->isFinished = false;
+				fireballs->isUsed = true;
+				fireballs->isFinished = false;
+			}
+			
 		}
 	}
 	else if (level == MARIO_LEVEL_TAIL)

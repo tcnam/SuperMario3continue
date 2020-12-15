@@ -4,7 +4,6 @@
 #include "Koopas.h"
 #include "FireFlower.h"
 #include "FireBallFLower.h"
-#include "Coin.h"
 
 #define MARIO_WALKING_SPEED		0.04f 
 #define MARIO_RUNNING_SPEED		0.09f

@@ -11,13 +11,13 @@ CFireBall::CFireBall()
 	vy = 0;
 	nx = -1;
 	isUsed = false;
-	isFinished = false;
+	isFinished = true;;
 }
 
 void CFireBall::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	if (isFinished == true)
-		return;
+	//if (isFinished == true)
+	//	return;
 	CGameObject::Update(dt);
 	if(isUsed==true)
 		vy += FIREBALL_GRAVITY*dt;
@@ -45,6 +45,10 @@ void CFireBall::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		{
 			vy =-FIREBALL_DEFLECT_SPEED;
 		}
+		if (nx != 0)
+		{
+			isFinished = true;
+		}
 		for (UINT i = 0; i < coEventsResult.size(); i++)
 		{
 			LPCOLLISIONEVENT e = coEventsResult[i];
@@ -68,28 +72,6 @@ void CFireBall::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					isFinished = true;
 				}
 			}
-			else if (dynamic_cast<CBountyBrick*>(e->obj))
-			{
-				CBountyBrick* bountybrick = static_cast<CBountyBrick*>(e->obj);
-				if (e->nx!= 0)
-				{
-					isFinished = true;
-				}
-			}
-			else if (dynamic_cast<CHiddenObject*>(e->obj))
-			{
-				if (e->nx != 0)
-				{
-					isFinished = true;
-				}
-			}
-			else if (dynamic_cast<CBrick*>(e->obj))
-			{
-				if (e->nx != 0)
-				{
-					isFinished = true;
-				}
-			}
 		}
 	}
 	//DebugOut(L"--> %s\n", ToWSTR(nx.ToString());
@@ -105,8 +87,8 @@ void CFireBall::GetBoundingBox(float& left, float& top, float& right, float& bot
 }
 void CFireBall::Render()
 {
-	if (isFinished == true)
-		return;
+	//if (isFinished == true)
+	//	return;
 	if (nx > 0)
 		animation_set->at(0)->Render(x, y);
 	else

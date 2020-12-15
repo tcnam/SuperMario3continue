@@ -64,10 +64,7 @@ void CBounty::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				{
 					if (isCrossBoundary == false)
 					{
-						if (isRightDirection == true)
 							vx = BOUNTY_LEAF_VX;
-						else
-							vx = -BOUNTY_LEAF_VX;
 					}
 					vy = BOUNTY_GRAVITY;
 					if (start_x +  BOUNTY_LEAF_DISTANCE_DX_TOCHANGE_VX <= x)
@@ -80,10 +77,7 @@ void CBounty::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			{
 				if (isCrossBoundary == false)
 				{
-					if (isRightDirection == true)
 						vx = BOUNTY_LEAF_VX;
-					else
-						vx = -BOUNTY_LEAF_VX;
 				}					
 				isCrossBoundary = true;
 				vy = BOUNTY_GRAVITY;
@@ -138,14 +132,32 @@ void CBounty::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
 	coEvents.clear();
-	if (state == BOUNTY_STATE_POWERUP 
-		&& isLeaf == true 
-		&& isCrossBoundary == true)			
+	float Mario_current_x, Mario_current_y;
+	Mario->GetPosition(Mario_current_x, Mario_current_y);
+	if (state != BOUNTY_STATE_COIN)
 	{
-		x += dx;
-		y += dy;
-		return;
-	}//turn off collision of bounty(state leaf) when it get over its limit boundary and begin to fall
+		if (AABBCheck(Mario) == true)//check if bounty super leaf collide with mario in this frame
+		{
+			isFinised = true;
+			Mario->SetPosition(Mario_current_x, Mario_current_y - 1);//push mario a distance to avoid falling
+			SetPosition(start_x, start_y + 320.00f);
+			if (state == BOUNTY_STATE_POWERUP)
+			{
+				if (Mario->GetLevel() < MARIO_LEVEL_BIG)
+					Mario->SetLevel(MARIO_LEVEL_BIG);
+				else
+					Mario->SetLevel(MARIO_LEVEL_TAIL);
+			}
+			
+			
+		}
+		if (isLeaf == true && isCrossBoundary == true&&state==BOUNTY_STATE_POWERUP)
+		{
+			x += dx;
+			y += dy;
+		}
+	}
+	//turn off collision of bounty(state leaf) when it get over its limit boundary and begin to fall
 		
 	CalcPotentialCollisions(coObjects, coEvents);
 	if (coEvents.size() == 0)
@@ -169,17 +181,45 @@ void CBounty::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		}
 		if(nx!=0)
 			vx = -vx;
+		for (UINT i = 0; i < coEventsResult.size(); i++)
+		{
+			LPCOLLISIONEVENT e = coEventsResult[i];
+			if (dynamic_cast<CMario*>(e->obj))
+			{
+				
+				vy = BOUNTY_GRAVITY;
+				x += dx;
+				y += dy;
+				if (state != BOUNTY_STATE_COIN)
+				{
+					SetPosition(start_x, start_y+320.00f);
+					isFinised == true;
+					if (Mario->GetLevel() == MARIO_LEVEL_SMALL)
+						Mario->SetPosition(Mario_current_x, Mario_current_y - MARIO_BIG_BBOX_HEIGHT + MARIO_SMALL_BBOX_HEIGHT - 1);
+					else
+						Mario->SetPosition(Mario_current_x, Mario_current_y - 1);
+					if (state == BOUNTY_STATE_POWERUP)
+					{
+						if (isLeaf == true)
+							Mario->SetLevel(MARIO_LEVEL_TAIL);
+						else
+							Mario->SetLevel(MARIO_LEVEL_BIG);
+					}					
+				}
+			}
+		}
 	}
+	
 	for (UINT i = 0; i < coEvents.size(); i++)
 		delete coEvents[i];	
 }
 
 void CBounty::Render()
 {
-	/*if (isUsed == false)
+	if (isUsed == false)
 		return;
-	if (isFinised == true)
-		return;*/
+	//if (isFinised == true)
+	//	return;
 	int ani = -1;
 	if (state == BOUNTY_STATE_POWERUP)
 	{

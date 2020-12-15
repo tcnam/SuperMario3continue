@@ -27,16 +27,10 @@ void CBountyBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		y = start_y;
 		vy = 0;
 	}
-	vector<LPGAMEOBJECT> RealCoObjects;
-	RealCoObjects.clear();
-	for (UINT i = 0; i < coObjects->size(); i++)
-		if (coObjects->at(i)->GetType() == OBJECT_TYPE_MARIO|| coObjects->at(i)->GetType() == OBJECT_TYPE_KOOPAS)
-			RealCoObjects.push_back(coObjects->at(i));
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
 	coEvents.clear();
-	if (state != BOUNTYBRICK_STATE_EMPTY)
-		CalcPotentialCollisions(&RealCoObjects, coEvents);
+	CalcPotentialCollisions(coObjects, coEvents);
 	if (coEvents.size() == 0)
 	{
 		x += dx;
@@ -54,7 +48,7 @@ void CBountyBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 		if (nx != 0) vx = -vx;
 		if (ny < 0) vy = 0;*/
-		for (UINT i = 0; i < coEvents.size(); i++)
+		for (UINT i = 0; i < coEventsResult.size(); i++)
 		{
 			LPCOLLISIONEVENT e = coEventsResult[i];
 			if (dynamic_cast<CMario*>(e->obj))
@@ -64,11 +58,8 @@ void CBountyBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 				Mario->GetPosition(mario_x, mario_y);
 				Mario->GetSpeed(mario_vx, mario_vy);
-
-
 				if (ny < 0)
 				{
-
 					Mario->SetPosition(mario_x, start_y + BOUNTY_BBOX_HEIGHT + 0.001);
 					Mario->SetSpeed(mario_vx, 0);
 					if (state == BOUNTYBRICK_STATE_NORMAL)
@@ -85,6 +76,35 @@ void CBountyBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 							Bounty->isRightDirection = false;
 						Bounty->isUsed = true;
 						ActivateBounty();
+					}
+				}
+				if (nx != 0)
+				{
+					if (Mario->GetLevel() == MARIO_LEVEL_TAIL)
+					{
+						if (Mario->isAttacking == true)
+						{
+							bool result = this->AABBCheck(e->obj);
+							if (result == true)
+							{
+								if (state == BOUNTYBRICK_STATE_NORMAL)
+								{
+									state = BOUNTYBRICK_STATE_EMPTY;
+									vy = -BOUNTYBRICK_SPEED_Y;
+									if (Mario->GetLevel() > MARIO_LEVEL_SMALL)
+										Bounty->isLeaf = true;
+									else
+										Bounty->isLeaf = false;
+									if (vx > 0)
+										Bounty->isRightDirection = true;
+									else
+										Bounty->isRightDirection = false;
+									Bounty->isUsed = true;
+									ActivateBounty();
+								}
+							}
+							
+						}
 					}
 				}
 			}
