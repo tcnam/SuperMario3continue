@@ -60,7 +60,7 @@ void CBountyBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				Mario->GetSpeed(mario_vx, mario_vy);
 				if (ny < 0)
 				{
-					Mario->SetPosition(mario_x, start_y + BOUNTY_BBOX_HEIGHT + 0.001);
+					Mario->SetPosition(mario_x, start_y + BOUNTY_BBOX_HEIGHT + 1.00f);
 					Mario->SetSpeed(mario_vx, 0);
 					if (state == BOUNTYBRICK_STATE_NORMAL)
 					{

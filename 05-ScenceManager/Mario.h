@@ -1,7 +1,9 @@
 #pragma once
 #include "GameObject.h"
+#include "HiddenObject.h"
+#include "Brick.h"
 #include "FireBall.h"
-#include "Koopas.h"
+//#include "Koopas.h"
 #include "FireFlower.h"
 #include "FireBallFLower.h"
 
@@ -139,13 +141,13 @@
 class CMario : public CGameObject
 {
 	int level;
-	bool untouchable;
+	
 	DWORD untouchable_start;
 
 	float start_x;			// initial position of Mario at scene
 	float start_y; 
 	CFireBall* fireballs;
-	CKoopas* koopas;
+	//CKoopas* koopas;
 	vector <CFireFlower*>FireFlowers;
 	
 
@@ -165,6 +167,7 @@ class CMario : public CGameObject
 
 	
 public:
+	bool untouchable;
 	bool isOnGround;
 	//bool allowJump;
 	bool isRunningRight;
@@ -230,6 +233,7 @@ public:
 	void ResetBig();
 	void ResetSmall();
 	void ResetTail();
+	void GoUnderGround();
 
 	void GetBoundingBoxTailLevel(float& left, float& top, float& right, float& bottom);
 	void GetBoundingBoxTailWhileAttacking(float& left, float& top, float& right, float& bottom);

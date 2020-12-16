@@ -193,7 +193,7 @@ void CBounty::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				if (state != BOUNTY_STATE_COIN)
 				{
 					SetPosition(start_x, start_y+320.00f);
-					isFinised == true;
+					isFinised = true;
 					if (Mario->GetLevel() == MARIO_LEVEL_SMALL)
 						Mario->SetPosition(Mario_current_x, Mario_current_y - MARIO_BIG_BBOX_HEIGHT + MARIO_SMALL_BBOX_HEIGHT - 1);
 					else

@@ -148,7 +148,10 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		player = (CMario*)obj; 
 		DebugOut(L"[INFO] Player object created!\n");
 		break;
-	case OBJECT_TYPE_GOOMBA: obj = new CGoomba(); break;
+	case OBJECT_TYPE_GOOMBA: 
+		obj = new CGoomba(); 
+		((CGoomba*)obj)->SetMario(player);
+		break;
 	case OBJECT_TYPE_BRICK: obj = new CBrick(); break;
 	case OBJECT_TYPE_KOOPAS: obj = new CKoopas(); break;	
 	case OBJECT_TYPE_COIN: 
@@ -392,20 +395,29 @@ void CPlayScene::Update(DWORD dt)
 	player->GetPosition(cx, cy);
 	
 	CGame *game = CGame::GetInstance();
-	if (cx > game->GetScreenWidth() / 2)
-	{
-		cx -= game->GetScreenWidth()/2;
-		cy -= game->GetScreenHeight()/2;
-		if (cy > -game->GetScreenHeight()*3/2)
-			cy = (float)-game->GetScreenHeight();
-		CGame::GetInstance()->SetCamPos(round(cx),round(cy));
-	}
-	/*else if (py % game->GetScreenHeight() > game->GetScreenHeight() / 6 * 5)
-	{
-		CGame::GetInstance()->SetCamPos(0, py % game->GetScreenHeight() - game->GetScreenHeight() / 6 * 5);
-	}*/
-	else
-		CGame::GetInstance()->SetCamPos(0, round((float)(-game->GetScreenHeight())));	
+	//if (cx > game->GetScreenWidth() / 2)
+	//{
+	//	cx -= game->GetScreenWidth()/2;
+	//	cy -= game->GetScreenHeight()/2;
+	//	if (cy > -game->GetScreenHeight()*3/2)
+	//		cy = (float)-game->GetScreenHeight();
+	//	CGame::GetInstance()->SetCamPos(round(cx),round(cy));
+	//}
+	//else if (cy > 0)
+	//{
+	//	cx -= game->GetScreenWidth() / 2;
+	//	cy -= game->GetScreenHeight() / 2;
+	//	CGame::GetInstance()->SetCamPos(round(cx), round(cy));
+	//}
+	///*else if (py % game->GetScreenHeight() > game->GetScreenHeight() / 6 * 5)
+	//{
+	//	CGame::GetInstance()->SetCamPos(0, py % game->GetScreenHeight() - game->GetScreenHeight() / 6 * 5);
+	//}*/
+	//else
+	//	CGame::GetInstance()->SetCamPos(0, round((float)(-game->GetScreenHeight())));	
+	cx -= game->GetScreenWidth() / 2;
+	cy -= game->GetScreenHeight() / 2;
+	CGame::GetInstance()->SetCamPos(round(cx), round(cy));
 }
 
 void CPlayScene::Render()
@@ -498,6 +510,9 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 		break;
 	case DIK_4:
 		mario->ResetFire();
+		break;
+	case DIK_5:
+		mario->GoUnderGround();
 		break;
 	case DIK_Z:
 		if (mario->isAttacking == true)

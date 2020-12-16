@@ -6,11 +6,7 @@
 #include "Mario.h"
 #include "Game.h"
 
-#include "Goomba.h"
 #include "Portal.h"
-#include "Brick.h"
-//#include "BountyBrick.h"
-#include "HiddenObject.h"
 #include "FireBallFLower.h"
 
 CMario::CMario(float x, float y) : CGameObject()
@@ -58,64 +54,64 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	// turn off collision when die 
 	if (state!=MARIO_STATE_DIE)
 		CalcPotentialCollisions(coObjects, coEvents);
-	if (koopas != NULL)
-	{
-		if (isHoldingKoopas == true)
-		{
-			if (level != MARIO_LEVEL_SMALL)
-			{
-				if (state != MARIO_STATE_IDLE)//when mario in state idle its x location is smaller than in others state because mario is not moving
-				{
-					if (nx > 0)
-					{
-						if (level == MARIO_LEVEL_TAIL)
-							koopas->SetPosition(x + 20, y + 7);
-						else
-							koopas->SetPosition(x + 13, y + 7);
-					}
-					else
-						koopas->SetPosition(x - 14, y + 7);
-				}
-				else
-				{
-					if (nx > 0)
-					{
-						if (level == MARIO_LEVEL_TAIL)
-							koopas->SetPosition(x + 18, y + 7);
-						else
-							koopas->SetPosition(x + 11, y + 7);
-					}
-					else
-						koopas->SetPosition(x - 13, y + 7);
-				}
+	//if (koopas != NULL)
+	//{
+	//	if (isHoldingKoopas == true)
+	//	{
+	//		if (level != MARIO_LEVEL_SMALL)
+	//		{
+	//			if (state != MARIO_STATE_IDLE)//when mario in state idle its x location is smaller than in others state because mario is not moving
+	//			{
+	//				if (nx > 0)
+	//				{
+	//					if (level == MARIO_LEVEL_TAIL)
+	//						koopas->SetPosition(x + 20, y + 7);
+	//					else
+	//						koopas->SetPosition(x + 13, y + 7);
+	//				}
+	//				else
+	//					koopas->SetPosition(x - 14, y + 7);
+	//			}
+	//			else
+	//			{
+	//				if (nx > 0)
+	//				{
+	//					if (level == MARIO_LEVEL_TAIL)
+	//						koopas->SetPosition(x + 18, y + 7);
+	//					else
+	//						koopas->SetPosition(x + 11, y + 7);
+	//				}
+	//				else
+	//					koopas->SetPosition(x - 13, y + 7);
+	//			}
 
-			}
-			else
-			{
-				if (state != MARIO_STATE_IDLE)
-				{
-					if (nx > 0)
-						koopas->SetPosition(x + 11, y - 3);
-					else
-						koopas->SetPosition(x - 13, y - 3);
-				}
-				else
-				{
-					if (nx > 0)
-						koopas->SetPosition(x + 9, y - 3);
-					else
-						koopas->SetPosition(x - 12, y - 3);
-				}
+	//		}
+	//		else
+	//		{
+	//			if (state != MARIO_STATE_IDLE)
+	//			{
+	//				if (nx > 0)
+	//					koopas->SetPosition(x + 11, y - 3);
+	//				else
+	//					koopas->SetPosition(x - 13, y - 3);
+	//			}
+	//			else
+	//			{
+	//				if (nx > 0)
+	//					koopas->SetPosition(x + 9, y - 3);
+	//				else
+	//					koopas->SetPosition(x - 12, y - 3);
+	//			}
 
-			}
-		}
-		else
-		{
-			koopas->SetState(KOOPAS_STATE_DEFENSE_DYNAMIC);
-			koopas->vx = KOOPAS_DYNAMIC_SPEED * nx;
-			koopas = NULL;
-		}
-	}
+	//		}
+	//	}
+	//	else
+	//	{
+	//		koopas->SetState(KOOPAS_STATE_DEFENSE_DYNAMIC);
+	//		koopas->vx = KOOPAS_DYNAMIC_SPEED * nx;
+	//		koopas = NULL;
+	//	}
+	//}
 	if (GetTickCount64() - Slide_start > MARIO_SLDIE_TIME)
 	{
 		Slide_start = 0;
@@ -1151,8 +1147,8 @@ void CMario::Jump()
 {
 	//if (allowJump == false)
 		//return;
-	if (isOnGround ==false)//allow mario to jump only when on ground
-		return;
+	//if (isOnGround ==false)//allow mario to jump only when on ground
+	//	return;
 	vy =- MARIO_JUMP_SPEED_Y;
 	isOnGround = false;
 }
@@ -1253,6 +1249,13 @@ void CMario::ResetBig()
 	SetState(MARIO_STATE_IDLE);
 	SetLevel(MARIO_LEVEL_BIG);
 	SetPosition(x, y-2);
+	SetSpeed(0, 0);
+}
+void CMario::GoUnderGround()
+{
+	SetState(MARIO_STATE_IDLE);
+	SetLevel(MARIO_LEVEL_BIG);
+	SetPosition(2272, 176);
 	SetSpeed(0, 0);
 }
 void CMario::ResetSmall()

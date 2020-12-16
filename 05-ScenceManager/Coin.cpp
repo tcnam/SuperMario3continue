@@ -18,7 +18,7 @@ void CCoin::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	vector<LPCOLLISIONEVENT> coEventsResult;
 	coEvents.clear();
 	if (AABBCheck(Mario) == true)
-		isFinished == true;
+		isFinished = true;
 	CalcPotentialCollisions(coObjects, coEvents);
 	if (coEvents.size() == 0)
 	{

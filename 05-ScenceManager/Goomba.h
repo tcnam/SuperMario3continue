@@ -1,5 +1,8 @@
 #pragma once
 #include "GameObject.h"
+#include "Brick.h"
+#include "Mario.h"
+#include "BountyBrick.h"
 
 #define GOOMBA_WALKING_SPEED 0.05f;
 #define GOOMBA_GRAVITY			0.002f	
@@ -20,10 +23,12 @@
 class CGoomba : public CGameObject
 {
 public:
+	CMario* Mario;
 	bool untouchable;
 	DWORD untouchable_start;
 	CGoomba();
 	void StartUntouchable() { untouchable = true; untouchable_start = (DWORD)GetTickCount64(); }
+	void SetMario(CMario* mario) { Mario = mario; }
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects);
 	virtual void Render();
