@@ -129,6 +129,7 @@
     <ClCompile Include="Bounty.cpp" />
     <ClCompile Include="BountyBrick.cpp" />
     <ClCompile Include="Brick.cpp" />
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Coin.cpp" />
     <ClCompile Include="FireBall.cpp" />
     <ClCompile Include="FireBallFlower.cpp" />
@@ -153,6 +154,7 @@
     <ClInclude Include="Bounty.h" />
     <ClInclude Include="BountyBrick.h" />
     <ClInclude Include="Brick.h" />
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="Coin.h" />
     <ClInclude Include="FireBall.h" />
     <ClInclude Include="FireBallFLower.h" />

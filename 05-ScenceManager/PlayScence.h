@@ -15,6 +15,7 @@
 #include "FireBallFLower.h"
 #include "Coin.h"
 #include "Bounty.h"
+#include "Camera.h"
 
 
 
@@ -31,6 +32,8 @@ protected:
 
 	vector<LPGAMEOBJECT> objects;
 	vector<LPTERRAIN> terrains;
+	Camera* camera;
+
 
 	void _ParseSection_TEXTURES(string line);
 	void _ParseSection_SPRITES(string line);

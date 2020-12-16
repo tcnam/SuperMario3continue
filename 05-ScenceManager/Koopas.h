@@ -28,11 +28,14 @@
 class CKoopas : public CGameObject
 {	
 public:
+	CMario* MarioMain;
+	CMario* MarioForHold;
 	bool isHold;
 	CKoopas();
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects);
 	virtual void Render();
+	void SetMario(CMario* mario) { MarioMain = mario; }
 	void left();
 	void right();
 	void walk();

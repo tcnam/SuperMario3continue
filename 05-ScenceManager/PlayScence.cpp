@@ -153,7 +153,10 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		((CGoomba*)obj)->SetMario(player);
 		break;
 	case OBJECT_TYPE_BRICK: obj = new CBrick(); break;
-	case OBJECT_TYPE_KOOPAS: obj = new CKoopas(); break;	
+	case OBJECT_TYPE_KOOPAS: 
+		obj = new CKoopas();
+		((CKoopas*)obj)->SetMario(player);
+		break;	
 	case OBJECT_TYPE_COIN: 
 		obj = new CCoin(); 
 		((CCoin*)obj)->SetMario(player);
@@ -330,12 +333,14 @@ void CPlayScene::Update(DWORD dt)
 			coObjects_Of_Koopas.push_back(objects[i]);
 			coObbjects_Of_FireBall.push_back(objects[i]);
 			coObjects_Of_BountyBrick.push_back(objects[i]);
+			coObjects_Of_Mario.push_back(objects[i]);
 		}
 		else if (objects[i]->type == OBJECT_TYPE_GOOMBA)		//3,4,5
 		{
 			coObjects_Of_Goomba.push_back(objects[i]);
 			coObjects_Of_Koopas.push_back(objects[i]);
 			coObbjects_Of_FireBall.push_back(objects[i]);
+			coObjects_Of_Mario.push_back(objects[i]);
 		}
 		else if (objects[i]->type == OBJECT_TYPE_FIREFLOWER)	//4,5
 		{
@@ -395,29 +400,30 @@ void CPlayScene::Update(DWORD dt)
 	player->GetPosition(cx, cy);
 	
 	CGame *game = CGame::GetInstance();
-	//if (cx > game->GetScreenWidth() / 2)
-	//{
-	//	cx -= game->GetScreenWidth()/2;
-	//	cy -= game->GetScreenHeight()/2;
-	//	if (cy > -game->GetScreenHeight()*3/2)
-	//		cy = (float)-game->GetScreenHeight();
-	//	CGame::GetInstance()->SetCamPos(round(cx),round(cy));
-	//}
-	//else if (cy > 0)
-	//{
-	//	cx -= game->GetScreenWidth() / 2;
-	//	cy -= game->GetScreenHeight() / 2;
-	//	CGame::GetInstance()->SetCamPos(round(cx), round(cy));
-	//}
-	///*else if (py % game->GetScreenHeight() > game->GetScreenHeight() / 6 * 5)
-	//{
-	//	CGame::GetInstance()->SetCamPos(0, py % game->GetScreenHeight() - game->GetScreenHeight() / 6 * 5);
-	//}*/
-	//else
-	//	CGame::GetInstance()->SetCamPos(0, round((float)(-game->GetScreenHeight())));	
-	cx -= game->GetScreenWidth() / 2;
+	
+	if (cx > game->GetScreenWidth() / 2)
+	{
+		cx -= game->GetScreenWidth()/2;
+		cy -= game->GetScreenHeight()/2;
+		if (cy > -game->GetScreenHeight()*3/2)
+			cy = (float)-game->GetScreenHeight();
+		CGame::GetInstance()->SetCamPos(round(cx),round(cy));
+	}
+	else if (cy > 0)
+	{
+		cx -= game->GetScreenWidth() / 2;
+		cy -= game->GetScreenHeight() / 2;
+		CGame::GetInstance()->SetCamPos(round(cx), round(cy));
+	}
+	/*else if (py % game->GetScreenHeight() > game->GetScreenHeight() / 6 * 5)
+	{
+		CGame::GetInstance()->SetCamPos(0, py % game->GetScreenHeight() - game->GetScreenHeight() / 6 * 5);
+	}*/
+	else
+		CGame::GetInstance()->SetCamPos(0, round((float)(-game->GetScreenHeight())));	
+	/*cx -= game->GetScreenWidth() / 2;
 	cy -= game->GetScreenHeight() / 2;
-	CGame::GetInstance()->SetCamPos(round(cx), round(cy));
+	game->SetCamPos(round(cx), round(cy));*/
 }
 
 void CPlayScene::Render()
@@ -538,14 +544,14 @@ void CPlayScenceKeyHandler::OnKeyUp(int KeyCode)
 	CMario* mario = ((CPlayScene*)scence)->GetPlayer();
 	switch (KeyCode)
 	{
-	case DIK_RIGHT:
+	/*case DIK_RIGHT:
 		mario->StartSlide();
 		mario->SetState(MARIO_STATE_SLIDE_RIGHT);
 		break;
 	case DIK_LEFT:
 		mario->StartSlide();
 		mario->SetState(MARIO_STATE_SLIDE_LEFT);
-		break;
+		break;*/
 	case DIK_Z:
 		if (mario->isHoldingKoopas == true)
 			mario->isHoldingKoopas = false;
