@@ -148,24 +148,27 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		player = (CMario*)obj; 
 		DebugOut(L"[INFO] Player object created!\n");
 		break;
-	case OBJECT_TYPE_GOOMBA: 
-		obj = new CGoomba(); 
-		((CGoomba*)obj)->SetMario(player);
+	case OBJECT_TYPE_GOOMBA:
+		{
+			obj = new CGoomba();
+			((CGoomba*)obj)->SetMario(player);
+		}		
 		break;
 	case OBJECT_TYPE_BRICK: obj = new CBrick(); break;
-	case OBJECT_TYPE_KOOPAS: 
-		obj = new CKoopas();
-		((CKoopas*)obj)->SetMario(player);
-		break;	
+	
 	case OBJECT_TYPE_COIN: 
-		obj = new CCoin(); 
-		((CCoin*)obj)->SetMario(player);
+		{
+			obj = new CCoin();
+			((CCoin*)obj)->SetMario(player);
+		}		
 		break;
 	case OBJECT_TYPE_BOUNTYBRICK: 
-		obj = new CBountyBrick(); 
-		((CBountyBrick*)obj)->SetInitPosition(x, y);
-		((CBountyBrick*)obj)->SetMario(player);
-		bountybricks.push_back((CBountyBrick*)obj);
+		{
+			obj = new CBountyBrick();
+			((CBountyBrick*)obj)->SetInitPosition(x, y);
+			((CBountyBrick*)obj)->SetMario(player);
+			bountybricks.push_back((CBountyBrick*)obj);
+		}		
 		break;
 	case OBJECT_TYPE_FIREFLOWER:
 		{
@@ -175,38 +178,51 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		}
 		break;
 	case OBJECT_TYPE_FLOWER_FIREBALL:
-		obj = new CFireBallFlower();
-		DebugOut(L"flower index: %i\n", FlowerIndex);
-		player->SetFireBallFlower((CFireBallFlower*)obj, FireFlowers[FlowerIndex]);		
-		DebugOut(L"flower fire ball was loaded\n");
-		FlowerIndex++;
+		{
+			obj = new CFireBallFlower();
+			DebugOut(L"flower index: %i\n", FlowerIndex);
+			player->SetFireBallFlower((CFireBallFlower*)obj, FireFlowers[FlowerIndex]);
+			DebugOut(L"flower fire ball was loaded\n");
+			FlowerIndex++;
+		}		
 		break;
 	case OBJECT_TYPE_BOUNTY:
-		obj = new CBounty();
-		((CBounty*)obj)->SetMario(player);
-		bountybricks[BountyBrickIndex]->SetBounty((CBounty*)obj);
-		if (BountyBrickIndex == 3 || BountyBrickIndex == 5 || BountyBrickIndex == 7)
 		{
-			DebugOut(L"State of powerup%i\n", BOUNTY_STATE_POWERUP);
-			bountybricks[BountyBrickIndex]->SetStateBounty(BOUNTY_STATE_POWERUP);
-			DebugOut(L"Bounty was added to bountybrick:%i with state:%i\n", BountyBrickIndex,obj->GetState());
-		}
-		else if (BountyBrickIndex == 8)
-		{
-			DebugOut(L"State of lifeup%i\n", BOUNTY_STATE_LIFEUP);
-			bountybricks[BountyBrickIndex]->SetStateBounty(BOUNTY_STATE_LIFEUP);
-			DebugOut(L"Bounty was added to bountybrick:%i with state:%i\n", BountyBrickIndex, obj->GetState());
-		}
-		else
-			bountybricks[BountyBrickIndex]->SetStateBounty(BOUNTY_STATE_COIN);
-		bountybricks[BountyBrickIndex]->GetBounty()->SetInitPosition(x, y);
-		BountyBrickIndex++;
+			obj = new CBounty();
+			((CBounty*)obj)->SetMario(player);
+			bountybricks[BountyBrickIndex]->SetBounty((CBounty*)obj);
+			if (BountyBrickIndex == 3 || BountyBrickIndex == 5 || BountyBrickIndex == 7)
+			{
+				DebugOut(L"State of powerup%i\n", BOUNTY_STATE_POWERUP);
+				bountybricks[BountyBrickIndex]->SetStateBounty(BOUNTY_STATE_POWERUP);
+				DebugOut(L"Bounty was added to bountybrick:%i with state:%i\n", BountyBrickIndex, obj->GetState());
+			}
+			else if (BountyBrickIndex == 8)
+			{
+				DebugOut(L"State of lifeup%i\n", BOUNTY_STATE_LIFEUP);
+				bountybricks[BountyBrickIndex]->SetStateBounty(BOUNTY_STATE_LIFEUP);
+				DebugOut(L"Bounty was added to bountybrick:%i with state:%i\n", BountyBrickIndex, obj->GetState());
+			}
+			else
+				bountybricks[BountyBrickIndex]->SetStateBounty(BOUNTY_STATE_COIN);
+			bountybricks[BountyBrickIndex]->GetBounty()->SetInitPosition(x, y);
+			BountyBrickIndex++;
+		}		
 		break;
 	case OBJECT_TYPE_FIREBALL:
 		{	
 			obj = new CFireBall();
 			player->SetFireBall((CFireBall*)obj);
 		}
+		break;
+	case OBJECT_TYPE_KOOPAS:
+		{
+			int koopas_level = atoi(tokens[4].c_str());
+			obj = new CKoopas();
+			((CKoopas*)obj)->SetMario(player);
+			((CKoopas*)obj)->Setlevel(koopas_level);
+			((CKoopas*)obj)->SetInitPosition(x, y);
+		}		
 		break;
 	case OBJECT_TYPE_HIDDENOBJECT: 
 		{
@@ -577,8 +593,8 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 //			mario->SetState(MARIO_STATE_CHANGELEFT);
 //		}	*/		
 //		else
-		if(mario->isSliding==false)
-		{
+		/*if(mario->isSliding==false)
+		{*/
 			if (game->IsKeyDown(DIK_Z))
 			{
 				if (mario->isRunningLeft == false)
@@ -603,7 +619,7 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 				mario->isRunningFastLeft = false;
 			}
 							
-		}
+		//}
 	}
 	else if (game->IsKeyDown(DIK_RIGHT) && !game->IsKeyDown(DIK_LEFT))
 	{
@@ -613,8 +629,8 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 		//	mario->SetState(MARIO_STATE_CHANGERIGHT);
 		//}
 		//else
-		if (mario->isSliding == false)
-		{
+		/*if (mario->isSliding == false)
+		{*/
 			if (game->IsKeyDown(DIK_Z))
 			{
 				if (mario->isRunningRight == false)
@@ -639,7 +655,7 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 				mario->isRunningFastRight = false;
 			}
 
-		}
+		//}
 	}
 	/*else if (game->IsKeyDown(DIK_SPACE))
 	{
@@ -654,8 +670,7 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 	}*/
 	else if(!game->IsKeyDown(DIK_SPACE))
 	{
-		if (mario->isSliding == false)
-			mario->SetState(MARIO_STATE_IDLE);
+		mario->SetState(MARIO_STATE_IDLE);
 		//mario->SetState(MARIO_STATE_SLIDE)
 	}		
 }

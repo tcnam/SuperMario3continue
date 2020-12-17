@@ -5,7 +5,8 @@
 10	textures\enemies.png	3	26	110
 20	textures\tiles.png	4	193	170
 30	textures\tile.png	255	128	192
-40	textures\enemies-2.png	0	128	128
+40	textures\enemiesl.png	0	128	128
+45	textures\enemiesr.png	0	130	130
 50	textures\flowerr.png	255	255	255
 60	textures\flowerl.png	255	255	255
 70	textures\misc1.png	166	185	255
@@ -260,6 +261,7 @@
 #die
 70003	45	21	61	29	10
 #KOOPAS
+#level normal
 #walk left
 80001	205	191	221	217	40
 80002	222	191	238	217	40
@@ -271,6 +273,17 @@
 80022	256	202	272	218	40
 80023	273	202	289	218	40
 80024	290	202	306	218	40
+#level fly
+#walk left
+80031	256	249	272	276	40
+80032	239	249	255	276	40
+80033	222	250	238	276	40
+80034	205	248	221	276	40
+#walk right
+80041	262	249	278	276	45
+80042	279	249	295	276	45
+80043	296	250	312	276	45
+80044	313	248	329	276	45
 #FIRE FLOWER 
 #right upper
 90001	222	126	238	158	50
@@ -567,14 +580,18 @@
 705	90005	500	90006	500
 706	90007	500	90008	500
 # ==== KOOPAS  =========
-#walk left
+#walk left normal
 801	80001	100	80002	100
-#walk right
+#walk right normal
 802	80011	100	80012	100
 #defense static
 804	80021	100
 #defense dynamic
 805	80021	100	80022	100	80023	100	80024	100
+#walk left fly
+806	80031	100	80032	100	80033	100	80034	100
+#walk right fly
+807	80041	100	80042	100	80043	100	80044	100
 # ==== UPPER CENTER GROUND BRICK =========
 600	40000	100
 # ==== LOWER CENTER GROUND BRICK =========
@@ -630,7 +647,7 @@
 # GOOMBA
 3	701	702
 #KOOPAS
-4	801	802	804	805
+4	801	802	804	805	806	807
 #FIRE BALL
 5	300	301
 #FIRE FLOWER
@@ -671,7 +688,7 @@
 # type	x	y	ani_set_id	extra_settings per object type
 # type: 0 = Mario , 1 = Brick, 2 = Goomba, 3 = Koopas, 4 = Bounty Brick, 5=Hidden Object, 6=Fire Ball of Mario, 7=Fire Flower, 8=Fire Ball of Flower, 9=Bounty, 10=Coin
 # MARIO
-0	17	-50	1
+0	1248	-50	1
 # HIDDEN OBJECT
 5	240	-64	0	48	1
 5	272	-96	0	48	1
@@ -1155,10 +1172,14 @@
 8	0	-48	5
 8	0	-64	5
 # GOOMBA
-3	544	-96	4
 2	464	-32	3
 2	120	-80	3
-3	160	-80	4
+#KOOPAS
+3	544	-96	4	0
+3	160	-80	4	0
+3	1328	-120	4	1
+3	1360	-120	4	1
+3	1392	-120	4	1
 # COIN
 10	1072	-112	8
 10	1104	-144	8

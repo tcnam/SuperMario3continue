@@ -2,8 +2,10 @@
 
 CKoopas::CKoopas()
 {
-	right();
-	SetState(KOOPAS_STATE_DEFENSE_STATIC);
+	vy = 0;
+	left();
+	SetState(KOOPAS_STATE_WALKING);
+
 }
 
 void CKoopas::GetBoundingBox(float &left, float &top, float &right, float &bottom)
@@ -20,6 +22,14 @@ void CKoopas::GetBoundingBox(float &left, float &top, float &right, float &botto
 
 void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
+	if (level == KOOPAS_LEVEL_FLY)
+	{
+		if (abs(x - start_x) >= KOOPAS_DX_LIMIT_TOFLY)
+		{
+			vy = -KOOPAS_FLY_JUMP_SPEED;
+			start_x = x;
+		}
+	}	
 	CGameObject::Update(dt, coObjects);
 	float Mario_x, Mario_y;
 	MarioMain->GetPosition(Mario_x, Mario_y);
@@ -125,7 +135,7 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 			x += min_tx * dx + nx * 0.4f;
 			y += min_ty * dy + ny * 0.4f;
 			//if (nx != 0) vx = -vx;
-			if (ny < 0)
+			if (ny != 0)
 			{
 				vy = 0;
 			}
@@ -220,20 +230,33 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 						SetPosition(x, y - 1);
 						float Mario_vx, Mario_vy;
 						MarioMain->GetSpeed(Mario_vx, Mario_vy);
-						if (state != KOOPAS_STATE_DEFENSE_STATIC)
+						if (level == KOOPAS_LEVEL_FLY)
 						{
-							state = KOOPAS_STATE_DEFENSE_STATIC;
+							level = KOOPAS_LEVEL_NORMAL;
+							state = KOOPAS_STATE_WALKING;
 							MarioMain->SetSpeed(Mario_vx, -MARIO_JUMP_DEFLECT_SPEED);
 						}
+							
 						else
 						{
-							state=KOOPAS_STATE_DEFENSE_DYNAMIC;
-							MarioMain->SetSpeed(Mario_vx, -MARIO_JUMP_DEFLECT_SPEED);
-							if (MarioMain->Getnx() > 0)
-								vx = KOOPAS_DYNAMIC_SPEED;
+							if (state != KOOPAS_STATE_DEFENSE_STATIC)
+							{
+								state = KOOPAS_STATE_DEFENSE_STATIC;
+								vx = 0;
+								vy = 0;
+								MarioMain->SetSpeed(Mario_vx, -MARIO_JUMP_DEFLECT_SPEED);
+							}
 							else
-								vx = -KOOPAS_DYNAMIC_SPEED;							
+							{
+								state = KOOPAS_STATE_DEFENSE_DYNAMIC;
+								MarioMain->SetSpeed(Mario_vx, -MARIO_JUMP_DEFLECT_SPEED);
+								if (MarioMain->Getnx() > 0)
+									vx = KOOPAS_DYNAMIC_SPEED;
+								else
+									vx = -KOOPAS_DYNAMIC_SPEED;
+							}
 						}
+						
 					}
 					if (ny < 0)
 					{
@@ -299,14 +322,24 @@ void CKoopas::Render()
 	else if(vx>0)
 	{
 		if (state == KOOPAS_STATE_WALKING)
-			ani = KOOPAS_ANI_WALKING_RIGHT;
+		{
+			if (level == KOOPAS_LEVEL_FLY)
+				ani = KOOPAS_ANI_FLY_WALKING_RIGHT;
+			else
+				ani = KOOPAS_ANI_WALKING_RIGHT;
+		}			
 		else
 			ani = KOOPAS_ANI_DEFENSE_DYNAMIC;
 	}
 	else
 	{
 		if (state == KOOPAS_STATE_WALKING)
-			ani = KOOPAS_ANI_WALKING_LEFT;
+		{
+			if (level == KOOPAS_LEVEL_FLY)
+				ani = KOOPAS_ANI_FLY_WALKING_LEFT;
+			else
+				ani = KOOPAS_ANI_WALKING_LEFT;
+		}			
 		else
 			ani = KOOPAS_ANI_DEFENSE_DYNAMIC;
 	}
