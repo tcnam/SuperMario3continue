@@ -1,6 +1,7 @@
 #pragma once
 #include "GameObject.h"
 #include "FireBallFLower.h"
+#include "Mario.h"
 
 #define FIREFLOWER_FLY_SPEED 0.015f;	
 
@@ -29,6 +30,7 @@
 class CFireFlower : public CGameObject
 {
 public:
+	CMario* Mario;
 	bool isShooting;
 	bool isShootFar;
 	bool isAppear;
@@ -37,6 +39,7 @@ public:
 	CFireBallFlower* FireBallFlower;
 	void StartShoot() { isShooting = true; Shoot_Start = (DWORD)GetTickCount64(); vy = 0; }
 	void Shoot();
+	void SetMario(CMario* mario) { Mario = mario; }
 	void SetFireBallFlower(CFireBallFlower* fireball) { FireBallFlower = fireball; }
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);

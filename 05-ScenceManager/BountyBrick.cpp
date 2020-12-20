@@ -78,6 +78,10 @@ void CBountyBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						ActivateBounty();
 					}
 				}
+				if (ny > 0)
+				{
+					Mario->isOnGround = true;
+				}
 				if (nx != 0)
 				{
 					if (Mario->GetLevel() == MARIO_LEVEL_TAIL)
@@ -112,19 +116,28 @@ void CBountyBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			{
 				if (nx != 0)
 				{
+					CKoopas* koopas = dynamic_cast<CKoopas*>(e->obj);
+
 					if (state == BOUNTYBRICK_STATE_NORMAL)
 					{
-						state = BOUNTYBRICK_STATE_EMPTY;
-						if (Mario->GetLevel() > MARIO_LEVEL_SMALL)
-							Bounty->isLeaf = true;
-						else
-							Bounty->isLeaf = false;
-						if (vx > 0)
-							Bounty->isRightDirection = true;
-						else
-							Bounty->isRightDirection = false;
-						Bounty->isUsed = true;
-						ActivateBounty();
+						if (koopas->GetState() == KOOPAS_STATE_DEFENSE_DYNAMIC)
+						{
+							float koopas_vx, koopas_vy;
+							koopas->GetSpeed(koopas_vx, koopas_vy);
+							koopas->SetSpeed(-koopas_vx, koopas_vy);
+							state = BOUNTYBRICK_STATE_EMPTY;
+							if (Mario->GetLevel() > MARIO_LEVEL_SMALL)
+								Bounty->isLeaf = true;
+							else
+								Bounty->isLeaf = false;
+							if (vx > 0)
+								Bounty->isRightDirection = true;
+							else
+								Bounty->isRightDirection = false;
+							Bounty->isUsed = true;
+							ActivateBounty();
+						}
+						
 					}
 				}
 			}

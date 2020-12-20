@@ -14,6 +14,49 @@ void CFireFlower::GetBoundingBox(float& left, float& top, float& right, float& b
 }
 void CFireFlower::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	float Mario_x, Mario_y;
+	Mario->GetPosition(Mario_x, Mario_y);
+	if (isAppear == true)
+	{
+		if (Mario_x> x + 16)
+		{
+			if (Mario_y < FIREFLOWER_UPPER_Y)
+				state=FIREFLOWER_STATE_RIGHT_UPPER;
+			else
+				state=FIREFLOWER_STATE_RIGHT_LOWER;
+		}
+		else
+		{
+			if (Mario_y < FIREFLOWER_UPPER_Y)
+				state=FIREFLOWER_STATE_LEFT_UPPER;
+			else
+				state=FIREFLOWER_STATE_LEFT_LOWER;
+		}
+	}
+	else
+	{
+		if (Mario_x > x + 40)
+		{
+			SetSpeed(0, -0.015f);
+			if (y < FIREFLOWER_UPPER_Y)
+				state=FIREFLOWER_STATE_RIGHT_UPPER;
+			else
+				state=FIREFLOWER_STATE_RIGHT_LOWER;
+		}
+		else if (Mario_x < x - 24)
+		{
+			SetSpeed(0, -0.015f);
+			if (y < FIREFLOWER_UPPER_Y)
+				state=FIREFLOWER_STATE_LEFT_UPPER;
+			else
+				state=FIREFLOWER_STATE_LEFT_LOWER;
+		}
+		else
+		{
+			SetSpeed(0, 0);
+		}
+
+	}
 	CGameObject::Update(dt, coObjects);	
 	y += dy;	
 	if (y <= FIREFLOWR_APPEAR_Y)

@@ -3,7 +3,7 @@
 CKoopas::CKoopas()
 {
 	vy = 0;
-	left();
+	right();
 	SetState(KOOPAS_STATE_WALKING);
 
 }

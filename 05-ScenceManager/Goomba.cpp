@@ -17,121 +17,130 @@ void CGoomba::GetBoundingBox(float &left, float &top, float &right, float &botto
 
 void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
-	CGameObject::Update(dt, coObjects);
-	vy += GOOMBA_GRAVITY * dt;
-	if (AABBCheck(Mario) == true)
-	{
-		if (Mario->isAttacking == true)
-		{
-			if (state != GOOMBA_STATE_DIE)
-			{
-				StartUntouchable();
-				state = GOOMBA_STATE_DIE;
-				vx = 0;
-				vy = 0;
-			}
-		}
-		if (Mario->untouchable == false)
-		{
-			if (Mario->GetLevel() == MARIO_LEVEL_SMALL)
-				Mario->SetState(MARIO_STATE_DIE);
-			else
-			{
-				Mario->StartUntouchable();
-				Mario->SetLevel(Mario->GetLevel() - 1);
-			}
-		}
-	}
-	vector<LPCOLLISIONEVENT> coEvents;
-	vector<LPCOLLISIONEVENT> coEventsResult;
-	coEvents.clear();
-	if(state!=GOOMBA_STATE_DIE)
-		CalcPotentialCollisions(coObjects, coEvents);	
 	if (GetTickCount64() - untouchable_start > GOOMBA_UNTOUCHABLE_TIME)
 	{
 		untouchable_start = 0;
 		untouchable = false;
-	}
-	if (coEvents.size() == 0)
-	{
-		x += dx;
-		y += dy;
-	}
-	else
-	{
-		float min_tx, min_ty, nx=0 , ny=0;
-		float rdx = 0;
-		float rdy = 0;
-		
-		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
-		x += min_tx * dx + nx * 0.4f;
-		y += min_ty * dy + ny * 0.4f;
-		/*if (nx != 0) vx=-vx;*/
-		if (ny != 0) vy = 0;
-		for (UINT i = 0; i < coEventsResult.size(); i++)
+		//SetPosition(x, y + 320.00f);
+		CGameObject::Update(dt, coObjects);
+		vy += GOOMBA_GRAVITY * dt;
+		if (state != GOOMBA_STATE_DIE)
 		{
-			LPCOLLISIONEVENT e = coEventsResult[i];
-			if (dynamic_cast<CBrick*>(e->obj))
+			if (AABBCheck(Mario) == true)
 			{
-				if (nx != 0)
-					vx = -vx;
-			}
-			else if (dynamic_cast<CBountyBrick*>(e->obj))
-			{
-				if (nx != 0)
-					vx = -vx;
-			}
-			else if (dynamic_cast<CMario*>(e->obj))
-			{
-				SetPosition(x, y - 1);
-				if (untouchable == false)
-				{					
-					if (nx != 0)
+				if (Mario->isAttacking == true)
+				{
+					if (state != GOOMBA_STATE_DIE)
 					{
-						if (Mario->GetLevel() == MARIO_LEVEL_TAIL)
+						StartUntouchable();
+						state = GOOMBA_STATE_DIE;
+						vx = 0;
+						vy = 0;
+					}
+				}
+				if (Mario->untouchable == false)
+				{
+					if (Mario->GetLevel() == MARIO_LEVEL_SMALL)
+						Mario->SetState(MARIO_STATE_DIE);
+					else
+					{
+						Mario->StartUntouchable();
+						Mario->SetLevel(Mario->GetLevel() - 1);
+					}
+				}
+			}
+		}
+		
+
+		vector<LPCOLLISIONEVENT> coEvents;
+		vector<LPCOLLISIONEVENT> coEventsResult;
+		coEvents.clear();
+		if(state!=GOOMBA_STATE_DIE)
+			CalcPotentialCollisions(coObjects, coEvents);
+
+		if (coEvents.size() == 0)
+		{
+			x += dx;
+			y += dy;
+		}
+		else
+		{
+			float min_tx, min_ty, nx = 0, ny = 0;
+			float rdx = 0;
+			float rdy = 0;
+
+			FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
+			x += min_tx * dx + nx * 0.4f;
+			y += min_ty * dy + ny * 0.4f;
+			/*if (nx != 0) vx=-vx;*/
+			if (ny != 0) vy = 0;
+			for (UINT i = 0; i < coEventsResult.size(); i++)
+			{
+				LPCOLLISIONEVENT e = coEventsResult[i];
+				if (dynamic_cast<CBrick*>(e->obj))
+				{
+					if (nx != 0)
+						vx = -vx;
+				}
+				else if (dynamic_cast<CBountyBrick*>(e->obj))
+				{
+					if (nx != 0)
+						vx = -vx;
+				}
+				else if (dynamic_cast<CMario*>(e->obj))
+				{
+					SetPosition(x, y - 1);
+					if (untouchable == false)
+					{
+						if (nx != 0)
 						{
-							if (Mario->isAttacking == true)
+							if (Mario->GetLevel() == MARIO_LEVEL_TAIL)
 							{
-								if (state != GOOMBA_STATE_DIE)
+								if (Mario->isAttacking == true)
 								{
-									StartUntouchable();
-									state = GOOMBA_STATE_DIE;
-									vx = 0;
-									vy = 0;
+									if (state != GOOMBA_STATE_DIE)
+									{
+										StartUntouchable();
+										state = GOOMBA_STATE_DIE;
+										vx = 0;
+										vy = 0;
+									}
+								}
+							}
+							if (Mario->untouchable == false)
+							{
+								if (Mario->GetLevel() == MARIO_LEVEL_SMALL)
+									Mario->SetState(MARIO_STATE_DIE);
+								else
+								{
+									Mario->StartUntouchable();
+									Mario->SetLevel(Mario->GetLevel() - 1);
 								}
 							}
 						}
-						if (Mario->untouchable == false)
+						if (ny > 0)
 						{
-							if (Mario->GetLevel() == MARIO_LEVEL_SMALL)
-								Mario->SetState(MARIO_STATE_DIE);
-							else
+
+							float Mario_vx, Mario_vy;
+							Mario->GetSpeed(Mario_vx, Mario_vy);
+							Mario->SetSpeed(Mario_vx, -MARIO_JUMP_DEFLECT_SPEED);
+							if (state != GOOMBA_STATE_DIE)
 							{
-								Mario->StartUntouchable();
-								Mario->SetLevel(Mario->GetLevel() - 1);
+								StartUntouchable();
+								state = GOOMBA_STATE_DIE;
+								SetPosition(x, y - GOOMBA_BBOX_HEIGHT_DIE + GOOMBA_BBOX_HEIGHT);
+								vx = 0;
+								vy = 0;
 							}
 						}
 					}
-					if (ny > 0)
-					{
-
-						float Mario_vx, Mario_vy;
-						Mario->GetSpeed(Mario_vx, Mario_vy);
-						Mario->SetSpeed(Mario_vx, -MARIO_JUMP_DEFLECT_SPEED);
-						if (state != GOOMBA_STATE_DIE)
-						{
-							StartUntouchable();
-							state = GOOMBA_STATE_DIE;
-							vx = 0;
-							vy = 0;
-						}
-					}
-				}				
+				}
 			}
 		}
+		for (UINT i = 0; i < coEvents.size(); i++)
+			delete coEvents[i];
 	}
-	for (UINT i = 0; i < coEvents.size(); i++)
-		delete coEvents[i];
+	
 }
 
 void CGoomba::Render()
@@ -152,7 +161,7 @@ void CGoomba::SetState(int state)
 	switch (state)
 	{
 		case GOOMBA_STATE_DIE:
-			y += GOOMBA_BBOX_HEIGHT - GOOMBA_BBOX_HEIGHT_DIE ;
+			//y += GOOMBA_BBOX_HEIGHT_DIE -GOOMBA_BBOX_HEIGHT   ;
 			vx = 0;
 			vy = 0;
 			break;

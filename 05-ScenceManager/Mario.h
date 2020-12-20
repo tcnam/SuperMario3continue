@@ -3,9 +3,7 @@
 #include "HiddenObject.h"
 #include "Brick.h"
 #include "FireBall.h"
-//#include "Koopas.h"
-#include "FireFlower.h"
-#include "FireBallFLower.h"
+
 
 #define MARIO_WALKING_SPEED		0.05f 
 #define MARIO_RUNNING_SPEED		0.15f
@@ -148,7 +146,6 @@ class CMario : public CGameObject
 	float start_y; 
 	CFireBall* fireballs;
 	//CKoopas* koopas;
-	vector <CFireFlower*>FireFlowers;
 	
 
 	DWORD StartMovingLeft;
@@ -217,8 +214,6 @@ public:
 	DWORD GetTimeFly() { return StartFly; }
 
 	void SetFireBall(CFireBall* FireBall) { fireballs = FireBall; }
-	void PushFireFlower(CFireFlower* FireFlower);
-	void SetFireBallFlower(CFireBallFlower* FireBallFlower, CFireFlower* FireFlower) { FireFlower->SetFireBallFlower(FireBallFlower); }
 
 	void SetState(int state);
 	void SetLevel(int l) { level = l; }

@@ -11,17 +11,23 @@
 #define GOOMBA_BBOX_HEIGHT 15
 #define GOOMBA_BBOX_HEIGHT_DIE 9
 
+#define GOOMBA_LEVEL_NORMAL		0
+#define GOOMBA_LEVEL_FLY		1
+
 #define GOOMBA_STATE_WALKING 100
 #define GOOMBA_STATE_DIE 200
 
 #define GOOMBA_ANI_WALKING 0
 #define GOOMBA_ANI_DIE 1
 
-#define GOOMBA_UNTOUCHABLE_TIME		1000
+#define GOOMBA_UNTOUCHABLE_TIME		300
 
 
 class CGoomba : public CGameObject
 {
+	float start_x;
+	float start_y;
+	int level;
 public:
 	CMario* Mario;
 	bool untouchable;
@@ -29,6 +35,11 @@ public:
 	CGoomba();
 	void StartUntouchable() { untouchable = true; untouchable_start = (DWORD)GetTickCount64(); }
 	void SetMario(CMario* mario) { Mario = mario; }
+
+	void Setlevel(int l) { level = l; }
+	int GetLevel() { return level; }
+	void SetInitPosition(float x, float y) { start_x = x; start_y = y; }
+
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects);
 	virtual void Render();

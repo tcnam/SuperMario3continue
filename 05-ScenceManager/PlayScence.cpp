@@ -10,6 +10,7 @@
 #include "Sprites.h"
 #include "Portal.h"
 #include "Terrain.h"
+//#include"Camera.h"
 
 using namespace std;
 
@@ -150,8 +151,11 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	case OBJECT_TYPE_GOOMBA:
 		{
+			int goomba_level = atoi(tokens[4].c_str());
 			obj = new CGoomba();
 			((CGoomba*)obj)->SetMario(player);
+			((CGoomba*)obj)->Setlevel(goomba_level);
+			((CGoomba*)obj)->SetInitPosition(x, y);
 		}		
 		break;
 	case OBJECT_TYPE_BRICK: obj = new CBrick(); break;
@@ -173,7 +177,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_FIREFLOWER:
 		{
 			obj = new CFireFlower();
-			player->PushFireFlower((CFireFlower*)obj);
+			((CFireFlower*)obj)->SetMario(player);
 			FireFlowers.push_back((CFireFlower*)obj);
 		}
 		break;
@@ -181,7 +185,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		{
 			obj = new CFireBallFlower();
 			DebugOut(L"flower index: %i\n", FlowerIndex);
-			player->SetFireBallFlower((CFireBallFlower*)obj, FireFlowers[FlowerIndex]);
+			FireFlowers[FlowerIndex]->SetFireBallFlower((CFireBallFlower*)obj);
 			DebugOut(L"flower fire ball was loaded\n");
 			FlowerIndex++;
 		}		
@@ -313,7 +317,6 @@ void CPlayScene::Load()
 	f.close();
 
 	CTextures::GetInstance()->Add(ID_TEX_BBOX, L"textures\\bbox.png", D3DCOLOR_XRGB(255, 255, 255));
-
 	DebugOut(L"[INFO] Done loading scene resources %s\n", sceneFilePath);
 }
 
@@ -376,7 +379,8 @@ void CPlayScene::Update(DWORD dt)
 			coObjects_Of_Bounty.push_back(objects[i]);
 			coObjects_Of_Goomba.push_back(objects[i]);
 			coObbjects_Of_FireBall.push_back(objects[i]);
-			coObjects_Of_Mario.push_back(objects[i]);					//?
+			coObjects_Of_Mario.push_back(objects[i]);					//add bountybrick to coOjects of Mario to block mario
+			coObjects_Of_Koopas.push_back(objects[i]);					//add bountybrick to coOjects of Koopas to block Koopas
 		}
 	}
 
@@ -414,6 +418,7 @@ void CPlayScene::Update(DWORD dt)
 	float cx, cy;
 	
 	player->GetPosition(cx, cy);
+
 	
 	CGame *game = CGame::GetInstance();
 	
@@ -423,23 +428,24 @@ void CPlayScene::Update(DWORD dt)
 		cy -= game->GetScreenHeight()/2;
 		if (cy > -game->GetScreenHeight()*3/2)
 			cy = (float)-game->GetScreenHeight();
-		CGame::GetInstance()->SetCamPos(round(cx),round(cy));
+		CGame::GetInstance()->SetCamPos(round(cx),round(cy)+32);
 	}
 	else if (cy > 0)
 	{
 		cx -= game->GetScreenWidth() / 2;
 		cy -= game->GetScreenHeight() / 2;
-		CGame::GetInstance()->SetCamPos(round(cx), round(cy));
+		CGame::GetInstance()->SetCamPos(round(cx), round(cy)+32);
 	}
 	/*else if (py % game->GetScreenHeight() > game->GetScreenHeight() / 6 * 5)
 	{
 		CGame::GetInstance()->SetCamPos(0, py % game->GetScreenHeight() - game->GetScreenHeight() / 6 * 5);
 	}*/
 	else
-		CGame::GetInstance()->SetCamPos(0, round((float)(-game->GetScreenHeight())));	
-	/*cx -= game->GetScreenWidth() / 2;
-	cy -= game->GetScreenHeight() / 2;
-	game->SetCamPos(round(cx), round(cy));*/
+		CGame::GetInstance()->SetCamPos(0, round((float)(-game->GetScreenHeight()+32)));	
+	//cx -= game->GetScreenWidth() / 2;
+	//cy -= game->GetScreenHeight() / 2;
+	/*game->SetCamPos(round(cx), round(cy));*/
+
 }
 
 void CPlayScene::Render()

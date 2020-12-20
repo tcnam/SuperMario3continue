@@ -67,6 +67,9 @@
     <Filter Include="Framework\Camera">
       <UniqueIdentifier>{36072578-d1e9-483b-83f4-f39de80e8030}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Framework\Scene\Scene_Intro">
+      <UniqueIdentifier>{dc6693e3-5829-4ccb-86e2-2edcd439ddb8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animations.cpp">
@@ -208,6 +211,9 @@
     </ClInclude>
     <ClInclude Include="Camera.h">
       <Filter>Framework\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneIntro.h">
+      <Filter>Framework\Scene\Scene_Intro</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
