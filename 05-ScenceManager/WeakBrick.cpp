@@ -1,0 +1,116 @@
+#pragma once
+#include "WeakBrick.h"
+CWeakBrick::CWeakBrick() :CGameObject()
+{
+	vx = 0;
+	vy = 0;
+	SetState(WEAKBRICK_STATE_NORMAL);
+}
+void CWeakBrick::Render()
+{
+	if (state == WEAKBRICK_STATE_DISAPPEAR)
+		animation_set->at(1)->Render(x, y);		//empty bounty brick animation
+	else if (state == WEAKBRICK_STATE_NORMAL)
+		animation_set->at(0)->Render(x, y);		//normal bounty brick animation
+	//RenderBoundingBox();
+}
+void CWeakBrick::ActivateFragment()
+{
+	for (UINT i = 0; i < fragments.size(); i++)
+	{
+		fragments[i]->isUsed = true;
+		fragments[i]->isFinished = false;
+		float fragment_vx = 0;
+		float fragment_vy = 0;
+		if (i % 2 == 0)
+			fragment_vx = FRAGMENT_SPEED_VX;
+		else
+			fragment_vx = -FRAGMENT_SPEED_VX;
+		if (i < 3)
+			fragment_vy = -FRAGMENT_SPEED_VY;
+		else
+			fragment_vy = FRAGMENT_SPEED_VY;
+		fragments[i]->SetSpeed(fragment_vx, fragment_vy);
+	}
+}
+void CWeakBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+{
+	CGameObject::Update(dt, coObjects);
+	if (AABBCheck(Mario) == true)
+		ActivateFragment();
+	vector<LPCOLLISIONEVENT> coEvents;
+	vector<LPCOLLISIONEVENT> coEventsResult;
+	coEvents.clear();
+	CalcPotentialCollisions(coObjects, coEvents);
+	if (coEvents.size() == 0)
+	{
+		return;
+	}
+	else
+	{
+		float min_tx, min_ty, nx = 0, ny = 0;
+		float rdx = 0;
+		float rdy = 0;
+
+		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
+
+		for (UINT i = 0; i < coEventsResult.size(); i++)
+		{
+			LPCOLLISIONEVENT e = coEventsResult[i];
+			if (dynamic_cast<CMario*>(e->obj))
+			{
+				float mario_vx, mario_vy;
+				float mario_x, mario_y;
+
+				Mario->GetPosition(mario_x, mario_y);
+				Mario->GetSpeed(mario_vx, mario_vy);
+				if (ny < 0)
+				{
+					Mario->SetPosition(mario_x, start_y + BOUNTY_BBOX_HEIGHT + 1.00f);
+					Mario->SetSpeed(mario_vx, 0);
+
+				}
+				if (ny > 0)
+				{
+					Mario->isOnGround = true;
+				}
+				if (nx != 0)
+				{
+					if (Mario->GetLevel() == MARIO_LEVEL_TAIL)
+					{
+
+
+					}
+				}
+			}
+			else if (dynamic_cast<CKoopas*>(e->obj))
+			{
+				if (nx != 0)
+				{
+					CKoopas* koopas = dynamic_cast<CKoopas*>(e->obj);
+
+					if (state == BOUNTYBRICK_STATE_NORMAL)
+					{
+						if (koopas->GetState() == KOOPAS_STATE_DEFENSE_DYNAMIC)
+						{
+
+						}
+
+					}
+				}
+			}
+
+		}
+	}
+}
+void CWeakBrick::GetBoundingBox(float& l, float& t, float& r, float& b)
+{
+	l = x;
+	t = y;
+	r = x + BRICK_BBOX_WIDTH;
+	b = y + BRICK_BBOX_HEIGHT;
+}
+void CWeakBrick::SetState(int state)
+{
+	CGameObject::SetState(state);
+}

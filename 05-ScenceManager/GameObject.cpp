@@ -128,7 +128,7 @@ void CGameObject::FilterCollision(
 			rdy = c->dy;
 		}
 	}
-	if (min_iy >= 0) coEventsResult.push_back(coEvents[min_iy]);
+	if (min_iy >= 0 ) coEventsResult.push_back(coEvents[min_iy]);
 	if (min_ix>=0) coEventsResult.push_back(coEvents[min_ix]);
 	
 }

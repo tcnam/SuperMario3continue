@@ -55,11 +55,11 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	if (state!=MARIO_STATE_DIE)
 		CalcPotentialCollisions(coObjects, coEvents);
 
-	if (GetTickCount64() - Slide_start > MARIO_SLDIE_TIME)
-	{
-		Slide_start = 0;
-		isSliding = false;
-	}
+	//if (GetTickCount64() - Slide_start > MARIO_SLDIE_TIME)
+	//{
+	//	Slide_start = 0;
+	//	isSliding = false;
+	//}
 	// reset untouchable timer if untouchable time has passed
 	if ( GetTickCount64() - untouchable_start > MARIO_UNTOUCHABLE_TIME) 
 	{
@@ -136,22 +136,22 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 			{
 				if (ny > 0)
 				{
+					//if (isOnGround == false)				//if mario was blocked by hidden object vy=0 so we need to set vy back to its value
+					//	vy = -MARIO_JUMP_SPEED_Y;
 					y += dy;
-					x += dx;
 				}
 				if (nx != 0)
 				{
-					x += dx;
-					y += dy;
+					x += min_tx * dx + nx * 0.4f;
 				}
 			}
-			else if (dynamic_cast<CBrick*>(e->obj))
+			/*else if (dynamic_cast<CBrick*>(e->obj))
 			{
 				if (nx != 0)
 				{
 					vx = 0;
 				}
-			}
+			}*/
 		}
 		
 	}
@@ -637,12 +637,12 @@ void CMario::SetState(int state)
 }
 void CMario::GetBoundingBoxTailLevel(float& left, float& top, float& right, float& bottom)
 {
-	if (nx > 0)
+	if (nx > 0||vx>0)
 	{
 		left = x + 7;
 		right = left + MARIO_TAIL_BBOX_WIDTH;
 	}		
-	else
+	else if(nx<0||vx<0)
 	{
 		left = x;
 		right = x + MARIO_TAIL_BBOX_WIDTH;
@@ -811,21 +811,21 @@ void CMario::ResetTail()
 {
 	SetState(MARIO_STATE_IDLE);
 	SetLevel(MARIO_LEVEL_TAIL);
-	SetPosition(x, y-2);
+	SetPosition(1904.00f, -64.00f);
 	SetSpeed(0, 0);
 }
 void CMario::ResetBig()
 {
 	SetState(MARIO_STATE_IDLE);
 	SetLevel(MARIO_LEVEL_BIG);
-	SetPosition(x, y-2);
+	SetPosition(start_x, start_y);
 	SetSpeed(0, 0);
 }
 void CMario::GoUnderGround()
 {
 	SetState(MARIO_STATE_IDLE);
 	SetLevel(MARIO_LEVEL_BIG);
-	SetPosition(2272, 176);
+	SetPosition(2272.00f, 176.00f);
 	SetSpeed(0, 0);
 }
 void CMario::ResetSmall()
@@ -839,7 +839,7 @@ void CMario::ResetFire()
 {
 	SetState(MARIO_STATE_IDLE);
 	SetLevel(MARIO_LEVEL_FIRE);
-	SetPosition(x, y-2);
+	SetPosition(start_x, start_y);
 	SetSpeed(0, 0);
 }
 

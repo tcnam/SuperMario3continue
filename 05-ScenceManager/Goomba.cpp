@@ -48,6 +48,10 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 						Mario->SetLevel(Mario->GetLevel() - 1);
 					}
 				}
+				else 
+				{
+
+				}
 			}
 		}
 		

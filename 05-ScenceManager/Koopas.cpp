@@ -134,7 +134,7 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 
 			x += min_tx * dx + nx * 0.4f;
 			y += min_ty * dy + ny * 0.4f;
-			//if (nx != 0) vx = -vx;
+			/*if (nx != 0) vx = 0;*/
 			if (ny != 0)
 			{
 				vy = 0;
@@ -260,7 +260,19 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 					}
 					if (ny < 0)
 					{
-
+						if (MarioMain->untouchable == false)
+						{
+							if (state != KOOPAS_STATE_DEFENSE_STATIC)
+							{
+								if (MarioMain->GetLevel() > MARIO_LEVEL_SMALL)
+								{
+									MarioMain->StartUntouchable();
+									MarioMain->SetLevel(MarioMain->GetLevel() - 1);
+								}
+								else
+									MarioMain->SetState(MARIO_STATE_DIE);
+							}
+						}
 					}
 				}
 				if (dynamic_cast<CBrick*>(e->obj))
@@ -278,7 +290,6 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 						if (state != KOOPAS_STATE_WALKING)
 						{
 							x += dx;
-							y += dy;
 						}
 						else
 							vx = -vx;

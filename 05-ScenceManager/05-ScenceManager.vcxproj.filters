@@ -70,6 +70,15 @@
     <Filter Include="Framework\Scene\Scene_Intro">
       <UniqueIdentifier>{dc6693e3-5829-4ccb-86e2-2edcd439ddb8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Object\GameObject\Brick\WeakBrick">
+      <UniqueIdentifier>{c530b2b2-71b6-407a-b9fa-8ffeea6cb193}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\GameObject\Brick\Fragment">
+      <UniqueIdentifier>{a1c1911c-9ea1-4405-aa0f-312bd6f18323}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\GameObject\Brick\BountyBrick">
+      <UniqueIdentifier>{d094aa25-e0e4-4291-b04f-a959dbd7da8b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animations.cpp">
@@ -105,9 +114,6 @@
     <ClCompile Include="Brick.cpp">
       <Filter>Object\GameObject\Brick</Filter>
     </ClCompile>
-    <ClCompile Include="BountyBrick.cpp">
-      <Filter>Object\GameObject\Brick</Filter>
-    </ClCompile>
     <ClCompile Include="Goomba.cpp">
       <Filter>Object\GameObject\Enemy\Goomba</Filter>
     </ClCompile>
@@ -140,6 +146,15 @@
     </ClCompile>
     <ClCompile Include="Camera.cpp">
       <Filter>Framework\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="WeakBrick.cpp">
+      <Filter>Object\GameObject\Brick\WeakBrick</Filter>
+    </ClCompile>
+    <ClCompile Include="Fragment.cpp">
+      <Filter>Object\GameObject\Brick\Fragment</Filter>
+    </ClCompile>
+    <ClCompile Include="BountyBrick.cpp">
+      <Filter>Object\GameObject\Brick\BountyBrick</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -174,9 +189,6 @@
       <Filter>Object\GameObject\Mario</Filter>
     </ClInclude>
     <ClInclude Include="Brick.h">
-      <Filter>Object\GameObject\Brick</Filter>
-    </ClInclude>
-    <ClInclude Include="BountyBrick.h">
       <Filter>Object\GameObject\Brick</Filter>
     </ClInclude>
     <ClInclude Include="Goomba.h">
@@ -214,6 +226,15 @@
     </ClInclude>
     <ClInclude Include="SceneIntro.h">
       <Filter>Framework\Scene\Scene_Intro</Filter>
+    </ClInclude>
+    <ClInclude Include="WeakBrick.h">
+      <Filter>Object\GameObject\Brick\WeakBrick</Filter>
+    </ClInclude>
+    <ClInclude Include="Fragment.h">
+      <Filter>Object\GameObject\Brick\Fragment</Filter>
+    </ClInclude>
+    <ClInclude Include="BountyBrick.h">
+      <Filter>Object\GameObject\Brick\BountyBrick</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -1,3 +1,4 @@
+#pragma once
 #include "BountyBrick.h"
 CBountyBrick::CBountyBrick() :CGameObject()
 {
@@ -33,8 +34,7 @@ void CBountyBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	CalcPotentialCollisions(coObjects, coEvents);
 	if (coEvents.size() == 0)
 	{
-		x += dx;
-		y += dy;
+		
 	}
 	else
 	{

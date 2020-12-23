@@ -15,6 +15,8 @@
 #include "FireBallFLower.h"
 #include "Coin.h"
 #include "Bounty.h"
+#include "Fragment.h"
+#include "WeakBrick.h"
 //#include "Camera.h"
 
 
@@ -29,6 +31,9 @@ protected:
 
 	vector <CBountyBrick*> bountybricks;
 	unsigned int BountyBrickIndex = 0;
+
+	vector <CWeakBrick*> WeakBricks;
+	unsigned int WeaKBrickIndex = 0;
 
 	vector<LPGAMEOBJECT> objects;
 	vector<LPTERRAIN> terrains;

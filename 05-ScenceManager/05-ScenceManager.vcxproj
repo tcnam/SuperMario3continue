@@ -134,6 +134,7 @@
     <ClCompile Include="FireBall.cpp" />
     <ClCompile Include="FireBallFlower.cpp" />
     <ClCompile Include="FireFlower.cpp" />
+    <ClCompile Include="Fragment.cpp" />
     <ClCompile Include="HiddenObject.cpp" />
     <ClCompile Include="Koopas.cpp" />
     <ClCompile Include="Portal.cpp" />
@@ -148,6 +149,7 @@
     <ClCompile Include="Scence.cpp" />
     <ClCompile Include="Sprites.cpp" />
     <ClCompile Include="Textures.cpp" />
+    <ClCompile Include="WeakBrick.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animations.h" />
@@ -159,6 +161,7 @@
     <ClInclude Include="FireBall.h" />
     <ClInclude Include="FireBallFLower.h" />
     <ClInclude Include="FireFlower.h" />
+    <ClInclude Include="Fragment.h" />
     <ClInclude Include="HiddenObject.h" />
     <ClInclude Include="Koopas.h" />
     <ClInclude Include="Portal.h" />
@@ -174,6 +177,7 @@
     <ClInclude Include="Scence.h" />
     <ClInclude Include="Sprites.h" />
     <ClInclude Include="Textures.h" />
+    <ClInclude Include="WeakBrick.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -22,6 +22,8 @@ using namespace std;
 #define OBJECT_TYPE_FLOWER_FIREBALL	8
 #define OBJECT_TYPE_BOUNTY			9
 #define OBJECT_TYPE_COIN			10
+#define OBJECT_TYPE_FRAGMENT		11
+#define OBJECT_TYPE_WEAKBRICK		12
 
 class CGameObject; 
 typedef CGameObject * LPGAMEOBJECT;

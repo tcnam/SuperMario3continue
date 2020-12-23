@@ -24,9 +24,15 @@ void CBounty::GetBoundingBox(float& left, float& top, float& right, float& botto
 
 void CBounty::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	CGameObject::Update(dt, coObjects);
+	
 	if (isUsed == false)
 		return;
+	if (isFinised == true)
+	{
+		SetPosition(start_x, start_y);
+		isUsed = false;
+	}
+	CGameObject::Update(dt, coObjects);
 	if (state == BOUNTY_STATE_POWERUP)				//powerup include red mushroom and super leaf
 	{
 		if (isLeaf == false)						//red mushroom 
@@ -140,7 +146,7 @@ void CBounty::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		{
 			isFinised = true;
 			Mario->SetPosition(Mario_current_x, Mario_current_y - 1);//push mario a distance to avoid falling
-			SetPosition(start_x, start_y + 320.00f);
+			/*SetPosition(start_x, start_y + 320.00f);*/
 			if (state == BOUNTY_STATE_POWERUP)
 			{
 				if (Mario->GetLevel() < MARIO_LEVEL_BIG)
@@ -185,14 +191,13 @@ void CBounty::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		{
 			LPCOLLISIONEVENT e = coEventsResult[i];
 			if (dynamic_cast<CMario*>(e->obj))
-			{
-				
+			{				
 				vy = BOUNTY_GRAVITY;
 				x += dx;
 				y += dy;
 				if (state != BOUNTY_STATE_COIN)
 				{
-					SetPosition(start_x, start_y+320.00f);
+					/*SetPosition(start_x, start_y+320.00f);*/
 					isFinised = true;
 					if (Mario->GetLevel() == MARIO_LEVEL_SMALL)
 						Mario->SetPosition(Mario_current_x, Mario_current_y - MARIO_BIG_BBOX_HEIGHT + MARIO_SMALL_BBOX_HEIGHT - 1);
@@ -207,6 +212,16 @@ void CBounty::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					}					
 				}
 			}
+			if (dynamic_cast<CBrick*>(e->obj))
+			{
+				if (isLeaf == true)
+				{
+					vy = BOUNTY_GRAVITY;
+					x += dx;
+					y += dy;
+				}
+				
+			}
 		}
 	}
 	
@@ -218,8 +233,8 @@ void CBounty::Render()
 {
 	if (isUsed == false)
 		return;
-	//if (isFinised == true)
-	//	return;
+	if (isFinised == true)
+		return;
 	int ani = -1;
 	if (state == BOUNTY_STATE_POWERUP)
 	{

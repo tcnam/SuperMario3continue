@@ -159,7 +159,24 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		}		
 		break;
 	case OBJECT_TYPE_BRICK: obj = new CBrick(); break;
-	
+	case OBJECT_TYPE_FRAGMENT: 
+		{
+			obj = new CFragment();
+			((CFragment*)obj)->SetInitPosition(x, y);
+			int index_Of_WeakBrick = atoi(tokens[4].c_str());			
+			WeakBricks[index_Of_WeakBrick]->PushFragment((CFragment*)obj);
+			DebugOut(L"Fragment has been pushed to WeakBrick with index:%i\n", index_Of_WeakBrick);
+		}
+		break;
+	case OBJECT_TYPE_WEAKBRICK: 
+		{
+			obj = new CWeakBrick();
+			((CWeakBrick*)obj)->SetMario(player);
+			WeakBricks.push_back((CWeakBrick*)obj);
+			DebugOut(L"Weak Brick with index:%i has been pushed to list weakBricks\n", WeaKBrickIndex);
+			WeaKBrickIndex++;
+		}
+		break;
 	case OBJECT_TYPE_COIN: 
 		{
 			obj = new CCoin();
@@ -247,7 +264,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		DebugOut(L"[ERR] Invalid object type: %d\n", object_type);
 		return;
 	}
-	obj->SetType(object_type);
+	obj->SetType(object_type);						//set type for the object
 	// General object setup
 	obj->SetPosition(x, y);
 	LPANIMATION_SET ani_set = animation_sets->Get(ani_set_id);
@@ -332,7 +349,7 @@ void CPlayScene::Update(DWORD dt)
 	vector<LPGAMEOBJECT> coObjects_Of_Koopas;									//4: List of collidable Objects of Koopas
 	vector<LPGAMEOBJECT> coObbjects_Of_FireBall;								//5: List of collidable Objects of FireBall
 	vector<LPGAMEOBJECT> coObjects_Of_Mario;									//6: List of collidable Objects of Mario
-	vector<LPGAMEOBJECT> coObjects_Of_BountyBrick;								//7: List of collidable Objects of BountyBrick
+	vector<LPGAMEOBJECT> coObjects_Of_BountyBrick_WeakBrick;								//7: List of collidable Objects of BountyBrick
 	
 	
 
@@ -345,13 +362,13 @@ void CPlayScene::Update(DWORD dt)
 			coObjects_Of_Bounty.push_back(objects[i]);
 			coObjects_Of_Goomba.push_back(objects[i]);
 			coObjects_Of_Koopas.push_back(objects[i]);					
-			coObjects_Of_BountyBrick.push_back(objects[i]);
+			coObjects_Of_BountyBrick_WeakBrick.push_back(objects[i]);
 		}
 		else if (objects[i]->type == OBJECT_TYPE_KOOPAS)			//4,5,7
 		{
 			coObjects_Of_Koopas.push_back(objects[i]);
 			coObbjects_Of_FireBall.push_back(objects[i]);
-			coObjects_Of_BountyBrick.push_back(objects[i]);
+			coObjects_Of_BountyBrick_WeakBrick.push_back(objects[i]);
 			coObjects_Of_Mario.push_back(objects[i]);
 		}
 		else if (objects[i]->type == OBJECT_TYPE_GOOMBA)		//3,4,5
@@ -382,6 +399,14 @@ void CPlayScene::Update(DWORD dt)
 			coObjects_Of_Mario.push_back(objects[i]);					//add bountybrick to coOjects of Mario to block mario
 			coObjects_Of_Koopas.push_back(objects[i]);					//add bountybrick to coOjects of Koopas to block Koopas
 		}
+		else if (objects[i]->type == OBJECT_TYPE_WEAKBRICK)						//2,3,5
+		{
+			coObjects_Of_Bounty.push_back(objects[i]);
+			coObjects_Of_Goomba.push_back(objects[i]);
+			coObbjects_Of_FireBall.push_back(objects[i]);
+			/*coObjects_Of_Mario.push_back(objects[i]);*/					//add bountybrick to coOjects of Mario to block mario
+			coObjects_Of_Koopas.push_back(objects[i]);					//add bountybrick to coOjects of Koopas to block Koopas
+		}
 	}
 
 	for (size_t i = 0; i < objects.size(); i++)
@@ -404,8 +429,8 @@ void CPlayScene::Update(DWORD dt)
 		else if (objects[i]->type == OBJECT_TYPE_MARIO)
 			objects[i]->Update(dt, &coObjects_Of_Mario);
 
-		else if (objects[i]->type == OBJECT_TYPE_BOUNTYBRICK)
-			objects[i]->Update(dt, &coObjects_Of_BountyBrick);
+		else if (objects[i]->type == OBJECT_TYPE_BOUNTYBRICK||objects[i]->type==OBJECT_TYPE_WEAKBRICK)
+			objects[i]->Update(dt, &coObjects_Of_BountyBrick_WeakBrick);
 		else
 			objects[i]->Update(dt, &coObjects);
 	}
@@ -591,16 +616,11 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 	
 	if (mario->GetState() == MARIO_STATE_DIE)
 		return;
-	else if (game->IsKeyDown(DIK_LEFT) && !game->IsKeyDown(DIK_RIGHT))
+	if (game->IsKeyDown(DIK_LEFT) && !game->IsKeyDown(DIK_RIGHT))
 	{
-///*		if (mario->isSliding == true)
-//		{
-//			mario->isSliding = false;
-//			mario->SetState(MARIO_STATE_CHANGELEFT);
-//		}	*/		
-//		else
-		/*if(mario->isSliding==false)
-		{*/
+		mario->SetTimeMovingLeft(DWORD(GetTickCount64()));
+		if (DWORD(GetTickCount64()) - mario->GetTimeMovingRight() > MARIO_TIME_CHANGE_DIRECTION)
+		{
 			if (game->IsKeyDown(DIK_Z))
 			{
 				if (mario->isRunningLeft == false)
@@ -609,14 +629,14 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 				{
 					mario->isRunningLeft = true;
 					mario->isRunningFastLeft = true;
-					mario->SetState(MARIO_STATE_RUNNINGFAST_LEFT);					
-				}					
+					mario->SetState(MARIO_STATE_RUNNINGFAST_LEFT);
+				}
 				else
 				{
 					mario->isRunningLeft = true;
 					mario->isRunningFastLeft = false;
 					mario->SetState(MARIO_STATE_RUNNING_LEFT);
-				}					
+				}
 			}
 			else
 			{
@@ -624,19 +644,15 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 				mario->isRunningLeft = false;
 				mario->isRunningFastLeft = false;
 			}
-							
-		//}
+		}
+		else
+			mario->SetState(MARIO_STATE_CHANGELEFT);
 	}
 	else if (game->IsKeyDown(DIK_RIGHT) && !game->IsKeyDown(DIK_LEFT))
 	{
-		//if (mario->isSliding == true)
-		//{
-		//	mario->isSliding = false;
-		//	mario->SetState(MARIO_STATE_CHANGERIGHT);
-		//}
-		//else
-		/*if (mario->isSliding == false)
-		{*/
+		mario->SetTimeMovingRight(DWORD(GetTickCount64()));
+		if (DWORD(GetTickCount64()) - mario->GetTimeMovingLeft() > MARIO_TIME_CHANGE_DIRECTION)
+		{
 			if (game->IsKeyDown(DIK_Z))
 			{
 				if (mario->isRunningRight == false)
@@ -660,8 +676,9 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 				mario->isRunningRight = false;
 				mario->isRunningFastRight = false;
 			}
-
-		//}
+		}
+		else
+			mario->SetState(MARIO_STATE_CHANGERIGHT);
 	}
 	/*else if (game->IsKeyDown(DIK_SPACE))
 	{
