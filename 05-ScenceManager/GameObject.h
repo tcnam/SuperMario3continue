@@ -24,6 +24,7 @@ using namespace std;
 #define OBJECT_TYPE_COIN			10
 #define OBJECT_TYPE_FRAGMENT		11
 #define OBJECT_TYPE_WEAKBRICK		12
+#define OBJECT_TYPE_BOUNTYBUTTON	13
 
 class CGameObject; 
 typedef CGameObject * LPGAMEOBJECT;

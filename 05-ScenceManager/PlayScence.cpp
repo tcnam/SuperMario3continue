@@ -172,6 +172,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		{
 			obj = new CWeakBrick();
 			((CWeakBrick*)obj)->SetMario(player);
+			((CWeakBrick*)obj)->SetInitPosition(x, y);
 			WeakBricks.push_back((CWeakBrick*)obj);
 			DebugOut(L"Weak Brick with index:%i has been pushed to list weakBricks\n", WeaKBrickIndex);
 			WeaKBrickIndex++;
@@ -181,7 +182,23 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		{
 			obj = new CCoin();
 			((CCoin*)obj)->SetMario(player);
+			int index_Of_WeakBrick = atoi(tokens[4].c_str());
+			if (index_Of_WeakBrick != -1)
+			{
+				WeakBricks[index_Of_WeakBrick]->PushCoin((CCoin*)obj);
+				((CCoin*)obj)->isInsideWeakBrick = true;
+			}				
 		}		
+		break;
+	case OBJECT_TYPE_BOUNTYBUTTON:
+		{
+			obj = new CBountyButton();
+			((CBountyButton*)obj)->SetMario(player);
+			for (unsigned int i = 0; i < WeaKBrickIndex; i++)
+			{
+				((CBountyButton*)obj)->PushWeakBrick(WeakBricks[i]);
+			}
+		}
 		break;
 	case OBJECT_TYPE_BOUNTYBRICK: 
 		{

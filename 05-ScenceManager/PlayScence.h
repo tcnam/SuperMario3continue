@@ -17,6 +17,7 @@
 #include "Bounty.h"
 #include "Fragment.h"
 #include "WeakBrick.h"
+#include "BountyButton.h"
 //#include "Camera.h"
 
 

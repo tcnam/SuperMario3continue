@@ -117,7 +117,8 @@ void CWeakBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 								koopas->SetSpeed(-koopas_vx, koopas_vy);
 								ActivateFragment();
 								state = WEAKBRICK_STATE_DISAPPEAR;
-								SetPosition(start_x, start_y + 640.00f);
+								MoveWeakBrickToHorizon();
+								
 							}
 						}
 
@@ -132,12 +133,13 @@ void CWeakBrick::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
 	l = x;
 	t = y;
-	r = x + BRICK_BBOX_WIDTH;
-	b = y + BRICK_BBOX_HEIGHT;
+	r = x + WEAKBRICK_BBOX_WIDTH;
+	b = y + WEAKBRICK_BBOX_HEIGHT;
 }
 void CWeakBrick::SetState(int state)
 {
 	CGameObject::SetState(state);
+
 }
 CWeakBrick::~CWeakBrick()
 {

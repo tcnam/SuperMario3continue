@@ -16,8 +16,8 @@ CFireBall::CFireBall()
 
 void CFireBall::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	//if (isFinished == true)
-	//	return;
+	if (isFinished == true)
+		return;
 	CGameObject::Update(dt);
 	if(isUsed==true)
 		vy += FIREBALL_GRAVITY*dt;
@@ -87,8 +87,8 @@ void CFireBall::GetBoundingBox(float& left, float& top, float& right, float& bot
 }
 void CFireBall::Render()
 {
-	//if (isFinished == true)
-	//	return;
+	if (isFinished == true)
+		return;
 	if (nx > 0)
 		animation_set->at(0)->Render(x, y);
 	else

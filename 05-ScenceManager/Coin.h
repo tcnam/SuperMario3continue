@@ -10,7 +10,7 @@ class CCoin : public CGameObject
 public:
 	bool isFinished;
 	CMario* Mario;
-	
+	bool isInsideWeakBrick;
 	CCoin();
 	void SetMario(CMario* mario) { Mario = mario; }
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObject);

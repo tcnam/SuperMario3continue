@@ -140,18 +140,28 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 					//	vy = -MARIO_JUMP_SPEED_Y;
 					y += dy;
 				}
+				if (ny < 0)
+				{
+					isOnGround = true;
+					vy = 0;
+				}
 				if (nx != 0)
 				{
 					x += min_tx * dx + nx * 0.4f;
 				}
 			}
-			/*else if (dynamic_cast<CBrick*>(e->obj))
+			else if (dynamic_cast<CBrick*>(e->obj))
 			{
 				if (nx != 0)
 				{
 					vx = 0;
 				}
-			}*/
+				if (ny < 0)
+				{
+					isOnGround = true;
+					vy = 0;
+				}
+			}
 		}
 		
 	}
