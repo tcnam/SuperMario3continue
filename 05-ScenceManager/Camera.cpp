@@ -11,3 +11,7 @@ Camera::Camera()
 //		__instancecamera = new Camera();
 //	return __instancecamera;
 //}
+Camera::~Camera()
+{
+
+}

@@ -126,6 +126,7 @@ void CBountyBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 							koopas->GetSpeed(koopas_vx, koopas_vy);
 							koopas->SetSpeed(-koopas_vx, koopas_vy);
 							state = BOUNTYBRICK_STATE_EMPTY;
+							vy = -BOUNTYBRICK_SPEED_Y;
 							if (Mario->GetLevel() > MARIO_LEVEL_SMALL)
 								Bounty->isLeaf = true;
 							else

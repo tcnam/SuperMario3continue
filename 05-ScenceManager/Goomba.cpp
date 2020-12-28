@@ -93,7 +93,7 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 				}
 				else if (dynamic_cast<CMario*>(e->obj))
 				{
-					SetPosition(x, y - 1);
+					/*SetPosition(x, y - 1);*/
 					if (untouchable == false)
 					{
 						if (nx != 0)

@@ -1,6 +1,9 @@
 #include"Bounty.h"
 CBounty::CBounty()
 {
+	start_x = start_y = 0;
+	Mario = NULL;
+	isRightDirection = false;
 	isUsed = false;
 	isLeaf = false;
 	isCrossBoundary = false;
@@ -272,4 +275,8 @@ void CBounty::SetState(int state)
 		break;
 
 	}
+}
+CBounty::~CBounty()
+{
+
 }

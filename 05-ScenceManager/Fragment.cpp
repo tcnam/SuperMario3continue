@@ -15,27 +15,25 @@ void CFragment::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		return;
 	if (isFinished == true)
 	{
-		vx = 0;
-		vy = 0;
-		x = start_x;
-		y = start_y;
+		//vx = 0;
+		//vy = 0;
+		//x = start_x;
+		//y = start_y;
 		return;
-	}		
-	CGameObject::Update(dt, coObjects);
+	}	
 	if (start_x - DISTANCE_DX_TO_DISAPPEAR > x
 		|| start_x + DISTANCE_DX_TO_DISAPPEAR < x)
 	{
 		vx = 0;
-		vy = 0;
-		isFinished = true;
-		
+		vy = FRAGMENT_SPEED_VY;
+
+		//isFinished = true;
+
 	}
-	else
-	{
-		x += dx;
-		y += dy;
-	}
+	CGameObject::Update(dt, coObjects);
 	
+	x += dx;
+	y += dy;
 }
 void CFragment::Render()
 {
@@ -53,4 +51,8 @@ void CFragment::GetBoundingBox(float& l, float& t, float& r, float& b)
 	t = y;
 	r = x + FRAGMENT_BBOX_WIDTH;
 	b = y + FRAGMENT_BBOX_HEIGHT;
+}
+CFragment::~CFragment()
+{
+
 }

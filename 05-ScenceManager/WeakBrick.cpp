@@ -9,8 +9,10 @@ CWeakBrick::CWeakBrick() :CGameObject()
 void CWeakBrick::Render()
 {
 	if (state == WEAKBRICK_STATE_DISAPPEAR)
-		animation_set->at(1)->Render(x, y);		//empty bounty brick animation
-	else if (state == WEAKBRICK_STATE_NORMAL)
+		return;
+	//if (state == WEAKBRICK_STATE_DISAPPEAR)
+	//	animation_set->at(1)->Render(x, y);		//empty bounty brick animation
+	if (state == WEAKBRICK_STATE_NORMAL)
 		animation_set->at(0)->Render(x, y);		//normal bounty brick animation
 	//RenderBoundingBox();
 }
@@ -22,22 +24,37 @@ void CWeakBrick::ActivateFragment()
 		fragments[i]->isFinished = false;
 		float fragment_vx = 0;
 		float fragment_vy = 0;
-		if (i % 2 == 0)
-			fragment_vx = FRAGMENT_SPEED_VX;
-		else
+		if (i == 0)
+		{
 			fragment_vx = -FRAGMENT_SPEED_VX;
-		if (i < 3)
 			fragment_vy = -FRAGMENT_SPEED_VY;
+		}
+		else if (i == 1)
+		{
+			fragment_vx = FRAGMENT_SPEED_VX;
+			fragment_vy = -FRAGMENT_SPEED_VY;
+		}
+		else if (i == 2)
+		{
+			fragment_vx = -FRAGMENT_SPEED_VX;
+			fragment_vy = -FRAGMENT_SPEED_VY_2;
+		}
 		else
-			fragment_vy = FRAGMENT_SPEED_VY;
+		{
+			fragment_vx = FRAGMENT_SPEED_VX;
+			fragment_vy = -FRAGMENT_SPEED_VY_2;
+		}
+
 		fragments[i]->SetSpeed(fragment_vx, fragment_vy);
 	}
 }
 void CWeakBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	//if (AABBCheck(Mario) == true)
+	//	ActivateFragment();
+	if (state == WEAKBRICK_STATE_DISAPPEAR)
+		return;
 	CGameObject::Update(dt, coObjects);
-	if (AABBCheck(Mario) == true)
-		ActivateFragment();
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
 	coEvents.clear();
@@ -93,7 +110,15 @@ void CWeakBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					{
 						if (koopas->GetState() == KOOPAS_STATE_DEFENSE_DYNAMIC)
 						{
-
+							if (state == WEAKBRICK_STATE_NORMAL)
+							{
+								float koopas_vx, koopas_vy;
+								koopas->GetSpeed(koopas_vx, koopas_vy);
+								koopas->SetSpeed(-koopas_vx, koopas_vy);
+								ActivateFragment();
+								state = WEAKBRICK_STATE_DISAPPEAR;
+								SetPosition(start_x, start_y + 640.00f);
+							}
 						}
 
 					}
@@ -113,4 +138,8 @@ void CWeakBrick::GetBoundingBox(float& l, float& t, float& r, float& b)
 void CWeakBrick::SetState(int state)
 {
 	CGameObject::SetState(state);
+}
+CWeakBrick::~CWeakBrick()
+{
+
 }

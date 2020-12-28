@@ -404,7 +404,7 @@ void CPlayScene::Update(DWORD dt)
 			coObjects_Of_Bounty.push_back(objects[i]);
 			coObjects_Of_Goomba.push_back(objects[i]);
 			coObbjects_Of_FireBall.push_back(objects[i]);
-			/*coObjects_Of_Mario.push_back(objects[i]);*/					//add bountybrick to coOjects of Mario to block mario
+			coObjects_Of_Mario.push_back(objects[i]);					//add bountybrick to coOjects of Mario to block mario
 			coObjects_Of_Koopas.push_back(objects[i]);					//add bountybrick to coOjects of Koopas to block Koopas
 		}
 	}
