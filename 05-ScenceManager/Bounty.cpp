@@ -188,7 +188,7 @@ void CBounty::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			if(state==BOUNTY_STATE_COIN)
 				isFinised = true;
 		}
-		if(nx!=0)
+		if(nx!=0&&isLeaf==false)
 			vx = -vx;
 		for (UINT i = 0; i < coEventsResult.size(); i++)
 		{
