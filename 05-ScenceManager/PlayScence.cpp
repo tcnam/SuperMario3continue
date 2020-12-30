@@ -1,4 +1,4 @@
-
+#pragma once
 #include <iostream>
 #include <fstream>
 #include<stdio.h>
@@ -163,8 +163,11 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		{
 			obj = new CFragment();
 			((CFragment*)obj)->SetInitPosition(x, y);
-			int index_Of_WeakBrick = atoi(tokens[4].c_str());			
-			WeakBricks[index_Of_WeakBrick]->PushFragment((CFragment*)obj);
+			int index_Of_WeakBrick = atoi(tokens[4].c_str());
+			if (index_Of_WeakBrick == 18)//Special Brick
+				SpecialBrick->PushFragment((CFragment*)obj);
+			else
+				WeakBricks[index_Of_WeakBrick]->PushFragment((CFragment*)obj);
 			DebugOut(L"Fragment has been pushed to WeakBrick with index:%i\n", index_Of_WeakBrick);
 		}
 		break;
@@ -176,6 +179,14 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			WeakBricks.push_back((CWeakBrick*)obj);
 			DebugOut(L"Weak Brick with index:%i has been pushed to list weakBricks\n", WeaKBrickIndex);
 			WeaKBrickIndex++;
+		}
+		break;
+	case OBJECT_TYPE_SPECIALBRICK:
+		{
+			obj = new CSpecialBrick();
+			((CSpecialBrick*)obj)->SetMario(player);
+			((CSpecialBrick*)obj)->SetInitPosition(x, y);
+			SpecialBrick = (CSpecialBrick*)obj;
 		}
 		break;
 	case OBJECT_TYPE_COIN: 
@@ -193,8 +204,10 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_BOUNTYBUTTON:
 		{
 			obj = new CBountyButton();
-			((CBountyButton*)obj)->SetMario(player);
-			for (unsigned int i = 0; i < WeaKBrickIndex; i++)
+			((CBountyButton*)obj)->SetMario(player);			
+			SpecialBrick->SetBountyButton((CBountyButton*)obj);
+			((CBountyButton*)obj)->isInsideSpecialBrick = true;
+			for (unsigned int i = 0; i < WeakBricks.size(); i++)
 			{
 				((CBountyButton*)obj)->PushWeakBrick(WeakBricks[i]);
 			}
@@ -421,14 +434,22 @@ void CPlayScene::Update(DWORD dt)
 			coObjects_Of_Bounty.push_back(objects[i]);
 			coObjects_Of_Goomba.push_back(objects[i]);
 			coObbjects_Of_FireBall.push_back(objects[i]);
-			coObjects_Of_Mario.push_back(objects[i]);					//add bountybrick to coOjects of Mario to block mario
-			coObjects_Of_Koopas.push_back(objects[i]);					//add bountybrick to coOjects of Koopas to block Koopas
+			coObjects_Of_Mario.push_back(objects[i]);					//add weakbrick to coOjects of Mario to block mario
+			coObjects_Of_Koopas.push_back(objects[i]);					//add weakbrick to coOjects of Koopas to block Koopas
+		}
+		else if (objects[i]->type == OBJECT_TYPE_SPECIALBRICK)						//2,3,5
+		{
+			coObjects_Of_Bounty.push_back(objects[i]);
+			coObjects_Of_Goomba.push_back(objects[i]);
+			coObbjects_Of_FireBall.push_back(objects[i]);
+			coObjects_Of_Mario.push_back(objects[i]);					//add specialbrick to coOjects of Mario to block mario
+			coObjects_Of_Koopas.push_back(objects[i]);					//add specialbrick to coOjects of Koopas to block Koopas
 		}
 	}
 
 	for (size_t i = 0; i < objects.size(); i++)
 	{
-		if (objects[i]->type == OBJECT_TYPE_FLOWER_FIREBALL || objects[i]->type == OBJECT_TYPE_COIN || objects[i]->type == OBJECT_TYPE_FIREFLOWER)
+		if (objects[i]->type == OBJECT_TYPE_FLOWER_FIREBALL || objects[i]->type == OBJECT_TYPE_COIN || objects[i]->type == OBJECT_TYPE_FIREFLOWER||objects[i]->type==OBJECT_TYPE_BOUNTYBUTTON)
 			objects[i]->Update(dt, &coObjects_Of_FireFlower_Coin_FireBallFlower);
 
 		else if (objects[i]->type == OBJECT_TYPE_BOUNTY)
@@ -446,7 +467,7 @@ void CPlayScene::Update(DWORD dt)
 		else if (objects[i]->type == OBJECT_TYPE_MARIO)
 			objects[i]->Update(dt, &coObjects_Of_Mario);
 
-		else if (objects[i]->type == OBJECT_TYPE_BOUNTYBRICK||objects[i]->type==OBJECT_TYPE_WEAKBRICK)
+		else if (objects[i]->type == OBJECT_TYPE_BOUNTYBRICK||objects[i]->type==OBJECT_TYPE_WEAKBRICK|| objects[i]->type == OBJECT_TYPE_SPECIALBRICK)
 			objects[i]->Update(dt, &coObjects_Of_BountyBrick_WeakBrick);
 		else
 			objects[i]->Update(dt, &coObjects);

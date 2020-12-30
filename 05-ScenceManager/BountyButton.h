@@ -12,7 +12,8 @@ class CBountyButton : public CGameObject
 	CMario* Mario;
 	vector<CWeakBrick*> weakbricks;
 public:
-	bool isFinished;	
+	bool isFinished;
+	bool isInsideSpecialBrick;
 	CBountyButton();
 	void SetMario(CMario* mario) { Mario = mario; }
 	void PushWeakBrick(CWeakBrick* weakbirck) { weakbricks.push_back(weakbirck); }

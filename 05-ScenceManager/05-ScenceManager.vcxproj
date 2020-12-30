@@ -139,6 +139,7 @@
     <ClCompile Include="HiddenObject.cpp" />
     <ClCompile Include="Koopas.cpp" />
     <ClCompile Include="Portal.cpp" />
+    <ClCompile Include="SpecialBrick.cpp" />
     <ClCompile Include="Terrain.cpp" />
     <ClCompile Include="Utils.cpp" />
     <ClCompile Include="Game.cpp" />
@@ -168,6 +169,7 @@
     <ClInclude Include="Koopas.h" />
     <ClInclude Include="Portal.h" />
     <ClInclude Include="SceneIntro.h" />
+    <ClInclude Include="SpecialBrick.h" />
     <ClInclude Include="Terrain.h" />
     <ClInclude Include="Utils.h" />
     <ClInclude Include="Game.h" />

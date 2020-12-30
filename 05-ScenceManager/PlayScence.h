@@ -18,6 +18,7 @@
 #include "Fragment.h"
 #include "WeakBrick.h"
 #include "BountyButton.h"
+#include "SpecialBrick.h"
 //#include "Camera.h"
 
 
@@ -35,6 +36,8 @@ protected:
 
 	vector <CWeakBrick*> WeakBricks;
 	unsigned int WeaKBrickIndex = 0;
+
+	CSpecialBrick* SpecialBrick;
 
 	vector<LPGAMEOBJECT> objects;
 	vector<LPTERRAIN> terrains;

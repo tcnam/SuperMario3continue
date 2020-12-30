@@ -4,6 +4,7 @@ CBountyButton::CBountyButton()
 {
 	isFinished = false;
 	Mario = NULL;
+	isInsideSpecialBrick = true;
 }
 void CBountyButton::ActivateWeakBrick()
 {
@@ -19,6 +20,8 @@ void CBountyButton::ActivateWeakBrick()
 }
 void CBountyButton::Render()
 {
+	if (isInsideSpecialBrick == true)
+		return;
 	if (isFinished == true)
 		animation_set->at(1)->Render(x, y);
 	else
@@ -28,6 +31,8 @@ void CBountyButton::Render()
 void CBountyButton::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	if (isFinished == true)
+		return;
+	if (isInsideSpecialBrick == true)
 		return;
 	CGameObject::Update(dt, coObjects);
 	vector<LPCOLLISIONEVENT> coEvents;

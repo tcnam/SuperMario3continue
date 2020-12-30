@@ -82,6 +82,9 @@
     <Filter Include="Object\GameObject\BountyButton">
       <UniqueIdentifier>{7785a3fc-a862-40f2-940d-4a6350cf91cb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Object\GameObject\Brick\SpecialBrick">
+      <UniqueIdentifier>{047e8f42-db62-477d-9165-3f256f530c71}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animations.cpp">
@@ -161,6 +164,9 @@
     </ClCompile>
     <ClCompile Include="BountyButton.cpp">
       <Filter>Object\GameObject\BountyButton</Filter>
+    </ClCompile>
+    <ClCompile Include="SpecialBrick.cpp">
+      <Filter>Object\GameObject\Brick\SpecialBrick</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -244,6 +250,9 @@
     </ClInclude>
     <ClInclude Include="BountyButton.h">
       <Filter>Object\GameObject\BountyButton</Filter>
+    </ClInclude>
+    <ClInclude Include="SpecialBrick.h">
+      <Filter>Object\GameObject\Brick\SpecialBrick</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

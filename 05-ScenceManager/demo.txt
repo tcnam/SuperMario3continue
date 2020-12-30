@@ -712,7 +712,7 @@
 35	205	206
 [OBJECTS]
 # type	x	y	ani_set_id	extra_settings per object type
-# type: 0 = Mario , 1 = Brick, 2 = Goomba, 3 = Koopas, 4 = Bounty Brick, 5=Hidden Object, 6=Fire Ball of Mario, 7=Fire Flower, 8=Fire Ball of Flower, 9=Bounty, 10=Coin, 11=Fragment, 12=Weak Brick, 13=Bounty Button
+# type: 0 = Mario , 1 = Brick, 2 = Goomba, 3 = Koopas, 4 = Bounty Brick, 5=Hidden Object, 6=Fire Ball of Mario, 7=Fire Flower, 8=Fire Ball of Flower, 9=Bounty, 10=Coin, 11=Fragment, 12=Weak Brick, 13=Bounty Button, 14=Special Brick
 # MARIO
 0	17	-50	1
 # HIDDEN OBJECT
@@ -991,7 +991,8 @@
 12	1984	-64	28
 12	2000	-64	28
 12	2016	-64	28
-12	2032	-64	28
+#-----Special brick 
+14	2032	-64	28
 #-------fragment of weak brick-----
 11	1952	-32	34	0
 11	1960	-32	34	0	
@@ -1087,8 +1088,9 @@
 11	2040	-64	34	18
 11	2032	-56	34	18
 11	2040	-56	34	18
+
 #BOUNTY BUTTON
-13	2032	-80	35
+13	2032	-64	35
 # FIRE FLOWER
 7	360	-48	6
 7	1864	-48	6
@@ -1347,7 +1349,7 @@
 10	1984	-64	8	15
 10	2000	-64	8	16
 10	2016	-64	8	17
-10	2032	-64	8	18
+
 # BOUNTY
 9	180	-80	7
 9	196	-80	7
