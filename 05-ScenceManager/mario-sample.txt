@@ -2,6 +2,6 @@
 start	1
 #scene list
 [SCENES]
+2	sceneworld.txt
 1	demo.txt
-2	sceneintro.txt
-3	sceneworld.txt
+3	sceneintro.txt

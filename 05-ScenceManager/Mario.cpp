@@ -5,7 +5,6 @@
 
 #include "Mario.h"
 #include "Game.h"
-
 #include "Portal.h"
 
 
@@ -91,12 +90,10 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	if (coEvents.size()==0)
 	{
 		x += dx; 
-		y += dy;
-		
+		y += dy;		
 	}
 	else
 	{
-
 		float min_tx, min_ty, nx = 0, ny;
 		float rdx = 0;
 		float rdy = 0;
@@ -125,7 +122,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 				isOnGround = true;
 			}
 		}
-
 		//
 		// Collision logic with other objects
 		//
@@ -213,8 +209,7 @@ void CMario::Render()
 						else
 							ani = MARIO_ANI_BIG_IDLE_LEFT;
 					}
-				}
-				
+				}				
 			}
 			else if (vx > 0)
 			{
@@ -229,8 +224,6 @@ void CMario::Render()
 					else
 						ani = MARIO_ANI_BIG_WALKING_RIGHT;
 				}
-				
-
 			}
 			else
 			{
@@ -245,8 +238,7 @@ void CMario::Render()
 					else
 						ani = MARIO_ANI_BIG_WALKING_LEFT;
 				}
-				}
-				
+			}				
 		}
 		else
 		{
@@ -263,11 +255,9 @@ void CMario::Render()
 					ani = MARIO_ANI_BIG_JUMP_RIGHT;
 				else
 					ani = MARIO_ANI_BIG_JUMP_LEFT;
-			}
-					
+			}					
 		}
-	}
-	
+	}	
 	else if (level == MARIO_LEVEL_SMALL)				//small
 	{
 		if (vy >= 0)
@@ -375,19 +365,17 @@ void CMario::Render()
 				}
 				else
 				{
-					if (state == MARIO_STATE_CHANGELEFT)
-						ani = MARIO_ANI_TAIL_CHANGE_LEFT;
-					else if (state == MARIO_STATE_CHANGERIGHT)
-						ani = MARIO_ANI_TAIL_CHANGE_RIGHT;
-
-					else if (isFlyFall == true)			
+					if (isFlyFall == true)			
 					{
 						if (nx > 0)
 							ani = MARIO_ANI_TAIL_FALL_FLYRIGHT;
 						else
 							ani = MARIO_ANI_TAIL_FALL_FLYLEFT;
 					}
-					
+					else if (state == MARIO_STATE_CHANGELEFT)
+						ani = MARIO_ANI_TAIL_CHANGE_LEFT;
+					else if (state == MARIO_STATE_CHANGERIGHT)
+						ani = MARIO_ANI_TAIL_CHANGE_RIGHT;
 
 					else if (state == MARIO_STATE_WALKING_RIGHT)
 						ani = MARIO_ANI_TAIL_WALKING_RIGHT;
@@ -438,14 +426,14 @@ void CMario::Render()
 			}
 			else
 			{
-				if (isHoldingKoopas == true)
-				{
-					ani = MARIO_ANI_TAIL_HOLDKOOPAS_WALK_LEFT;
-				}
-				else if (isFlyFall == true)			
+				if (isFlyFall == true)
 				{
 					ani = MARIO_ANI_TAIL_FALL_FLYLEFT;
 				}
+				else if (isHoldingKoopas == true)
+				{
+					ani = MARIO_ANI_TAIL_HOLDKOOPAS_WALK_LEFT;
+				}				
 				else
 				{
 					if (state == MARIO_STATE_RUNNINGFAST_LEFT)
@@ -457,20 +445,20 @@ void CMario::Render()
 		}
 		else
 		{	
-			if (isHoldingKoopas == true)
-			{
-				if (nx > 0)
-					ani = MARIO_ANI_TAIL_HOLDKOOPAS_IDLE_RIGHT;
-				else
-					ani = MARIO_ANI_TAIL_HOLDKOOPAS_IDLE_LEFT;
-			}
-			else if (isFlying==true)
+			if (isFlying == true)
 			{
 				if (nx > 0)
 					ani = MARIO_ANI_TAIL_FLYRIGHT;
 				else
 					ani = MARIO_ANI_TAIL_FLYLEFT;
-			}			
+			}
+			else if (isHoldingKoopas == true)
+			{
+				if (nx > 0)
+					ani = MARIO_ANI_TAIL_HOLDKOOPAS_IDLE_RIGHT;
+				else
+					ani = MARIO_ANI_TAIL_HOLDKOOPAS_IDLE_LEFT;
+			}				
 			else
 			{
 				if (nx > 0)

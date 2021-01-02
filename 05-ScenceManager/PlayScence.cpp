@@ -17,6 +17,8 @@ using namespace std;
 CPlayScene::CPlayScene(int id, LPCWSTR filePath):CScene(id, filePath)
 {
 	key_handler = new CPlayScenceKeyHandler(this);
+	SpecialBrick = NULL;
+	player = NULL;
 }
 
 /*
@@ -365,6 +367,8 @@ void CPlayScene::Load()
 
 	CTextures::GetInstance()->Add(ID_TEX_BBOX, L"textures\\bbox.png", D3DCOLOR_XRGB(255, 255, 255));
 	DebugOut(L"[INFO] Done loading scene resources %s\n", sceneFilePath);
+	camera = new Camera();
+	camera->SetMario(player);
 }
 
 void CPlayScene::Update(DWORD dt)
@@ -478,37 +482,7 @@ void CPlayScene::Update(DWORD dt)
 	if (player == NULL) return; 
 
 	// Update camera to follow mario
-	float cx, cy;
-	
-	player->GetPosition(cx, cy);
-
-	
-	CGame *game = CGame::GetInstance();
-	
-	if (cx > game->GetScreenWidth() / 2)
-	{
-		cx -= game->GetScreenWidth()/2;
-		cy -= game->GetScreenHeight()/2;
-		if (cy > -game->GetScreenHeight()*3/2)
-			cy = (float)-game->GetScreenHeight();
-		CGame::GetInstance()->SetCamPos(round(cx),round(cy)+32);
-	}
-	else if (cy > 0)
-	{
-		cx -= game->GetScreenWidth() / 2;
-		cy -= game->GetScreenHeight() / 2;
-		CGame::GetInstance()->SetCamPos(round(cx), round(cy)+32);
-	}
-	/*else if (py % game->GetScreenHeight() > game->GetScreenHeight() / 6 * 5)
-	{
-		CGame::GetInstance()->SetCamPos(0, py % game->GetScreenHeight() - game->GetScreenHeight() / 6 * 5);
-	}*/
-	else
-		CGame::GetInstance()->SetCamPos(0, round((float)(-game->GetScreenHeight()+32)));	
-	//cx -= game->GetScreenWidth() / 2;
-	//cy -= game->GetScreenHeight() / 2;
-	/*game->SetCamPos(round(cx), round(cy));*/
-
+	camera->Update();
 }
 
 void CPlayScene::Render()
@@ -555,7 +529,9 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 					mario->isFlying = true;
 				}
 				if ((DWORD)GetTickCount64() - mario->GetTimeFly() < MARIO_FLY_TIME)
+				{
 					mario->SetState(MARIO_STATE_FLYLEFT);
+				}					
 				else
 				{
 					mario->StartFlyFall();
@@ -568,8 +544,10 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 					mario->SetTimeFly((DWORD)GetTickCount64());
 					mario->isFlying = true;
 				}
-				if ((DWORD)GetTickCount64() - mario->GetTimeFly() < MARIO_FLY_TIME)
+				if ((DWORD)GetTickCount64() - mario->GetTimeFly() < MARIO_FLY_TIME )
+				{
 					mario->SetState(MARIO_STATE_FLYRIGHT);
+				}					
 				else
 				{
 					mario->StartFlyFall();
@@ -672,7 +650,6 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 				else
 				{
 					mario->isRunningLeft = true;
-					mario->isRunningFastLeft = false;
 					mario->SetState(MARIO_STATE_RUNNING_LEFT);
 				}
 			}
@@ -680,11 +657,18 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 			{
 				mario->SetState(MARIO_STATE_WALKING_LEFT);
 				mario->isRunningLeft = false;
-				mario->isRunningFastLeft = false;
 			}
 		}
 		else
-			mario->SetState(MARIO_STATE_CHANGELEFT);
+		{
+			if (mario->isFlying == false)
+			{
+				mario->SetState(MARIO_STATE_CHANGELEFT);
+				mario->isRunningRight = false;
+				mario->isRunningFastRight = false;
+			}			
+		}
+			
 	}
 	else if (game->IsKeyDown(DIK_RIGHT) && !game->IsKeyDown(DIK_LEFT))
 	{
@@ -704,7 +688,6 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 				else
 				{
 					mario->isRunningRight = true;
-					mario->isRunningFastRight = false;
 					mario->SetState(MARIO_STATE_RUNNING_RIGHT);
 				}
 			}
@@ -712,11 +695,17 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 			{
 				mario->SetState(MARIO_STATE_WALKING_RIGHT);
 				mario->isRunningRight = false;
-				mario->isRunningFastRight = false;
 			}
 		}
 		else
-			mario->SetState(MARIO_STATE_CHANGERIGHT);
+		{
+			if (mario->isFlying == false)
+			{
+				mario->SetState(MARIO_STATE_CHANGERIGHT);
+				mario->isRunningFastLeft = false;
+				mario->isRunningLeft = false;
+			}			
+		}			
 	}
 	/*else if (game->IsKeyDown(DIK_SPACE))
 	{

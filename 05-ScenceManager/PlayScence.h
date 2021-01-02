@@ -19,7 +19,7 @@
 #include "WeakBrick.h"
 #include "BountyButton.h"
 #include "SpecialBrick.h"
-//#include "Camera.h"
+#include "Camera.h"
 
 
 
@@ -41,7 +41,7 @@ protected:
 
 	vector<LPGAMEOBJECT> objects;
 	vector<LPTERRAIN> terrains;
-	//Camera* camera;
+	Camera* camera;
 
 
 	void _ParseSection_TEXTURES(string line);
