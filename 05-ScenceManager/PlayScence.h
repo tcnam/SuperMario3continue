@@ -20,6 +20,8 @@
 #include "BountyButton.h"
 #include "SpecialBrick.h"
 #include "Camera.h"
+#include "ScoreBoard.h"
+#include "Hud.h"
 
 
 
@@ -42,7 +44,7 @@ protected:
 	vector<LPGAMEOBJECT> objects;
 	vector<LPTERRAIN> terrains;
 	Camera* camera;
-
+	CHud* Hud;
 
 	void _ParseSection_TEXTURES(string line);
 	void _ParseSection_SPRITES(string line);
@@ -50,7 +52,7 @@ protected:
 	void _ParseSection_ANIMATION_SETS(string line);
 	void _ParseSection_OBJECTS(string line);
 	void _ParseSection_TERRAIN(string line);
-
+	void _ParseSection_HUD(string line);
 	
 public: 
 	CPlayScene(int id, LPCWSTR filePath);

@@ -129,7 +129,7 @@
 #define MARIO_FIRE_BBOX_HEIGHT	27
 
 #define MARIO_UNTOUCHABLE_TIME 5000
-#define MARIO_FLY_TIME			2000
+#define MARIO_FLY_TIME			3000
 #define MARIO_ATTACK_TIME_TAIL	500
 #define MARIO_ATTACK_TIME_FIRE	250
 #define MARIO_FLYFALL_TIME	200
@@ -144,10 +144,12 @@ class CMario : public CGameObject
 
 	float start_x;			// initial position of Mario at scene
 	float start_y; 
-	CFireBall* fireballs;
-	//CKoopas* koopas;
-	
 
+	int numberOfCoins;
+	int Scores;
+
+	CFireBall* fireballs;
+	
 	DWORD StartMovingLeft;
 	DWORD StartMovingRight;
 
@@ -166,6 +168,7 @@ class CMario : public CGameObject
 public:
 	bool untouchable;
 	bool isOnGround;
+	bool isTransform;
 	//bool allowJump;
 	bool isRunningRight;
 	bool isRunningLeft;
@@ -219,6 +222,11 @@ public:
 	void SetLevel(int l) { level = l; }
 	int GetLevel() { return level; }
 	int Getnx() { return nx; }
+
+	void SetNumberOfCoin(int coins) { numberOfCoins = coins; }
+	void SetScore(int sc) { Scores = sc; }
+	int GetNumberOfCoin() { return this->numberOfCoins; }
+	int GetScore() { return this->Scores; }
 
 	void StartUntouchable() { untouchable = true; untouchable_start = (DWORD)GetTickCount64(); }
 	void StartFlyFall() { isFlyFall = true; FlyFall_start = (DWORD)GetTickCount64(); }

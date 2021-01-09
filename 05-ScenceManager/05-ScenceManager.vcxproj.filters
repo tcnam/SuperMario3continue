@@ -85,6 +85,18 @@
     <Filter Include="Object\GameObject\Brick\SpecialBrick">
       <UniqueIdentifier>{047e8f42-db62-477d-9165-3f256f530c71}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Object\GameObject\Effect">
+      <UniqueIdentifier>{fbfe28e4-562b-417b-8618-1ed90fbf50e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\HUD">
+      <UniqueIdentifier>{3d3aa59a-159f-44b8-bacf-2f65a9f92c77}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\HUD\ScoreBoard">
+      <UniqueIdentifier>{432cb073-b861-4124-876e-ef4cec89625f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\HUD\Square">
+      <UniqueIdentifier>{c7e2846b-3000-4273-a4aa-c4962b1b1f65}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animations.cpp">
@@ -167,6 +179,15 @@
     </ClCompile>
     <ClCompile Include="SpecialBrick.cpp">
       <Filter>Object\GameObject\Brick\SpecialBrick</Filter>
+    </ClCompile>
+    <ClCompile Include="Effect.cpp">
+      <Filter>Object\GameObject\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="ScoreBoard.cpp">
+      <Filter>Object\HUD\ScoreBoard</Filter>
+    </ClCompile>
+    <ClCompile Include="Hud.cpp">
+      <Filter>Object\HUD</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -253,6 +274,15 @@
     </ClInclude>
     <ClInclude Include="SpecialBrick.h">
       <Filter>Object\GameObject\Brick\SpecialBrick</Filter>
+    </ClInclude>
+    <ClInclude Include="Effect.h">
+      <Filter>Object\GameObject\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="ScoreBoard.h">
+      <Filter>Object\HUD\ScoreBoard</Filter>
+    </ClInclude>
+    <ClInclude Include="Hud.h">
+      <Filter>Object\HUD</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

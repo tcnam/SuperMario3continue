@@ -11,6 +11,7 @@
 60	textures\flowerl.png	255	255	255
 70	textures\misc1.png	166	185	255
 80	textures\misc.png	176	224	248
+90	textures\hud.png	81	255	191
 
 
 #Mario:  10000
@@ -22,6 +23,7 @@
 #fireFlower: 90000
 #terrain on ground: 50000
 #terrain on air: 60000
+#hud	:21000
 # id	left	top	right	bottom	texture_id
 [SPRITES]
 # BIG MARIO 
@@ -214,6 +216,9 @@
 20008	156	144	172	160	70
 20009	178	144	194	160	70
 20010	200	153	216	160	70
+#ScoreBoard
+21000	11	127	165	157	90
+
 #WEAK BRICK
 30000	52	52	68	68	20
 30001	69	52	85	68	20
@@ -2339,3 +2344,6 @@
 1376	-256	60011
 1376	-272	60000
 1376	-280	60001
+0	0	21000
+[SCOREBOARD]
+0	21000

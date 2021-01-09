@@ -5,9 +5,6 @@
 
 #include "Sprites.h"
 
-#pragma once
-#define TERRAIN_BBOX_WIDTH  16
-#define TERRAIN_BBOX_HEIGHT 16
 
 class CTerrain;
 typedef CTerrain* LPTERRAIN;

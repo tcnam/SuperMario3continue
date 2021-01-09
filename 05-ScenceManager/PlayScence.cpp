@@ -19,6 +19,8 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath):CScene(id, filePath)
 	key_handler = new CPlayScenceKeyHandler(this);
 	SpecialBrick = NULL;
 	player = NULL;
+	Hud = NULL;
+	camera = NULL;
 }
 
 /*
@@ -33,6 +35,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath):CScene(id, filePath)
 #define SCENE_SECTION_ANIMATION_SETS	5
 #define SCENE_SECTION_OBJECTS	6
 #define SCENE_SECTION_TERRAIN	7
+#define SCENE_SECTION_HUD	8
 #define OBJECT_TYPE_PORTAL	50
 
 #define MAX_SCENE_LINE 1024
@@ -318,6 +321,24 @@ void CPlayScene::_ParseSection_TERRAIN(string line)
 	terr->SetSprite(sprites);
 	terrains.push_back(terr);
 }
+void CPlayScene::_ParseSection_HUD(string line)
+{
+	vector<string> tokens = split(line);
+	if (tokens.size() < 2)return;
+	int type = atoi(tokens[0].c_str());
+	int sprite_id= atoi(tokens[1].c_str());
+	switch (type)
+	{
+	case HUD_TYPE_SCOREBOARD:
+		{
+			CScoreBoard* scoreboard = new CScoreBoard();
+			LPSPRITE sprites = CSprites::GetInstance()->Get(sprite_id);
+			scoreboard->SetSprite(sprites);
+			Hud->SetScoreBoard(scoreboard);
+		}
+		break;
+	}
+}
 
 void CPlayScene::Load()
 {
@@ -330,6 +351,8 @@ void CPlayScene::Load()
 	int section = SCENE_SECTION_UNKNOWN;					
 
 	char str[MAX_SCENE_LINE];
+	Hud = new CHud();
+	//Hud = NULL;
 	while (f.getline(str, MAX_SCENE_LINE))
 	{
 		string line(str);
@@ -347,6 +370,8 @@ void CPlayScene::Load()
 			section = SCENE_SECTION_OBJECTS; continue; }
 		if (line == "[TERRAINS]"){
 			section = SCENE_SECTION_TERRAIN; continue;}
+		if (line == "[SCOREBOARD]") {
+			section = SCENE_SECTION_HUD; continue;}
 		if (line[0] == '[') { section = SCENE_SECTION_UNKNOWN; continue; }	
 
 		//
@@ -360,6 +385,7 @@ void CPlayScene::Load()
 			case SCENE_SECTION_ANIMATION_SETS: _ParseSection_ANIMATION_SETS(line); break;
 			case SCENE_SECTION_OBJECTS: _ParseSection_OBJECTS(line);break;
 			case SCENE_SECTION_TERRAIN: _ParseSection_TERRAIN(line); break;
+			case SCENE_SECTION_HUD: _ParseSection_HUD(line); break;
 		}
 	}
 
@@ -368,7 +394,8 @@ void CPlayScene::Load()
 	CTextures::GetInstance()->Add(ID_TEX_BBOX, L"textures\\bbox.png", D3DCOLOR_XRGB(255, 255, 255));
 	DebugOut(L"[INFO] Done loading scene resources %s\n", sceneFilePath);
 	camera = new Camera();
-	camera->SetMario(player);
+	camera->SetMario(player);	
+	Hud->SetCamera(camera);
 }
 
 void CPlayScene::Update(DWORD dt)
@@ -483,6 +510,7 @@ void CPlayScene::Update(DWORD dt)
 
 	// Update camera to follow mario
 	camera->Update();
+	Hud->Update();
 }
 
 void CPlayScene::Render()
@@ -492,7 +520,8 @@ void CPlayScene::Render()
 	for (unsigned int i = 0; i < objects.size(); i++)
 	{
 		objects[i]->Render();
-	}	
+	}
+	Hud->Render();
 }
 
 /*

@@ -13,7 +13,9 @@ CMario::CMario(float x, float y) : CGameObject()
 	level = MARIO_LEVEL_BIG;
 	untouchable = 0;
 	SetState(MARIO_STATE_IDLE);
+	numberOfCoins = Scores = 0;
 	isOnGround = false;
+	isTransform = false;
 
 	isHoldingKoopas = false;
 	isFlyFall = false;
