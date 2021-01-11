@@ -152,7 +152,6 @@ void CBounty::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			/*SetPosition(start_x, start_y + 320.00f);*/
 			if (state == BOUNTY_STATE_POWERUP)
 			{
-				CGame::GetInstance()->SetScores(CGame::GetInstance()->GetScores() + 1000);
 				if (Mario->GetLevel() < MARIO_LEVEL_BIG)
 					Mario->SetLevel(MARIO_LEVEL_BIG);
 				else
@@ -186,12 +185,8 @@ void CBounty::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		if (ny < 0)
 		{
 			vy = 0;
-			if (state == BOUNTY_STATE_COIN)
-			{
-				CGame::GetInstance()->SetCoins(CGame::GetInstance()->GetCoins() + 1);
-				CGame::GetInstance()->SetScores(CGame::GetInstance()->GetScores() + 100);
+			if(state==BOUNTY_STATE_COIN)
 				isFinised = true;
-			}				
 		}
 		if(nx!=0&&isLeaf==false)
 			vx = -vx;
@@ -213,7 +208,6 @@ void CBounty::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						Mario->SetPosition(Mario_current_x, Mario_current_y - 1);
 					if (state == BOUNTY_STATE_POWERUP)
 					{
-						CGame::GetInstance()->SetScores(CGame::GetInstance()->GetScores() + 1000);
 						if (isLeaf == true)
 							Mario->SetLevel(MARIO_LEVEL_TAIL);
 						else
@@ -225,7 +219,6 @@ void CBounty::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			{
 				if (isLeaf == true)
 				{
-
 					vy = BOUNTY_GRAVITY;
 					x += dx;
 					y += dy;

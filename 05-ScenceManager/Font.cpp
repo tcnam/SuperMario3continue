@@ -34,9 +34,6 @@ void CFont::Render()
 			ani = FONT_NUMBER_2;
 			break;
 		case FONT_NUMBER_3:
-			ani = FONT_NUMBER_3;
-			break;
-		case FONT_NUMBER_4:
 			ani = FONT_NUMBER_4;
 			break;
 		case FONT_NUMBER_5:
@@ -55,17 +52,17 @@ void CFont::Render()
 			ani = FONT_NUMBER_9;
 			break;
 		}
-		animation_set->at(ani)->Render(round(x), round(y));
+		animation_set->at(ani)->Render(x, y);
 	}
 	else if(type==FONT_TYPE_STATE)
 	{
 		switch(state)
 		{
 		case FONT_STATE_WHITE:
-			animation_set->at(1)->Render(round(x), round(y));
+			animation_set->at(1)->Render(x, y);
 			break;
 		default:
-			animation_set->at(0)->Render(round(x), round(y));
+			animation_set->at(0)->Render(x, y);
 			break;
 		}
 	}
@@ -74,14 +71,14 @@ void CFont::Render()
 		switch (state)
 		{
 		case FONT_STATE_MAX_WHITE:
-			animation_set->at(1)->Render(round(x), round(y));
+			animation_set->at(1)->Render(x, y);
 			break;
 		default:
-			animation_set->at(0)->Render(round(x), round(y));
+			animation_set->at(0)->Render(x, y);
 			break;
 		}
 	}
 	else
-		animation_set->at(0)->Render(round(x), round(y));
+		animation_set->at(0)->Render(x, y);
 
 }

@@ -28,13 +28,12 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		{
 			if (AABBCheck(Mario) == true)
 			{
-				if (Mario->isAttacking == true||Mario->isOnGround==false)
+				if (Mario->isAttacking == true)
 				{
 					if (state != GOOMBA_STATE_DIE)
 					{
+						StartUntouchable();
 						state = GOOMBA_STATE_DIE;
-						SetPosition(x, y - GOOMBA_BBOX_HEIGHT_DIE + GOOMBA_BBOX_HEIGHT);
-						CGame::GetInstance()->SetScores(CGame::GetInstance()->GetScores() + 100);
 						vx = 0;
 						vy = 0;
 					}
@@ -107,7 +106,6 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 									{
 										StartUntouchable();
 										state = GOOMBA_STATE_DIE;
-										CGame::GetInstance()->SetScores(CGame::GetInstance()->GetScores() + 100);
 										vx = 0;
 										vy = 0;
 									}
@@ -134,7 +132,6 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 							{
 								StartUntouchable();
 								state = GOOMBA_STATE_DIE;
-								CGame::GetInstance()->SetScores(CGame::GetInstance()->GetScores() + 100);
 								SetPosition(x, y - GOOMBA_BBOX_HEIGHT_DIE + GOOMBA_BBOX_HEIGHT);
 								vx = 0;
 								vy = 0;
@@ -168,14 +165,12 @@ void CGoomba::SetState(int state)
 	switch (state)
 	{
 		case GOOMBA_STATE_DIE:
-			{				
-				//y += GOOMBA_BBOX_HEIGHT_DIE -GOOMBA_BBOX_HEIGHT   ;
-				vx = 0;
-				vy = 0;
-			}
-				break;
+			//y += GOOMBA_BBOX_HEIGHT_DIE -GOOMBA_BBOX_HEIGHT   ;
+			vx = 0;
+			vy = 0;
+			break;
 		case GOOMBA_STATE_WALKING:
 			vx = -GOOMBA_WALKING_SPEED;
-			break;
+
 	}
 }

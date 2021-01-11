@@ -5,7 +5,6 @@
 #include "Camera.h"
 #include "Sprites.h"
 #include "Font.h"
-#include "Mario.h"
 
 #define RELATIVE_DY 192.0f
 
@@ -24,9 +23,6 @@ class CScoreBoard
 	CFont* marioLifes;
 	CFont* worldNumber;
 	CFont* marioSpeedMaxState;
-	CFont* backgroundFont;
-	CMario* Mario;
-
 public:
 	CScoreBoard();
 
@@ -45,11 +41,6 @@ public:
 	void SetMarioLife(CFont* font) { marioLifes = font; }
 	void SetWorldNumber(CFont* font) { worldNumber = font; }
 	void SetMarioSpeedMaxState(CFont* font) { marioSpeedMaxState = font; }
-	void SetBackGroundFont(CFont* font) { backgroundFont = font; }
-
-	void SetMario(CMario* mario) { Mario = mario; }
-
-	void ConvertNumber(int number, vector<CFont*> vectorFont);
 
 	void Update(float cam_x,float cam_y);
 	void Draw();

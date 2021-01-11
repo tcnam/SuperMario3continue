@@ -241,7 +241,6 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 						{
 							if (state != KOOPAS_STATE_DEFENSE_STATIC)
 							{
-								CGame::GetInstance()->SetScores(CGame::GetInstance()->GetScores() + 100);
 								state = KOOPAS_STATE_DEFENSE_STATIC;
 								vx = 0;
 								vy = 0;
@@ -249,7 +248,6 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 							}
 							else
 							{
-								CGame::GetInstance()->SetScores(CGame::GetInstance()->GetScores() + 100);
 								state = KOOPAS_STATE_DEFENSE_DYNAMIC;
 								MarioMain->SetSpeed(Mario_vx, -MARIO_JUMP_DEFLECT_SPEED);
 								if (MarioMain->Getnx() > 0)
@@ -307,11 +305,7 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 							//y += dy;
 							CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
 							if (goomba->GetState() != GOOMBA_STATE_DIE)
-							{
-								CGame::GetInstance()->SetScores(CGame::GetInstance()->GetScores() + 100);
 								goomba->SetState(GOOMBA_STATE_DIE);
-							}
-								
 						}
 						else
 							vx = -vx;

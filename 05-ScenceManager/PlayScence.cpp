@@ -21,7 +21,6 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath):CScene(id, filePath)
 	player = NULL;
 	Hud = NULL;
 	camera = NULL;
-	tCount = 0;
 }
 
 /*
@@ -333,14 +332,13 @@ void CPlayScene::_ParseSection_HUD(string line)
 			CScoreBoard* scoreboard = new CScoreBoard();
 			LPSPRITE sprites = CSprites::GetInstance()->Get(sprite_id);
 			scoreboard->SetSprite(sprites);
-			scoreboard->SetMario(player);
 			Hud->SetScoreBoard(scoreboard);
 		}
 		break;
 	case HUD_TYPE_FONT:
 		{
-			float x = (float)atof(tokens[1].c_str());
-			float y = (float)atof(tokens[2].c_str());
+			float x = atof(tokens[1].c_str());
+			float y = atof(tokens[2].c_str());
 			int type_font = atoi(tokens[3].c_str());
 			int ani_set_id = atoi(tokens[4].c_str());
 			int font_belong_id = atoi(tokens[5].c_str());
@@ -353,7 +351,6 @@ void CPlayScene::_ParseSection_HUD(string line)
 			switch (font_belong_id)
 			{
 			case -1:
-				Hud->GetScoreBoard()->SetBackGroundFont(font);
 				break;
 			case 0:
 				Hud->GetScoreBoard()->SetWorldNumber(font);
@@ -440,16 +437,13 @@ void CPlayScene::Load()
 	camera = new Camera();
 	camera->SetMario(player);	
 	Hud->SetCamera(camera);
-	CGame::GetInstance()->SetTime(300);
-	tCount = 0;
 }
 
 void CPlayScene::Update(DWORD dt)
 {
 	// We know that Mario is the first object in the list hence we won't add him into the colliable object list
 	// TO-DO: This is a "dirty" way, need a moref organized way 
-	if(tCount==0)
-		tCount = GetTickCount64();
+
 	vector<LPGAMEOBJECT> coObjects;
 	vector<LPGAMEOBJECT> coObjects_Of_FireFlower_Coin_FireBallFlower;			//1: List of collidable Objects of FireFlower(or Coin, or FireBallFlower)
 	vector<LPGAMEOBJECT> coObjects_Of_Bounty;									//2: List of collidable Objects of Bounty
@@ -558,7 +552,6 @@ void CPlayScene::Update(DWORD dt)
 	// Update camera to follow mario
 	camera->Update();
 	Hud->Update();
-	TimeCount();
 }
 
 void CPlayScene::Render()
@@ -586,14 +579,7 @@ void CPlayScene::Unload()
 
 	DebugOut(L"[INFO] Scene %s unloaded! \n", sceneFilePath);
 }
-void CPlayScene::TimeCount()
-{
-	if (GetTickCount64() - tCount >= 1000)
-	{
-		tCount = 0;
-		CGame::GetInstance()->SetTime(CGame::GetInstance()->GetTime() - 1);
-	}
-}
+
 void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 {
 	DebugOut(L"[INFO] KeyDown: %d\n", KeyCode);
@@ -603,57 +589,54 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 	{
 	case DIK_SPACE:
 		//mario->allowJump = false;
+		if (mario->GetLevel() == MARIO_LEVEL_TAIL)				//tail mario
 		{
-			if (mario->GetLevel() == MARIO_LEVEL_TAIL)				//tail mario
+			if (mario->isRunningFastLeft == true)
 			{
-				if (mario->isRunningFastLeft == true)
+				if (mario->isFlying == false)			//set time to start flying 
 				{
-					if (mario->isFlying == false)			//set time to start flying 
-					{
-						mario->SetTimeFly((DWORD)GetTickCount64());
-						mario->isFlying = true;
-					}
-					if ((DWORD)GetTickCount64() - mario->GetTimeFly() < MARIO_FLY_TIME)
-					{
-						mario->SetState(MARIO_STATE_FLYLEFT);
-					}
-					else
-					{
-						mario->StartFlyFall();
-					}
+					mario->SetTimeFly((DWORD)GetTickCount64());
+					mario->isFlying = true;
 				}
-				else if (mario->isRunningFastRight == true)
+				if ((DWORD)GetTickCount64() - mario->GetTimeFly() < MARIO_FLY_TIME)
 				{
-					if (mario->isFlying == false)			//set time to start flying 
-					{
-						mario->SetTimeFly((DWORD)GetTickCount64());
-						mario->isFlying = true;
-					}
-					if ((DWORD)GetTickCount64() - mario->GetTimeFly() < MARIO_FLY_TIME)
-					{
-						mario->SetState(MARIO_STATE_FLYRIGHT);
-					}
-					else
-					{
-						mario->StartFlyFall();
-					}
-				}
+					mario->SetState(MARIO_STATE_FLYLEFT);
+				}					
 				else
 				{
-					if (mario->isOnGround == true)
-						mario->SetState(MARIO_STATE_JUMP);
-					else
-					{
-						mario->StartFlyFall();
-					}
+					mario->StartFlyFall();
+				}
+			}
+			else if (mario->isRunningFastRight == true)
+			{
+				if (mario->isFlying == false)			//set time to start flying 
+				{
+					mario->SetTimeFly((DWORD)GetTickCount64());
+					mario->isFlying = true;
+				}
+				if ((DWORD)GetTickCount64() - mario->GetTimeFly() < MARIO_FLY_TIME )
+				{
+					mario->SetState(MARIO_STATE_FLYRIGHT);
+				}					
+				else
+				{
+					mario->StartFlyFall();
 				}
 			}
 			else
 			{
-				mario->SetState(MARIO_STATE_JUMP);
+				if (mario->isOnGround == true)
+					mario->SetState(MARIO_STATE_JUMP);
+				else
+				{
+					mario->StartFlyFall();
+				}
 			}
 		}
-		
+		else
+		{
+			mario->SetState(MARIO_STATE_JUMP);
+		}
 		break;
 	case DIK_1:
 		mario->ResetSmall();
@@ -726,8 +709,19 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 		{
 			if (game->IsKeyDown(DIK_Z))
 			{
-				mario->isRunningLeft = true;
-				mario->SetState(MARIO_STATE_RUNNING_LEFT);
+				if (mario->isRunningLeft == false)
+					mario->SetTimeRunningLeft((DWORD)GetTickCount64());
+				if ((DWORD)GetTickCount64() - mario->GetTimeRunningLeft() > MARIO_RUNTIME)
+				{
+					mario->isRunningLeft = true;
+					mario->isRunningFastLeft = true;
+					mario->SetState(MARIO_STATE_RUNNINGFAST_LEFT);
+				}
+				else
+				{
+					mario->isRunningLeft = true;
+					mario->SetState(MARIO_STATE_RUNNING_LEFT);
+				}
 			}
 			else
 			{
@@ -753,8 +747,19 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 		{
 			if (game->IsKeyDown(DIK_Z))
 			{
-				mario->isRunningRight = true;
-				mario->SetState(MARIO_STATE_RUNNING_RIGHT);
+				if (mario->isRunningRight == false)
+					mario->SetTimeRunningRight((DWORD)GetTickCount64());
+				if ((DWORD)GetTickCount64() - mario->GetTimeRuningRight() > MARIO_RUNTIME)
+				{
+					mario->isRunningRight = true;
+					mario->isRunningFastRight = true;
+					mario->SetState(MARIO_STATE_RUNNINGFAST_RIGHT);
+				}
+				else
+				{
+					mario->isRunningRight = true;
+					mario->SetState(MARIO_STATE_RUNNING_RIGHT);
+				}
 			}
 			else
 			{
@@ -772,8 +777,20 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 			}			
 		}			
 	}
+	/*else if (game->IsKeyDown(DIK_SPACE))
+	{
+		mario->SetTimeJump(GetTickCount());
+		
+		if (GetTickCount() - mario->GetTimeJump() >100)
+			mario->SetState(MARIO_STATE_HIGHJUMP);
+		else
+			mario->SetState(MARIO_STATE_JUMP);
+		mario->allowJump = false;
+		
+	}*/
 	else if(!game->IsKeyDown(DIK_SPACE))
 	{
 		mario->SetState(MARIO_STATE_IDLE);
+		//mario->SetState(MARIO_STATE_SLIDE)
 	}		
 }
