@@ -90,7 +90,7 @@ void CFireBall::Render()
 	if (isFinished == true)
 		return;
 	if (nx > 0)
-		animation_set->at(0)->Render(x, y);
+		animation_set->at(0)->Render(round(x), round(y));
 	else
-		animation_set->at(1)->Render(x, y);
+		animation_set->at(1)->Render(round(x), round(y));
 }

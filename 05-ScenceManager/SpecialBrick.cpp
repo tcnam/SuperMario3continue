@@ -46,9 +46,9 @@ void CSpecialBrick::ActivateFragment()
 void CSpecialBrick::Render()
 {
 	if (state == SPECIALBRICK_STATE_EMPTY)
-		animation_set->at(1)->Render(x, y);
+		animation_set->at(1)->Render(round(x), round(y));
 	else
-		animation_set->at(0)->Render(x, y);		//normal bounty brick animation
+		animation_set->at(0)->Render(round(x), round(y));		//normal bounty brick animation
 	//RenderBoundingBox();
 }
 

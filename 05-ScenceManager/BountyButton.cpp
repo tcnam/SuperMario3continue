@@ -23,9 +23,9 @@ void CBountyButton::Render()
 	if (isInsideSpecialBrick == true)
 		return;
 	if (isFinished == true)
-		animation_set->at(1)->Render(x, y);
+		animation_set->at(1)->Render(round(x), round(y));
 	else
-		animation_set->at(0)->Render(x, y);
+		animation_set->at(0)->Render(round(x), round(y));
 	RenderBoundingBox();
 }
 void CBountyButton::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)

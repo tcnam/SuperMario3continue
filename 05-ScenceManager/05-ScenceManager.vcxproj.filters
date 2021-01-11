@@ -97,6 +97,9 @@
     <Filter Include="Object\HUD\Square">
       <UniqueIdentifier>{c7e2846b-3000-4273-a4aa-c4962b1b1f65}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Object\HUD\Font">
+      <UniqueIdentifier>{f6a820bc-680e-4f09-bd5f-56cda73df34d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animations.cpp">
@@ -188,6 +191,9 @@
     </ClCompile>
     <ClCompile Include="Hud.cpp">
       <Filter>Object\HUD</Filter>
+    </ClCompile>
+    <ClCompile Include="Font.cpp">
+      <Filter>Object\HUD\Font</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -283,6 +289,9 @@
     </ClInclude>
     <ClInclude Include="Hud.h">
       <Filter>Object\HUD</Filter>
+    </ClInclude>
+    <ClInclude Include="Font.h">
+      <Filter>Object\HUD\Font</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

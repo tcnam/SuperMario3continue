@@ -9,9 +9,9 @@ CBountyBrick::CBountyBrick() :CGameObject()
 void CBountyBrick::Render()
 {
 	if (state == BOUNTYBRICK_STATE_EMPTY)
-		animation_set->at(1)->Render(x, y);		//empty bounty brick animation
+		animation_set->at(1)->Render(round(x), round(y));		//empty bounty brick animation
 	else if(state==BOUNTYBRICK_STATE_NORMAL)
-		animation_set->at(0)->Render(x, y);		//normal bounty brick animation
+		animation_set->at(0)->Render(round(x), round(y));		//normal bounty brick animation
 	//RenderBoundingBox();
 }
 void CBountyBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)

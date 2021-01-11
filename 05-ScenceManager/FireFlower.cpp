@@ -128,7 +128,7 @@ void CFireFlower::Render()
 		ani = FIREFLOWER_ANI_RIGHT_LOWER;
 	else
 		ani = FIREFLOWER_ANI_LEFT_LOWER;
-	animation_set->at(ani)->Render(x, y);	
+	animation_set->at(ani)->Render(round(x), round(y));	
 	RenderBoundingBox();
 }
 void CFireFlower::SetState(int state)

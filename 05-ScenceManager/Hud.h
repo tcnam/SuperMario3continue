@@ -16,6 +16,7 @@ public:
 	CHud();
 	void SetCamera(Camera* cm) { camera = cm; }
 	void SetScoreBoard(CScoreBoard* sb) { ScoreBoard = sb; }
+	CScoreBoard* GetScoreBoard() { return ScoreBoard; }
 	void Update();
 	void Render();
 	~CHud();

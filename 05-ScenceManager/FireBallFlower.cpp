@@ -28,5 +28,5 @@ void CFireBallFlower::GetBoundingBox(float& left, float& top, float& right, floa
 }
 void CFireBallFlower::Render()
 {
-	animation_set->at(1)->Render(x, y);
+	animation_set->at(1)->Render(round(x), round(y));
 }

@@ -10,7 +10,7 @@ void CWeakBrick::Render()
 {
 	if (state == WEAKBRICK_STATE_DISAPPEAR)
 		return;
-	animation_set->at(0)->Render(x, y);		//normal bounty brick animation
+	animation_set->at(0)->Render(round(x), round(y));		//normal bounty brick animation
 	//RenderBoundingBox();
 }
 void CWeakBrick::ActivateFragment()

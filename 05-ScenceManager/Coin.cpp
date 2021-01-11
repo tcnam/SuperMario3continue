@@ -13,7 +13,7 @@ void CCoin::Render()
 	if (isFinished == true)
 		return;
 	else
-		animation_set->at(0)->Render(x, y);
+		animation_set->at(0)->Render(round(x), round(y));
 }
 void CCoin::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {

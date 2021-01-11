@@ -114,12 +114,10 @@ void CPlayScene::_ParseSection_ANIMATION_SETS(string line)
 
 	for (unsigned int i = 1; i < tokens.size(); i++)
 	{
-		int ani_id = atoi(tokens[i].c_str());
-		
+		int ani_id = atoi(tokens[i].c_str());		
 		LPANIMATION ani = animations->Get(ani_id);
 		s->push_back(ani);
 	}
-
 	CAnimationSets::GetInstance()->Add(ani_set_id, s);
 }
 
@@ -325,16 +323,59 @@ void CPlayScene::_ParseSection_HUD(string line)
 {
 	vector<string> tokens = split(line);
 	if (tokens.size() < 2)return;
-	int type = atoi(tokens[0].c_str());
-	int sprite_id= atoi(tokens[1].c_str());
+	int type = atoi(tokens[0].c_str());	
 	switch (type)
 	{
 	case HUD_TYPE_SCOREBOARD:
 		{
+			int sprite_id = atoi(tokens[1].c_str());
 			CScoreBoard* scoreboard = new CScoreBoard();
 			LPSPRITE sprites = CSprites::GetInstance()->Get(sprite_id);
 			scoreboard->SetSprite(sprites);
 			Hud->SetScoreBoard(scoreboard);
+		}
+		break;
+	case HUD_TYPE_FONT:
+		{
+			float x = atof(tokens[1].c_str());
+			float y = atof(tokens[2].c_str());
+			int type_font = atoi(tokens[3].c_str());
+			int ani_set_id = atoi(tokens[4].c_str());
+			int font_belong_id = atoi(tokens[5].c_str());
+			CFont* font = new CFont();
+			CAnimationSets* animation_sets = CAnimationSets::GetInstance();
+			font->SetRelativePosition(x, y);
+			font->SetType(type_font);
+			LPANIMATION_SET ani_set = animation_sets->Get(ani_set_id);
+			font->SetAnimationSet(ani_set);
+			switch (font_belong_id)
+			{
+			case -1:
+				break;
+			case 0:
+				Hud->GetScoreBoard()->SetWorldNumber(font);
+				break;
+			case 1:
+				Hud->GetScoreBoard()->PushSpeedState(font);
+				break;
+			case 2:
+				Hud->GetScoreBoard()->SetMarioSpeedMaxState(font);
+				break;
+			case 3:
+				Hud->GetScoreBoard()->PushCoins(font);
+				break;
+			case 4:
+				Hud->GetScoreBoard()->SetMarioLife(font);
+				break;
+			case 5:
+				Hud->GetScoreBoard()->PushScores(font);
+				break;
+			case 6:
+				Hud->GetScoreBoard()->PushTime(font);
+				break;
+
+			}
+			
 		}
 		break;
 	}
