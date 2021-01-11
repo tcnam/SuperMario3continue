@@ -7,6 +7,7 @@ CTerrain::CTerrain()
 	x = 0;
 	y = 0;
 	sprite = NULL;
+	//
 }
 void CTerrain::Draw(float x, float y,int alpha)
 {
