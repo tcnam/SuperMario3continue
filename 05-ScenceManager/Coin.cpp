@@ -18,7 +18,10 @@ void CCoin::Render()
 void CCoin::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	if (isFinished == true)
+	{
 		return;
+	}
+		
 	if (isInsideWeakBrick == true)
 		return;
 	CGameObject::Update(dt, coObjects);
@@ -26,7 +29,12 @@ void CCoin::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	vector<LPCOLLISIONEVENT> coEventsResult;
 	coEvents.clear();
 	if (AABBCheck(Mario) == true)
+	{
+		CGame::GetInstance()->SetCoins(CGame::GetInstance()->GetCoins() + 1);
+		CGame::GetInstance()->SetScores(CGame::GetInstance()->GetScores() + 100);
 		isFinished = true;
+	}
+		
 	CalcPotentialCollisions(coObjects, coEvents);
 	if (coEvents.size() != 0)
 	{
@@ -35,7 +43,12 @@ void CCoin::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		float rdy = 0;
 		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
 		if (nx != 0 || ny != 0)
+		{
+			CGame::GetInstance()->SetCoins(CGame::GetInstance()->GetCoins() + 1);
+			CGame::GetInstance()->SetScores(CGame::GetInstance()->GetScores() + 100);
 			isFinished = true;
+		}
+			
 	}
 }
 

@@ -12,6 +12,7 @@
 #define SCREEN_HEIGHT 256.0f
 #define MAP_WIDTH	2816.0f
 #define MAP_HEIGHT	448.0f
+#define onesec		1000
 #include <dinput.h>
 
 #include "Scence.h"
@@ -41,6 +42,12 @@ class CGame
 
 	float cam_x = 0.0f;
 	float cam_y = 0.0f;
+
+	int Coins = 0;
+	int Scores = 0;
+	int Time = 0;
+	int life = 4;
+	int World = 1;
 
 	int screen_width;
 	int screen_height; 
@@ -72,6 +79,21 @@ public:
 
 	int GetMapWidth() { return map_width; }
 	int GetMapHeight() { return map_height; }
+
+	int GetCoins() { return Coins; }
+	void SetCoins(int n) { Coins = n; }
+
+	int GetScores() { return Scores; }
+	void SetScores(int n) { Scores = n; }
+
+	int GetLife() { return life; }
+	void SetLife(int n) { life = n; }
+
+	int GetTime() { return Time; }
+	void SetTime(int n) { Time = n; }
+
+	int GetWorld() { return World; }
+	void SetWorld(int n) { World = n; }
 
 	static void SweptAABB(
 		float ml,			// move left 

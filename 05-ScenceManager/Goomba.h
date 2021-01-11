@@ -3,6 +3,7 @@
 #include "Brick.h"
 #include "Mario.h"
 #include "BountyBrick.h"
+#include "Game.h"
 
 #define GOOMBA_WALKING_SPEED 0.05f;
 #define GOOMBA_GRAVITY			0.002f	

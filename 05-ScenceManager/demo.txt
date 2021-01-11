@@ -12,7 +12,7 @@
 70	textures\misc1.png	166	185	255
 80	textures\misc.png	176	224	248
 90	textures\hud.png	81	255	191
-95	textures\hud2.png	81	255	191
+95	textures\hud2.png	232	226	1
 
 
 #Mario:  10000
@@ -960,9 +960,9 @@
 1	2176	-16	20
 1	2192	-16	20
 1	2208	-16	20
-1	2224	-16	23
+1	2222	-16	23
 # ---- ground brick 7 ----
-1	2256	-16	22			
+1	2257	-16	22			
 1	2272	-16	20
 1	2288	-16	20
 1	2304	-16	20
@@ -2405,8 +2405,8 @@
 #ScoreBoard
 0	22000
 #FONT
-#Background
-2	0	16	2	43	1
+#Background Font
+2	4	15	0	43	-1
 #World Number - 0
 2	38	8	1	40	0
 #Speed State - 1	

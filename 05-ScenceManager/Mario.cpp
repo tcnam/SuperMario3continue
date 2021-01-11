@@ -13,7 +13,6 @@ CMario::CMario(float x, float y) : CGameObject()
 	level = MARIO_LEVEL_BIG;
 	untouchable = 0;
 	SetState(MARIO_STATE_IDLE);
-	numberOfCoins = Scores = 0;
 	isOnGround = false;
 	isTransform = false;
 
@@ -37,7 +36,7 @@ CMario::CMario(float x, float y) : CGameObject()
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
-	if (vy > 0)
+	if (vy > 0.04f)
 		isOnGround = false;
 	// Calculate dx, dy 
 	CGameObject::Update(dt);
@@ -114,11 +113,11 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		{
 			vy = 0;
 			isFlyFall = false;
-			if (state != MARIO_STATE_RUNNINGFAST_LEFT && state != MARIO_STATE_RUNNINGFAST_RIGHT)
-			{
-				isRunningFastLeft = isRunningFastRight = false;
-				isFlying = false;
-			}
+			//if (state != MARIO_STATE_RUNNINGFAST_LEFT && state != MARIO_STATE_RUNNINGFAST_RIGHT)
+			//{
+			//	isRunningFastLeft = isRunningFastRight = false;
+			//	isFlying = false;
+			//}
 			if (!isOnGround)
 			{
 				isOnGround = true;
@@ -707,7 +706,20 @@ void CMario::Walk()
 }
 void CMario::Run()
 {
-	vx = MARIO_RUNNING_SPEED * nx;
+	if (vx >= MARIO_WALKING_SPEED && vx < MARIO_RUNNING_SPEED)
+	{
+		if (nx > 0)
+			vx += 0.001f;
+		else
+			vx -= 0.001f;
+	}
+		
+	else if (vx >= MARIO_RUNNING_SPEED)
+		vx = MARIO_RUNNING_SPEED;
+	else if(vx<MARIO_WALKING_SPEED)
+		vx = MARIO_WALKING_SPEED;
+	vx = vx * nx;
+	DebugOut(L"speed:%f" , vx);
 }
 void CMario::RunFast()
 {

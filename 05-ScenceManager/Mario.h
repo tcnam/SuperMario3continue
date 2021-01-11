@@ -5,17 +5,17 @@
 #include "FireBall.h"
 
 
-#define MARIO_WALKING_SPEED		0.05f 
-#define MARIO_RUNNING_SPEED		0.12f
+#define MARIO_WALKING_SPEED		0.1f 
+#define MARIO_RUNNING_SPEED		0.22f
 #define MARIO_RUNNINGFAST_SPEED	0.2f
 //0.1f
-#define MARIO_JUMP_SPEED_Y		0.5f
+#define MARIO_JUMP_SPEED_Y		0.33f
 #define MARIO_JUMPHIGH_SPEED_Y	0.7f
-#define MARIO_FLY_SPEED_Y		0.3f
-#define MARIO_JUMP_DEFLECT_SPEED 0.35f
-#define MARIO_GRAVITY			0.002f
-#define MARIO_RESIST_GRAVITY	0.05f	//0.00095f
-#define MARIO_DIE_DEFLECT_SPEED	 0.6f
+#define MARIO_FLY_SPEED_Y		0.06f
+#define MARIO_JUMP_DEFLECT_SPEED 0.2f
+#define MARIO_GRAVITY			0.0008f
+#define MARIO_RESIST_GRAVITY	0.04f	//0.00095f
+#define MARIO_DIE_DEFLECT_SPEED	 0.4f
 #define MARIO_DX_RUNNING_LIMIT		256
 
 #define MARIO_STATE_IDLE				0
@@ -145,8 +145,7 @@ class CMario : public CGameObject
 	float start_x;			// initial position of Mario at scene
 	float start_y; 
 
-	int numberOfCoins;
-	int Scores;
+	
 
 	CFireBall* fireballs;
 	
@@ -166,6 +165,7 @@ class CMario : public CGameObject
 
 	
 public:
+
 	bool untouchable;
 	bool isOnGround;
 	bool isTransform;
@@ -223,10 +223,6 @@ public:
 	int GetLevel() { return level; }
 	int Getnx() { return nx; }
 
-	void SetNumberOfCoin(int coins) { numberOfCoins = coins; }
-	void SetScore(int sc) { Scores = sc; }
-	int GetNumberOfCoin() { return this->numberOfCoins; }
-	int GetScore() { return this->Scores; }
 
 	void StartUntouchable() { untouchable = true; untouchable_start = (DWORD)GetTickCount64(); }
 	void StartFlyFall() { isFlyFall = true; FlyFall_start = (DWORD)GetTickCount64(); }

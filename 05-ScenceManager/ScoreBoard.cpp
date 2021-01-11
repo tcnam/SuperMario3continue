@@ -11,6 +11,31 @@ CScoreBoard::CScoreBoard()
 	marioLifes = NULL;
 	marioSpeedMaxState = NULL;
 	worldNumber = NULL;
+	backgroundFont = NULL;
+	Mario = NULL;
+}
+void CScoreBoard::ConvertNumber(int n,vector<CFont*> vectorFont)
+{
+	vector<int> temp;
+	while (n != 0)
+	{
+		temp.push_back(n % 10);
+		n = n / 10;
+	}
+	if (temp.size() == 1)
+	{
+		vectorFont[1]->SetState(temp[0]);
+		return;
+	}
+	else
+	{
+		int indexVector = vectorFont.size() - 1;
+		for (unsigned int i = 0; i <temp.size(); i++)
+		{			
+			vectorFont[indexVector]->SetState(temp[i]);
+			indexVector--;
+		}
+	}	
 }
 void CScoreBoard::Update(float cam_x,float cam_y)
 {
@@ -18,23 +43,32 @@ void CScoreBoard::Update(float cam_x,float cam_y)
 	y = cam_y + RELATIVE_DY;
 	for (unsigned int i = 0; i < scores.size(); i++)
 	{
-		scores[i]->Update(round(x),round(y));
+		ConvertNumber(CGame::GetInstance()->GetScores(), scores);
+		scores[i]->Update(x,y);
 	}
 	for (unsigned int i = 0; i < numberOfCoins.size(); i++)
 	{
-		numberOfCoins[i]->Update(round(x), round(y));
+		ConvertNumber(CGame::GetInstance()->GetCoins(),numberOfCoins);
+		numberOfCoins[i]->Update(x, y);
 	}
 	for (unsigned int i = 0; i < time.size(); i++)
 	{
-		time[i]->Update(round(x), round(y));
+		ConvertNumber(CGame::GetInstance()->GetTime(), time);
+		time[i]->Update(x, y);
 	}
 	for (unsigned int i = 0; i < marioSpeedState.size(); i++)
 	{
-		marioSpeedState[i]->Update(round(x), round(y));
+		marioSpeedState[i]->Update(x, y);
 	}
-	worldNumber->Update(round(x),round(y));
-	marioLifes->Update(round(x), round(y));
-	marioSpeedMaxState->Update(round(x), round(y));
+	backgroundFont->Update(x, y);
+
+	worldNumber->SetState(CGame::GetInstance()->GetWorld());
+	worldNumber->Update(x,y);
+
+	marioLifes->SetState(CGame::GetInstance()->GetLife());
+	marioLifes->Update(x, y);
+
+	marioSpeedMaxState->Update(x, y);
 }
 void CScoreBoard::Draw()
 {
@@ -56,6 +90,7 @@ void CScoreBoard::Draw()
 	{
 		marioSpeedState[i]->Render();
 	}
+	backgroundFont->Render();
 	worldNumber->Render();
 	marioLifes->Render();
 	marioSpeedMaxState->Render();
