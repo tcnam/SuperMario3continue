@@ -305,7 +305,6 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	obj->SetAnimationSet(ani_set);
 	objects.push_back(obj);
 }
-
 void CPlayScene::_ParseSection_TERRAIN(string line)
 {
 	vector<string> tokens = split(line);

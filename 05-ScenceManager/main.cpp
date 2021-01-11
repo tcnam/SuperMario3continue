@@ -31,7 +31,6 @@
 
 #define BACKGROUND_COLOR D3DCOLOR_XRGB(156, 252, 240)
 
-
 #define MAX_FRAME_RATE 120
 
 CGame *game;

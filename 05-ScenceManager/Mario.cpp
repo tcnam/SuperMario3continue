@@ -855,4 +855,3 @@ void CMario::ResetFire()
 	SetSpeed(0, 0);
 }
 
-
