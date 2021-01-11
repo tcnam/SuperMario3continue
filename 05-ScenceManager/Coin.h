@@ -1,6 +1,7 @@
 #pragma once
 #include "GameObject.h"
 #include "Mario.h"
+#include "Game.h"
 
 #define COIN_BBOX_WIDTH  16
 #define COIN_BBOX_HEIGHT 16

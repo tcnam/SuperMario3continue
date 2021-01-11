@@ -47,6 +47,8 @@ protected:
 	Camera* camera;
 	CHud* Hud;
 
+	DWORD tCount;
+
 	void _ParseSection_TEXTURES(string line);
 	void _ParseSection_SPRITES(string line);
 	void _ParseSection_ANIMATIONS(string line);
@@ -57,7 +59,7 @@ protected:
 	
 public: 
 	CPlayScene(int id, LPCWSTR filePath);
-
+	void TimeCount();
 	virtual void Load();
 	virtual void Update(DWORD dt);
 	virtual void Render();

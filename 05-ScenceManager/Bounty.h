@@ -2,6 +2,7 @@
 #include "GameObject.h"
 #include "Utils.h"
 #include "Mario.h"
+#include "Game.h"
 
 #define BOUNTY_BBOX_WIDTH  16
 #define BOUNTY_BBOX_HEIGHT 16
