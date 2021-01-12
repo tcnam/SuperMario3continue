@@ -195,6 +195,9 @@
     <ClCompile Include="Font.cpp">
       <Filter>Object\HUD\Font</Filter>
     </ClCompile>
+    <ClCompile Include="Square.cpp">
+      <Filter>Object\HUD\Square</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animations.h">
@@ -292,6 +295,9 @@
     </ClInclude>
     <ClInclude Include="Font.h">
       <Filter>Object\HUD\Font</Filter>
+    </ClInclude>
+    <ClInclude Include="Square.h">
+      <Filter>Object\HUD\Square</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -39,8 +39,8 @@ void CScoreBoard::ConvertNumber(int n,vector<CFont*> vectorFont)
 }
 void CScoreBoard::Update(float cam_x,float cam_y)
 {
-	x = cam_x;
-	y = cam_y + RELATIVE_DY;
+	x = cam_x+RELATIVE_DX_SB;
+	y = cam_y + RELATIVE_DY_SB;
 	for (unsigned int i = 0; i < scores.size(); i++)
 	{
 		ConvertNumber(CGame::GetInstance()->GetScores(), scores);

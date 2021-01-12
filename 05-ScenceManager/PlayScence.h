@@ -23,6 +23,7 @@
 #include "ScoreBoard.h"
 #include "Hud.h"
 #include "Font.h"
+#include "Square.h"
 
 
 

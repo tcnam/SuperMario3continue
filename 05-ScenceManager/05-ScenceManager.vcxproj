@@ -144,6 +144,7 @@
     <ClCompile Include="Portal.cpp" />
     <ClCompile Include="ScoreBoard.cpp" />
     <ClCompile Include="SpecialBrick.cpp" />
+    <ClCompile Include="Square.cpp" />
     <ClCompile Include="Terrain.cpp" />
     <ClCompile Include="Utils.cpp" />
     <ClCompile Include="Game.cpp" />
@@ -178,6 +179,7 @@
     <ClInclude Include="SceneIntro.h" />
     <ClInclude Include="ScoreBoard.h" />
     <ClInclude Include="SpecialBrick.h" />
+    <ClInclude Include="Square.h" />
     <ClInclude Include="Terrain.h" />
     <ClInclude Include="Utils.h" />
     <ClInclude Include="Game.h" />

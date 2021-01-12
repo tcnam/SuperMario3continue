@@ -336,6 +336,23 @@ void CPlayScene::_ParseSection_HUD(string line)
 			Hud->SetScoreBoard(scoreboard);
 		}
 		break;
+	case HUD_TYPE_SQUARE:
+		{
+			int sprite_id = atoi(tokens[1].c_str());
+			CSquare* square = new CSquare();
+			LPSPRITE sprites = CSprites::GetInstance()->Get(sprite_id);
+			square->SetSprite(sprites);
+			square->SetMario(player);
+			Hud->SetSquare(square);
+		}
+		break;
+	case HUD_TYPE_BACKGROUND:
+		{
+			int sprite_id = atoi(tokens[1].c_str());
+			LPSPRITE sprites = CSprites::GetInstance()->Get(sprite_id);
+			Hud->SetSprite(sprites);
+		}
+		break;
 	case HUD_TYPE_FONT:
 		{
 			float x = (float)atof(tokens[1].c_str());
@@ -440,7 +457,7 @@ void CPlayScene::Load()
 	camera->SetMario(player);	
 	Hud->SetCamera(camera);
 	CGame::GetInstance()->SetTime(300);
-	tCount = 0;
+	tCount = DWORD(0);
 }
 
 void CPlayScene::Update(DWORD dt)
@@ -448,7 +465,7 @@ void CPlayScene::Update(DWORD dt)
 	// We know that Mario is the first object in the list hence we won't add him into the colliable object list
 	// TO-DO: This is a "dirty" way, need a moref organized way 
 	if(tCount==0)
-		tCount = GetTickCount64();
+		tCount = (DWORD)GetTickCount64();
 	vector<LPGAMEOBJECT> coObjects;
 	vector<LPGAMEOBJECT> coObjects_Of_FireFlower_Coin_FireBallFlower;			//1: List of collidable Objects of FireFlower(or Coin, or FireBallFlower)
 	vector<LPGAMEOBJECT> coObjects_Of_Bounty;									//2: List of collidable Objects of Bounty
@@ -465,25 +482,36 @@ void CPlayScene::Update(DWORD dt)
 	{
 		if (objects[i]->type == OBJECT_TYPE_MARIO)				//1,2,3,4,7
 		{
-			coObjects_Of_FireFlower_Coin_FireBallFlower.push_back(objects[i]);
-			coObjects_Of_Bounty.push_back(objects[i]);
-			coObjects_Of_Goomba.push_back(objects[i]);
-			coObjects_Of_Koopas.push_back(objects[i]);					
-			coObjects_Of_BountyBrick_WeakBrick.push_back(objects[i]);
+			if (((CMario*)objects[i])->untouchable == true)
+			{
+				coObjects_Of_FireFlower_Coin_FireBallFlower.push_back(objects[i]);
+				coObjects_Of_Bounty.push_back(objects[i]);
+				coObjects_Of_BountyBrick_WeakBrick.push_back(objects[i]);
+			}
+			else
+			{
+				coObjects_Of_FireFlower_Coin_FireBallFlower.push_back(objects[i]);
+				coObjects_Of_Bounty.push_back(objects[i]);
+				coObjects_Of_BountyBrick_WeakBrick.push_back(objects[i]);
+				coObjects_Of_Goomba.push_back(objects[i]);
+				coObjects_Of_Koopas.push_back(objects[i]);
+			}			
 		}
 		else if (objects[i]->type == OBJECT_TYPE_KOOPAS)			//4,5,7
 		{
 			coObjects_Of_Koopas.push_back(objects[i]);
 			coObbjects_Of_FireBall.push_back(objects[i]);
 			coObjects_Of_BountyBrick_WeakBrick.push_back(objects[i]);
-			coObjects_Of_Mario.push_back(objects[i]);
+			if(player->untouchable==false)
+				coObjects_Of_Mario.push_back(objects[i]);
 		}
 		else if (objects[i]->type == OBJECT_TYPE_GOOMBA)		//3,4,5
 		{
 			coObjects_Of_Goomba.push_back(objects[i]);
 			coObjects_Of_Koopas.push_back(objects[i]);
 			coObbjects_Of_FireBall.push_back(objects[i]);
-			coObjects_Of_Mario.push_back(objects[i]);
+			if (player->untouchable == false)
+				coObjects_Of_Mario.push_back(objects[i]);
 		}
 		else if (objects[i]->type == OBJECT_TYPE_FIREFLOWER)	//4,5
 		{

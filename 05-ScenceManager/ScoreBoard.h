@@ -7,7 +7,8 @@
 #include "Font.h"
 #include "Mario.h"
 
-#define RELATIVE_DY 192.0f
+#define RELATIVE_DX_SB 10.0f
+#define RELATIVE_DY_SB 192.0f
 
 class CScoreBoard
 {

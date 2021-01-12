@@ -11,6 +11,7 @@
 60	textures\flowerl.png	255	255	255
 70	textures\misc1.png	166	185	255
 80	textures\misc.png	176	224	248
+85	textures\hudbg.png	255	255	255
 90	textures\hud.png	81	255	191
 95	textures\hud2.png	232	226	1
 
@@ -219,6 +220,10 @@
 20010	200	153	216	160	70
 #ScoreBoard
 22000	11	127	165	157	90
+#Square
+23000	171	127	245	157	90
+#BackGround Hud
+24000	0	0	272	32	85
 #Number
 21000	77	31	85	38	90
 21001	88	31	94	38	90
@@ -2400,10 +2405,13 @@
 1376	-256	60011
 1376	-272	60000
 1376	-280	60001
-0	0	21000
 [SCOREBOARD]
 #ScoreBoard
 0	22000
+#Suare
+1	23000
+#BackGround Hud
+3	24000
 #FONT
 #Background Font
 2	4	15	0	43	-1

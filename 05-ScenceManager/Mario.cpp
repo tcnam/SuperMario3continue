@@ -106,18 +106,22 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	/*	if (rdx != 0 && rdx!=dx)
 			x += nx*abs(rdx); */
 			// block every object first!
+
 		x += min_tx * dx + nx * 0.4f;
 		y += min_ty * dy + ny * 0.4f;
-		if (nx != 0) vx = 0;
+		if (nx != 0)
+		{			
+			vx = 0;
+		}
 		if (ny < 0)
-		{
+		{			
 			vy = 0;
 			isFlyFall = false;
-			//if (state != MARIO_STATE_RUNNINGFAST_LEFT && state != MARIO_STATE_RUNNINGFAST_RIGHT)
-			//{
-			//	isRunningFastLeft = isRunningFastRight = false;
-			//	isFlying = false;
-			//}
+			if (state != MARIO_STATE_RUNNINGFAST_LEFT && state != MARIO_STATE_RUNNINGFAST_RIGHT)
+			{
+				isRunningFastLeft = isRunningFastRight = false;
+				isFlying = false;
+			}
 			if (!isOnGround)
 			{
 				isOnGround = true;
@@ -539,7 +543,7 @@ void CMario::Render()
 
 	animation_set->at(ani)->Render(round(x), round(y), alpha);
 
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 void CMario::SetState(int state)
@@ -558,21 +562,15 @@ void CMario::SetState(int state)
 		Right();
 		Run();
 		break;
-	case MARIO_STATE_RUNNINGFAST_RIGHT:
-		Right();
-		RunFast();
-		DebugOut(L"running fast right\n");
-		break;
+	//case MARIO_STATE_RUNNINGFAST_RIGHT:
+	//	Right();
+	//	RunFast();
+	//	DebugOut(L"running fast right\n");
+	//	break;
 	case MARIO_STATE_FLYRIGHT:
 		DebugOut(L"fly right\n");
 		Fly();
 		break;
-	/*case MARIO_STATE_SLIDE_RIGHT:
-		DebugOut(L"Slide right\n");
-		Right();		
-		Slide();
-		DebugOut(L"vx: %f\n", vx);
-		break;*/
 	
 	case MARIO_STATE_WALKING_LEFT: 
 		DebugOut(L"walking left\n");
@@ -585,21 +583,15 @@ void CMario::SetState(int state)
 		//DebugOut(L"vx: %f\n", vx);
 		Run();
 		break;	
-	case MARIO_STATE_RUNNINGFAST_LEFT:
-		DebugOut(L"running fast left\n");
-		Left();
-		RunFast();
-		break;
+	//case MARIO_STATE_RUNNINGFAST_LEFT:
+	//	DebugOut(L"running fast left\n");
+	//	Left();
+	//	RunFast();
+	//	break;
 	case MARIO_STATE_FLYLEFT:
 		DebugOut(L"fly left\n");
 		Fly();
 		break;
-	/*case MARIO_STATE_SLIDE_LEFT:
-		DebugOut(L"Slide left\n");
-		Left();
-		Slide();
-		DebugOut(L"vx: %f\n", vx);
-		break;*/
 	
 	case MARIO_STATE_CHANGERIGHT:
 		DebugOut(L"Change right\n");
@@ -617,9 +609,6 @@ void CMario::SetState(int state)
 		DebugOut(L"Jump\n");
 		Jump();
 		break;
-	/*case MARIO_STATE_HIGHJUMP:
-		JumpHigh();
-		break;*/
 	case MARIO_STATE_IDLE: 
 		Stop();
 		break;	
@@ -706,17 +695,14 @@ void CMario::Walk()
 }
 void CMario::Run()
 {
-	if (vx >= MARIO_WALKING_SPEED && vx < MARIO_RUNNING_SPEED)
+	
+	if (abs(vx) >= MARIO_WALKING_SPEED && abs(vx) < MARIO_RUNNING_SPEED&&isOnGround==true)
 	{
-		if (nx > 0)
-			vx += 0.001f;
-		else
-			vx -= 0.001f;
+		vx = abs(vx) + 0.01f;
 	}
-		
-	else if (vx >= MARIO_RUNNING_SPEED)
+	if (abs(vx) >= MARIO_RUNNING_SPEED)
 		vx = MARIO_RUNNING_SPEED;
-	else if(vx<MARIO_WALKING_SPEED)
+	if(abs(vx)<MARIO_WALKING_SPEED)
 		vx = MARIO_WALKING_SPEED;
 	vx = vx * nx;
 	DebugOut(L"speed:%f" , vx);
@@ -744,28 +730,6 @@ void CMario::Fly()
 	vx = MARIO_RUNNING_SPEED * nx;
 	isOnGround = false;
 }
-//void CMario :: Slide()
-//{
-//	if (isSliding == false)
-//		return;
-//	else
-//	{
-//		if (isRunningLeft == true)
-//			vx = MARIO_RUNNING_SPEED * nx;
-//		else if (isRunningRight == true)
-//			vx = MARIO_RUNNING_SPEED * nx;
-//		else if(isRunningFastRight == true)
-//			vx = MARIO_RUNNINGFAST_SPEED * nx;
-//		else if (isRunningFastLeft == true)
-//			vx = MARIO_RUNNINGFAST_SPEED * nx;
-//		else
-//			vx = MARIO_WALKING_SPEED * nx;
-//	}
-//	isRunningFastLeft = false;
-//	isRunningFastRight = false;
-//	isRunningLeft = false;
-//	isRunningRight = false;
-//}
 void CMario::Attack()
 {
 	if (level == MARIO_LEVEL_FIRE)
