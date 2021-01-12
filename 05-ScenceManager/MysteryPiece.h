@@ -12,9 +12,13 @@
 #define MYSTERYPIECE_STATE_FLOWER	1
 #define MYSTERYPIECE_STATE_STAR		2
 
+#define MYSTERYPIECE_FLY_SPEED		0.05f
+#define MYSTERYPIECE_Y_LIMIT		192.0f
+
 class CMysteryPiece : public CGameObject
 {
 public:
+	bool isCollidedWithMario;
 	bool isFinished;
 	CMario* Mario;
 	DWORD t;

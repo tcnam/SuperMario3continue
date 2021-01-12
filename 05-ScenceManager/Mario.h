@@ -4,7 +4,7 @@
 #include "Brick.h"
 #include "FireBall.h"
 
-
+#define MARIO_AUTO_WALKING_SPEED	0.05f
 #define MARIO_WALKING_SPEED		0.1f 
 #define MARIO_RUNNING_SPEED		0.22f
 #define MARIO_RUNNINGFAST_SPEED	0.2f
@@ -182,7 +182,10 @@ public:
 	bool isHoldingKoopas;
 	bool isSliding;
 
+	bool isClearingCourse;
+
 	CMario(float x = 0.0f, float y = 0.0f);
+	~CMario();
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *colliable_objects = NULL);
 	virtual void Render();
 	void Stop();
@@ -194,7 +197,6 @@ public:
 	void Left();
 	void RunFast();
 	void Fly();
-	void Slide();
 	void Attack();
 	void ChangeDirection();
 

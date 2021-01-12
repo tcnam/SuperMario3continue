@@ -417,5 +417,8 @@ void CKoopas::SetState(int state)
 		stop();
 		break;
 	}
+}
+CKoopas::~CKoopas()
+{
 
 }

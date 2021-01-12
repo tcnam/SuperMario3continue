@@ -30,3 +30,7 @@ void CFireBallFlower::Render()
 {
 	animation_set->at(1)->Render(round(x), round(y));
 }
+CFireBallFlower::~CFireBallFlower()
+{
+
+}

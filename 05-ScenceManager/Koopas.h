@@ -62,5 +62,7 @@ public:
 	void stop();
 	void dynamic();	
 
+	~CKoopas();
+
 	
 };

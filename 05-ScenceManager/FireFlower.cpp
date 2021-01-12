@@ -134,5 +134,8 @@ void CFireFlower::Render()
 void CFireFlower::SetState(int state)
 {
 	CGameObject::SetState(state);
-	
+}
+CFireFlower::~CFireFlower()
+{
+
 }

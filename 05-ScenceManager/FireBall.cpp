@@ -94,3 +94,7 @@ void CFireBall::Render()
 	else
 		animation_set->at(1)->Render(round(x), round(y));
 }
+CFireBall::~CFireBall()
+{
+
+}

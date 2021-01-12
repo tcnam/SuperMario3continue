@@ -23,5 +23,9 @@ void CHud::Render()
 }
 CHud::~CHud()
 {
-
+	Square = NULL;
+	background = NULL;
+	ScoreBoard = NULL;
+	camera = NULL;
+	cam_x = cam_y = 0.0f;
 }

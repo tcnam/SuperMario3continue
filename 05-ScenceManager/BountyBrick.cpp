@@ -159,3 +159,7 @@ void CBountyBrick::SetState(int state)
 {
 	CGameObject::SetState(state);
 }
+CBountyBrick::~CBountyBrick()
+{
+
+}

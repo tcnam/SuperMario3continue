@@ -26,6 +26,8 @@ CMario::CMario(float x, float y) : CGameObject()
 	isRunningFastRight = false;
 	isRunningRight = false;
 	isRunningFastLeft = false;
+
+	isClearingCourse = false;
 	//allowJump = true;
 	start_x = x; 
 	start_y = y; 
@@ -45,7 +47,10 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		vy = MARIO_RESIST_GRAVITY;
 	else
 		vy += MARIO_GRAVITY*dt;
-	
+	if (isClearingCourse == true)
+	{
+		vx = MARIO_AUTO_WALKING_SPEED;
+	}
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
 
@@ -55,11 +60,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	if (state!=MARIO_STATE_DIE)
 		CalcPotentialCollisions(coObjects, coEvents);
 
-	//if (GetTickCount64() - Slide_start > MARIO_SLDIE_TIME)
-	//{
-	//	Slide_start = 0;
-	//	isSliding = false;
-	//}
 	// reset untouchable timer if untouchable time has passed
 	if ( GetTickCount64() - untouchable_start > MARIO_UNTOUCHABLE_TIME) 
 	{
@@ -162,6 +162,11 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 					isOnGround = true;
 					vy = 0;
 				}
+			}
+			else if (dynamic_cast<CPortal*>(e->obj))
+			{
+				CPortal* p = dynamic_cast<CPortal*>(e->obj);
+				CGame::GetInstance()->SwitchScene(p->GetSceneId());
 			}
 		}
 		
@@ -817,5 +822,9 @@ void CMario::ResetFire()
 	SetLevel(MARIO_LEVEL_FIRE);
 	SetPosition(start_x, start_y);
 	SetSpeed(0, 0);
+}
+CMario::~CMario()
+{
+
 }
 

@@ -556,6 +556,10 @@ void CPlayScene::Update(DWORD dt)
 			coObjects_Of_Mario.push_back(objects[i]);					//add specialbrick to coOjects of Mario to block mario
 			coObjects_Of_Koopas.push_back(objects[i]);					//add specialbrick to coOjects of Koopas to block Koopas
 		}
+		else if (objects[i]->type == OBJECT_TYPE_PORTAL)
+		{
+			coObjects_Of_Mario.push_back(objects[i]);
+		}
 	}
 
 	for (size_t i = 0; i < objects.size(); i++)
@@ -614,13 +618,44 @@ void CPlayScene::Render()
 */
 void CPlayScene::Unload()
 {
-	for (unsigned int i = 0; i < objects.size(); i++)
-		delete objects[i];
-
-	objects.clear();
-	terrains.clear();
+	SpecialBrick = NULL;
+	camera = NULL;
+	Hud = NULL;
+	tCount = 0;
 	player = NULL;
 
+	//for (unsigned int i = 0; i < FireFlowers.size(); i++)
+	//	delete FireFlowers[i];
+	FlowerIndex = 0;
+	FireFlowers.clear();
+	//for (unsigned int i = 0; i < bountybricks.size(); i++)
+	//	delete bountybricks[i];
+	BountyBrickIndex = 0;
+	bountybricks.clear();
+	//for (unsigned int i = 0; i < WeakBricks.size(); i++)
+	//	delete WeakBricks[i];
+	WeakBricks.clear();
+	WeaKBrickIndex = 0;
+	for (unsigned int i = 0; i < objects.size(); i++)
+	{
+		if (objects[i]->type == OBJECT_TYPE_FIREFLOWER
+			|| objects[i]->type == OBJECT_TYPE_BOUNTYBRICK
+			|| objects[i]->type == OBJECT_TYPE_WEAKBRICK)
+			continue;
+		else
+		{
+			float x, y;
+			objects[i]->GetPosition(x, y);
+			DebugOut(L"type of the object:%i\n with x= %f and y= % f\n", objects[i]->GetType(), x, y);
+			delete objects[i];
+		}
+		
+	}
+		
+	for (unsigned int i = 0; i < terrains.size(); i++)
+		delete terrains[i];
+	objects.clear();
+	terrains.clear();	
 	DebugOut(L"[INFO] Scene %s unloaded! \n", sceneFilePath);
 }
 void CPlayScene::TimeCount()
@@ -636,6 +671,8 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 	DebugOut(L"[INFO] KeyDown: %d\n", KeyCode);
 
 	CMario *mario = ((CPlayScene*)scence)->GetPlayer();
+	if (mario->GetState() == MARIO_STATE_DIE || mario->isClearingCourse == true)
+		return;
 	switch (KeyCode)
 	{
 	case DIK_SPACE:
@@ -729,6 +766,8 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 void CPlayScenceKeyHandler::OnKeyUp(int KeyCode)
 {
 	CMario* mario = ((CPlayScene*)scence)->GetPlayer();
+	if (mario->GetState() == MARIO_STATE_DIE || mario->isClearingCourse == true)
+		return;
 	switch (KeyCode)
 	{
 	/*case DIK_RIGHT:
@@ -754,7 +793,7 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 	CMario *mario = ((CPlayScene*)scence)->GetPlayer();
 	// disable control key when Mario die 
 	
-	if (mario->GetState() == MARIO_STATE_DIE)
+	if (mario->GetState() == MARIO_STATE_DIE||mario->isClearingCourse==true)
 		return;
 	if (game->IsKeyDown(DIK_LEFT) && !game->IsKeyDown(DIK_RIGHT))
 	{

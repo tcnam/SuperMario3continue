@@ -103,6 +103,12 @@
     <Filter Include="Object\GameObject\MysteryPiece">
       <UniqueIdentifier>{8a17e144-5950-48b4-9ad1-cfa826f2dde9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Framework\Scene\PlayScence">
+      <UniqueIdentifier>{a947d85e-510c-42ce-924b-5b68f3165484}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\Scene\WorldScence">
+      <UniqueIdentifier>{da3585ef-ae32-47d9-94b9-6a641d964580}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animations.cpp">
@@ -115,9 +121,6 @@
       <Filter>Framework\Game</Filter>
     </ClCompile>
     <ClCompile Include="Scence.cpp">
-      <Filter>Framework\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="PlayScence.cpp">
       <Filter>Framework\Scene</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp">
@@ -204,6 +207,12 @@
     <ClCompile Include="MysteryPiece.cpp">
       <Filter>Object\GameObject\MysteryPiece</Filter>
     </ClCompile>
+    <ClCompile Include="PlayScence.cpp">
+      <Filter>Framework\Scene\PlayScence</Filter>
+    </ClCompile>
+    <ClCompile Include="WorldScence.cpp">
+      <Filter>Framework\Scene\WorldScence</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animations.h">
@@ -216,9 +225,6 @@
       <Filter>Framework\Game</Filter>
     </ClInclude>
     <ClInclude Include="Scence.h">
-      <Filter>Framework\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="PlayScence.h">
       <Filter>Framework\Scene</Filter>
     </ClInclude>
     <ClInclude Include="KeyEventHandler.h">
@@ -307,6 +313,12 @@
     </ClInclude>
     <ClInclude Include="MysteryPiece.h">
       <Filter>Object\GameObject\MysteryPiece</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayScence.h">
+      <Filter>Framework\Scene\PlayScence</Filter>
+    </ClInclude>
+    <ClInclude Include="WorldScence.h">
+      <Filter>Framework\Scene\WorldScence</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
