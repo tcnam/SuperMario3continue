@@ -3,7 +3,6 @@
 #include "Textures.h"
 #include "Scence.h"
 #include "GameObject.h"
-#include "Brick.h"
 #include "Mario.h"
 #include "Terrain.h"
 #include "Camera.h"
@@ -11,10 +10,12 @@
 #include "Hud.h"
 #include "Font.h"
 #include "Square.h"
+#include "Portal.h"
 class CWorldScence : public CScene
 {
 protected:
 	CMario* player;					// A play scene has to have player, right? 
+	vector<CPortal*> portals;
 	vector<LPGAMEOBJECT> objects;
 	vector<LPTERRAIN> terrains;
 	Camera* camera;

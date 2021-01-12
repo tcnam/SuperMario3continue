@@ -151,6 +151,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		}
 		obj = new CMario(x,y); 
 		player = (CMario*)obj; 
+		player->isInsidePlayScence = true;
 		DebugOut(L"[INFO] Player object created!\n");
 		break;
 	case OBJECT_TYPE_GOOMBA:
@@ -298,6 +299,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			float b = (float)atof(tokens[5].c_str());
 			int scene_id = atoi(tokens[6].c_str());
 			obj = new CPortal(x, y, r, b, scene_id);
+			((CPortal*)obj)->SetMario(player);
 		}
 		break;
 	default:
@@ -556,10 +558,10 @@ void CPlayScene::Update(DWORD dt)
 			coObjects_Of_Mario.push_back(objects[i]);					//add specialbrick to coOjects of Mario to block mario
 			coObjects_Of_Koopas.push_back(objects[i]);					//add specialbrick to coOjects of Koopas to block Koopas
 		}
-		else if (objects[i]->type == OBJECT_TYPE_PORTAL)
-		{
-			coObjects_Of_Mario.push_back(objects[i]);
-		}
+		//else if (objects[i]->type == OBJECT_TYPE_PORTAL)
+		//{
+		//	coObjects_Of_Mario.push_back(objects[i]);
+		//}
 	}
 
 	for (size_t i = 0; i < objects.size(); i++)
@@ -626,34 +628,34 @@ void CPlayScene::Unload()
 
 	//for (unsigned int i = 0; i < FireFlowers.size(); i++)
 	//	delete FireFlowers[i];
-	FlowerIndex = 0;
-	FireFlowers.clear();
+	//
+	//
 	//for (unsigned int i = 0; i < bountybricks.size(); i++)
 	//	delete bountybricks[i];
-	BountyBrickIndex = 0;
-	bountybricks.clear();
+	//
+	//
 	//for (unsigned int i = 0; i < WeakBricks.size(); i++)
 	//	delete WeakBricks[i];
-	WeakBricks.clear();
+	BountyBrickIndex = 0;
+	FlowerIndex = 0;
 	WeaKBrickIndex = 0;
 	for (unsigned int i = 0; i < objects.size(); i++)
 	{
-		if (objects[i]->type == OBJECT_TYPE_FIREFLOWER
-			|| objects[i]->type == OBJECT_TYPE_BOUNTYBRICK
-			|| objects[i]->type == OBJECT_TYPE_WEAKBRICK)
-			continue;
-		else
+		if (objects[i] != NULL)
 		{
 			float x, y;
 			objects[i]->GetPosition(x, y);
 			DebugOut(L"type of the object:%i\n with x= %f and y= % f\n", objects[i]->GetType(), x, y);
 			delete objects[i];
 		}
-		
+					
 	}
 		
 	for (unsigned int i = 0; i < terrains.size(); i++)
 		delete terrains[i];
+	FireFlowers.clear();
+	WeakBricks.clear();
+	bountybricks.clear();
 	objects.clear();
 	terrains.clear();	
 	DebugOut(L"[INFO] Scene %s unloaded! \n", sceneFilePath);

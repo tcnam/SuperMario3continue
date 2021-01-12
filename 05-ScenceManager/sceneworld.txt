@@ -2,14 +2,6 @@
 [TEXTURES]
 0	textures\mario1.png	255	255	255
 10 	textures\world.png	255	255	255
-20	textures\tiles.png	4	193	170
-30	textures\tile.png	255	128	192
-40	textures\enemiesl.png	0	128	128
-45	textures\enemiesr.png	0	130	130
-50	textures\flowerr.png	255	255	255
-60	textures\flowerl.png	255	255	255
-70	textures\misc1.png	166	185	255
-80	textures\misc.png	176	224	248
 85	textures\hudbg.png	255	255	255
 90	textures\hud.png	81	255	191
 95	textures\hud2.png	232	226	1
@@ -21,7 +13,7 @@
 10001	16	9	30	25	0
 10002	16	49	30	65	0
 # WORLD MAP BACKGROUND
-20001	0	0	272	224	10
+20001	6	2	267	189	10
 #ScoreBoard
 22000	11	127	165	157	90
 #Square
@@ -113,9 +105,28 @@
 # type	x	y	ani_set_id	extra_settings per object type
 # type: 0 = Mario , 1 = Brick, 2 = Goomba, 3 = Koopas
 # MARIO
-0	22	-142	1
+0	17	-146	1
+#HIDEN OBJECT
+5	0	-208	0	256	22
+5	0	-146	0	16	16
+5	0	-190	0	64	42
+5	0	-129	0	64	21
+5	81	-169	0	40	60
+5	81	-88	0	28	52
+5	140	-169	0	60	18
+5	109	-88	0	144	16
+5	140	-128	0	128	40
+5	48	-108	0	16	147
+5	64	-16	0	112	21
+5	170	-52	0	16	40
+5	112	-52	0	38	18
+5	186	-52	0	64	18
+5	234	-70	0	16	18
+5	218	-190	0	16	48
+#PORTAL
+50	64	-190	0	80	-174	2		
 [TERRAINS]
-0	-186	20001
+0	-190	20001
 [SCOREBOARD]
 #ScoreBoard
 0	22000

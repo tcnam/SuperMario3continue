@@ -20,6 +20,10 @@
 
 #define MARIO_STATE_IDLE				0
 
+#define MARIO_STATE_MOVE_UP				601
+#define MARIO_STATE_MOVE_DOWN			602
+#define MARIO_STATE_GOTO_ANOTHER_SCENCE	603
+
 #define MARIO_STATE_WALKING_RIGHT		100
 #define MARIO_STATE_RUNNING_RIGHT		101
 #define MARIO_STATE_CHANGERIGHT			102
@@ -128,6 +132,9 @@
 #define MARIO_FIRE_BBOX_WIDTH	15
 #define MARIO_FIRE_BBOX_HEIGHT	27
 
+#define MARIO_WORLDSCENCE_BBOX_WIDTH	16
+#define MARIO_WORLDSCENCE_BBOX_HEIGHT	16
+
 #define MARIO_UNTOUCHABLE_TIME 5000
 #define MARIO_FLY_TIME			3000
 #define MARIO_ATTACK_TIME_TAIL	500
@@ -183,6 +190,7 @@ public:
 	bool isSliding;
 
 	bool isClearingCourse;
+	bool isInsidePlayScence;
 
 	CMario(float x = 0.0f, float y = 0.0f);
 	~CMario();

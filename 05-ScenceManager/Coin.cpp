@@ -50,7 +50,9 @@ void CCoin::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		}
 			
 	}
+	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
 }
+
 
 void CCoin::GetBoundingBox(float& l, float& t, float& r, float& b)
 {

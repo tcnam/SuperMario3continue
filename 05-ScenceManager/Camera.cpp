@@ -7,8 +7,16 @@ Camera::Camera()
 }
 void Camera::Update()
 {
+	if (Mario->isInsidePlayScence == false)
+	{
+		cam_x = 0.0f;
+		cam_y = -SCREEN_HEIGHT + 64.0f;
+		CGame::GetInstance()->SetCamPos(round(cam_x), round(cam_y));
+		return;
+	}
 	float cx, cy;
 	Mario->GetPosition(cx, cy);
+	
 	if (cx > (float)SCREEN_WIDTH/2 && cy<=0)
 	{
 		cx -= (float)SCREEN_WIDTH / 2;
@@ -36,6 +44,7 @@ void Camera::Update()
 	{
 		cam_x = 0.0f;
 		cam_y = -SCREEN_HEIGHT+64.0f;
+		
 	}
 	CGame::GetInstance()->SetCamPos(round(cam_x), round(cam_y));
 }

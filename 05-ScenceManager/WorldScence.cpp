@@ -142,16 +142,37 @@ void CWorldScence::_ParseSection_OBJECTS(string line)
 			}
 			obj = new CMario(x, y);
 			player = (CMario*)obj;
+			player->isInsidePlayScence = false;
 			DebugOut(L"[INFO] Player object created!\n");
 		}		
 			break;
-	case OBJECT_TYPE_BRICK: obj = new CBrick(); break;
+	case OBJECT_TYPE_HIDDENOBJECT:
+		{
+			int width = atoi(tokens[4].c_str());
+			int height = atoi(tokens[5].c_str());
+			obj = new CHiddenObject(x, y, width, height);
+		}
+	break;
+	case OBJECT_TYPE_PORTAL:
+	{
+		float r = (float)atof(tokens[4].c_str());
+		float b = (float)atof(tokens[5].c_str());
+		int scene_id = atoi(tokens[6].c_str());
+		obj = new CPortal(x, y, r, b, scene_id);
+		((CPortal*)obj)->SetMario(player);
+		portals.push_back((CPortal*)obj);
+	}
+	break;
+	default:
+		DebugOut(L"[ERR] Invalid object type: %d\n", object_type);
+		return;
 	}
 	obj->SetType(object_type);						//set type for the object
 	// General object setup
 	obj->SetPosition(x, y);
 	LPANIMATION_SET ani_set = animation_sets->Get(ani_set_id);
 	obj->SetAnimationSet(ani_set);
+
 	objects.push_back(obj);
 }
 void CWorldScence::_ParseSection_TERRAIN(string line)
@@ -314,9 +335,24 @@ void CWorldScence::Load()
 }
 void CWorldScence::Update(DWORD dt)
 {
+	vector<LPGAMEOBJECT> coObbjects_Of_Portals;								//5: List of collidable Objects of FireBall
+	vector<LPGAMEOBJECT> coObjects_Of_Mario;
+	for (size_t i = 0; i < objects.size(); i++)
+	{
+		if (objects[i]->GetType() == OBJECT_TYPE_MARIO)
+		{
+			coObbjects_Of_Portals.push_back(objects[i]);
+		}
+		else if (objects[i]->GetType() == OBJECT_TYPE_PORTAL)
+			continue;
+		else
+			coObjects_Of_Mario.push_back(objects[i]);
+	}
+	player->Update(dt,&coObjects_Of_Mario);
+	for (unsigned i = 0; i < portals.size(); i++)
+		portals[i]->Update(dt, &coObbjects_Of_Portals);
 	// We know that Mario is the first object in the list hence we won't add him into the colliable object list
 	// TO-DO: This is a "dirty" way, need a moref organized way 
-	
 	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
 	if (player == NULL) return;
 
@@ -344,15 +380,13 @@ void CWorldScence::Unload()
 	camera = NULL;
 	Hud = NULL;
 	player = NULL;
-
+	portals.clear();
 	for (unsigned int i = 0; i < objects.size(); i++)
-	{
-		
+	{		
 			float x, y;
 			objects[i]->GetPosition(x, y);
 			DebugOut(L"type of the object:%i\n with x= %f and y= % f\n", objects[i]->GetType(), x, y);
 			delete objects[i];
-
 	}
 
 	for (unsigned int i = 0; i < terrains.size(); i++)
@@ -370,107 +404,14 @@ void CWorldScenceKeyHandler::OnKeyDown(int KeyCode)
 		return;
 	switch (KeyCode)
 	{
-	case DIK_SPACE:
-		//mario->allowJump = false;
-	{
-		if (mario->GetLevel() == MARIO_LEVEL_TAIL)				//tail mario
-		{
-			if (mario->isRunningFastLeft == true)
-			{
-				if (mario->isFlying == false)			//set time to start flying 
-				{
-					mario->SetTimeFly((DWORD)GetTickCount64());
-					mario->isFlying = true;
-				}
-				if ((DWORD)GetTickCount64() - mario->GetTimeFly() < MARIO_FLY_TIME)
-				{
-					mario->SetState(MARIO_STATE_FLYLEFT);
-				}
-				else
-				{
-					mario->StartFlyFall();
-				}
-			}
-			else if (mario->isRunningFastRight == true)
-			{
-				if (mario->isFlying == false)			//set time to start flying 
-				{
-					mario->SetTimeFly((DWORD)GetTickCount64());
-					mario->isFlying = true;
-				}
-				if ((DWORD)GetTickCount64() - mario->GetTimeFly() < MARIO_FLY_TIME)
-				{
-					mario->SetState(MARIO_STATE_FLYRIGHT);
-				}
-				else
-				{
-					mario->StartFlyFall();
-				}
-			}
-			else
-			{
-				if (mario->isOnGround == true)
-					mario->SetState(MARIO_STATE_JUMP);
-				else
-				{
-					mario->StartFlyFall();
-				}
-			}
-		}
-		else
-		{
-			mario->SetState(MARIO_STATE_JUMP);
-		}
-	}
-
-	break;
-	case DIK_1:
-		mario->ResetSmall();
-		break;
-	case DIK_2:
-		mario->ResetBig();
-		break;
-	case DIK_3:
-		mario->ResetTail();
-		break;
-	case DIK_4:
-		mario->ResetFire();
-		break;
-	case DIK_5:
-		mario->GoUnderGround();
-		break;
-	case DIK_Z:
-		if (mario->isAttacking == true)
-			return;
-		else
-		{
-			if (mario->GetLevel() == MARIO_LEVEL_FIRE)
-			{
-				mario->StartAttack();
-				mario->SetState(MARIO_STATE_ATTACK);
-			}
-			else if (mario->GetLevel() == MARIO_LEVEL_TAIL)
-			{
-				mario->StartAttack();
-				//mario->SetState(MARIO_STATE_ATTACK);
-			}
-		}
+	case (DIK_A):
+		mario->SetState(MARIO_STATE_GOTO_ANOTHER_SCENCE);
 		break;
 	}
 }
 void CWorldScenceKeyHandler::OnKeyUp(int KeyCode)
 {
-	CMario* mario = ((CWorldScence*)scence)->GetPlayer();
-	if (mario->GetState() == MARIO_STATE_DIE || mario->isClearingCourse == true)
-		return;
-	switch (KeyCode)
-	{
-	case DIK_Z:
-		if (mario->isHoldingKoopas == true)
-			mario->isHoldingKoopas = false;
-		break;
-
-	}
+	
 }
 
 
@@ -479,60 +420,21 @@ void CWorldScenceKeyHandler::KeyState(BYTE* states)
 	CGame* game = CGame::GetInstance();
 	CMario* mario = ((CWorldScence*)scence)->GetPlayer();
 
-	if (mario->GetState() == MARIO_STATE_DIE || mario->isClearingCourse == true)
-		return;
 	if (game->IsKeyDown(DIK_LEFT) && !game->IsKeyDown(DIK_RIGHT))
 	{
-		mario->SetTimeMovingLeft(DWORD(GetTickCount64()));
-		if (DWORD(GetTickCount64()) - mario->GetTimeMovingRight() > MARIO_TIME_CHANGE_DIRECTION)
-		{
-			if (game->IsKeyDown(DIK_Z))
-			{
-				mario->isRunningLeft = true;
-				mario->SetState(MARIO_STATE_RUNNING_LEFT);
-			}
-			else
-			{
-				mario->SetState(MARIO_STATE_WALKING_LEFT);
-				mario->isRunningLeft = false;
-			}
-		}
-		else
-		{
-			if (mario->isFlying == false)
-			{
-				mario->SetState(MARIO_STATE_CHANGELEFT);
-				mario->isRunningRight = false;
-				mario->isRunningFastRight = false;
-			}
-		}
-
+		mario->SetState(MARIO_STATE_WALKING_LEFT);
 	}
 	else if (game->IsKeyDown(DIK_RIGHT) && !game->IsKeyDown(DIK_LEFT))
 	{
-		mario->SetTimeMovingRight(DWORD(GetTickCount64()));
-		if (DWORD(GetTickCount64()) - mario->GetTimeMovingLeft() > MARIO_TIME_CHANGE_DIRECTION)
-		{
-			if (game->IsKeyDown(DIK_Z))
-			{
-				mario->isRunningRight = true;
-				mario->SetState(MARIO_STATE_RUNNING_RIGHT);
-			}
-			else
-			{
-				mario->SetState(MARIO_STATE_WALKING_RIGHT);
-				mario->isRunningRight = false;
-			}
-		}
-		else
-		{
-			if (mario->isFlying == false)
-			{
-				mario->SetState(MARIO_STATE_CHANGERIGHT);
-				mario->isRunningFastLeft = false;
-				mario->isRunningLeft = false;
-			}
-		}
+		mario->SetState(MARIO_STATE_WALKING_RIGHT);
+	}
+	else if (game->IsKeyDown(DIK_UP) && !game->IsKeyDown(DIK_DOWN))
+	{
+		mario->SetState(MARIO_STATE_MOVE_UP);
+	}
+	else if (game->IsKeyDown(DIK_DOWN) && !game->IsKeyDown(DIK_UP))
+	{
+		mario->SetState(MARIO_STATE_MOVE_DOWN);
 	}
 	else if (!game->IsKeyDown(DIK_SPACE))
 	{
