@@ -19,6 +19,7 @@
 #include "WeakBrick.h"
 #include "BountyButton.h"
 #include "SpecialBrick.h"
+#include "MysteryPiece.h"
 #include "Camera.h"
 #include "ScoreBoard.h"
 #include "Hud.h"

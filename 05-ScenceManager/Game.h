@@ -8,8 +8,8 @@
 
 
 #define DIRECTINPUT_VERSION 0x0800
-#define SCREEN_WIDTH  272.0f
-#define SCREEN_HEIGHT 256.0f
+#define SCREEN_WIDTH  272
+#define SCREEN_HEIGHT 256
 #define MAP_WIDTH	2816.0f
 #define MAP_HEIGHT	448.0f
 #define onesec		1000

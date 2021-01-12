@@ -13,6 +13,13 @@ CGameObject::CGameObject()
 	x = y = 0;
 	vx = vy = 0;
 	nx = 1;	
+	state = -1;
+	type = -1;
+	dt = 0;
+	dx = 0.0f;
+	dy = 0.0f;
+	ax = 0;
+	animation_set = NULL;
 	//ny = -1;
 }
 

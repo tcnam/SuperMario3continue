@@ -100,6 +100,9 @@
     <Filter Include="Object\HUD\Font">
       <UniqueIdentifier>{f6a820bc-680e-4f09-bd5f-56cda73df34d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Object\GameObject\MysteryPiece">
+      <UniqueIdentifier>{8a17e144-5950-48b4-9ad1-cfa826f2dde9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animations.cpp">
@@ -197,6 +200,9 @@
     </ClCompile>
     <ClCompile Include="Square.cpp">
       <Filter>Object\HUD\Square</Filter>
+    </ClCompile>
+    <ClCompile Include="MysteryPiece.cpp">
+      <Filter>Object\GameObject\MysteryPiece</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -298,6 +304,9 @@
     </ClInclude>
     <ClInclude Include="Square.h">
       <Filter>Object\HUD\Square</Filter>
+    </ClInclude>
+    <ClInclude Include="MysteryPiece.h">
+      <Filter>Object\GameObject\MysteryPiece</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

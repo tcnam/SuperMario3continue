@@ -2,31 +2,35 @@
 Camera::Camera()
 {
 	cam_x = 0.00f;
-	cam_y = -SCREEN_HEIGHT;
+	cam_y = (float)-SCREEN_HEIGHT;
 	Mario = NULL;
 }
 void Camera::Update()
 {
 	float cx, cy;
 	Mario->GetPosition(cx, cy);
-	if (cx > float(SCREEN_WIDTH/2)&&cy<=0)
+	if (cx > (float)SCREEN_WIDTH/2 && cy<=0)
 	{
-		cx -= float(SCREEN_WIDTH / 2);
+		cx -= (float)SCREEN_WIDTH / 2;
 		if (abs(cy) > SCREEN_HEIGHT)
 		{
-			cy -= float(SCREEN_HEIGHT / 2);
+			cy -= (float)SCREEN_HEIGHT / 2;
 		}
 		else
-			cy= -SCREEN_HEIGHT + 64.0f;
+			cy= (float)-SCREEN_HEIGHT + 64.0f;
 		cam_x = cx;
 		cam_y = cy;
+		if (cam_x > CAM_X_MAX_WHEN_Y_NEGATIVE)
+			cam_x = CAM_X_MAX_WHEN_Y_NEGATIVE;
 	}
 	else if (cy > 0)
 	{
-		cx -= float(SCREEN_WIDTH / 2);
-		cy -= float(SCREEN_HEIGHT / 2);
-		cam_x = cx;
-		cam_y = cy;
+		cx -= (float)SCREEN_WIDTH / 2;
+		if (cx >= CAM_X_MIN_WHEN_UNDERGROUND && cx <= CAM_X_MAX_WHEN_UNDERGROUND)
+		{
+			cam_x = cx;
+			cam_y = CAM_Y_WHEN_UNDERGROUND;
+		}		
 	}
 	else
 	{

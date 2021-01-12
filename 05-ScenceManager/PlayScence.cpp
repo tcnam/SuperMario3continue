@@ -205,6 +205,12 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			}				
 		}		
 		break;
+	case OBJECT_TYPE_MYSTERYPIECE:
+		{
+			obj = new CMysteryPiece();
+			((CMysteryPiece*)obj)->SetMario(player);
+		}
+		break;
 	case OBJECT_TYPE_BOUNTYBUTTON:
 		{
 			obj = new CBountyButton();
@@ -467,7 +473,7 @@ void CPlayScene::Update(DWORD dt)
 	if(tCount==0)
 		tCount = (DWORD)GetTickCount64();
 	vector<LPGAMEOBJECT> coObjects;
-	vector<LPGAMEOBJECT> coObjects_Of_FireFlower_Coin_FireBallFlower;			//1: List of collidable Objects of FireFlower(or Coin, or FireBallFlower)
+	vector<LPGAMEOBJECT> coObjects_Of_FireFlower_Coin_FireBallFlower_MysteryPiece;			//1: List of collidable Objects of FireFlower(or Coin, or FireBallFlower)
 	vector<LPGAMEOBJECT> coObjects_Of_Bounty;									//2: List of collidable Objects of Bounty
 	vector<LPGAMEOBJECT> coObjects_Of_Goomba;									//3: List of collidable Objects of Goomba
 	vector<LPGAMEOBJECT> coObjects_Of_Koopas;									//4: List of collidable Objects of Koopas
@@ -484,13 +490,13 @@ void CPlayScene::Update(DWORD dt)
 		{
 			if (((CMario*)objects[i])->untouchable == true)
 			{
-				coObjects_Of_FireFlower_Coin_FireBallFlower.push_back(objects[i]);
+				coObjects_Of_FireFlower_Coin_FireBallFlower_MysteryPiece.push_back(objects[i]);
 				coObjects_Of_Bounty.push_back(objects[i]);
 				coObjects_Of_BountyBrick_WeakBrick.push_back(objects[i]);
 			}
 			else
 			{
-				coObjects_Of_FireFlower_Coin_FireBallFlower.push_back(objects[i]);
+				coObjects_Of_FireFlower_Coin_FireBallFlower_MysteryPiece.push_back(objects[i]);
 				coObjects_Of_Bounty.push_back(objects[i]);
 				coObjects_Of_BountyBrick_WeakBrick.push_back(objects[i]);
 				coObjects_Of_Goomba.push_back(objects[i]);
@@ -554,8 +560,12 @@ void CPlayScene::Update(DWORD dt)
 
 	for (size_t i = 0; i < objects.size(); i++)
 	{
-		if (objects[i]->type == OBJECT_TYPE_FLOWER_FIREBALL || objects[i]->type == OBJECT_TYPE_COIN || objects[i]->type == OBJECT_TYPE_FIREFLOWER||objects[i]->type==OBJECT_TYPE_BOUNTYBUTTON)
-			objects[i]->Update(dt, &coObjects_Of_FireFlower_Coin_FireBallFlower);
+		if (objects[i]->type == OBJECT_TYPE_FLOWER_FIREBALL 
+			|| objects[i]->type == OBJECT_TYPE_COIN 
+			|| objects[i]->type == OBJECT_TYPE_FIREFLOWER
+			|| objects[i]->type== OBJECT_TYPE_BOUNTYBUTTON
+			|| objects[i]->type== OBJECT_TYPE_MYSTERYPIECE)
+			objects[i]->Update(dt, &coObjects_Of_FireFlower_Coin_FireBallFlower_MysteryPiece);
 
 		else if (objects[i]->type == OBJECT_TYPE_BOUNTY)
 			objects[i]->Update(dt, &coObjects_Of_Bounty);

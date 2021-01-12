@@ -2,6 +2,10 @@
 
 #include "Game.h"
 #include "Mario.h"
+#define CAM_X_MAX_WHEN_Y_NEGATIVE	2560.0f
+#define CAM_X_MIN_WHEN_UNDERGROUND	2128.0f
+#define CAM_X_MAX_WHEN_UNDERGROUND	2384.0f
+#define CAM_Y_WHEN_UNDERGROUND		64.0f
 class Camera
 {
 	float cam_x;

@@ -222,6 +222,12 @@
 22000	11	127	165	157	90
 #Square
 23000	171	127	245	157	90
+#Square Mushroom
+23001	188	165	204	181	90
+#Square Flower
+23002	212	165	228	181	90
+#Square Star
+23003	236	165	252	181	90
 #BackGround Hud
 24000	0	0	272	32	85
 #Number
@@ -718,6 +724,12 @@
 663	21013	100
 #BACKGROND FONT
 664	21014	100
+#Square Mushroom
+665	23001	100
+#Square Flower
+666	23002	100
+#Square Star
+667	23003	100
 #
 # id	ani1	ani2	ani3
 #
@@ -776,9 +788,11 @@
 42	662	663
 #NORMAL
 43	664
+#SQUARE MYSTERY PIECE
+44	665	666	667
 [OBJECTS]
 # type	x	y	ani_set_id	extra_settings per object type
-# type: 0 = Mario , 1 = Brick, 2 = Goomba, 3 = Koopas, 4 = Bounty Brick, 5=Hidden Object, 6=Fire Ball of Mario, 7=Fire Flower, 8=Fire Ball of Flower, 9=Bounty, 10=Coin, 11=Fragment, 12=Weak Brick, 13=Bounty Button, 14=Special Brick
+# type: 0 = Mario , 1 = Brick, 2 = Goomba, 3 = Koopas, 4 = Bounty Brick, 5=Hidden Object, 6=Fire Ball of Mario, 7=Fire Flower, 8=Fire Ball of Flower, 9=Bounty, 10=Coin, 11=Fragment, 12=Weak Brick, 13=Bounty Button, 14=Special Brick, 15=Mystery Piece
 # MARIO
 0	17	-50	1
 # HIDDEN OBJECT
@@ -965,7 +979,7 @@
 1	2176	-16	20
 1	2192	-16	20
 1	2208	-16	20
-1	2222	-16	23
+1	2221	-16	23
 # ---- ground brick 7 ----
 1	2257	-16	22			
 1	2272	-16	20
@@ -1057,8 +1071,10 @@
 12	1984	-64	28
 12	2000	-64	28
 12	2016	-64	28
-#-----Special brick 
+#-----Special brick -----------
 14	2032	-64	28
+#------Mystery piece --------
+15	2680	-104	44
 #-------fragment of weak brick-----
 11	1952	-32	34	0
 11	1960	-32	34	0	
