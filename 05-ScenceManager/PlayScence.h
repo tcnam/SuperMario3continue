@@ -25,7 +25,7 @@
 #include "Hud.h"
 #include "Font.h"
 #include "Square.h"
-
+#include "Message.h"
 
 
 class CPlayScene: public CScene

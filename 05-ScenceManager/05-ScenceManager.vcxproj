@@ -141,6 +141,7 @@
     <ClCompile Include="HiddenObject.cpp" />
     <ClCompile Include="Hud.cpp" />
     <ClCompile Include="Koopas.cpp" />
+    <ClCompile Include="Message.cpp" />
     <ClCompile Include="MysteryPiece.cpp" />
     <ClCompile Include="Portal.cpp" />
     <ClCompile Include="ScoreBoard.cpp" />
@@ -177,6 +178,7 @@
     <ClInclude Include="HiddenObject.h" />
     <ClInclude Include="Hud.h" />
     <ClInclude Include="Koopas.h" />
+    <ClInclude Include="Message.h" />
     <ClInclude Include="MysteryPiece.h" />
     <ClInclude Include="Portal.h" />
     <ClInclude Include="SceneIntro.h" />

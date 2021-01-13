@@ -27,6 +27,7 @@ using namespace std;
 #define OBJECT_TYPE_BOUNTYBUTTON	13
 #define OBJECT_TYPE_SPECIALBRICK	14
 #define OBJECT_TYPE_MYSTERYPIECE	15
+#define OBJECT_TYPE_MESSAGE			16
 
 class CGameObject; 
 typedef CGameObject * LPGAMEOBJECT;

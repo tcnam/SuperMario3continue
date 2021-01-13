@@ -11,6 +11,7 @@
 #include "Font.h"
 #include "Square.h"
 #include "Portal.h"
+
 class CWorldScence : public CScene
 {
 protected:

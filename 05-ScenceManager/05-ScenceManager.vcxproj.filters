@@ -109,6 +109,9 @@
     <Filter Include="Framework\Scene\WorldScence">
       <UniqueIdentifier>{da3585ef-ae32-47d9-94b9-6a641d964580}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Object\GameObject\Message">
+      <UniqueIdentifier>{f8e6f636-d559-4611-8b96-e63bd70f186b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animations.cpp">
@@ -212,6 +215,9 @@
     </ClCompile>
     <ClCompile Include="WorldScence.cpp">
       <Filter>Framework\Scene\WorldScence</Filter>
+    </ClCompile>
+    <ClCompile Include="Message.cpp">
+      <Filter>Object\GameObject\Message</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -319,6 +325,9 @@
     </ClInclude>
     <ClInclude Include="WorldScence.h">
       <Filter>Framework\Scene\WorldScence</Filter>
+    </ClInclude>
+    <ClInclude Include="Message.h">
+      <Filter>Object\GameObject\Message</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

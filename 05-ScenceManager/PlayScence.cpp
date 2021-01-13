@@ -218,12 +218,19 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			}				
 			else
 			{
-				((CMysteryPiece*)obj)->SetState(MYSTERYPIECE_STATE_MUSHROOM);
+				((CMysteryPiece*)obj)->SetState(MYSTERYPIECE_STATE_MUSHROOM);		
 				MysteryPiece = (CMysteryPiece*)obj;
 			}
 			
 		}
 		break;
+	case OBJECT_TYPE_MESSAGE:
+	{
+		obj = new CMessage();
+		MysteryPiece->SetMessage((CMessage*)obj);
+
+	}
+	break;
 	case OBJECT_TYPE_BOUNTYBUTTON:
 		{
 			obj = new CBountyButton();
@@ -640,16 +647,6 @@ void CPlayScene::Unload()
 	tCount = 0;
 	player = NULL;
 	MysteryPiece = NULL;
-	//for (unsigned int i = 0; i < FireFlowers.size(); i++)
-	//	delete FireFlowers[i];
-	//
-	//
-	//for (unsigned int i = 0; i < bountybricks.size(); i++)
-	//	delete bountybricks[i];
-	//
-	//
-	//for (unsigned int i = 0; i < WeakBricks.size(); i++)
-	//	delete WeakBricks[i];
 	BountyBrickIndex = 0;
 	FlowerIndex = 0;
 	WeaKBrickIndex = 0;

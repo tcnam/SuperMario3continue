@@ -308,8 +308,18 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 							CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
 							if (goomba->GetState() != GOOMBA_STATE_DIE)
 							{
-								CGame::GetInstance()->SetScores(CGame::GetInstance()->GetScores() + 100);
+								float goomba_x, goomba_y;
+								float goomba_vx, goomba_vy;
+								goomba->GetPosition(goomba_x, goomba_y);
+								goomba->SetPosition(goomba_x, goomba_y - 1);
+
 								goomba->SetState(GOOMBA_STATE_DIE);
+
+								goomba->GetSpeed(goomba_vx, goomba_vy);
+								goomba->SetSpeed(goomba_vx, -0.4f);
+
+								CGame::GetInstance()->SetScores(CGame::GetInstance()->GetScores() + 100);
+								
 							}
 								
 						}

@@ -7,6 +7,7 @@ CMysteryPiece::CMysteryPiece()
 	Mario = NULL;
 	CGameObject::SetState(-1);
 	t = 0;
+	message = NULL;
 }
 void CMysteryPiece::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
@@ -21,6 +22,8 @@ void CMysteryPiece::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		{
 			CGame::GetInstance()->SetStatesOfMyPieces(state);
 			isFinished = true;
+			message->SetState(state);
+			message->isDisplay = true;
 		}			
 	}
 	else
@@ -68,8 +71,6 @@ void CMysteryPiece::Render()
 		animation_set->at(MYSTERYPIECE_STATE_FLOWER)->Render(round(x), round(y));
 	else if (state == MYSTERYPIECE_STATE_STAR)
 		animation_set->at(MYSTERYPIECE_STATE_STAR)->Render(round(x), round(y));
-	//else
-	//	return;
 }
 void CMysteryPiece::GetBoundingBox(float& l, float& t, float& r, float& b)
 {

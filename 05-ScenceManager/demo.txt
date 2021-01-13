@@ -14,6 +14,7 @@
 85	textures\hudbg.png	255	255	255
 90	textures\hud.png	81	255	191
 95	textures\hud2.png	232	226	1
+96	textures\message.png	255	255	255
 
 
 #Mario:  10000
@@ -230,6 +231,10 @@
 23003	236	165	252	181	90
 #BackGround Hud
 24000	0	0	272	32	85
+#Message Mystery Piece
+24001	0	151	248	224	96
+24002	0	75	248	149	96
+24003	0	0	248	73	96
 #Number
 21000	77	31	85	38	90
 21001	88	31	94	38	90
@@ -730,6 +735,12 @@
 666	23002	100
 #Square Star
 667	23003	100
+#Message Mushroom
+668	24001	100
+#Message Flower
+669	24002	100
+#Message star
+670	24003	100
 #
 # id	ani1	ani2	ani3
 #
@@ -790,6 +801,8 @@
 43	664
 #SQUARE MYSTERY PIECE
 44	665	666	667
+#MESSAGE MYSTERY PIECE
+45	668	669	670
 [OBJECTS]
 # type	x	y	ani_set_id	extra_settings per object type
 # type: 0 = Mario , 1 = Brick, 2 = Goomba, 3 = Koopas, 4 = Bounty Brick, 5=Hidden Object, 6=Fire Ball of Mario, 7=Fire Flower, 8=Fire Ball of Flower, 9=Bounty, 10=Coin, 11=Fragment, 12=Weak Brick, 13=Bounty Button, 14=Special Brick, 15=Mystery Piece
@@ -1081,6 +1094,8 @@
 15	0	96	44
 15	0	112	44
 15	0	128	44
+#-----Message--------
+16	2576	-208	45
 #-------fragment of weak brick-----
 11	1952	-32	34	0
 11	1960	-32	34	0	

@@ -58,7 +58,6 @@ void CSquare::Update(float cam_x, float cam_y)
 			Pieces[i]->SetState(temp2);
 		else
 			Pieces[i]->SetState(temp3);
-
 	}
 }
 void CSquare::Draw()
