@@ -215,9 +215,24 @@ void CBounty::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					{
 						CGame::GetInstance()->SetScores(CGame::GetInstance()->GetScores() + 1000);
 						if (isLeaf == true)
+						{
+							Mario->GetEffect()->SetState(EFFECT_CLOUND);
+							Mario->GetEffect()->SetPosition(Mario_current_x, Mario_current_y);
+							Mario->StartTransForm();
 							Mario->SetLevel(MARIO_LEVEL_TAIL);
+						}							
 						else
+						{
+							Mario->GetEffect()->SetState(EFFECT_SMALL_BIG);
+							if (Mario->nx >= 0)
+								Mario->GetEffect()->RightOrLeft = true;
+							else
+								Mario->GetEffect()->RightOrLeft = false;
+							Mario->GetEffect()->SetPosition(Mario_current_x, Mario_current_y+MARIO_SMALL_BBOX_HEIGHT-MARIO_BIG_BBOX_HEIGHT);
+							Mario->StartTransForm();
 							Mario->SetLevel(MARIO_LEVEL_BIG);
+						}
+							
 					}					
 				}
 			}

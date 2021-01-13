@@ -254,6 +254,11 @@
 21013	9	0	24	7	95
 #font normal
 21014	15	160	33	169	90
+#effect cloud
+25001	527	20	543	36	80
+25002	546	22	559	34	80
+25003	560	21	573	34	80
+25004	575	21	588	33	80
 #WEAK BRICK
 30000	52	52	68	68	20
 30001	69	52	85	68	20
@@ -741,6 +746,12 @@
 669	24002	100
 #Message star
 670	24003	100
+# EFFECT CLOUND
+671	25001	50	25002	50	25003	50	25004	50
+#EFFECT SMALL BIG RIGHT
+672	10021	100	10001	100
+#EFFECT SMALL BIG LEFT
+673	10031	100	10011	100	
 #
 # id	ani1	ani2	ani3
 #
@@ -803,6 +814,8 @@
 44	665	666	667
 #MESSAGE MYSTERY PIECE
 45	668	669	670
+#EFFCT
+46	671	672	673
 [OBJECTS]
 # type	x	y	ani_set_id	extra_settings per object type
 # type: 0 = Mario , 1 = Brick, 2 = Goomba, 3 = Koopas, 4 = Bounty Brick, 5=Hidden Object, 6=Fire Ball of Mario, 7=Fire Flower, 8=Fire Ball of Flower, 9=Bounty, 10=Coin, 11=Fragment, 12=Weak Brick, 13=Bounty Button, 14=Special Brick, 15=Mystery Piece
@@ -2445,6 +2458,8 @@
 1376	-256	60011
 1376	-272	60000
 1376	-280	60001
+[EFFECT]
+10	48	48	46	
 [SCOREBOARD]
 #ScoreBoard
 0	22000

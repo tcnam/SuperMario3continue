@@ -40,6 +40,14 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
 	if (vy > 0.04f)
 		isOnGround = false;
+	if (GetTickCount64() - Transform_start > MARIO_TRANSFORM_TIME)
+	{
+		isTransform = false;
+		Transform_start = 0;
+		effect->SetPosition(EFFECT_LOCATION_X_TO_HIDE, EFFECT_LOCATION_Y_TO_HIDE);
+	}
+	else
+		return;
 	// Calculate dx, dy 
 	CGameObject::Update(dt);
 
@@ -181,6 +189,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 
 void CMario::Render()
 {
+	if (isTransform == true)
+		return;
 	int alpha = 255;
 	if (untouchable) alpha = 128;
 	if (isInsidePlayScence == false)

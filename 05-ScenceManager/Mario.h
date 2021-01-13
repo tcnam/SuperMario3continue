@@ -3,6 +3,7 @@
 #include "HiddenObject.h"
 #include "Brick.h"
 #include "FireBall.h"
+#include "Effect.h"
 
 #define MARIO_AUTO_WALKING_SPEED	0.05f
 #define MARIO_WALKING_SPEED		0.1f 
@@ -142,19 +143,21 @@
 #define MARIO_FLYFALL_TIME	200
 #define MARIO_TIME_CHANGE_DIRECTION	200
 #define MARIO_RUNTIME		1200
+#define MARIO_TRANSFORM_TIME	800
 
 class CMario : public CGameObject
 {
 	int level;
 	
-	DWORD untouchable_start;
+	
 
 	float start_x;			// initial position of Mario at scene
 	float start_y; 
 
 	
-
+	CEffect* effect;
 	CFireBall* fireballs;
+
 	
 	DWORD StartMovingLeft;
 	DWORD StartMovingRight;
@@ -166,9 +169,11 @@ class CMario : public CGameObject
 	DWORD StartRunningRightFast;
 
 	DWORD StartFly;
+	DWORD untouchable_start;
 	DWORD FlyFall_start;
 	DWORD Attack_start;
 	DWORD Slide_start;
+	DWORD Transform_start;
 
 	
 public:
@@ -227,13 +232,15 @@ public:
 	DWORD GetTimeFly() { return StartFly; }
 
 	void SetFireBall(CFireBall* FireBall) { fireballs = FireBall; }
+	void SetEffect(CEffect* ef) { effect = ef; }
+	CEffect* GetEffect() { return effect; }
 
 	void SetState(int state);
 	void SetLevel(int l) { level = l; }
 	int GetLevel() { return level; }
 	int Getnx() { return nx; }
 
-
+	void StartTransForm() { isTransform = true; Transform_start = (DWORD)GetTickCount64(); }
 	void StartUntouchable() { untouchable = true; untouchable_start = (DWORD)GetTickCount64(); }
 	void StartFlyFall() { isFlyFall = true; FlyFall_start = (DWORD)GetTickCount64(); }
 	void StartAttack() { isAttacking = true; Attack_start = (DWORD)GetTickCount64(); }

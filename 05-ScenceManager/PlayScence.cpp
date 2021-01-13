@@ -38,6 +38,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath):CScene(id, filePath)
 #define SCENE_SECTION_OBJECTS	6
 #define SCENE_SECTION_TERRAIN	7
 #define SCENE_SECTION_HUD	8
+#define SCENE_SECTION_EFFECT	9
 #define OBJECT_TYPE_PORTAL	50
 
 #define MAX_SCENE_LINE 1024
@@ -346,6 +347,25 @@ void CPlayScene::_ParseSection_TERRAIN(string line)
 	terr->SetSprite(sprites);
 	terrains.push_back(terr);
 }
+void CPlayScene::_ParseSection_EFFECT(string line)
+{
+	vector<string> tokens = split(line);
+	if (tokens.size() < 3) return;
+	int ower_id = atoi(tokens[0].c_str());
+	float x = (float)atof(tokens[1].c_str());
+	float y = (float)atof(tokens[2].c_str());
+	int ani_set_id = atoi(tokens[3].c_str());
+	CEffect* effect = new CEffect();
+	effect->SetOwnerId(ower_id);
+	effect->SetPosition(x, y);
+	CAnimationSets* animation_sets = CAnimationSets::GetInstance();
+	LPANIMATION_SET ani_set = animation_sets->Get(ani_set_id);
+	effect->SetAnimationSet(ani_set);
+	if (ower_id == EFFECT_OWNER_ID_MARIO)
+		player->SetEffect(effect);
+	effects.push_back(effect);
+
+}
 void CPlayScene::_ParseSection_HUD(string line)
 {
 	vector<string> tokens = split(line);
@@ -461,6 +481,8 @@ void CPlayScene::Load()
 			section = SCENE_SECTION_TERRAIN; continue;}
 		if (line == "[SCOREBOARD]") {
 			section = SCENE_SECTION_HUD; continue;}
+		if (line == "[EFFECT]") {
+			section = SCENE_SECTION_EFFECT; continue;}
 		if (line[0] == '[') { section = SCENE_SECTION_UNKNOWN; continue; }	
 
 		//
@@ -475,6 +497,7 @@ void CPlayScene::Load()
 			case SCENE_SECTION_OBJECTS: _ParseSection_OBJECTS(line);break;
 			case SCENE_SECTION_TERRAIN: _ParseSection_TERRAIN(line); break;
 			case SCENE_SECTION_HUD: _ParseSection_HUD(line); break;
+			case SCENE_SECTION_EFFECT: _ParseSection_EFFECT(line); break;
 		}
 	}
 
@@ -614,7 +637,10 @@ void CPlayScene::Update(DWORD dt)
 		else
 			objects[i]->Update(dt, &coObjects);
 	}
-	
+	for (unsigned int i = 0; i < effects.size(); i++)
+	{
+		effects[i]->Update(dt);
+	}
 
 	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
 	if (player == NULL) return; 
@@ -632,6 +658,10 @@ void CPlayScene::Render()
 	for (unsigned int i = 0; i < objects.size(); i++)
 	{
 		objects[i]->Render();
+	}
+	for (unsigned int i = 0; i < effects.size(); i++)
+	{
+		effects[i]->Render();
 	}
 	Hud->Render();
 }
@@ -658,17 +688,19 @@ void CPlayScene::Unload()
 			objects[i]->GetPosition(x, y);
 			DebugOut(L"type of the object:%i\n with x= %f and y= % f\n", objects[i]->GetType(), x, y);
 			delete objects[i];
-		}
-					
+		}					
 	}
 		
 	for (unsigned int i = 0; i < terrains.size(); i++)
 		delete terrains[i];
+	for (unsigned int i = 0; i < effects.size(); i++)
+		delete effects[i];
 	FireFlowers.clear();
 	WeakBricks.clear();
 	bountybricks.clear();
 	objects.clear();
 	terrains.clear();
+	effects.clear();
 	PiecesOfSquare.clear();
 	DebugOut(L"[INFO] Scene %s unloaded! \n", sceneFilePath);
 }

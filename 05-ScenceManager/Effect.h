@@ -5,23 +5,42 @@
 #include"Game.h"
 #include"Utils.h"
 #include "Sprites.h"
+#include "Animations.h"
 
+#define EFFECT_CLOUND		0
+#define EFFECT_SMALL_BIG	1
 
-class CEffect;
-typedef CEffect* LPEFFECT;
+#define EFFECT_OWNER_ID_MARIO		10
+#define EFFECT_OWNER_ID_FIREFLOWER	20
+
+#define EFFECT_LOCATION_X_TO_HIDE	48.0f
+#define EFFECT_LOCATION_Y_TO_HIDE	48.0f
+using namespace std;
+
 class CEffect
 {
-	LPSPRITE sprite;
+	LPANIMATION_SET animation_set;
 	float x;
 	float y;
+	int state;
+	int owner_id;
+	DWORD dt;
+	
 public:
+	bool RightOrLeft;
 	CEffect();
+	void SetOwnerId(int n) { owner_id = n; }
+	int GetOwnerId() { return owner_id; }
+
 	void SetPosition(float x, float y) { this->x = x, this->y = y; }
-	void SetSprite(LPSPRITE sprite) { this->sprite = sprite; }
 	float GetPositionX() { return this->x; }
 	float GetPositionY() { return this->y; }
-	LPSPRITE GetSprite() { return this->sprite; }
-	void Draw(float x, float y, int alpha);
+
+	void SetAnimationSet(LPANIMATION_SET ani_set) { animation_set = ani_set; }
+	void Update(DWORD dt);
+	void Render();
+	void SetState(int state) { this->state = state; }
+
 	~CEffect();
 };
 

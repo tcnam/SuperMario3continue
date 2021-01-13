@@ -22,6 +22,8 @@ void CKoopas::GetBoundingBox(float &left, float &top, float &right, float &botto
 
 void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
+	if (MarioMain->isTransform == true)
+		return;
 	if (level == KOOPAS_LEVEL_FLY)
 	{
 		if (abs(x - start_x) >= KOOPAS_DX_LIMIT_TOFLY)

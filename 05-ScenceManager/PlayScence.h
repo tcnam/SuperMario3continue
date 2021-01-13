@@ -26,6 +26,7 @@
 #include "Font.h"
 #include "Square.h"
 #include "Message.h"
+#include "Effect.h"
 
 
 class CPlayScene: public CScene
@@ -49,6 +50,7 @@ protected:
 
 	vector<LPGAMEOBJECT> objects;
 	vector<LPTERRAIN> terrains;
+	vector<CEffect*> effects;
 	Camera* camera;
 	CHud* Hud;
 
@@ -61,6 +63,7 @@ protected:
 	void _ParseSection_OBJECTS(string line);
 	void _ParseSection_TERRAIN(string line);
 	void _ParseSection_HUD(string line);
+	void _ParseSection_EFFECT(string line);
 	
 public: 
 	CPlayScene(int id, LPCWSTR filePath);

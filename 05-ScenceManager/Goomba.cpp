@@ -17,6 +17,8 @@ void CGoomba::GetBoundingBox(float &left, float &top, float &right, float &botto
 
 void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
+	if (Mario->isTransform == true)
+		return;
 	if (GetTickCount64() - untouchable_start > GOOMBA_UNTOUCHABLE_TIME)
 	{
 		untouchable_start = 0;
