@@ -48,6 +48,9 @@ class CGame
 	int Time = 0;
 	int life = 4;
 	int World = 1;
+	int Piece1 = -1;
+	int Piece2 = -1;
+	int Piece3 = -1;
 
 	int screen_width;
 	int screen_height; 
@@ -94,6 +97,11 @@ public:
 
 	int GetWorld() { return World; }
 	void SetWorld(int n) { World = n; }
+
+	void SetStatesOfMyPieces(int n);
+	int GetPiece1() { return Piece1; }
+	int GetPiece2() { return Piece2; }
+	int GetPiece3() { return Piece3; }
 
 	static void SweptAABB(
 		float ml,			// move left 

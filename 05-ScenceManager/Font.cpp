@@ -55,6 +55,8 @@ void CFont::Render()
 			ani = FONT_NUMBER_9;
 			break;
 		}
+		if (ani == -1)
+			return;
 		animation_set->at(ani)->Render(round(x), round(y));
 	}
 	else if(type==FONT_TYPE_STATE)

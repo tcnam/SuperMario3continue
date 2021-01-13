@@ -42,7 +42,10 @@ protected:
 	vector <CWeakBrick*> WeakBricks;
 	unsigned int WeaKBrickIndex = 0;
 
+	vector<CMysteryPiece*> PiecesOfSquare;
+
 	CSpecialBrick* SpecialBrick;
+	CMysteryPiece* MysteryPiece;
 
 	vector<LPGAMEOBJECT> objects;
 	vector<LPTERRAIN> terrains;

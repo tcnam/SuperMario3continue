@@ -18,8 +18,11 @@ protected:
 	vector<CPortal*> portals;
 	vector<LPGAMEOBJECT> objects;
 	vector<LPTERRAIN> terrains;
+	vector<CMysteryPiece*> PiecesOfSquare;
+	int PiecesIndex = 0;
 	Camera* camera;
 	CHud* Hud;
+
 	void _ParseSection_TEXTURES(string line);
 	void _ParseSection_SPRITES(string line);
 	void _ParseSection_ANIMATIONS(string line);

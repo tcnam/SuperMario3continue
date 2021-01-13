@@ -387,7 +387,6 @@ void CGame::Load(LPCWSTR gameFile)
 	f.close();
 
 	DebugOut(L"[INFO] Loading game file : %s has been loaded successfully\n",gameFile);
-
 	SwitchScene(current_scene);
 }
 
@@ -405,4 +404,31 @@ void CGame::SwitchScene(int scene_id)
 	LPSCENE s = scenes[scene_id];
 	CGame::GetInstance()->SetKeyHandler(s->GetKeyEventHandler());
 	s->Load();	
+}
+void CGame::SetStatesOfMyPieces(int n)
+{
+	if (Piece1 == -1)
+	{
+		Piece1 = n;
+		return;
+	}
+	if (Piece2 == -1)
+	{
+		Piece2 = n;
+		return;
+	}
+	if (Piece2 == -1)
+	{
+		Piece2 = n;
+		return;
+	}
+	life++;
+	Piece1 = Piece2 = Piece3 = -1;
+	//if (int(StatesOfMyPieces[0]) != -1 && int(StatesOfMyPieces[1]) != -1 && int(StatesOfMyPieces[2]) != -1)			// add live when enough StatesOfMyPieces
+	//{
+	//	life++;																// else add 1 live
+
+	//	for (int i = 0; i < int(StatesOfMyPieces.size()); i++)										// clear ns
+	//		StatesOfMyPieces[i] = -1;
+	//}
 }

@@ -5,7 +5,7 @@ CMysteryPiece::CMysteryPiece()
 	isCollidedWithMario = false;
 	isFinished = false;
 	Mario = NULL;
-	CGameObject::SetState(MYSTERYPIECE_STATE_MUSHROOM);
+	CGameObject::SetState(-1);
 	t = 0;
 }
 void CMysteryPiece::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
@@ -18,7 +18,10 @@ void CMysteryPiece::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		vy = -MYSTERYPIECE_FLY_SPEED;
 		y += dy;
 		if (y < -MYSTERYPIECE_Y_LIMIT)
+		{
+			CGame::GetInstance()->SetStatesOfMyPieces(state);
 			isFinished = true;
+		}			
 	}
 	else
 	{
@@ -27,6 +30,8 @@ void CMysteryPiece::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		if (GetTickCount64() - t > onesec && isCollidedWithMario==false)
 		{
 			t = 0;
+			if (state == -1)
+				return;
 			if (state == MYSTERYPIECE_STATE_STAR)
 				state = 0;
 			else
@@ -57,17 +62,14 @@ void CMysteryPiece::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 }
 void CMysteryPiece::Render()
 {
-	if (isFinished == true)
-		return;
-	else
-	{
-		if (state == MYSTERYPIECE_STATE_MUSHROOM)
-			animation_set->at(MYSTERYPIECE_STATE_MUSHROOM)->Render(round(x), round(y));
-		else if (state == MYSTERYPIECE_STATE_FLOWER)
-			animation_set->at(MYSTERYPIECE_STATE_FLOWER)->Render(round(x), round(y));
-		else
-			animation_set->at(MYSTERYPIECE_STATE_STAR)->Render(round(x), round(y));
-	}		
+	if (state == MYSTERYPIECE_STATE_MUSHROOM)
+		animation_set->at(MYSTERYPIECE_STATE_MUSHROOM)->Render(round(x), round(y));
+	else if (state == MYSTERYPIECE_STATE_FLOWER)
+		animation_set->at(MYSTERYPIECE_STATE_FLOWER)->Render(round(x), round(y));
+	else if (state == MYSTERYPIECE_STATE_STAR)
+		animation_set->at(MYSTERYPIECE_STATE_STAR)->Render(round(x), round(y));
+	//else
+	//	return;
 }
 void CMysteryPiece::GetBoundingBox(float& l, float& t, float& r, float& b)
 {

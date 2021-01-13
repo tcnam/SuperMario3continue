@@ -22,6 +22,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath):CScene(id, filePath)
 	Hud = NULL;
 	camera = NULL;
 	tCount = 0;
+	MysteryPiece = NULL;
 }
 
 /*
@@ -209,7 +210,18 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_MYSTERYPIECE:
 		{
 			obj = new CMysteryPiece();
-			((CMysteryPiece*)obj)->SetMario(player);
+			((CMysteryPiece*)obj)->SetMario(player);			
+			if (x == 0)
+			{
+				PiecesOfSquare.push_back((CMysteryPiece*)obj);
+				((CMysteryPiece*)obj)->isFinished = true;
+			}				
+			else
+			{
+				((CMysteryPiece*)obj)->SetState(MYSTERYPIECE_STATE_MUSHROOM);
+				MysteryPiece = (CMysteryPiece*)obj;
+			}
+			
 		}
 		break;
 	case OBJECT_TYPE_BOUNTYBUTTON:
@@ -351,6 +363,10 @@ void CPlayScene::_ParseSection_HUD(string line)
 			LPSPRITE sprites = CSprites::GetInstance()->Get(sprite_id);
 			square->SetSprite(sprites);
 			square->SetMario(player);
+			for (unsigned int i = 0; i < PiecesOfSquare.size(); i++)
+				square->PushVectorPieces(PiecesOfSquare[i]);
+			//square->SetPieceStatesBasedOnGame();
+			square->PushMysteryPiece(MysteryPiece);
 			Hud->SetSquare(square);
 		}
 		break;
@@ -400,9 +416,7 @@ void CPlayScene::_ParseSection_HUD(string line)
 			case 6:
 				Hud->GetScoreBoard()->PushTime(font);
 				break;
-
-			}
-			
+			}			
 		}
 		break;
 	}
@@ -625,7 +639,7 @@ void CPlayScene::Unload()
 	Hud = NULL;
 	tCount = 0;
 	player = NULL;
-
+	MysteryPiece = NULL;
 	//for (unsigned int i = 0; i < FireFlowers.size(); i++)
 	//	delete FireFlowers[i];
 	//
@@ -657,7 +671,8 @@ void CPlayScene::Unload()
 	WeakBricks.clear();
 	bountybricks.clear();
 	objects.clear();
-	terrains.clear();	
+	terrains.clear();
+	PiecesOfSquare.clear();
 	DebugOut(L"[INFO] Scene %s unloaded! \n", sceneFilePath);
 }
 void CPlayScene::TimeCount()

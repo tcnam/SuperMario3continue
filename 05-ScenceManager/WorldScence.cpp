@@ -153,6 +153,30 @@ void CWorldScence::_ParseSection_OBJECTS(string line)
 			obj = new CHiddenObject(x, y, width, height);
 		}
 	break;
+	case OBJECT_TYPE_MYSTERYPIECE:
+	{
+		obj = new CMysteryPiece();
+		((CMysteryPiece*)obj)->SetMario(player);
+		PiecesOfSquare.push_back((CMysteryPiece*)obj);
+		((CMysteryPiece*)obj)->isFinished = true;
+		int temp1 = CGame::GetInstance()->GetPiece1();
+		int temp2 = CGame::GetInstance()->GetPiece2();
+		int temp3 = CGame::GetInstance()->GetPiece3();
+		if (PiecesIndex == 0)
+			((CMysteryPiece*)obj)->SetState(temp1);
+		else if (PiecesIndex == 1)
+			((CMysteryPiece*)obj)->SetState(temp2);
+		else
+			((CMysteryPiece*)obj)->SetState(temp3);
+		PiecesIndex++;
+		/*else
+		{
+			((CMysteryPiece*)obj)->SetState(MYSTERYPIECE_STATE_MUSHROOM);
+			MysteryPiece = (CMysteryPiece*)obj;
+		}*/
+
+	}
+	break;
 	case OBJECT_TYPE_PORTAL:
 	{
 		float r = (float)atof(tokens[4].c_str());
@@ -213,6 +237,7 @@ void CWorldScence::_ParseSection_HUD(string line)
 		LPSPRITE sprites = CSprites::GetInstance()->Get(sprite_id);
 		square->SetSprite(sprites);
 		square->SetMario(player);
+		//square->SetPieceStatesBasedOnGame();
 		Hud->SetSquare(square);
 	}
 	break;
@@ -332,6 +357,13 @@ void CWorldScence::Load()
 	camera = new Camera();
 	camera->SetMario(player);
 	Hud->SetCamera(camera);
+	CGame::GetInstance()->SetTime(0);
+	for (unsigned int i = 0; i < PiecesOfSquare.size(); i++)
+	{
+		DebugOut(L"state:%i\n", PiecesOfSquare[i]->GetState());
+	}
+
+	
 }
 void CWorldScence::Update(DWORD dt)
 {
@@ -351,6 +383,7 @@ void CWorldScence::Update(DWORD dt)
 	player->Update(dt,&coObjects_Of_Mario);
 	for (unsigned i = 0; i < portals.size(); i++)
 		portals[i]->Update(dt, &coObbjects_Of_Portals);
+
 	// We know that Mario is the first object in the list hence we won't add him into the colliable object list
 	// TO-DO: This is a "dirty" way, need a moref organized way 
 	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
@@ -393,6 +426,8 @@ void CWorldScence::Unload()
 		delete terrains[i];
 	objects.clear();
 	terrains.clear();
+	PiecesOfSquare.clear();
+	PiecesIndex = 0;
 	DebugOut(L"[INFO] Scene %s unloaded! \n", sceneFilePath);
 }
 void CWorldScenceKeyHandler::OnKeyDown(int KeyCode)
