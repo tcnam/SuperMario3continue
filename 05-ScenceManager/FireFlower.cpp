@@ -20,6 +20,17 @@ void CFireFlower::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		return;
 	if (Mario->isTransform == true)
 		return;
+	if (Shoot_Start != 0)
+	{
+		if (GetTickCount64() - Shoot_Start > FIREFLOWER_TIMEWAIT_FORSHOOT)
+		{
+			isShooting = false;
+			Shoot_Start = 0;
+			Shoot();
+			vy = FIREFLOWER_FLY_SPEED;
+		}
+	}
+	
 	float Mario_x, Mario_y;
 	Mario->GetPosition(Mario_x, Mario_y);
 	if (isAppear == true)
@@ -41,7 +52,8 @@ void CFireFlower::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	}
 	else
 	{
-		if (Mario_x > x + 40)
+
+		if (Mario_x > x + 50)
 		{
 			SetSpeed(0, -0.015f);
 			if (y < FIREFLOWER_UPPER_Y)
@@ -49,7 +61,7 @@ void CFireFlower::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			else
 				state=FIREFLOWER_STATE_RIGHT_LOWER;
 		}
-		else if (Mario_x < x - 24)
+		else if (Mario_x < x - 30)
 		{
 			SetSpeed(0, -0.015f);
 			if (y < FIREFLOWER_UPPER_Y)
@@ -61,30 +73,40 @@ void CFireFlower::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		{
 			SetSpeed(0, 0);
 		}
-
 	}
 	CGameObject::Update(dt, coObjects);	
+	if (AABBCheck(Mario) == true)
+	{
+		if (Mario->untouchable == false)
+		{
+			SetPosition(x, y - 1);
+			if (Mario->GetLevel() == MARIO_LEVEL_SMALL)
+				Mario->SetState(MARIO_STATE_DIE);
+			else
+			{
+				Mario->StartUntouchable();
+				Mario->SetLevel(Mario->GetLevel() - 1);
+			}
+		}		
+	}
 	y += dy;	
 	if (y <= FIREFLOWR_APPEAR_Y)
 		isAppear = true;
 	else
+	{
 		isAppear = false;
+	}
+		
 	if (y < FIREFLOWER_UPPER_Y )
 	{
-		if (GetTickCount64() - Shoot_Start > FIREFLOWER_TIMEWAIT_FORSHOOT)
-		{
-			isShooting = false;
-			Shoot_Start = 0;
-			Shoot();
-			vy = FIREFLOWER_FLY_SPEED;
-		}
-		else
+		if(Shoot_Start==0)
 			StartShoot();			
 	}
 	else if (y >= FIREFLOWER_LOWER_Y)
 	{
 		vy = -FIREFLOWER_FLY_SPEED;
 	}
+
 		
 }
 void CFireFlower::Shoot()

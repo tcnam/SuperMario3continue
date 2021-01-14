@@ -774,8 +774,8 @@ void CMario::Jump()
 {
 	//if (allowJump == false)
 		//return;
-	if (isOnGround ==false)//allow mario to jump only when on ground
-		return;
+	//if (isOnGround ==false)//allow mario to jump only when on ground
+	//	return;
 	vy =- MARIO_JUMP_SPEED_Y;
 	isOnGround = false;
 }

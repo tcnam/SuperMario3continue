@@ -151,7 +151,7 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 				if (dynamic_cast<CMario*>(e->obj))
 				{
 					MarioForHold = MarioMain;
-					if (nx != 0)
+					if (nx != 0&&ny==0)
 					{
 						if (MarioForHold->untouchable == false)
 						{
@@ -193,7 +193,6 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 										else
 											vx = -KOOPAS_DYNAMIC_SPEED;
 									}
-
 								}
 							}
 							else
@@ -326,8 +325,7 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 
 								CGame::GetInstance()->SetScores(CGame::GetInstance()->GetScores() + 100);
 								
-							}
-								
+							}							
 						}
 						else
 							vx = -vx;

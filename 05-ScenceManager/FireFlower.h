@@ -22,7 +22,7 @@
 #define FIREFLOWER_LOWER_Y			-48
 #define FIREFLOWR_APPEAR_Y			-64
 
-#define FIREFLOWER_TIMEWAIT_FORSHOOT	5000
+#define FIREFLOWER_TIMEWAIT_FORSHOOT	1000
 
 
 
@@ -35,6 +35,7 @@ public:
 	bool isShootFar;
 	bool isAppear;
 	DWORD Shoot_Start;
+
 	CFireFlower();
 	CFireBallFlower* FireBallFlower;
 	void StartShoot() { isShooting = true; Shoot_Start = (DWORD)GetTickCount64(); vy = 0; }

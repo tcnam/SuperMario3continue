@@ -262,6 +262,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_FLOWER_FIREBALL:
 		{
 			obj = new CFireBallFlower();
+			((CFireBallFlower*)obj)->SetMario(player);
 			DebugOut(L"flower index: %i\n", FlowerIndex);
 			FireFlowers[FlowerIndex]->SetFireBallFlower((CFireBallFlower*)obj);
 			DebugOut(L"flower fire ball was loaded\n");
