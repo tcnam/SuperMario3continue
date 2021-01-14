@@ -126,6 +126,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Animations.cpp" />
+    <ClCompile Include="AutoDoor.cpp" />
     <ClCompile Include="Bounty.cpp" />
     <ClCompile Include="BountyBrick.cpp" />
     <ClCompile Include="BountyButton.cpp" />
@@ -138,6 +139,7 @@
     <ClCompile Include="FireFlower.cpp" />
     <ClCompile Include="Font.cpp" />
     <ClCompile Include="Fragment.cpp" />
+    <ClCompile Include="HiddenDoor.cpp" />
     <ClCompile Include="HiddenObject.cpp" />
     <ClCompile Include="Hud.cpp" />
     <ClCompile Include="Koopas.cpp" />
@@ -163,6 +165,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animations.h" />
+    <ClInclude Include="AutoDoor.h" />
     <ClInclude Include="Bounty.h" />
     <ClInclude Include="BountyBrick.h" />
     <ClInclude Include="BountyButton.h" />
@@ -175,6 +178,7 @@
     <ClInclude Include="FireFlower.h" />
     <ClInclude Include="Font.h" />
     <ClInclude Include="Fragment.h" />
+    <ClInclude Include="HiddenDoor.h" />
     <ClInclude Include="HiddenObject.h" />
     <ClInclude Include="Hud.h" />
     <ClInclude Include="Koopas.h" />

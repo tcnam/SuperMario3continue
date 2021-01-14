@@ -113,7 +113,9 @@
 #define MARIO_ANI_TAIL_HOLDKOOPAS_IDLE_LEFT			58
 #define MARIO_ANI_TAIL_HOLDKOOPAS_WALK_LEFT			59
 
-#define MARIO_ANI_DIE						60
+#define MARIO_ANI_CROSS_PIPE						60
+
+#define MARIO_ANI_DIE						61
 
 #define	MARIO_LEVEL_SMALL	1
 #define	MARIO_LEVEL_BIG		2
@@ -188,6 +190,8 @@ public:
 	bool isRunningFastRight;
 	bool isRunningFastLeft;
 
+	bool isDucking;
+	bool isCrossingPipe;
 	bool isFlying;						//for identifying sprites when flying and calculate fly time
 	bool isFlyFall;						//for choosing the right sprites for jump and fall fly state	
 	bool isAttacking;
@@ -251,6 +255,7 @@ public:
 	void ResetSmall();
 	void ResetTail();
 	void GoUnderGround();
+	void GoHiddenDoor();
 
 	void GetBoundingBoxTailLevel(float& left, float& top, float& right, float& bottom);
 	void GetBoundingBoxTailWhileAttacking(float& left, float& top, float& right, float& bottom);

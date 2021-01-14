@@ -45,8 +45,7 @@ void Camera::Update()
 	else
 	{
 		cam_x = 0.0f;
-		cam_y = -SCREEN_HEIGHT+64.0f;
-		
+		cam_y = -SCREEN_HEIGHT+64.0f;		
 	}
 	CGame::GetInstance()->SetCamPos(round(cam_x), round(cam_y));
 }

@@ -313,6 +313,31 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			obj = new CHiddenObject(x, y, width, height);
 		}
 		break;
+	case OBJECT_TYPE_HIDDENDOOR:
+	{
+		int width = atoi(tokens[4].c_str());
+		int height = atoi(tokens[5].c_str());
+		int upOrdown = atoi(tokens[6].c_str());
+		obj = new CHiddenDoor(x, y, width, height);
+		DebugOut(L"Hidden door was loaded\n");
+		((CHiddenDoor*)obj)->SetMario(player);
+		if(upOrdown==0)
+			((CHiddenDoor*)obj)->UpOrDown = false;
+		else
+			((CHiddenDoor*)obj)->UpOrDown = true;
+	}
+		break;
+	case OBJECT_SYPE_AUTODOOR:
+	{
+		int width = atoi(tokens[4].c_str());
+		int height = atoi(tokens[5].c_str());
+		float des_x = (float)atof(tokens[6].c_str());
+		float des_y = (float)atof(tokens[7].c_str());
+		obj = new CAutoDoor(x, y, width, height,des_x,des_y);
+		DebugOut(L"Hidden door was loaded\n");
+		((CAutoDoor*)obj)->SetMario(player);
+	}
+		break;
 	case OBJECT_TYPE_PORTAL:
 		{	
 			float r = (float)atof(tokens[4].c_str());
@@ -724,7 +749,7 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 	DebugOut(L"[INFO] KeyDown: %d\n", KeyCode);
 
 	CMario *mario = ((CPlayScene*)scence)->GetPlayer();
-	if (mario->GetState() == MARIO_STATE_DIE || mario->isClearingCourse == true||mario->isTransform==true)
+	if (mario->GetState() == MARIO_STATE_DIE || mario->isClearingCourse == true||mario->isTransform==true || mario->isCrossingPipe == true)
 		return;
 	switch (KeyCode)
 	{
@@ -797,6 +822,9 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 	case DIK_5:
 		mario->GoUnderGround();
 		break;
+	case DIK_6:
+		mario->GoHiddenDoor();
+		break;
 	case DIK_Z:
 		if (mario->isAttacking == true)
 			return;
@@ -819,7 +847,7 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 void CPlayScenceKeyHandler::OnKeyUp(int KeyCode)
 {
 	CMario* mario = ((CPlayScene*)scence)->GetPlayer();
-	if (mario->GetState() == MARIO_STATE_DIE || mario->isClearingCourse == true||mario->isTransform==true)
+	if (mario->GetState() == MARIO_STATE_DIE || mario->isClearingCourse == true||mario->isTransform==true||mario->isCrossingPipe==true)
 		return;
 	switch (KeyCode)
 	{
@@ -846,7 +874,7 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 	CMario *mario = ((CPlayScene*)scence)->GetPlayer();
 	// disable control key when Mario die 
 	
-	if (mario->GetState() == MARIO_STATE_DIE||mario->isClearingCourse==true||mario->isTransform==true)
+	if (mario->GetState() == MARIO_STATE_DIE||mario->isClearingCourse==true||mario->isTransform==true || mario->isCrossingPipe == true)
 		return;
 	if (game->IsKeyDown(DIK_LEFT) && !game->IsKeyDown(DIK_RIGHT))
 	{
@@ -901,8 +929,13 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 			}			
 		}			
 	}
+	else if (game->IsKeyDown(DIK_DOWN))
+	{
+		mario->isDucking = true;
+	}
 	else if(!game->IsKeyDown(DIK_SPACE))
 	{
+		mario->isDucking = false;
 		mario->SetState(MARIO_STATE_IDLE);
 	}		
 }

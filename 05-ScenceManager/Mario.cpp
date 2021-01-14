@@ -20,6 +20,8 @@ CMario::CMario(float x, float y) : CGameObject()
 	isFlying = false;
 	isAttacking = false;
 	isSliding = false;
+	isDucking = false;
+	isCrossingPipe = false;
 
 	isRunningLeft = false;
 	isRunningFastRight = false;
@@ -51,7 +53,12 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		return;
 	// Calculate dx, dy 
 	CGameObject::Update(dt);
-
+	if (isCrossingPipe == true)
+	{
+		y += dy;
+		return;
+	}
+		
 	// Simple fall down
 	if (isFlyFall == true)
 		vy = MARIO_RESIST_GRAVITY;
@@ -200,8 +207,9 @@ void CMario::Render()
 	}
 	else
 	{
+		
 		int ani = -1;
-
+		
 		if (level == MARIO_LEVEL_BIG)					//big
 		{
 			if (vy >= 0)
@@ -566,6 +574,11 @@ void CMario::Render()
 					ani = MARIO_ANI_FIRE_JUMP_LEFT;
 			}
 		}
+		if (isCrossingPipe == true)
+		{
+			ani = MARIO_ANI_CROSS_PIPE;
+		}
+
 		animation_set->at(ani)->Render(round(x), round(y), alpha);
 	}
 	//RenderBoundingBox();
@@ -831,7 +844,8 @@ void CMario::GoUnderGround()
 {
 	SetState(MARIO_STATE_IDLE);
 	SetLevel(MARIO_LEVEL_BIG);
-	SetPosition(2272.00f, 176.00f);
+	//SetPosition(2264.00f, 64.00f);
+	SetPosition(2480.00f, 80.00f);
 	SetSpeed(0, 0);
 }
 void CMario::ResetSmall()
@@ -846,6 +860,13 @@ void CMario::ResetFire()
 	SetState(MARIO_STATE_IDLE);
 	SetLevel(MARIO_LEVEL_FIRE);
 	SetPosition(start_x, start_y);
+	SetSpeed(0, 0);
+}
+void CMario::GoHiddenDoor()
+{
+	SetState(MARIO_STATE_IDLE);
+	SetLevel(MARIO_LEVEL_BIG);
+	SetPosition(2256.0f, -368.0f);
 	SetSpeed(0, 0);
 }
 CMario::~CMario()

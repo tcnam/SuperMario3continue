@@ -27,6 +27,8 @@
 #include "Square.h"
 #include "Message.h"
 #include "Effect.h"
+#include "HiddenDoor.h"
+#include "AutoDoor.h"
 
 
 class CPlayScene: public CScene

@@ -112,6 +112,12 @@
     <Filter Include="Object\GameObject\Message">
       <UniqueIdentifier>{f8e6f636-d559-4611-8b96-e63bd70f186b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Object\GameObject\HiddenDoor">
+      <UniqueIdentifier>{1544524a-c837-4b5f-9557-65c3aa60e042}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\GameObject\AutoDoor">
+      <UniqueIdentifier>{069c0bc3-8bc8-4d54-84ca-e96c30c7e54a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animations.cpp">
@@ -218,6 +224,12 @@
     </ClCompile>
     <ClCompile Include="Message.cpp">
       <Filter>Object\GameObject\Message</Filter>
+    </ClCompile>
+    <ClCompile Include="HiddenDoor.cpp">
+      <Filter>Object\GameObject\HiddenDoor</Filter>
+    </ClCompile>
+    <ClCompile Include="AutoDoor.cpp">
+      <Filter>Object\GameObject\AutoDoor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -328,6 +340,12 @@
     </ClInclude>
     <ClInclude Include="Message.h">
       <Filter>Object\GameObject\Message</Filter>
+    </ClInclude>
+    <ClInclude Include="HiddenDoor.h">
+      <Filter>Object\GameObject\HiddenDoor</Filter>
+    </ClInclude>
+    <ClInclude Include="AutoDoor.h">
+      <Filter>Object\GameObject\AutoDoor</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
