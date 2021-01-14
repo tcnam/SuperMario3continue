@@ -149,6 +149,7 @@
     <ClCompile Include="ScoreBoard.cpp" />
     <ClCompile Include="SpecialBrick.cpp" />
     <ClCompile Include="Square.cpp" />
+    <ClCompile Include="Tail.cpp" />
     <ClCompile Include="Terrain.cpp" />
     <ClCompile Include="Utils.cpp" />
     <ClCompile Include="Game.cpp" />

@@ -819,7 +819,19 @@ void CMario::Attack()
 	}
 	else if (level == MARIO_LEVEL_TAIL)
 	{
-		
+		tail->SetPosition(x, y+20.0f);
+		if (nx > 0)
+		{			
+			tail->SetSpeed(TAIL_SPEED, 0);
+		}
+		else
+		{
+			tail->SetSpeed(-TAIL_SPEED, 0);
+		}
+	}
+	else
+	{
+		DebugOut(L"can't attack");
 	}
 	
 	DebugOut(L"Fire ball was created\n");

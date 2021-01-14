@@ -30,6 +30,7 @@ using namespace std;
 #define OBJECT_TYPE_MESSAGE			16
 #define OBJECT_TYPE_HIDDENDOOR		17
 #define OBJECT_SYPE_AUTODOOR		18
+#define OBJECT_TYPE_TAIL			19
 
 class CGameObject; 
 typedef CGameObject * LPGAMEOBJECT;

@@ -29,7 +29,7 @@
 #include "Effect.h"
 #include "HiddenDoor.h"
 #include "AutoDoor.h"
-
+#include "Tail.h"
 
 class CPlayScene: public CScene
 {

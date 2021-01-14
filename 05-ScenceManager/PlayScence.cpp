@@ -181,7 +181,6 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_WEAKBRICK: 
 		{
 			obj = new CWeakBrick();
-			((CWeakBrick*)obj)->SetMario(player);
 			((CWeakBrick*)obj)->SetInitPosition(x, y);
 			WeakBricks.push_back((CWeakBrick*)obj);
 			DebugOut(L"Weak Brick with index:%i has been pushed to list weakBricks\n", WeaKBrickIndex);
@@ -191,7 +190,6 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_SPECIALBRICK:
 		{
 			obj = new CSpecialBrick();
-			((CSpecialBrick*)obj)->SetMario(player);
 			((CSpecialBrick*)obj)->SetInitPosition(x, y);
 			SpecialBrick = (CSpecialBrick*)obj;
 		}
@@ -296,6 +294,12 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		{	
 			obj = new CFireBall();
 			player->SetFireBall((CFireBall*)obj);
+		}
+		break;
+	case OBJECT_TYPE_TAIL:
+		{
+			obj = new CTail();
+			player->SetTail((CTail*)obj);
 		}
 		break;
 	case OBJECT_TYPE_KOOPAS:
@@ -556,7 +560,7 @@ void CPlayScene::Update(DWORD dt)
 	vector<LPGAMEOBJECT> coObbjects_Of_FireBall;								//5: List of collidable Objects of FireBall
 	vector<LPGAMEOBJECT> coObjects_Of_Mario;									//6: List of collidable Objects of Mario
 	vector<LPGAMEOBJECT> coObjects_Of_BountyBrick_WeakBrick;								//7: List of collidable Objects of BountyBrick
-
+	vector<LPGAMEOBJECT> coObjects_Of_Tail;
 
 
 
@@ -581,6 +585,7 @@ void CPlayScene::Update(DWORD dt)
 		}
 		else if (objects[i]->type == OBJECT_TYPE_KOOPAS)			//4,5,7
 		{
+			coObjects_Of_Tail.push_back(objects[i]);
 			coObjects_Of_Koopas.push_back(objects[i]);
 			coObbjects_Of_FireBall.push_back(objects[i]);
 			coObjects_Of_BountyBrick_WeakBrick.push_back(objects[i]);
@@ -589,6 +594,7 @@ void CPlayScene::Update(DWORD dt)
 		}
 		else if (objects[i]->type == OBJECT_TYPE_GOOMBA)		//3,4,5
 		{
+			coObjects_Of_Tail.push_back(objects[i]);
 			coObjects_Of_Goomba.push_back(objects[i]);
 			coObjects_Of_Koopas.push_back(objects[i]);
 			coObbjects_Of_FireBall.push_back(objects[i]);
@@ -597,6 +603,7 @@ void CPlayScene::Update(DWORD dt)
 		}
 		else if (objects[i]->type == OBJECT_TYPE_FIREFLOWER)	//4,5
 		{
+			coObjects_Of_Tail.push_back(objects[i]);
 			coObjects_Of_Koopas.push_back(objects[i]);
 			coObbjects_Of_FireBall.push_back(objects[i]);
 		}
@@ -610,6 +617,7 @@ void CPlayScene::Update(DWORD dt)
 		}
 		else if (objects[i]->type == OBJECT_TYPE_BOUNTYBRICK)					//2,3,5
 		{
+			coObjects_Of_Tail.push_back(objects[i]);
 			coObjects_Of_Bounty.push_back(objects[i]);
 			coObjects_Of_Goomba.push_back(objects[i]);
 			coObbjects_Of_FireBall.push_back(objects[i]);
@@ -618,6 +626,7 @@ void CPlayScene::Update(DWORD dt)
 		}
 		else if (objects[i]->type == OBJECT_TYPE_WEAKBRICK)						//2,3,5
 		{
+			coObjects_Of_Tail.push_back(objects[i]);
 			coObjects_Of_Bounty.push_back(objects[i]);
 			coObjects_Of_Goomba.push_back(objects[i]);
 			coObbjects_Of_FireBall.push_back(objects[i]);
@@ -626,6 +635,7 @@ void CPlayScene::Update(DWORD dt)
 		}
 		else if (objects[i]->type == OBJECT_TYPE_SPECIALBRICK)						//2,3,5
 		{
+			coObjects_Of_Tail.push_back(objects[i]);
 			coObjects_Of_Bounty.push_back(objects[i]);
 			coObjects_Of_Goomba.push_back(objects[i]);
 			coObbjects_Of_FireBall.push_back(objects[i]);
@@ -663,6 +673,8 @@ void CPlayScene::Update(DWORD dt)
 
 		else if (objects[i]->type == OBJECT_TYPE_BOUNTYBRICK || objects[i]->type == OBJECT_TYPE_WEAKBRICK || objects[i]->type == OBJECT_TYPE_SPECIALBRICK)
 			objects[i]->Update(dt, &coObjects_Of_BountyBrick_WeakBrick);
+		else if (objects[i]->type == OBJECT_TYPE_TAIL)
+			objects[i]->Update(dt, &coObjects_Of_Tail);
 		else
 		{
 			objects[i]->Update(dt, &coObjects);			
@@ -842,7 +854,7 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 			else if (mario->GetLevel() == MARIO_LEVEL_TAIL)
 			{
 				mario->StartAttack();
-				//mario->SetState(MARIO_STATE_ATTACK);
+				mario->SetState(MARIO_STATE_ATTACK);
 			}
 		}		
 		break;

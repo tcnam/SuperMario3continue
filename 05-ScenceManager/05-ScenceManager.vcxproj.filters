@@ -231,6 +231,9 @@
     <ClCompile Include="AutoDoor.cpp">
       <Filter>Object\GameObject\AutoDoor</Filter>
     </ClCompile>
+    <ClCompile Include="Tail.cpp">
+      <Filter>Object\GameObject\Mario\MarioWeapon</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animations.h">

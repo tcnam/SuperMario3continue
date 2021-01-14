@@ -1,6 +1,5 @@
 #pragma once
 #include "GameObject.h"
-#include "Mario.h"
 #include "Koopas.h"
 #include "BountyButton.h"
 #include"Fragment.h"
@@ -17,14 +16,12 @@ class CSpecialBrick : public CGameObject
 protected:
 	float start_x;
 	float start_y;
-	CMario* Mario;
 	CBountyButton* bountybutton;
 	vector<CFragment*> fragments;
 
 public:
 	CSpecialBrick();
 
-	void SetMario(CMario* mario) { this->Mario = mario; }
 	void SetBountyButton(CBountyButton* bb) { bountybutton = bb; }
 	void PushFragment(CFragment* fragment) { fragments.push_back(fragment); }
 

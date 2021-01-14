@@ -19,13 +19,11 @@ class CWeakBrick : public CGameObject
 protected:
 	float start_x;
 	float start_y;
-	CMario* Mario;
 	CCoin* Coin;
 	vector<CFragment*> fragments;
 public:
 	CWeakBrick();
 
-	void SetMario(CMario* mario) { this->Mario = mario; }
 
 	void PushCoin(CCoin* coin) { this->Coin= coin; }
 	CCoin* GetCoin() { return Coin; }

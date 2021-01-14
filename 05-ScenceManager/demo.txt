@@ -835,6 +835,8 @@
 # type: 0 = Mario , 1 = Brick, 2 = Goomba, 3 = Koopas, 4 = Bounty Brick, 5=Hidden Object, 6=Fire Ball of Mario, 7=Fire Flower, 8=Fire Ball of Flower, 9=Bounty, 10=Coin, 11=Fragment, 12=Weak Brick, 13=Bounty Button, 14=Special Brick, 15=Mystery Piece
 # MARIO
 0	17	-50	1
+# TAIL OF MARIO
+19	17	-50	0
 # HIDDEN OBJECT
 5	240	-64	0	48	1
 5	272	-96	0	48	1

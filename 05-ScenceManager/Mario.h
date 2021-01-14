@@ -4,6 +4,7 @@
 #include "Brick.h"
 #include "FireBall.h"
 #include "Effect.h"
+#include "Tail.h"
 
 #define MARIO_AUTO_WALKING_SPEED	0.05f
 #define MARIO_WALKING_SPEED		0.1f 
@@ -159,7 +160,7 @@ class CMario : public CGameObject
 	
 	CEffect* effect;
 	CFireBall* fireballs;
-
+	CTail* tail;
 	
 	DWORD StartMovingLeft;
 	DWORD StartMovingRight;
@@ -236,6 +237,8 @@ public:
 	DWORD GetTimeFly() { return StartFly; }
 
 	void SetFireBall(CFireBall* FireBall) { fireballs = FireBall; }
+	void SetTail(CTail* t) { tail = t; }
+	CTail* GetTail() { return tail; }
 	void SetEffect(CEffect* ef) { effect = ef; }
 	CEffect* GetEffect() { return effect; }
 

@@ -49,8 +49,6 @@ void CWeakBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	//if (AABBCheck(Mario) == true)
 	//	ActivateFragment();
-	if (Mario == NULL)
-		return;
 	if (state == WEAKBRICK_STATE_DISAPPEAR)
 		return;
 	CGameObject::Update(dt, coObjects);
@@ -73,33 +71,8 @@ void CWeakBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		for (UINT i = 0; i < coEventsResult.size(); i++)
 		{
 			LPCOLLISIONEVENT e = coEventsResult[i];
-			if (dynamic_cast<CMario*>(e->obj))
-			{
-				float mario_vx, mario_vy;
-				float mario_x, mario_y;
 
-				Mario->GetPosition(mario_x, mario_y);
-				Mario->GetSpeed(mario_vx, mario_vy);
-				if (ny < 0)
-				{
-					Mario->SetPosition(mario_x, start_y + BOUNTY_BBOX_HEIGHT + 1.00f);
-					Mario->SetSpeed(mario_vx, 0);
-
-				}
-				if (ny > 0)
-				{
-					Mario->isOnGround = true;
-				}
-				if (nx != 0)
-				{
-					if (Mario->GetLevel() == MARIO_LEVEL_TAIL)
-					{
-
-
-					}
-				}
-			}
-			else if (dynamic_cast<CKoopas*>(e->obj))
+			if (dynamic_cast<CKoopas*>(e->obj))
 			{
 				if (nx != 0)
 				{
