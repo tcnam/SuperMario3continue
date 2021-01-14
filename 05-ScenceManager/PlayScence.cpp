@@ -724,7 +724,7 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 	DebugOut(L"[INFO] KeyDown: %d\n", KeyCode);
 
 	CMario *mario = ((CPlayScene*)scence)->GetPlayer();
-	if (mario->GetState() == MARIO_STATE_DIE || mario->isClearingCourse == true)
+	if (mario->GetState() == MARIO_STATE_DIE || mario->isClearingCourse == true||mario->isTransform==true)
 		return;
 	switch (KeyCode)
 	{
@@ -819,7 +819,7 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 void CPlayScenceKeyHandler::OnKeyUp(int KeyCode)
 {
 	CMario* mario = ((CPlayScene*)scence)->GetPlayer();
-	if (mario->GetState() == MARIO_STATE_DIE || mario->isClearingCourse == true)
+	if (mario->GetState() == MARIO_STATE_DIE || mario->isClearingCourse == true||mario->isTransform==true)
 		return;
 	switch (KeyCode)
 	{
@@ -846,7 +846,7 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 	CMario *mario = ((CPlayScene*)scence)->GetPlayer();
 	// disable control key when Mario die 
 	
-	if (mario->GetState() == MARIO_STATE_DIE||mario->isClearingCourse==true)
+	if (mario->GetState() == MARIO_STATE_DIE||mario->isClearingCourse==true||mario->isTransform==true)
 		return;
 	if (game->IsKeyDown(DIK_LEFT) && !game->IsKeyDown(DIK_RIGHT))
 	{
