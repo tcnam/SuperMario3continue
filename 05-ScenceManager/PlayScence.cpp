@@ -254,6 +254,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		{
 			obj = new CFireFlower();
 			((CFireFlower*)obj)->SetMario(player);
+			((CFireFlower*)obj)->SetInitPosition(x,y);
 			FireFlowers.push_back((CFireFlower*)obj);
 		}
 		break;
@@ -381,18 +382,25 @@ void CPlayScene::_ParseSection_EFFECT(string line)
 {
 	vector<string> tokens = split(line);
 	if (tokens.size() < 3) return;
-	int ower_id = atoi(tokens[0].c_str());
+	int owner_id = atoi(tokens[0].c_str());
 	float x = (float)atof(tokens[1].c_str());
 	float y = (float)atof(tokens[2].c_str());
 	int ani_set_id = atoi(tokens[3].c_str());
 	CEffect* effect = new CEffect();
-	effect->SetOwnerId(ower_id);
+	effect->SetOwnerId(owner_id);
 	effect->SetPosition(x, y);
 	CAnimationSets* animation_sets = CAnimationSets::GetInstance();
 	LPANIMATION_SET ani_set = animation_sets->Get(ani_set_id);
 	effect->SetAnimationSet(ani_set);
-	if (ower_id == EFFECT_OWNER_ID_MARIO)
+	if (owner_id == EFFECT_OWNER_ID_MARIO)
 		player->SetEffect(effect);
+	else if (owner_id == EFFECT_OWNER_ID_FIREFLOWER)
+	{
+		if (FlowerIndex >= FireFlowers.size())
+			FlowerIndex = 0;
+		FireFlowers[FlowerIndex]->SetEffect(effect);
+		FlowerIndex++;		
+	}
 	effects.push_back(effect);
 
 }

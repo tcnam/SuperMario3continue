@@ -4,6 +4,9 @@ CFireFlower::CFireFlower()
 {
 	SetState(FIREFLOWER_STATE_LEFT_LOWER);
 	vy = -FIREFLOWER_FLY_SPEED;
+	isFinish = false;
+	start_x = 0;
+	start_y = 0;
 }
 void CFireFlower::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
@@ -20,6 +23,12 @@ void CFireFlower::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		return;
 	if (Mario->isTransform == true)
 		return;
+	if (isFinish == true)
+	{
+		//effect->SetPosition(EFFECT_LOCATION_X_TO_HIDE,EFFECT_LOCATION_Y_TO_HIDE);
+		return;
+	}
+		
 	if (Shoot_Start != 0)
 	{
 		if (GetTickCount64() - Shoot_Start > FIREFLOWER_TIMEWAIT_FORSHOOT)
@@ -147,6 +156,8 @@ void CFireFlower::Shoot()
 }
 void CFireFlower::Render()
 {
+	if (isFinish == true)
+		return;
 	int ani = -1;
 	if (state == FIREFLOWER_STATE_RIGHT_UPPER)
 		ani = FIREFLOWER_ANI_RIGHT_UPPER;

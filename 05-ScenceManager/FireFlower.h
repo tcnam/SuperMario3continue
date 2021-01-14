@@ -29,19 +29,27 @@
 
 class CFireFlower : public CGameObject
 {
+	float start_x;
+	float start_y;
+	CEffect* effect;
 public:
 	CMario* Mario;
 	bool isShooting;
 	bool isShootFar;
 	bool isAppear;
+	bool isFinish;
 	DWORD Shoot_Start;
-
 	CFireFlower();
 	CFireBallFlower* FireBallFlower;
+	void SetInitPosition(float x, float y) { start_x = x; start_y = y; }
+	float GetStartx() { return start_x; }
+	float GetStarty() { return start_y; }
 	void StartShoot() { isShooting = true; Shoot_Start = (DWORD)GetTickCount64(); vy = 0; }
 	void Shoot();
 	void SetMario(CMario* mario) { Mario = mario; }
 	void SetFireBallFlower(CFireBallFlower* fireball) { FireBallFlower = fireball; }
+	void SetEffect(CEffect* ef) { effect = ef; }
+	CEffect* GetEffect() { return effect; }
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	virtual void Render();

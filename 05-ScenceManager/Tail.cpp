@@ -3,18 +3,30 @@
 #include"SpecialBrick.h"
 #include"Goomba.h"
 #include"Koopas.h"
+#include"FireFlower.h"
 
 CTail::CTail()
 {
 	vx = 0;
 	vy = 0;
 	isUsed = false;
+	start_x = 0;
+	start_y = 0;
 }
 
 void CTail::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-
+	if (isUsed == false)
+		return;
 	CGameObject::Update(dt);
+	if (abs(x - start_x) >= TAIL_DX_MOVE)
+	{
+		vy = 0;
+		vx = 0;
+		isUsed = false;
+		start_x = x;
+		start_y = y;
+	}
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
 
@@ -49,6 +61,7 @@ void CTail::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 			if (dynamic_cast<CGoomba*>(e->obj)) // if e->obj is Goomba 
 			{
+				isUsed = false;
 				CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
 
 				if (goomba->GetState() != GOOMBA_STATE_DIE)
@@ -59,6 +72,7 @@ void CTail::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			} // if Goomba
 			else if (dynamic_cast<CKoopas*>(e->obj))
 			{
+				isUsed = false;
 				CKoopas* koopas = dynamic_cast<CKoopas*>(e->obj);
 				if (koopas->GetState() != KOOPAS_STATE_DEFENSE_STATIC)
 				{
@@ -68,6 +82,7 @@ void CTail::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			}
 			else if (dynamic_cast<CSpecialBrick*>(e->obj))
 			{
+				isUsed = false;
 				CSpecialBrick* spB = dynamic_cast<CSpecialBrick*>(e->obj);
 				if (spB->GetState() != SPECIALBRICK_STATE_EMPTY)
 				{
@@ -77,6 +92,7 @@ void CTail::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			}
 			else if (dynamic_cast<CBountyBrick*>(e->obj))
 			{
+				isUsed = false;
 				CBountyBrick* bountybrick = dynamic_cast<CBountyBrick*>(e->obj);
 				if (bountybrick->GetState()!= BOUNTYBRICK_STATE_EMPTY)
 				{
@@ -87,6 +103,7 @@ void CTail::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			}
 			else if (dynamic_cast<CWeakBrick*>(e->obj))
 			{
+				isUsed = false;
 				CWeakBrick* weakbrick = dynamic_cast<CWeakBrick*>(e->obj);
 				if (weakbrick->GetState() == WEAKBRICK_STATE_NORMAL)
 				{
@@ -95,6 +112,21 @@ void CTail::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					weakbrick->MoveWeakBrickToHorizon();
 
 				}
+			}
+			else if (dynamic_cast<CFireFlower*>(e->obj))
+			{
+				isUsed = false;
+				CFireFlower* fireflower = dynamic_cast<CFireFlower*>(e->obj);
+				if (fireflower->isFinish != true)
+				{
+					if (fireflower->GetEffect() != NULL)
+					{
+						fireflower->GetEffect()->SetPosition(x, y);
+						fireflower->GetEffect()->SetState(EFFECT_CLOUND);
+					}
+					fireflower->SetPosition(fireflower->GetStartx(), fireflower->GetStarty());
+					fireflower->isFinish = true;
+				}					
 			}
 		}
 	}

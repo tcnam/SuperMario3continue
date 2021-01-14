@@ -40,7 +40,8 @@ CMario::CMario(float x, float y) : CGameObject()
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
-
+	
+	
 	if (vy > 0.04f)
 		isOnGround = false;
 	if (GetTickCount64() - Transform_start > MARIO_TRANSFORM_TIME)
@@ -194,6 +195,11 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		}		
 	}
 	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
+	if (tail != NULL)
+	{
+		if (tail->isUsed == false)
+			tail->SetPosition(x, y);
+	}
 }
 
 void CMario::Render()
@@ -774,8 +780,8 @@ void CMario::Jump()
 {
 	//if (allowJump == false)
 		//return;
-	//if (isOnGround ==false)//allow mario to jump only when on ground
-	//	return;
+	if (isOnGround ==false)//allow mario to jump only when on ground
+		return;
 	vy =- MARIO_JUMP_SPEED_Y;
 	isOnGround = false;
 }
@@ -819,13 +825,18 @@ void CMario::Attack()
 	}
 	else if (level == MARIO_LEVEL_TAIL)
 	{
-		tail->SetPosition(x, y+20.0f);
+		tail->isUsed = true;
+		
 		if (nx > 0)
-		{			
+		{
+			tail->SetStartPosition(x, y + 20.0f);
+			tail->SetPosition(x, y+20.0f);
 			tail->SetSpeed(TAIL_SPEED, 0);
 		}
 		else
 		{
+			tail->SetStartPosition(x + MARIO_BIG_BBOX_WIDTH, y + 20.0f);
+			tail->SetPosition(x+MARIO_BIG_BBOX_WIDTH, y + 20.0f);
 			tail->SetSpeed(-TAIL_SPEED, 0);
 		}
 	}
@@ -880,7 +891,7 @@ void CMario::ResetFire()
 void CMario::GoHiddenDoor()
 {
 	SetState(MARIO_STATE_IDLE);
-	SetLevel(MARIO_LEVEL_BIG);
+	SetLevel(MARIO_LEVEL_TAIL);
 	SetPosition(2256.0f, -368.0f);
 	SetSpeed(0, 0);
 }
