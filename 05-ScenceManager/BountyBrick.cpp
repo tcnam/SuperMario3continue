@@ -16,6 +16,8 @@ void CBountyBrick::Render()
 }
 void CBountyBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	if (Mario == NULL)
+		return;
 	CGameObject::Update(dt, coObjects);
 	y += dy;
 	if (y < start_y - BOUNTYBRICK_MOVING_DISTANCE_TOBACK)

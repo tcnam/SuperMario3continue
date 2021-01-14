@@ -22,6 +22,8 @@ void CSquare::PushMysteryPiece(CMysteryPiece* p)
 }
 void CSquare::Update(float cam_x, float cam_y)
 {
+	if (Mario == NULL)
+		return;
 	x = cam_x+  RELATIVE_DX;
 	y = cam_y + RELATIVE_DY;
 	int temp1 = CGame::GetInstance()->GetPiece1();

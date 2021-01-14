@@ -32,9 +32,9 @@ public:
 	void SetOwnerId(int n) { owner_id = n; }
 	int GetOwnerId() { return owner_id; }
 
-	void SetPosition(float x, float y) { this->x = x, this->y = y; }
-	float GetPositionX() { return this->x; }
-	float GetPositionY() { return this->y; }
+	void SetPosition(float lo_x, float lo_y) { x = lo_x, y = lo_y; }
+	float GetPositionX() { x; }
+	float GetPositionY() { y; }
 
 	void SetAnimationSet(LPANIMATION_SET ani_set) { animation_set = ani_set; }
 	void Update(DWORD dt);

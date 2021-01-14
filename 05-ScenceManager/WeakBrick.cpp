@@ -49,6 +49,8 @@ void CWeakBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	//if (AABBCheck(Mario) == true)
 	//	ActivateFragment();
+	if (Mario == NULL)
+		return;
 	if (state == WEAKBRICK_STATE_DISAPPEAR)
 		return;
 	CGameObject::Update(dt, coObjects);

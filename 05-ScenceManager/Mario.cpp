@@ -44,7 +44,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	{
 		isTransform = false;
 		Transform_start = 0;
-		effect->SetPosition(EFFECT_LOCATION_X_TO_HIDE, EFFECT_LOCATION_Y_TO_HIDE);
+		if(effect!=NULL)					//Pvevent error when switch scene
+			effect->SetPosition(EFFECT_LOCATION_X_TO_HIDE, EFFECT_LOCATION_Y_TO_HIDE);
 	}
 	else
 		return;

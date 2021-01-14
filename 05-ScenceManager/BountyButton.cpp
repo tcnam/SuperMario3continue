@@ -30,6 +30,8 @@ void CBountyButton::Render()
 }
 void CBountyButton::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	if (Mario == NULL)
+		return;
 	if (isFinished == true)
 		return;
 	if (isInsideSpecialBrick == true)

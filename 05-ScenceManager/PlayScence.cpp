@@ -319,7 +319,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			float b = (float)atof(tokens[5].c_str());
 			int scene_id = atoi(tokens[6].c_str());
 			obj = new CPortal(x, y, r, b, scene_id);
-			((CPortal*)obj)->SetMario(player);
+			((CPortal*)obj)->SetMario(player);	
 		}
 		break;
 	default:
@@ -516,7 +516,11 @@ void CPlayScene::Update(DWORD dt)
 {
 	// We know that Mario is the first object in the list hence we won't add him into the colliable object list
 	// TO-DO: This is a "dirty" way, need a moref organized way 
-	if(tCount==0)
+	
+	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
+	if (player == NULL)
+		return;
+	if (tCount == 0)
 		tCount = (DWORD)GetTickCount64();
 	vector<LPGAMEOBJECT> coObjects;
 	vector<LPGAMEOBJECT> coObjects_Of_FireFlower_Coin_FireBallFlower_MysteryPiece;			//1: List of collidable Objects of FireFlower(or Coin, or FireBallFlower)
@@ -526,8 +530,8 @@ void CPlayScene::Update(DWORD dt)
 	vector<LPGAMEOBJECT> coObbjects_Of_FireBall;								//5: List of collidable Objects of FireBall
 	vector<LPGAMEOBJECT> coObjects_Of_Mario;									//6: List of collidable Objects of Mario
 	vector<LPGAMEOBJECT> coObjects_Of_BountyBrick_WeakBrick;								//7: List of collidable Objects of BountyBrick
-	
-	
+
+
 
 
 	for (size_t i = 0; i < objects.size(); i++)
@@ -547,14 +551,14 @@ void CPlayScene::Update(DWORD dt)
 				coObjects_Of_BountyBrick_WeakBrick.push_back(objects[i]);
 				coObjects_Of_Goomba.push_back(objects[i]);
 				coObjects_Of_Koopas.push_back(objects[i]);
-			}			
+			}
 		}
 		else if (objects[i]->type == OBJECT_TYPE_KOOPAS)			//4,5,7
 		{
 			coObjects_Of_Koopas.push_back(objects[i]);
 			coObbjects_Of_FireBall.push_back(objects[i]);
 			coObjects_Of_BountyBrick_WeakBrick.push_back(objects[i]);
-			if(player->untouchable==false)
+			if (player->untouchable == false)
 				coObjects_Of_Mario.push_back(objects[i]);
 		}
 		else if (objects[i]->type == OBJECT_TYPE_GOOMBA)		//3,4,5
@@ -570,13 +574,13 @@ void CPlayScene::Update(DWORD dt)
 			coObjects_Of_Koopas.push_back(objects[i]);
 			coObbjects_Of_FireBall.push_back(objects[i]);
 		}
-		else if (objects[i]->type == OBJECT_TYPE_BRICK|| objects[i]->type==OBJECT_TYPE_HIDDENOBJECT)		//2,3,4,5,6
+		else if (objects[i]->type == OBJECT_TYPE_BRICK || objects[i]->type == OBJECT_TYPE_HIDDENOBJECT)		//2,3,4,5,6
 		{
-			coObjects_Of_Bounty.push_back(objects[i]);									
-			coObjects_Of_Goomba.push_back(objects[i]);									
-			coObjects_Of_Koopas.push_back(objects[i]);									
-			coObbjects_Of_FireBall.push_back(objects[i]);								
-			coObjects_Of_Mario.push_back(objects[i]);									
+			coObjects_Of_Bounty.push_back(objects[i]);
+			coObjects_Of_Goomba.push_back(objects[i]);
+			coObjects_Of_Koopas.push_back(objects[i]);
+			coObbjects_Of_FireBall.push_back(objects[i]);
+			coObjects_Of_Mario.push_back(objects[i]);
 		}
 		else if (objects[i]->type == OBJECT_TYPE_BOUNTYBRICK)					//2,3,5
 		{
@@ -607,14 +611,13 @@ void CPlayScene::Update(DWORD dt)
 		//	coObjects_Of_Mario.push_back(objects[i]);
 		//}
 	}
-
 	for (size_t i = 0; i < objects.size(); i++)
 	{
-		if (objects[i]->type == OBJECT_TYPE_FLOWER_FIREBALL 
-			|| objects[i]->type == OBJECT_TYPE_COIN 
+		if (objects[i]->type == OBJECT_TYPE_FLOWER_FIREBALL
+			|| objects[i]->type == OBJECT_TYPE_COIN
 			|| objects[i]->type == OBJECT_TYPE_FIREFLOWER
-			|| objects[i]->type== OBJECT_TYPE_BOUNTYBUTTON
-			|| objects[i]->type== OBJECT_TYPE_MYSTERYPIECE)
+			|| objects[i]->type == OBJECT_TYPE_BOUNTYBUTTON
+			|| objects[i]->type == OBJECT_TYPE_MYSTERYPIECE)
 			objects[i]->Update(dt, &coObjects_Of_FireFlower_Coin_FireBallFlower_MysteryPiece);
 
 		else if (objects[i]->type == OBJECT_TYPE_BOUNTY)
@@ -632,19 +635,21 @@ void CPlayScene::Update(DWORD dt)
 		else if (objects[i]->type == OBJECT_TYPE_MARIO)
 			objects[i]->Update(dt, &coObjects_Of_Mario);
 
-		else if (objects[i]->type == OBJECT_TYPE_BOUNTYBRICK||objects[i]->type==OBJECT_TYPE_WEAKBRICK|| objects[i]->type == OBJECT_TYPE_SPECIALBRICK)
+		else if (objects[i]->type == OBJECT_TYPE_BOUNTYBRICK || objects[i]->type == OBJECT_TYPE_WEAKBRICK || objects[i]->type == OBJECT_TYPE_SPECIALBRICK)
 			objects[i]->Update(dt, &coObjects_Of_BountyBrick_WeakBrick);
 		else
-			objects[i]->Update(dt, &coObjects);
+		{
+			objects[i]->Update(dt, &coObjects);			
+		}
 	}
+	if (player == NULL)
+		return;
 	for (unsigned int i = 0; i < effects.size(); i++)
 	{
+		if (effects[i] == NULL)
+			continue;
 		effects[i]->Update(dt);
 	}
-
-	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
-	if (player == NULL) return; 
-
 	// Update camera to follow mario
 	camera->Update();
 	Hud->Update();
@@ -671,11 +676,14 @@ void CPlayScene::Render()
 */
 void CPlayScene::Unload()
 {
+	for (unsigned int i = 0; i < effects.size(); i++)
+		delete effects[i];
+	effects.clear();
+	player = NULL;
 	SpecialBrick = NULL;
 	camera = NULL;
 	Hud = NULL;
-	tCount = 0;
-	player = NULL;
+	tCount = 0;	
 	MysteryPiece = NULL;
 	BountyBrickIndex = 0;
 	FlowerIndex = 0;
@@ -693,14 +701,13 @@ void CPlayScene::Unload()
 		
 	for (unsigned int i = 0; i < terrains.size(); i++)
 		delete terrains[i];
-	for (unsigned int i = 0; i < effects.size(); i++)
-		delete effects[i];
+	
 	FireFlowers.clear();
 	WeakBricks.clear();
 	bountybricks.clear();
 	objects.clear();
 	terrains.clear();
-	effects.clear();
+	
 	PiecesOfSquare.clear();
 	DebugOut(L"[INFO] Scene %s unloaded! \n", sceneFilePath);
 }

@@ -59,7 +59,9 @@ void CSpecialBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	//	ActivateFragment();
 	//	ActivateBountyButton();
 	//	state = SPECIALBRICK_STATE_EMPTY;
-	//}		
+	//}	
+	if (Mario == NULL)
+		return;
 	if (state == SPECIALBRICK_STATE_EMPTY)
 		return;
 	CGameObject::Update(dt, coObjects);

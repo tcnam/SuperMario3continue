@@ -14,6 +14,8 @@ void CFireFlower::GetBoundingBox(float& left, float& top, float& right, float& b
 }
 void CFireFlower::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	if (Mario == NULL)
+		return;
 	if (Mario->isTransform == true)
 		return;
 	float Mario_x, Mario_y;

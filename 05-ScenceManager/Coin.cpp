@@ -17,6 +17,8 @@ void CCoin::Render()
 }
 void CCoin::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	if (Mario == NULL)
+		return;
 	if (isFinished == true)
 	{
 		return;

@@ -7,6 +7,8 @@ Camera::Camera()
 }
 void Camera::Update()
 {
+	if (Mario == NULL)
+		return;
 	if (Mario->isInsidePlayScence == false)
 	{
 		cam_x = 0.0f;

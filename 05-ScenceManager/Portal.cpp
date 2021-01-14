@@ -12,6 +12,8 @@ CPortal::CPortal(float l, float t, float r, float b, int scene_id )
 }
 void CPortal::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	if (Mario == NULL)
+		return;
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
 	coEvents.clear();
@@ -31,8 +33,7 @@ void CPortal::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		}
 	}
 	//if (Mario->isInsidePlayScence == true)
-	//{
-	//	
+	//{		
 	//	CalcPotentialCollisions(coObjects, coEvents);
 	//	if (coEvents.size() != 0)
 	//	{
