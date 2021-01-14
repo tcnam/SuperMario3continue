@@ -16,6 +16,7 @@ public:
 	~Camera();
 	void SetPosition(float x, float y) { this->cam_x = x, this->cam_y = y; }
 	void GetPosition(float& x, float& y) { x = this->cam_x; y = this->cam_y; }
+	bool checkifMarioInside();
 	void SetMario(CMario* mario) { Mario = mario; }
 	void Update();
 

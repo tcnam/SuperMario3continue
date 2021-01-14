@@ -24,6 +24,8 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
 	if (MarioMain == NULL)
 		return;
+	if (MarioMain->GetState() == MARIO_STATE_DIE)
+		return;
 	if (MarioMain->isTransform == true)
 		return;
 	if (level == KOOPAS_LEVEL_FLY)

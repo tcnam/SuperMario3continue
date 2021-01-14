@@ -189,6 +189,7 @@
     <ClInclude Include="ScoreBoard.h" />
     <ClInclude Include="SpecialBrick.h" />
     <ClInclude Include="Square.h" />
+    <ClInclude Include="Tail.h" />
     <ClInclude Include="Terrain.h" />
     <ClInclude Include="Utils.h" />
     <ClInclude Include="Game.h" />

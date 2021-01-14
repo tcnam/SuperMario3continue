@@ -12,7 +12,7 @@ CAutoDoor::CAutoDoor(float x, float y, int width, int height,float des_x, float 
 }
 void CAutoDoor::Render()
 {
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 void CAutoDoor::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {

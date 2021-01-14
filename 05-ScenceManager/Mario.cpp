@@ -40,6 +40,7 @@ CMario::CMario(float x, float y) : CGameObject()
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
+
 	if (vy > 0.04f)
 		isOnGround = false;
 	if (GetTickCount64() - Transform_start > MARIO_TRANSFORM_TIME)
@@ -578,7 +579,8 @@ void CMario::Render()
 		{
 			ani = MARIO_ANI_CROSS_PIPE;
 		}
-
+		if (state == MARIO_STATE_DIE)
+			ani = MARIO_ANI_DIE;
 		animation_set->at(ani)->Render(round(x), round(y), alpha);
 	}
 	//RenderBoundingBox();
@@ -652,6 +654,7 @@ void CMario::SetState(int state)
 		break;	
 	case MARIO_STATE_DIE:
 		vy = -MARIO_DIE_DEFLECT_SPEED;
+		vx = 0;
 		break;
 	case MARIO_STATE_ATTACK:
 		DebugOut(L"Attack\n");

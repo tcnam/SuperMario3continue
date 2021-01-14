@@ -19,8 +19,11 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
 	if (Mario == NULL)
 		return;
+	if (Mario->GetState() == MARIO_STATE_DIE)
+		return;
 	if (Mario->isTransform == true)
 		return;
+
 	if (GetTickCount64() - untouchable_start > GOOMBA_UNTOUCHABLE_TIME)
 	{
 		untouchable_start = 0;
@@ -32,7 +35,7 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		{
 			if (AABBCheck(Mario) == true)
 			{
-				if (Mario->isAttacking == true||Mario->isOnGround==false)
+				if (Mario->isAttacking == true)
 				{
 					if (state != GOOMBA_STATE_DIE)
 					{
@@ -45,6 +48,7 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 				}
 				if (Mario->untouchable == false)
 				{
+					SetPosition(x, y - 1);
 					if (Mario->GetLevel() == MARIO_LEVEL_SMALL)
 						Mario->SetState(MARIO_STATE_DIE);
 					else

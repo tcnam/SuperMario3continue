@@ -677,6 +677,9 @@ void CPlayScene::Update(DWORD dt)
 	}
 	// Update camera to follow mario
 	camera->Update();
+	//when mario dropping out from camera vision will triggers unload scence
+	if (player == NULL)				
+		return;
 	Hud->Update();
 	TimeCount();
 }

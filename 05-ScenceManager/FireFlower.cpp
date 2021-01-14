@@ -16,6 +16,8 @@ void CFireFlower::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	if (Mario == NULL)
 		return;
+	if (Mario->GetState() == MARIO_STATE_DIE)
+		return;
 	if (Mario->isTransform == true)
 		return;
 	float Mario_x, Mario_y;

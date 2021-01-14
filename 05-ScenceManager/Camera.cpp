@@ -17,8 +17,7 @@ void Camera::Update()
 		return;
 	}
 	float cx, cy;
-	Mario->GetPosition(cx, cy);
-	
+	Mario->GetPosition(cx, cy);	
 	if (cx > (float)SCREEN_WIDTH/2 && cy<=0)
 	{
 		cx -= (float)SCREEN_WIDTH / 2;
@@ -48,6 +47,23 @@ void Camera::Update()
 		cam_y = -SCREEN_HEIGHT+64.0f;		
 	}
 	CGame::GetInstance()->SetCamPos(round(cam_x), round(cam_y));
+	if (Mario != NULL)
+	{
+		if (checkifMarioInside() == false)
+		{
+			CGame::GetInstance()->SwitchScene(1);
+			CGame::GetInstance()->SetLife(CGame::GetInstance()->GetLife() - 1);
+		}
+			
+	}
+	
+}
+bool Camera::checkifMarioInside()
+{
+	float cx, cy;
+	Mario->GetPosition(cx, cy);
+	bool result = CGame::GetInstance()->AABBCheck(cx, cy, cx + 30.0f, cy + 30.0f, cam_x, cam_y, cam_x + SCREEN_WIDTH, cam_y + SCREEN_HEIGHT);
+	return result;
 }
 Camera::~Camera()
 {

@@ -18,6 +18,8 @@ void CBountyBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	if (Mario == NULL)
 		return;
+	if (Mario->GetState() == MARIO_STATE_DIE)
+		return;
 	CGameObject::Update(dt, coObjects);
 	y += dy;
 	if (y < start_y - BOUNTYBRICK_MOVING_DISTANCE_TOBACK)
@@ -55,6 +57,7 @@ void CBountyBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			LPCOLLISIONEVENT e = coEventsResult[i];
 			if (dynamic_cast<CMario*>(e->obj))
 			{
+
 				float mario_vx, mario_vy;
 				float mario_x, mario_y;
 

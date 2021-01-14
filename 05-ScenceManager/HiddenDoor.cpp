@@ -11,7 +11,7 @@ CHiddenDoor::CHiddenDoor(float x, float y, int width, int height)
 }
 void CHiddenDoor::Render()
 {
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 void CHiddenDoor::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
