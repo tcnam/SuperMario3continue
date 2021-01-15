@@ -237,26 +237,25 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 						MarioMain->GetSpeed(Mario_vx, Mario_vy);
 						if (level == KOOPAS_LEVEL_FLY)
 						{
+							MarioMain->SetSpeed(Mario_vx, -MARIO_JUMP_DEFLECT_SPEED);
 							level = KOOPAS_LEVEL_NORMAL;
 							state = KOOPAS_STATE_WALKING;
-							MarioMain->SetSpeed(Mario_vx, -MARIO_JUMP_DEFLECT_SPEED);
-						}
 							
+						}						
 						else
 						{
+							MarioMain->SetSpeed(Mario_vx, -MARIO_JUMP_DEFLECT_SPEED);
 							if (state != KOOPAS_STATE_DEFENSE_STATIC)
 							{
 								CGame::GetInstance()->SetScores(CGame::GetInstance()->GetScores() + 100);
 								state = KOOPAS_STATE_DEFENSE_STATIC;
 								vx = 0;
-								vy = 0;
-								MarioMain->SetSpeed(Mario_vx, -MARIO_JUMP_DEFLECT_SPEED);
+								vy = 0;								
 							}
 							else
 							{
 								CGame::GetInstance()->SetScores(CGame::GetInstance()->GetScores() + 100);
 								state = KOOPAS_STATE_DEFENSE_DYNAMIC;
-								MarioMain->SetSpeed(Mario_vx, -MARIO_JUMP_DEFLECT_SPEED);
 								if (MarioMain->Getnx() > 0)
 									vx = KOOPAS_DYNAMIC_SPEED;
 								else

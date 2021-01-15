@@ -777,7 +777,7 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 		return;
 	switch (KeyCode)
 	{
-	case DIK_SPACE:
+	case DIK_A:
 		//mario->allowJump = false;
 		{
 			if (mario->GetLevel() == MARIO_LEVEL_TAIL)				//tail mario
@@ -849,7 +849,7 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 	case DIK_6:
 		mario->GoHiddenDoor();
 		break;
-	case DIK_Z:
+	case DIK_S:
 		if (mario->isAttacking == true)
 			return;
 		else
@@ -883,9 +883,16 @@ void CPlayScenceKeyHandler::OnKeyUp(int KeyCode)
 		mario->StartSlide();
 		mario->SetState(MARIO_STATE_SLIDE_LEFT);
 		break;*/
-	case DIK_Z:
+	case DIK_S:
+	{
 		if (mario->isHoldingKoopas == true)
 			mario->isHoldingKoopas = false;
+		if (mario->isRunningLeft == true)
+			mario->isRunningLeft = false;
+		if (mario->isRunningRight == true)
+			mario->isRunningRight = false;
+	}
+		
 		break;
 	
 	}
@@ -902,10 +909,12 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 		return;
 	if (game->IsKeyDown(DIK_LEFT) && !game->IsKeyDown(DIK_RIGHT))
 	{
+		if (mario->GetLevel() == MARIO_LEVEL_TAIL && mario->nx > 0)
+			mario->x = mario->x + 7;
 		mario->SetTimeMovingLeft(DWORD(GetTickCount64()));
 		if (DWORD(GetTickCount64()) - mario->GetTimeMovingRight() > MARIO_TIME_CHANGE_DIRECTION)
 		{
-			if (game->IsKeyDown(DIK_S))
+			if (game->IsKeyDown(DIK_S)&&game->IsKeyDown(DIK_LEFT))
 			{
 				if (mario->isRunningLeft == false)
 					mario->SetTimeRunningLeft((DWORD)GetTickCount64());
@@ -918,13 +927,13 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 				else
 				{
 					mario->isRunningLeft = true;
-					mario->SetState(MARIO_STATE_RUNNING_LEFT);
+					mario->SetState(MARIO_STATE_RUNNING_LEFT);					
 				}
 			}
 			else
 			{
 				mario->SetState(MARIO_STATE_WALKING_LEFT);
-			}
+			}	
 			
 		}
 		else
@@ -934,17 +943,20 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 				mario->SetState(MARIO_STATE_CHANGELEFT);
 				mario->isRunningRight = false;
 				mario->isRunningFastRight = false;
+
 			}			
 		}
-			
+
 	}
 	else if (game->IsKeyDown(DIK_RIGHT) && !game->IsKeyDown(DIK_LEFT))
 	{
+		if (mario->GetLevel() == MARIO_LEVEL_TAIL && mario->nx < 0)
+			mario->x = mario->x - 7;
 		mario->SetTimeMovingRight(DWORD(GetTickCount64()));
 		
 		if (DWORD(GetTickCount64()) - mario->GetTimeMovingLeft() > MARIO_TIME_CHANGE_DIRECTION)
 		{
-			if (game->IsKeyDown(DIK_S))
+			if (game->IsKeyDown(DIK_S)&&game->IsKeyDown(DIK_RIGHT))
 			{
 				if (mario->isRunningRight == false)
 					mario->SetTimeRunningRight((DWORD)GetTickCount64());
@@ -971,7 +983,9 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 				mario->isRunningFastLeft = false;
 				mario->isRunningLeft = false;
 			}			
-		}			
+		}
+		//if (mario->GetLevel() == MARIO_LEVEL_TAIL && mario->nx < 0)
+		//	mario->x = mario->x - MARIO_TAIL_ATTACK_BBOX_WIDTH + MARIO_TAIL_BBOX_WIDTH;
 	}
 	else if (game->IsKeyDown(DIK_DOWN))
 	{

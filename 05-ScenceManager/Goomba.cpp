@@ -35,17 +35,17 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		{
 			if (AABBCheck(Mario) == true)
 			{
-				if (Mario->isAttacking == true)
-				{
-					if (state != GOOMBA_STATE_DIE)
-					{
-						state = GOOMBA_STATE_DIE;
-						SetPosition(x, y - GOOMBA_BBOX_HEIGHT_DIE + GOOMBA_BBOX_HEIGHT);
-						CGame::GetInstance()->SetScores(CGame::GetInstance()->GetScores() + 100);
-						vx = 0;
-						vy = 0;
-					}
-				}
+				//if (Mario->isAttacking == true)
+				//{
+				//	if (state != GOOMBA_STATE_DIE)
+				//	{
+				//		state = GOOMBA_STATE_DIE;
+				//		SetPosition(x, y - GOOMBA_BBOX_HEIGHT_DIE + GOOMBA_BBOX_HEIGHT);
+				//		CGame::GetInstance()->SetScores(CGame::GetInstance()->GetScores() + 100);
+				//		vx = 0;
+				//		vy = 0;
+				//	}
+				//}
 				if (Mario->untouchable == false)
 				{
 					SetPosition(x, y - 1);

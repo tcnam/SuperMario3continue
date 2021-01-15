@@ -30,6 +30,7 @@ class CScoreBoard
 	DWORD Mario_StartRunning;
 	DWORD period;
 
+	int temp_index;
 public:
 	
 	CScoreBoard();

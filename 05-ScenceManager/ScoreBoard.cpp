@@ -15,6 +15,7 @@ CScoreBoard::CScoreBoard()
 	Mario = NULL;
 	Mario_StartRunning = 0;
 	period = 0;
+	temp_index = 0;
 }
 void CScoreBoard::ConvertNumber(int n,vector<CFont*> vectorFont)
 {
@@ -70,16 +71,22 @@ void CScoreBoard::Update(float cam_x,float cam_y)
 	{
 		if (abs(Mario_vx) == MARIO_RUNNING_SPEED && Mario->isOnGround == true)
 		{
+			
 			if (Mario_StartRunning == 0)
 			{
 				Mario_StartRunning = (DWORD)GetTickCount64();
+				/*marioSpeedState[0]->SetState(FONT_STATE_WHITE);
+				marioSpeedState[1]->SetState(FONT_STATE_WHITE);*/
 			}
-			if (Mario_StartRunning != 0)
-			{
-				
-				/*period = (DWORD)GetTickCount64() - Mario_StartRunning;
-				int temp_index = FindSpeedindex(period);*/
-				int temp_index = 3;
+			else
+			{				
+				if ((DWORD)GetTickCount64() - Mario_StartRunning > 0 && (DWORD)GetTickCount64() - Mario_StartRunning < 200)
+					temp_index = 2;
+				//else if ((DWORD)GetTickCount64() - Mario_StartRunning > 200 && (DWORD)GetTickCount64() - Mario_StartRunning < 400)
+				//	temp_index = 2;
+				else
+					temp_index = 4;
+				/*int temp_index = FindSpeedindex(period);*/					
 				for (int i = 0; i < temp_index; i++)
 				{
 					marioSpeedState[i]->SetState(FONT_STATE_WHITE);

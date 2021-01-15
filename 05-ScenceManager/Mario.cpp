@@ -143,6 +143,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 				if (state != MARIO_STATE_RUNNINGFAST_LEFT && state != MARIO_STATE_RUNNINGFAST_RIGHT)
 				{
 					isRunningFastLeft = isRunningFastRight = false;
+					//isRunningLeft = isRunningRight = false;
 					isFlying = false;
 				}
 				if (!isOnGround)
@@ -724,7 +725,7 @@ void CMario::GetBoundingBox(float &left, float &top, float &right, float &bottom
 		}
 		else if (level == MARIO_LEVEL_TAIL)
 		{
-			if (isAttacking == true)
+			if (isAttacking == true||state==MARIO_STATE_CHANGERIGHT||state==MARIO_STATE_CHANGELEFT)
 				GetBoundingBoxTailWhileAttacking(left, top, right, bottom);
 			else
 				GetBoundingBoxTailLevel(left, top, right, bottom);
