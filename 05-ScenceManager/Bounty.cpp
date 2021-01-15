@@ -309,7 +309,7 @@ void CBounty::Render()
 	else
 		ani = BOUNTY_COIN_ANI;
 	animation_set->at(ani)->Render(x, y);
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 void CBounty::SetState(int state)

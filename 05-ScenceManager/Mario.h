@@ -259,6 +259,7 @@ public:
 	void ResetTail();
 	void GoUnderGround();
 	void GoHiddenDoor();
+	void GoToRunWay();
 
 	void GetBoundingBoxTailLevel(float& left, float& top, float& right, float& bottom);
 	void GetBoundingBoxTailWhileAttacking(float& left, float& top, float& right, float& bottom);

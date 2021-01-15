@@ -120,7 +120,8 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		coEvents.clear();
 
 		// turn off collision when die 
-		CalcPotentialCollisions(coObjects, coEvents);
+		if(state!=KOOPAS_STATE_KICKOUT)
+			CalcPotentialCollisions(coObjects, coEvents);
 		
 		// reset untouchable timer if untouchable time has passed
 		// No collision occured, proceed normally
@@ -317,7 +318,7 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 								goomba->GetPosition(goomba_x, goomba_y);
 								goomba->SetPosition(goomba_x, goomba_y - 1);
 
-								goomba->SetState(GOOMBA_STATE_DIE);
+								goomba->SetState(GOOMBA_STATE_KICKED_OUT);
 
 								goomba->GetSpeed(goomba_vx, goomba_vy);
 								goomba->SetSpeed(goomba_vx, -0.4f);
@@ -373,6 +374,8 @@ void CKoopas::Render()
 		else
 			ani = KOOPAS_ANI_DEFENSE_DYNAMIC;
 	}
+	if (state == KOOPAS_STATE_KICKOUT)
+		ani = KOOPAS_ANI_KICKOUT;
 	animation_set->at(ani)->Render(round(x), round(y));
 
 	/*RenderBoundingBox();*/

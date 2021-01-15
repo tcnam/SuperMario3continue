@@ -5,6 +5,7 @@
 
 #include "Mario.h"
 #include "Game.h"
+#include "WeakBrick.h"
 
 
 CMario::CMario(float x, float y) : CGameObject()
@@ -176,6 +177,18 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 					}
 				}
 				else if (dynamic_cast<CBrick*>(e->obj))
+				{
+					if (nx != 0)
+					{
+						vx = 0;
+					}
+					if (ny < 0)
+					{
+						isOnGround = true;
+						vy = 0;
+					}
+				}
+				else if (dynamic_cast<CWeakBrick*>(e->obj))
 				{
 					if (nx != 0)
 					{
@@ -894,6 +907,13 @@ void CMario::GoHiddenDoor()
 	SetState(MARIO_STATE_IDLE);
 	SetLevel(MARIO_LEVEL_TAIL);
 	SetPosition(2256.0f, -368.0f);
+	SetSpeed(0, 0);
+}
+void CMario::GoToRunWay()
+{
+	SetState(MARIO_STATE_IDLE);
+	SetLevel(MARIO_LEVEL_TAIL);
+	SetPosition(1152.0f, -48.0f);
 	SetSpeed(0, 0);
 }
 CMario::~CMario()

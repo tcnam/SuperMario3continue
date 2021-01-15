@@ -849,6 +849,9 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 	case DIK_6:
 		mario->GoHiddenDoor();
 		break;
+	case DIK_7:
+		mario->GoToRunWay();
+		break;
 	case DIK_S:
 		if (mario->isAttacking == true)
 			return;

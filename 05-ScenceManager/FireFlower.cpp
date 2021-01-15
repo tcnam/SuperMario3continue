@@ -7,6 +7,7 @@ CFireFlower::CFireFlower()
 	isFinish = false;
 	start_x = 0;
 	start_y = 0;
+	Finish_Start = 0;
 }
 void CFireFlower::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
@@ -23,6 +24,14 @@ void CFireFlower::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		return;
 	if (Mario->isTransform == true)
 		return;
+	if (Finish_Start != 0)
+	{
+		if (GetTickCount64() - Finish_Start > 500)
+		{
+			Finish_Start = 0;
+			effect->SetPosition(EFFECT_LOCATION_X_TO_HIDE, EFFECT_LOCATION_Y_TO_HIDE);
+		}
+	}	
 	if (isFinish == true)
 	{
 		//effect->SetPosition(EFFECT_LOCATION_X_TO_HIDE,EFFECT_LOCATION_Y_TO_HIDE);

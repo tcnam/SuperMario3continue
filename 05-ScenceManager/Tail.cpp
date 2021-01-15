@@ -66,8 +66,8 @@ void CTail::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 				if (goomba->GetState() != GOOMBA_STATE_DIE)
 				{
-					goomba->SetState(GOOMBA_STATE_DIE);
-					goomba->SetSpeed(0, -0.4f);
+					goomba->SetState(GOOMBA_STATE_KICKED_OUT);
+					goomba->SetSpeed(0, -0.2f);
 				}
 			} // if Goomba
 			else if (dynamic_cast<CKoopas*>(e->obj))
@@ -76,8 +76,8 @@ void CTail::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				CKoopas* koopas = dynamic_cast<CKoopas*>(e->obj);
 				if (koopas->GetState() != KOOPAS_STATE_DEFENSE_STATIC)
 				{
-					koopas->SetState(KOOPAS_STATE_DEFENSE_STATIC);
-					koopas->SetSpeed(0, -0.4f);
+					koopas->SetState(KOOPAS_STATE_KICKOUT);
+					koopas->SetSpeed(0, -0.2f);
 				}
 			}
 			else if (dynamic_cast<CSpecialBrick*>(e->obj))
@@ -127,7 +127,7 @@ void CTail::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						fireflower->GetEffect()->SetState(EFFECT_CLOUND);
 					}
 					fireflower->SetPosition(fireflower->GetStartx(), fireflower->GetStarty());
-					fireflower->isFinish = true;
+					fireflower->StartFinish();
 				}					
 			}
 		}

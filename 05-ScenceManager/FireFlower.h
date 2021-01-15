@@ -39,12 +39,14 @@ public:
 	bool isAppear;
 	bool isFinish;
 	DWORD Shoot_Start;
+	DWORD Finish_Start;
 	CFireFlower();
 	CFireBallFlower* FireBallFlower;
 	void SetInitPosition(float x, float y) { start_x = x; start_y = y; }
 	float GetStartx() { return start_x; }
 	float GetStarty() { return start_y; }
 	void StartShoot() { isShooting = true; Shoot_Start = (DWORD)GetTickCount64(); vy = 0; }
+	void StartFinish() { isFinish = true; Finish_Start = (DWORD)GetTickCount64(); }
 	void Shoot();
 	void SetMario(CMario* mario) { Mario = mario; }
 	void SetFireBallFlower(CFireBallFlower* fireball) { FireBallFlower = fireball; }

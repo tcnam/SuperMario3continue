@@ -68,7 +68,7 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		vector<LPCOLLISIONEVENT> coEvents;
 		vector<LPCOLLISIONEVENT> coEventsResult;
 		coEvents.clear();
-		if(state!=GOOMBA_STATE_DIE)
+		if(state==GOOMBA_STATE_WALKING)
 			CalcPotentialCollisions(coObjects, coEvents);
 
 		if (coEvents.size() == 0)
@@ -164,6 +164,10 @@ void CGoomba::Render()
 	if (state == GOOMBA_STATE_DIE) {
 		ani = GOOMBA_ANI_DIE;
 	}
+	else if (state == GOOMBA_STATE_KICKED_OUT)
+	{
+		ani = GOOMBA_ANI_KICKOUT;
+	}
 
 	animation_set->at(ani)->Render(round(x),round(y));
 
@@ -175,6 +179,12 @@ void CGoomba::SetState(int state)
 	CGameObject::SetState(state);
 	switch (state)
 	{
+		case GOOMBA_STATE_KICKED_OUT:
+		{
+			vx = 0;
+			vy = 0;
+		}
+			break;
 		case GOOMBA_STATE_DIE:
 			{				
 				//y += GOOMBA_BBOX_HEIGHT_DIE -GOOMBA_BBOX_HEIGHT   ;
