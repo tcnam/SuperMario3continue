@@ -13,6 +13,8 @@ CScoreBoard::CScoreBoard()
 	worldNumber = NULL;
 	backgroundFont = NULL;
 	Mario = NULL;
+	Mario_StartRunning = 0;
+	period = 0;
 }
 void CScoreBoard::ConvertNumber(int n,vector<CFont*> vectorFont)
 {
@@ -41,6 +43,7 @@ void CScoreBoard::Update(float cam_x,float cam_y)
 {
 	if (Mario == NULL)
 		return;
+	float Mario_vx, Mario_vy;
 	x = cam_x+RELATIVE_DX_SB;
 	y = cam_y + RELATIVE_DY_SB;
 	for (unsigned int i = 0; i < scores.size(); i++)
@@ -62,6 +65,59 @@ void CScoreBoard::Update(float cam_x,float cam_y)
 	{
 		marioSpeedState[i]->Update(x, y);
 	}
+	Mario->GetSpeed(Mario_vx, Mario_vy);
+	if (Mario->isFlying == false)
+	{
+		if (abs(Mario_vx) == MARIO_RUNNING_SPEED && Mario->isOnGround == true)
+		{
+			if (Mario_StartRunning == 0)
+			{
+				Mario_StartRunning = (DWORD)GetTickCount64();
+			}
+			if (Mario_StartRunning != 0)
+			{
+				
+				/*period = (DWORD)GetTickCount64() - Mario_StartRunning;
+				int temp_index = FindSpeedindex(period);*/
+				int temp_index = 3;
+				for (int i = 0; i < temp_index; i++)
+				{
+					marioSpeedState[i]->SetState(FONT_STATE_WHITE);
+				}
+			}
+				
+			marioSpeedMaxState->SetState(FONT_STATE_MAX_BLACK);
+		}
+		else if (abs(Mario_vx) == MARIO_RUNNINGFAST_SPEED && Mario->isOnGround == true)
+		{
+			Mario_StartRunning = 0;
+			period = 0;
+			for (unsigned int i = 0; i < marioSpeedState.size(); i++)
+			{
+				marioSpeedState[i]->SetState(FONT_STATE_WHITE);
+			}
+			marioSpeedMaxState->SetState(FONT_STATE_MAX_WHITE);
+		}
+		else
+		{
+			period = 0;
+			Mario_StartRunning = 0;
+			for (unsigned int i = 0; i < marioSpeedState.size(); i++)
+			{
+				marioSpeedState[i]->SetState(FONT_STATE_BLACK);
+			}
+			marioSpeedMaxState->SetState(FONT_STATE_MAX_BLACK);
+		}
+	}
+	else
+	{
+		for (unsigned int i = 0; i < marioSpeedState.size(); i++)
+		{
+			marioSpeedState[i]->SetState(FONT_STATE_WHITE);
+		}
+		marioSpeedMaxState->SetState(FONT_STATE_MAX_WHITE);
+	}
+	
 	backgroundFont->Update(x, y);
 
 	worldNumber->SetState(CGame::GetInstance()->GetWorld());
@@ -96,6 +152,38 @@ void CScoreBoard::Draw()
 	worldNumber->Render();
 	marioLifes->Render();
 	marioSpeedMaxState->Render();
+}
+int CScoreBoard::FindSpeedindex(DWORD period)
+{
+	int temp_index;
+	if (period < 200 && period>0)
+	{
+		temp_index = 1;
+	}
+	else if (period > 200 && period < 400)
+	{
+		temp_index = 2;
+	}
+	else if (period > 400 && period < 600)
+	{
+		temp_index = 3;
+	}
+	else if (period > 600 && period < 800)
+	{
+		temp_index = 4;
+	}
+	else if (period > 800 && period < 1000)
+	{
+		temp_index = 5;
+	}
+	else if (period > 1200)
+	{
+		temp_index = 6;
+	}
+	else
+		temp_index = 3;
+
+	return temp_index;
 }
 CScoreBoard::~CScoreBoard()
 {

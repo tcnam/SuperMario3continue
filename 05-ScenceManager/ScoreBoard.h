@@ -27,8 +27,11 @@ class CScoreBoard
 	CFont* marioSpeedMaxState;
 	CFont* backgroundFont;
 	CMario* Mario;
+	DWORD Mario_StartRunning;
+	DWORD period;
 
 public:
+	
 	CScoreBoard();
 
 	void SetPosition(float x, float y) { this->x = x, this->y = y; }
@@ -49,6 +52,7 @@ public:
 	void SetBackGroundFont(CFont* font) { backgroundFont = font; }
 
 	void SetMario(CMario* mario) { Mario = mario; }
+	int FindSpeedindex(DWORD period);
 
 	void ConvertNumber(int number, vector<CFont*> vectorFont);
 

@@ -905,16 +905,27 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 		mario->SetTimeMovingLeft(DWORD(GetTickCount64()));
 		if (DWORD(GetTickCount64()) - mario->GetTimeMovingRight() > MARIO_TIME_CHANGE_DIRECTION)
 		{
-			if (game->IsKeyDown(DIK_Z))
+			if (game->IsKeyDown(DIK_S))
 			{
-				mario->isRunningLeft = true;
-				mario->SetState(MARIO_STATE_RUNNING_LEFT);
+				if (mario->isRunningLeft == false)
+					mario->SetTimeRunningLeft((DWORD)GetTickCount64());
+				if ((DWORD)GetTickCount64() - mario->GetTimeRunningLeft() > MARIO_RUNTIME)
+				{
+					mario->isRunningLeft = true;
+					mario->isRunningFastLeft = true;
+					mario->SetState(MARIO_STATE_RUNNINGFAST_LEFT);
+				}
+				else
+				{
+					mario->isRunningLeft = true;
+					mario->SetState(MARIO_STATE_RUNNING_LEFT);
+				}
 			}
 			else
 			{
 				mario->SetState(MARIO_STATE_WALKING_LEFT);
-				mario->isRunningLeft = false;
 			}
+			
 		}
 		else
 		{
@@ -930,18 +941,27 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 	else if (game->IsKeyDown(DIK_RIGHT) && !game->IsKeyDown(DIK_LEFT))
 	{
 		mario->SetTimeMovingRight(DWORD(GetTickCount64()));
+		
 		if (DWORD(GetTickCount64()) - mario->GetTimeMovingLeft() > MARIO_TIME_CHANGE_DIRECTION)
 		{
-			if (game->IsKeyDown(DIK_Z))
+			if (game->IsKeyDown(DIK_S))
 			{
-				mario->isRunningRight = true;
-				mario->SetState(MARIO_STATE_RUNNING_RIGHT);
+				if (mario->isRunningRight == false)
+					mario->SetTimeRunningRight((DWORD)GetTickCount64());
+				if ((DWORD)GetTickCount64() - mario->GetTimeRuningRight() > MARIO_RUNTIME)
+				{
+					mario->isRunningRight = true;
+					mario->isRunningFastRight = true;
+					mario->SetState(MARIO_STATE_RUNNINGFAST_RIGHT);
+				}
+				else
+				{
+					mario->isRunningRight = true;
+					mario->SetState(MARIO_STATE_RUNNING_RIGHT);
+				}
 			}
 			else
-			{
 				mario->SetState(MARIO_STATE_WALKING_RIGHT);
-				mario->isRunningRight = false;
-			}
 		}
 		else
 		{

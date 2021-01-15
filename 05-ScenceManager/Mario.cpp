@@ -608,11 +608,11 @@ void CMario::SetState(int state)
 		Right();
 		Run();
 		break;
-	//case MARIO_STATE_RUNNINGFAST_RIGHT:
-	//	Right();
-	//	RunFast();
-	//	DebugOut(L"running fast right\n");
-	//	break;
+	case MARIO_STATE_RUNNINGFAST_RIGHT:
+		Right();
+		RunFast();
+		DebugOut(L"running fast right\n");
+		break;
 	case MARIO_STATE_FLYRIGHT:
 		DebugOut(L"fly right\n");
 		Fly();
@@ -629,11 +629,11 @@ void CMario::SetState(int state)
 		//DebugOut(L"vx: %f\n", vx);
 		Run();
 		break;	
-	//case MARIO_STATE_RUNNINGFAST_LEFT:
-	//	DebugOut(L"running fast left\n");
-	//	Left();
-	//	RunFast();
-	//	break;
+	case MARIO_STATE_RUNNINGFAST_LEFT:
+		DebugOut(L"running fast left\n");
+		Left();
+		RunFast();
+		break;
 	case MARIO_STATE_FLYLEFT:
 		DebugOut(L"fly left\n");
 		Fly();
@@ -756,8 +756,8 @@ void CMario::Walk()
 }
 void CMario::Run()
 {
-	
-	if (abs(vx) >= MARIO_WALKING_SPEED && abs(vx) < MARIO_RUNNING_SPEED&&isOnGround==true)
+	vx = MARIO_RUNNING_SPEED * nx;
+	/*if (abs(vx) >= MARIO_WALKING_SPEED && abs(vx) < MARIO_RUNNING_SPEED&&isOnGround==true)
 	{
 		vx = abs(vx) + 0.01f;
 	}
@@ -766,7 +766,7 @@ void CMario::Run()
 	if(abs(vx)<MARIO_WALKING_SPEED)
 		vx = MARIO_WALKING_SPEED;
 	vx = vx * nx;
-	DebugOut(L"speed:%f" , vx);
+	DebugOut(L"speed:%f" , vx);*/
 }
 void CMario::RunFast()
 {
