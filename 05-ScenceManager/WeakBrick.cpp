@@ -77,14 +77,14 @@ void CWeakBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				if (nx != 0)
 				{
 					CKoopas* koopas = dynamic_cast<CKoopas*>(e->obj);
-
+					float koopas_vx, koopas_vy;
 					if (state == BOUNTYBRICK_STATE_NORMAL)
 					{
 						if (koopas->GetState() == KOOPAS_STATE_DEFENSE_DYNAMIC)
 						{
 							if (state == WEAKBRICK_STATE_NORMAL)
 							{
-								float koopas_vx, koopas_vy;
+								
 								koopas->GetSpeed(koopas_vx, koopas_vy);
 								koopas->SetSpeed(-koopas_vx, koopas_vy);
 								ActivateFragment();
@@ -93,7 +93,11 @@ void CWeakBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 								
 							}
 						}
-
+						else
+						{
+							koopas->GetSpeed(koopas_vx, koopas_vy);
+							koopas->SetSpeed(-koopas_vx, koopas_vy);
+						}
 					}
 				}
 			}

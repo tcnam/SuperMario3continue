@@ -9,7 +9,7 @@ CHiddenObject::CHiddenObject(float x, float y, int width, int height)
 }
 void CHiddenObject::Render()
 {
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 void CHiddenObject::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {

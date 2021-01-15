@@ -1,0 +1,30 @@
+# id	file_path	transparent_color_r	g	b
+[TEXTURES]
+10	textures\IntroMenu.png	0	0	0
+20	textures\black.png	255	255	255
+30	textures\title.png	255	255	255
+# id	left	top	right	bottom	texture_id
+[SPRITES]
+1	0	0	272	256	10
+2	0	0	321	271	20
+3	194	363	236	404	30
+4	240	363	282	404	30
+5	287	363	329	404	30
+6	333	363	375	404	30
+7	30	307	37	315	30
+[ANIMATIONS]
+#
+# id	ani1	ani2	ani3
+#
+10000	3	100	4	100	5	100	6	100
+10001	7	100
+[ANIMATION_SETS]
+100	10000
+101	10001
+[OBJECTS]
+21	68	-36	101
+20	112	-87	100
+[TERRAINS]
+0	-194	2
+0	-192	1
+

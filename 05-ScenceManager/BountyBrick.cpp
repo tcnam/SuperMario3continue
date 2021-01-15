@@ -122,12 +122,11 @@ void CBountyBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				if (nx != 0)
 				{
 					CKoopas* koopas = dynamic_cast<CKoopas*>(e->obj);
-
+					float koopas_vx, koopas_vy;
 					if (state == BOUNTYBRICK_STATE_NORMAL)
 					{
 						if (koopas->GetState() == KOOPAS_STATE_DEFENSE_DYNAMIC)
-						{
-							float koopas_vx, koopas_vy;
+						{							
 							koopas->GetSpeed(koopas_vx, koopas_vy);
 							koopas->SetSpeed(-koopas_vx, koopas_vy);
 							state = BOUNTYBRICK_STATE_EMPTY;
@@ -143,7 +142,11 @@ void CBountyBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 							Bounty->isUsed = true;
 							ActivateBounty();
 						}
-						
+						else
+						{
+							koopas->GetSpeed(koopas_vx, koopas_vy);
+							koopas->SetSpeed(-koopas_vx, koopas_vy);
+						}
 					}
 				}
 			}

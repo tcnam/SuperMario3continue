@@ -117,11 +117,13 @@ void CTail::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			{
 				isUsed = false;
 				CFireFlower* fireflower = dynamic_cast<CFireFlower*>(e->obj);
+				float flower_x, flower_y;
+				fireflower->GetPosition(flower_x, flower_y);
 				if (fireflower->isFinish != true)
 				{
 					if (fireflower->GetEffect() != NULL)
 					{
-						fireflower->GetEffect()->SetPosition(x, y);
+						fireflower->GetEffect()->SetPosition(flower_x, flower_y);
 						fireflower->GetEffect()->SetState(EFFECT_CLOUND);
 					}
 					fireflower->SetPosition(fireflower->GetStartx(), fireflower->GetStarty());
@@ -143,7 +145,7 @@ void CTail::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 }
 void CTail::Render()
 {
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 CTail::~CTail()
 {

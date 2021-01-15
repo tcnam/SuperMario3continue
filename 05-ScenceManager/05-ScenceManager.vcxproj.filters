@@ -118,6 +118,9 @@
     <Filter Include="Object\GameObject\AutoDoor">
       <UniqueIdentifier>{069c0bc3-8bc8-4d54-84ca-e96c30c7e54a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Framework\Scene\Scene_Intro\IntroObject">
+      <UniqueIdentifier>{c7089cd6-e64a-4d41-b56e-0dc97f79b60a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animations.cpp">
@@ -233,6 +236,15 @@
     </ClCompile>
     <ClCompile Include="Tail.cpp">
       <Filter>Object\GameObject\Mario\MarioWeapon</Filter>
+    </ClCompile>
+    <ClCompile Include="ScenceIntro.cpp">
+      <Filter>Framework\Scene\Scene_Intro</Filter>
+    </ClCompile>
+    <ClCompile Include="IntroNumber.cpp">
+      <Filter>Framework\Scene\Scene_Intro\IntroObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Pointer.cpp">
+      <Filter>Framework\Scene\Scene_Intro\IntroObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -352,6 +364,12 @@
     </ClInclude>
     <ClInclude Include="Tail.h">
       <Filter>Object\GameObject\Mario\MarioWeapon</Filter>
+    </ClInclude>
+    <ClInclude Include="IntroNumber.h">
+      <Filter>Framework\Scene\Scene_Intro\IntroObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Pointer.h">
+      <Filter>Framework\Scene\Scene_Intro\IntroObject</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -142,10 +142,13 @@
     <ClCompile Include="HiddenDoor.cpp" />
     <ClCompile Include="HiddenObject.cpp" />
     <ClCompile Include="Hud.cpp" />
+    <ClCompile Include="IntroNumber.cpp" />
     <ClCompile Include="Koopas.cpp" />
     <ClCompile Include="Message.cpp" />
     <ClCompile Include="MysteryPiece.cpp" />
+    <ClCompile Include="Pointer.cpp" />
     <ClCompile Include="Portal.cpp" />
+    <ClCompile Include="ScenceIntro.cpp" />
     <ClCompile Include="ScoreBoard.cpp" />
     <ClCompile Include="SpecialBrick.cpp" />
     <ClCompile Include="Square.cpp" />
@@ -182,9 +185,11 @@
     <ClInclude Include="HiddenDoor.h" />
     <ClInclude Include="HiddenObject.h" />
     <ClInclude Include="Hud.h" />
+    <ClInclude Include="IntroNumber.h" />
     <ClInclude Include="Koopas.h" />
     <ClInclude Include="Message.h" />
     <ClInclude Include="MysteryPiece.h" />
+    <ClInclude Include="Pointer.h" />
     <ClInclude Include="Portal.h" />
     <ClInclude Include="SceneIntro.h" />
     <ClInclude Include="ScoreBoard.h" />
