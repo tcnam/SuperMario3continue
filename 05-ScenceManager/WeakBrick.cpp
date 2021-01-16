@@ -15,6 +15,7 @@ void CWeakBrick::Render()
 }
 void CWeakBrick::ActivateFragment()
 {
+	Coin->isFinished = true;
 	for (UINT i = 0; i < fragments.size(); i++)
 	{
 		fragments[i]->isUsed = true;
@@ -89,8 +90,7 @@ void CWeakBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 								koopas->SetSpeed(-koopas_vx, koopas_vy);
 								ActivateFragment();
 								state = WEAKBRICK_STATE_DISAPPEAR;
-								MoveWeakBrickToHorizon();
-								
+								MoveWeakBrickToHorizon();							
 							}
 						}
 						else

@@ -30,6 +30,8 @@ public:
 	
 	void PushFragment(CFragment* fragment) { fragments.push_back(fragment); }
 	void ActivateFragment();
+	float GetStartx() { return start_x; }
+	float GetStarty() { return start_y; }
 	void SetInitPosition(float x, float y) { start_x = x; start_y = y; }
 	void MoveWeakBrickToHorizon() { SetPosition(start_x, start_y + WEAKBRICK_DY_TO_MOVE); }
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);

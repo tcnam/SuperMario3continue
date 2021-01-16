@@ -5,9 +5,14 @@ CBountyButton::CBountyButton()
 	isFinished = false;
 	Mario = NULL;
 	isInsideSpecialBrick = true;
+	Bounty_start = 0;
 }
 void CBountyButton::ActivateWeakBrick()
 {
+	if (Bounty_start == 0)
+	{
+		Bounty_start = GetTickCount64();
+	}
 	for (UINT i = 0; i < weakbricks.size(); i++)
 	{
 		if (weakbricks[i]->GetState() == WEAKBRICK_STATE_NORMAL)
@@ -16,6 +21,21 @@ void CBountyButton::ActivateWeakBrick()
 			weakbricks[i]->SetState(WEAKBRICK_STATE_DISAPPEAR);
 			weakbricks[i]->MoveWeakBrickToHorizon();
 		}		
+	}
+}
+void CBountyButton::BringBackWeakBrick()
+{
+	for (UINT i = 0; i < weakbricks.size(); i++)
+	{
+		if (weakbricks[i]->GetState() == WEAKBRICK_STATE_DISAPPEAR)
+		{
+			if (weakbricks[i]->GetCoin()->isFinished == false)
+			{
+				weakbricks[i]->GetCoin()->isInsideWeakBrick = true;
+				weakbricks[i]->SetState(WEAKBRICK_STATE_NORMAL);
+				weakbricks[i]->SetPosition(weakbricks[i]->GetStartx(), weakbricks[i]->GetStarty());
+			}
+		}
 	}
 }
 void CBountyButton::Render()
@@ -32,19 +52,31 @@ void CBountyButton::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	if (Mario == NULL)
 		return;
-	if (isFinished == true)
-		return;
+	//if (isFinished == true)
+	//	return;
 	if (isInsideSpecialBrick == true)
 		return;
+	if (Bounty_start != 0)
+	{
+		if (GetTickCount64() - Bounty_start > BOUNTYBUTTON_TIME_WAIT)
+		{
+			BringBackWeakBrick();
+			Bounty_start = 0;
+		}
+	}
+	
 	CGameObject::Update(dt, coObjects);
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
 	coEvents.clear();
 	if (AABBCheck(Mario) == true)
 	{
-		SetPosition(x, y + BOUNTYBUTTON_BBOX_HEIGHT - BOUNTYBUTTON_BBOX_HEIGHT_ISPRESSED);
-		ActivateWeakBrick();
-		isFinished = true;
+		if (isFinished == false)
+		{
+			SetPosition(x, y + BOUNTYBUTTON_BBOX_HEIGHT - BOUNTYBUTTON_BBOX_HEIGHT_ISPRESSED);
+			ActivateWeakBrick();
+			isFinished = true;
+		}		
 	}
 		
 	CalcPotentialCollisions(coObjects, coEvents);
@@ -56,11 +88,14 @@ void CBountyButton::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
 		if (nx != 0 || ny != 0)
 		{
-			ActivateWeakBrick();
-			isFinished = true;
-			SetPosition(x, y + BOUNTYBUTTON_BBOX_HEIGHT - BOUNTYBUTTON_BBOX_HEIGHT_ISPRESSED);
-		}
+			if (isFinished == false)
+			{
+				ActivateWeakBrick();
+				isFinished = true;
+				SetPosition(x, y + BOUNTYBUTTON_BBOX_HEIGHT - BOUNTYBUTTON_BBOX_HEIGHT_ISPRESSED);
+			}
 			
+		}			
 	}
 }
 
