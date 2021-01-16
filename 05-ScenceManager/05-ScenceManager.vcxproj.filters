@@ -252,6 +252,9 @@
     <ClCompile Include="Piranha.cpp">
       <Filter>Object\GameObject\Enemy\Piranha</Filter>
     </ClCompile>
+    <ClCompile Include="Curtain.cpp">
+      <Filter>Framework\Scene\Scene_Intro\IntroObject</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animations.h">
@@ -379,6 +382,9 @@
     </ClInclude>
     <ClInclude Include="Piranha.h">
       <Filter>Object\GameObject\Enemy\Piranha</Filter>
+    </ClInclude>
+    <ClInclude Include="Curtain.h">
+      <Filter>Framework\Scene\Scene_Intro\IntroObject</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

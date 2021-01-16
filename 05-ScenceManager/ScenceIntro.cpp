@@ -20,6 +20,10 @@
 CSceneIntro::CSceneIntro(int id, LPCWSTR filePath) :CScene(id, filePath)
 {
 	pointer = NULL;
+	IntroMenu = NULL;
+	IntroNumber = NULL;
+	blackbackground = NULL;
+	curtain = NULL;
 	key_handler = new CSceneIntroKeyHandler(this);
 
 }
@@ -126,6 +130,7 @@ void CSceneIntro::_ParseSection_OBJECTS(string line)
 	{
 	case OBJECT_TYPE_INTRONUMBER:
 		obj = new CIntroNumber();
+		IntroNumber = (CIntroNumber*)obj;
 		break;
 	case OBJECT_TYPE_POINTER:
 		{
@@ -133,6 +138,12 @@ void CSceneIntro::_ParseSection_OBJECTS(string line)
 			pointer = (CPointer*)obj;
 		}
 			break;
+	case OBJECT_TYPE_CURTAIN:
+	{
+		obj = new CCurtain();
+		curtain = (CCurtain*)obj;
+	}
+	break;
 	default:
 		DebugOut(L"[ERR] Invalid object type: %d\n", object_type);
 		return;
@@ -143,7 +154,6 @@ void CSceneIntro::_ParseSection_OBJECTS(string line)
 	LPANIMATION_SET ani_set = animation_sets->Get(ani_set_id);
 	obj->SetAnimationSet(ani_set);
 
-	objects.push_back(obj);
 }
 void CSceneIntro::_ParseSection_TERRAIN(string line)
 {
@@ -153,11 +163,15 @@ void CSceneIntro::_ParseSection_TERRAIN(string line)
 	float x = (float)atof(tokens[0].c_str());
 	float y = (float)atof(tokens[1].c_str());
 	int sprite_id = atoi(tokens[2].c_str());
+	int MenuOrBack = atoi(tokens[3].c_str());
 	CTerrain* terr = new CTerrain();
 	terr->SetPosition(x, y);
 	LPSPRITE sprites = CSprites::GetInstance()->Get(sprite_id);
 	terr->SetSprite(sprites);
-	terrains.push_back(terr);
+	if (MenuOrBack == 2)
+		blackbackground = terr;
+	else
+		IntroMenu = terr;
 }
 void CSceneIntro::Load()
 {
@@ -219,24 +233,26 @@ void CSceneIntro::Load()
 }
 void CSceneIntro::Update(DWORD dt)
 {
-	vector<LPGAMEOBJECT> coObbjects;								//5: List of collidable Objects of FireBall
-	for (size_t i = 0; i < objects.size(); i++)
-	{
-		coObbjects.push_back(objects[i]);
-	}
-	for (unsigned i = 0; i < objects.size(); i++)
-		objects[i]->Update(dt, &coObbjects);
+
+	curtain->Update(dt);
 	CGame::GetInstance()->SetCamPos(round(0.0f),round(-SCREEN_HEIGHT + 64.0f));
 }
 
 void CSceneIntro::Render()
 {
-	for (unsigned int i = 0; i < terrains.size(); i++)
-		terrains[i]->Draw(round(terrains[i]->GetPositionX()), round(terrains[i]->GetPositionY()), 255);
-	for (unsigned int i = 0; i < objects.size(); i++)
+	blackbackground->Draw(round(blackbackground->GetPositionX()),round(blackbackground->GetPositionY()),255);
+
+	if (curtain->isFinish == false)
 	{
-		objects[i]->Render();
+		curtain->Render();
 	}
+	else
+	{		
+		IntroMenu->Draw(round(IntroMenu->GetPositionX()), round(IntroMenu->GetPositionY()), 255);
+		pointer->Render();
+		IntroNumber->Render();
+	}
+	
 }
 
 /*
@@ -244,17 +260,11 @@ void CSceneIntro::Render()
 */
 void CSceneIntro::Unload()
 {
-	for (unsigned int i = 0; i < objects.size(); i++)
-	{
-		float x, y;
-		delete objects[i];
-	}
-
-	for (unsigned int i = 0; i < terrains.size(); i++)
-		delete terrains[i];
+	IntroMenu = NULL;
+	IntroNumber = NULL;
 	pointer = NULL;
-	objects.clear();
-	terrains.clear();
+	curtain = NULL;
+	blackbackground = NULL;
 	DebugOut(L"[INFO] Scene %s unloaded! \n", sceneFilePath);
 }
 void CSceneIntroKeyHandler::OnKeyDown(int KeyCode)

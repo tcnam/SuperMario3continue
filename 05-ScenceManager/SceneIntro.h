@@ -8,13 +8,16 @@
 #include "Camera.h"
 #include "IntroNumber.h"
 #include "Pointer.h"
+#include"Curtain.h"
 
 class CSceneIntro :public CScene
 {
 protected:
 	CPointer* pointer;
-	vector<LPGAMEOBJECT> objects;
-	vector<LPTERRAIN> terrains;
+	CCurtain* curtain;
+	CTerrain* blackbackground;
+	CTerrain* IntroMenu;
+	CIntroNumber* IntroNumber;
 
 
 	void _ParseSection_TEXTURES(string line);
