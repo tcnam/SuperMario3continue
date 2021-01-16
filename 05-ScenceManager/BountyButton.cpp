@@ -11,7 +11,7 @@ void CBountyButton::ActivateWeakBrick()
 {
 	if (Bounty_start == 0)
 	{
-		Bounty_start = GetTickCount64();
+		Bounty_start = (DWORD)GetTickCount64();
 	}
 	for (UINT i = 0; i < weakbricks.size(); i++)
 	{
@@ -51,9 +51,7 @@ void CBountyButton::Render()
 void CBountyButton::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	if (Mario == NULL)
-		return;
-	//if (isFinished == true)
-	//	return;
+		return;	
 	if (isInsideSpecialBrick == true)
 		return;
 	if (Bounty_start != 0)
@@ -64,7 +62,8 @@ void CBountyButton::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			Bounty_start = 0;
 		}
 	}
-	
+	if (isFinished == true)
+		return;
 	CGameObject::Update(dt, coObjects);
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;

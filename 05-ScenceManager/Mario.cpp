@@ -655,12 +655,44 @@ void CMario::Render()
 					ani = MARIO_ANI_FIRE_JUMP_LEFT;
 			}
 		}
+		
+		if (state == MARIO_STATE_DIE)
+			ani = MARIO_ANI_DIE;
+		if (isDucking == true)
+		{
+			if (level == MARIO_LEVEL_FIRE)
+			{
+				if (nx > 0)
+					ani = MARIO_ANI_FIRE_DUCKING_RIGHT;
+				else
+					ani = MARIO_ANI_FIRE_DUCKING_LEFT;
+			}
+			else if (level == MARIO_LEVEL_BIG)
+			{
+				if (nx > 0)
+					ani = MARIO_ANI_BIG_DUCKING_RIGHT;
+				else
+					ani = MARIO_ANI_BIG_DUCKING_LEFT;
+			}
+			else if (level == MARIO_LEVEL_TAIL)
+			{
+				if (nx > 0)
+					ani = MARIO_ANI_TAIL_DUCKING_RIGHT;
+				else
+					ani = MARIO_ANI_TAIL_DUCKING_LEFT;
+			}
+			else
+			{
+				if (nx > 0)
+					ani = MARIO_ANI_SMALL_IDLE_RIGHT;
+				else
+					ani = MARIO_ANI_SMALL_IDLE_LEFT;
+			}
+		}
 		if (isCrossingPipe == true)
 		{
 			ani = MARIO_ANI_CROSS_PIPE;
 		}
-		if (state == MARIO_STATE_DIE)
-			ani = MARIO_ANI_DIE;
 		animation_set->at(ani)->Render(round(x), round(y), alpha);
 	}
 	//RenderBoundingBox();
@@ -746,6 +778,9 @@ void CMario::SetState(int state)
 	case MARIO_STATE_MOVE_DOWN:
 		vy = MARIO_WALKING_SPEED;
 		break;
+	case MARIO_STATE_DUCK:
+		Stop();
+		break;
 	}
 }
 void CMario::GetBoundingBoxTailLevel(float& left, float& top, float& right, float& bottom)
@@ -786,8 +821,17 @@ void CMario::GetBoundingBox(float &left, float &top, float &right, float &bottom
 		{
 			left = x;
 			top = y;
-			right = x + MARIO_BIG_BBOX_WIDTH;
-			bottom = y + MARIO_BIG_BBOX_HEIGHT;
+			if (isDucking == true)
+			{
+				right = x + MARIO_BIG_DUCK_BBOX_WIDTH;
+				bottom = y + MARIO_BIG_DUCK_BBOX_HEIGHT;
+			}
+			else
+			{
+				right = x + MARIO_BIG_BBOX_WIDTH;
+				bottom = y + MARIO_BIG_BBOX_HEIGHT;
+			}
+			
 		}
 		else if (level == MARIO_LEVEL_SMALL)
 		{
@@ -798,17 +842,36 @@ void CMario::GetBoundingBox(float &left, float &top, float &right, float &bottom
 		}
 		else if (level == MARIO_LEVEL_TAIL)
 		{
-			if (isAttacking == true||state==MARIO_STATE_CHANGERIGHT||state==MARIO_STATE_CHANGELEFT)
-				GetBoundingBoxTailWhileAttacking(left, top, right, bottom);
+			if (isDucking == true)
+			{
+				left = x;
+				top = y;
+				right = x + MARIO_TAIL_DUCK_BBOX_WIDTH;
+				bottom = y + MARIO_TAIL_DUCK_BBOX_HEIGHT;
+			}
 			else
-				GetBoundingBoxTailLevel(left, top, right, bottom);
+			{
+				if (isAttacking == true || state == MARIO_STATE_CHANGERIGHT || state == MARIO_STATE_CHANGELEFT)
+					GetBoundingBoxTailWhileAttacking(left, top, right, bottom);
+				else
+					GetBoundingBoxTailLevel(left, top, right, bottom);
+			}	
 		}
 		else if (level == MARIO_LEVEL_FIRE)
 		{
 			left = x;
 			top = y;
-			right = x + MARIO_BIG_BBOX_WIDTH;
-			bottom = y + MARIO_BIG_BBOX_HEIGHT;
+			if (isDucking == true)
+			{
+				right = x + MARIO_FIRE_DUCK_BBOX_WIDTH;
+				bottom = y + MARIO_FIRE_DUCK_BBOX_HEIGHT;
+			}
+			else
+			{
+				right = x + MARIO_FIRE_BBOX_WIDTH;
+				bottom = y + MARIO_FIRE_BBOX_HEIGHT;
+			}
+			
 		}
 	}
 }

@@ -777,7 +777,16 @@ void CPlayScene::TimeCount()
 	if (GetTickCount64() - tCount >= 1000)
 	{
 		tCount = 0;
-		CGame::GetInstance()->SetTime(CGame::GetInstance()->GetTime() - 1);
+		if (CGame::GetInstance()->GetTime() == 1)
+		{
+			player->SetState(MARIO_STATE_DIE);
+			player->SetSpeed(0, -MARIO_DIE_DEFLECT_SPEED);
+		}
+		else
+		{
+			CGame::GetInstance()->SetTime(CGame::GetInstance()->GetTime() - 1);
+		}
+		
 	}
 }
 void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
@@ -865,6 +874,8 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 		mario->GoToRunWay();
 		break;
 	case DIK_A:
+		if (mario->isDucking == true)
+			return;
 		if (mario->isAttacking == true)
 			return;
 		else
@@ -898,7 +909,7 @@ void CPlayScenceKeyHandler::OnKeyUp(int KeyCode)
 		mario->StartSlide();
 		mario->SetState(MARIO_STATE_SLIDE_LEFT);
 		break;*/
-	case DIK_S:
+	case DIK_A:
 	{
 		if (mario->isHoldingKoopas == true)
 			mario->isHoldingKoopas = false;
@@ -909,6 +920,15 @@ void CPlayScenceKeyHandler::OnKeyUp(int KeyCode)
 	}
 		
 		break;
+	case DIK_DOWN:
+	{
+		if (mario->isDucking == true)
+			mario->isDucking = false;
+		float current_x, current_y;
+		mario->GetPosition(current_x, current_y);
+		mario->SetPosition(current_x, current_y - 10);
+	}
+	break;
 	
 	}
 }
@@ -922,7 +942,7 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 	
 	if (mario->GetState() == MARIO_STATE_DIE||mario->isClearingCourse==true||mario->isTransform==true || mario->isCrossingPipe == true)
 		return;
-	if (game->IsKeyDown(DIK_LEFT) && !game->IsKeyDown(DIK_RIGHT))
+	if (game->IsKeyDown(DIK_LEFT) && !game->IsKeyDown(DIK_RIGHT)&&!game->IsKeyDown(DIK_DOWN))
 	{
 		if (mario->GetLevel() == MARIO_LEVEL_TAIL && mario->nx > 0)
 			mario->x = mario->x + 7;
@@ -963,7 +983,7 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 		}
 
 	}
-	else if (game->IsKeyDown(DIK_RIGHT) && !game->IsKeyDown(DIK_LEFT))
+	else if (game->IsKeyDown(DIK_RIGHT) && !game->IsKeyDown(DIK_LEFT)&&!game->IsKeyDown(DIK_DOWN))
 	{
 		if (mario->GetLevel() == MARIO_LEVEL_TAIL && mario->nx < 0)
 			mario->x = mario->x - 7;
@@ -1004,6 +1024,7 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 	}
 	else if (game->IsKeyDown(DIK_DOWN))
 	{
+		mario->SetState(MARIO_STATE_DUCK);
 		mario->isDucking = true;
 	}
 	else if(!game->IsKeyDown(DIK_SPACE))
