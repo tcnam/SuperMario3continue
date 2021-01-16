@@ -2,7 +2,7 @@
 #pragma once
 #include"GameObject.h"
 
-#define TAIL_SPEED		0.05f
+#define TAIL_SPEED		0.15f
 
 #define TAIL_DX_MOVE	24.0f
 

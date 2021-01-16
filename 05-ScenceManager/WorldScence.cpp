@@ -439,7 +439,7 @@ void CWorldScenceKeyHandler::OnKeyDown(int KeyCode)
 		return;
 	switch (KeyCode)
 	{
-	case (DIK_A):
+	case (DIK_S):
 		mario->SetState(MARIO_STATE_GOTO_ANOTHER_SCENCE);
 		break;
 	}

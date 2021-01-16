@@ -123,17 +123,17 @@
 #define MARIO_LEVEL_TAIL	3
 #define MARIO_LEVEL_FIRE	4
 
-#define MARIO_BIG_BBOX_WIDTH  15
+#define MARIO_BIG_BBOX_WIDTH  16
 #define MARIO_BIG_BBOX_HEIGHT 27
 
 #define MARIO_SMALL_BBOX_WIDTH  13
 #define MARIO_SMALL_BBOX_HEIGHT 15
 
-#define MARIO_TAIL_BBOX_WIDTH	15
+#define MARIO_TAIL_BBOX_WIDTH	16
 #define MARIO_TAIL_BBOX_HEIGHT	28
-#define MARIO_TAIL_ATTACK_BBOX_WIDTH	21;
+#define MARIO_TAIL_ATTACK_BBOX_WIDTH	24;
 
-#define MARIO_FIRE_BBOX_WIDTH	15
+#define MARIO_FIRE_BBOX_WIDTH	16
 #define MARIO_FIRE_BBOX_HEIGHT	27
 
 #define MARIO_WORLDSCENCE_BBOX_WIDTH	16
@@ -141,7 +141,7 @@
 
 #define MARIO_UNTOUCHABLE_TIME 5000
 #define MARIO_FLY_TIME			4000
-#define MARIO_ATTACK_TIME_TAIL	500
+#define MARIO_ATTACK_TIME_TAIL	400
 #define MARIO_ATTACK_TIME_FIRE	250
 #define MARIO_FLYFALL_TIME	200
 #define MARIO_TIME_CHANGE_DIRECTION	200
@@ -152,11 +152,11 @@ class CMario : public CGameObject
 {
 	int level;
 	
-	
-
 	float start_x;			// initial position of Mario at scene
 	float start_y; 
 
+	float tempx_attack;		//store location x when mario attack in tail level
+	float tempy_attack;	//store location y when mario attack in tail level
 	
 	CEffect* effect;
 	CFireBall* fireballs;
@@ -250,7 +250,7 @@ public:
 	void StartTransForm() { isTransform = true; Transform_start = (DWORD)GetTickCount64(); }
 	void StartUntouchable() { untouchable = true; untouchable_start = (DWORD)GetTickCount64(); }
 	void StartFlyFall() { isFlyFall = true; FlyFall_start = (DWORD)GetTickCount64(); }
-	void StartAttack() { isAttacking = true; Attack_start = (DWORD)GetTickCount64(); }
+	void StartAttack();
 	void StartSlide() { isSliding = true; Slide_start = (DWORD)GetTickCount64(); }
 
 	void ResetFire();

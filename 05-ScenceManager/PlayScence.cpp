@@ -789,7 +789,7 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 		return;
 	switch (KeyCode)
 	{
-	case DIK_A:
+	case DIK_S:
 		//mario->allowJump = false;
 		{
 			if (mario->GetLevel() == MARIO_LEVEL_TAIL)				//tail mario
@@ -864,7 +864,7 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 	case DIK_7:
 		mario->GoToRunWay();
 		break;
-	case DIK_S:
+	case DIK_A:
 		if (mario->isAttacking == true)
 			return;
 		else
@@ -929,7 +929,7 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 		mario->SetTimeMovingLeft(DWORD(GetTickCount64()));
 		if (DWORD(GetTickCount64()) - mario->GetTimeMovingRight() > MARIO_TIME_CHANGE_DIRECTION)
 		{
-			if (game->IsKeyDown(DIK_S)&&game->IsKeyDown(DIK_LEFT))
+			if (game->IsKeyDown(DIK_A)&&game->IsKeyDown(DIK_LEFT))
 			{
 				if (mario->isRunningLeft == false)
 					mario->SetTimeRunningLeft((DWORD)GetTickCount64());
@@ -971,7 +971,7 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 		
 		if (DWORD(GetTickCount64()) - mario->GetTimeMovingLeft() > MARIO_TIME_CHANGE_DIRECTION)
 		{
-			if (game->IsKeyDown(DIK_S)&&game->IsKeyDown(DIK_RIGHT))
+			if (game->IsKeyDown(DIK_A)&&game->IsKeyDown(DIK_RIGHT))
 			{
 				if (mario->isRunningRight == false)
 					mario->SetTimeRunningRight((DWORD)GetTickCount64());

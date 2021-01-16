@@ -6,6 +6,7 @@
 #include "Mario.h"
 #include "Game.h"
 #include "WeakBrick.h"
+#include "BountyBrick.h"
 
 
 CMario::CMario(float x, float y) : CGameObject()
@@ -34,6 +35,8 @@ CMario::CMario(float x, float y) : CGameObject()
 	//allowJump = true;
 	start_x = x; 
 	start_y = y; 
+	tempx_attack = 0;
+	tempy_attack = 0;
 	this->x = x; 
 	this->y = y; 
 }
@@ -107,6 +110,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		{
 			isAttacking = false;
 			Attack_start = 0;
+			//SetPosition(tempx_attack, tempy_attack);
 		}
 	}
 	// No collision occured, proceed normally
@@ -178,8 +182,22 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 				}
 				else if (dynamic_cast<CBrick*>(e->obj))
 				{
-					if (nx != 0)
+					if (nx != 0&&ny==0)
 					{
+						if (state == MARIO_STATE_RUNNINGFAST_LEFT
+							|| state == MARIO_STATE_RUNNING_LEFT)
+						{
+							vx = -MARIO_WALKING_SPEED;
+							isRunningLeft = false;
+							isRunningRight = false;
+						}
+						else if (state == MARIO_STATE_RUNNING_RIGHT
+							|| state == MARIO_STATE_RUNNINGFAST_RIGHT)
+						{
+							vx = MARIO_WALKING_SPEED;
+							isRunningLeft = false;
+							isRunningRight = false;
+						}
 						vx = 0;
 					}
 					if (ny < 0)
@@ -190,8 +208,50 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 				}
 				else if (dynamic_cast<CWeakBrick*>(e->obj))
 				{
-					if (nx != 0)
+					if (nx != 0&&ny==0)
 					{
+						if (state == MARIO_STATE_RUNNINGFAST_LEFT
+							|| state == MARIO_STATE_RUNNING_LEFT)
+						{
+							vx = -MARIO_WALKING_SPEED;
+							isRunningLeft = false;
+							isRunningRight = false;
+						}
+						else if (state == MARIO_STATE_RUNNING_RIGHT
+							|| state == MARIO_STATE_RUNNINGFAST_RIGHT)
+						{
+							vx = MARIO_WALKING_SPEED;
+							isRunningLeft = false;
+							isRunningRight = false;
+						}
+							
+						vx = 0;
+					}
+					if (ny < 0)
+					{
+						isOnGround = true;
+						vy = 0;
+					}
+				}
+				else if (dynamic_cast<CBountyBrick*>(e->obj))
+				{
+					if (nx != 0 && ny == 0)
+					{
+						if (state == MARIO_STATE_RUNNINGFAST_LEFT
+							|| state == MARIO_STATE_RUNNING_LEFT)
+						{
+							vx = -MARIO_WALKING_SPEED;
+							isRunningLeft = false;
+							isRunningRight = false;
+						}
+						else if (state == MARIO_STATE_RUNNING_RIGHT
+							|| state == MARIO_STATE_RUNNINGFAST_RIGHT)
+						{
+							vx = MARIO_WALKING_SPEED;
+							isRunningLeft = false;
+							isRunningRight = false;
+						}
+
 						vx = 0;
 					}
 					if (ny < 0)
@@ -866,6 +926,23 @@ void CMario::Attack()
 /*
 	Reset Mario status to the beginning state of a scene
 */
+void CMario::StartAttack()
+{
+	isAttacking = true; 
+	Attack_start = (DWORD)GetTickCount64();
+	/*tempx_attack = x;
+	tempy_attack = y;
+	if (nx > 0)
+	{
+		x = x + MARIO_TAIL_ATTACK_BBOX_WIDTH - MARIO_TAIL_BBOX_WIDTH;
+		SetPosition(x, y);
+	}
+	else
+	{
+		x = x - MARIO_TAIL_ATTACK_BBOX_WIDTH + MARIO_TAIL_BBOX_WIDTH;
+		SetPosition(x, y);
+	}*/
+}
 void CMario::ResetTail()
 {
 	SetState(MARIO_STATE_IDLE);

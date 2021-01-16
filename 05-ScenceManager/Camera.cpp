@@ -52,8 +52,13 @@ void Camera::Update()
 		
 		if (checkifMarioInside() == false && cy>0)
 		{
+			if (CGame::GetInstance()->GetLife() == 1)
+				CGame::GetInstance()->SetLife(4);
+			else
+			{
+				CGame::GetInstance()->SetLife(CGame::GetInstance()->GetLife() - 1);
+			}			
 			CGame::GetInstance()->SwitchScene(1);
-			CGame::GetInstance()->SetLife(CGame::GetInstance()->GetLife() - 1);
 		}
 			
 	}

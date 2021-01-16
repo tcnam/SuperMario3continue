@@ -264,7 +264,7 @@ void CSceneIntroKeyHandler::OnKeyDown(int KeyCode)
 	CPointer* pointer = ((CSceneIntro*)scence)->GetPointer();
 	switch (KeyCode)
 	{
-	case (DIK_A):
+	case (DIK_S):
 		CGame::GetInstance()->SwitchScene(1);
 		break;
 	case (DIK_UP):
