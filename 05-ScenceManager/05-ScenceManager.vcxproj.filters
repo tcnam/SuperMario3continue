@@ -121,6 +121,9 @@
     <Filter Include="Framework\Scene\Scene_Intro\IntroObject">
       <UniqueIdentifier>{c7089cd6-e64a-4d41-b56e-0dc97f79b60a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Object\GameObject\Enemy\Piranha">
+      <UniqueIdentifier>{b1f14f97-463d-4b98-82ba-1713c7ca6220}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animations.cpp">
@@ -246,6 +249,9 @@
     <ClCompile Include="Pointer.cpp">
       <Filter>Framework\Scene\Scene_Intro\IntroObject</Filter>
     </ClCompile>
+    <ClCompile Include="Piranha.cpp">
+      <Filter>Object\GameObject\Enemy\Piranha</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animations.h">
@@ -370,6 +376,9 @@
     </ClInclude>
     <ClInclude Include="Pointer.h">
       <Filter>Framework\Scene\Scene_Intro\IntroObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Piranha.h">
+      <Filter>Object\GameObject\Enemy\Piranha</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

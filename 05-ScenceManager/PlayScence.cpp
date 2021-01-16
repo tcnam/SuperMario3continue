@@ -258,6 +258,13 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			FireFlowers.push_back((CFireFlower*)obj);
 		}
 		break;
+	case OBJECT_TYPE_PIRANHA:
+		{
+			obj = new CPiranha();
+			((CPiranha*)obj)->SetMario(player);
+			((CPiranha*)obj)->SetInitPosition(x, y);
+		}
+		break;
 	case OBJECT_TYPE_FLOWER_FIREBALL:
 		{
 			obj = new CFireBallFlower();
@@ -650,6 +657,10 @@ void CPlayScene::Update(DWORD dt)
 			coObjects_Of_Mario.push_back(objects[i]);					//add specialbrick to coOjects of Mario to block mario
 			coObjects_Of_Koopas.push_back(objects[i]);					//add specialbrick to coOjects of Koopas to block Koopas
 		}
+		else if (objects[i]->type == OBJECT_TYPE_PIRANHA)
+		{
+			coObjects_Of_Tail.push_back(objects[i]);
+		}
 		//else if (objects[i]->type == OBJECT_TYPE_PORTAL)
 		//{
 		//	coObjects_Of_Mario.push_back(objects[i]);
@@ -702,7 +713,8 @@ void CPlayScene::Update(DWORD dt)
 	if (player == NULL)				
 		return;
 	Hud->Update();
-	TimeCount();
+	if(player->isTransform==false)
+		TimeCount();
 }
 
 void CPlayScene::Render()

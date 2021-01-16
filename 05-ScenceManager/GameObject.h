@@ -33,6 +33,8 @@ using namespace std;
 #define OBJECT_TYPE_TAIL			19
 #define OBJECT_TYPE_INTRONUMBER		20
 #define OBJECT_TYPE_POINTER			21
+#define OBJECT_TYPE_PIRANHA			22
+#define OBJECT_TYPE_BOOMBROTHER		23
 
 class CGameObject; 
 typedef CGameObject * LPGAMEOBJECT;

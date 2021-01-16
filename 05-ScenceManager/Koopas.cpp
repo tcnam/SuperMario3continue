@@ -28,17 +28,22 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		return;
 	if (MarioMain->isTransform == true)
 		return;
+	float Mario_x, Mario_y;
+	MarioMain->GetPosition(Mario_x, Mario_y);
 	if (level == KOOPAS_LEVEL_FLY)
 	{
 		if (abs(x - start_x) >= KOOPAS_DX_LIMIT_TOFLY)
 		{
 			vy = -KOOPAS_FLY_JUMP_SPEED;
+			if (Mario_x < x)
+				vx = -KOOPAS_WALKING_SPEED;
+			else
+				vx = KOOPAS_WALKING_SPEED;
 			start_x = x;
 		}
 	}	
 	CGameObject::Update(dt, coObjects);
-	float Mario_x, Mario_y;
-	MarioMain->GetPosition(Mario_x, Mario_y);
+	
 
 	if (isHold==true)
 	{

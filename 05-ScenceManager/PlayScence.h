@@ -30,6 +30,7 @@
 #include "HiddenDoor.h"
 #include "AutoDoor.h"
 #include "Tail.h"
+#include "Piranha.h"
 
 class CPlayScene: public CScene
 {

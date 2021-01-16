@@ -4,6 +4,7 @@
 #include"Goomba.h"
 #include"Koopas.h"
 #include"FireFlower.h"
+#include"Piranha.h"
 
 CTail::CTail()
 {
@@ -63,12 +64,22 @@ void CTail::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			{
 				isUsed = false;
 				CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
-
-				if (goomba->GetState() != GOOMBA_STATE_DIE)
+				if (goomba->GetLevel() == GOOMBA_LEVEL_FLY)
 				{
-					goomba->SetState(GOOMBA_STATE_KICKED_OUT);
-					goomba->SetSpeed(0, -0.2f);
+					goomba->Setlevel(GOOMBA_LEVEL_NORMAL);
+					goomba->SetState(GOOMBA_STATE_WALKING);
+					CGame::GetInstance()->SetScores(CGame::GetInstance()->GetScores() + 100);
 				}
+				else
+				{
+					if (goomba->GetState() != GOOMBA_STATE_DIE)
+					{
+						goomba->SetState(GOOMBA_STATE_KICKED_OUT);
+						goomba->SetSpeed(0, -0.2f);
+					}
+					CGame::GetInstance()->SetScores(CGame::GetInstance()->GetScores() + 100);
+				}
+				
 			} // if Goomba
 			else if (dynamic_cast<CKoopas*>(e->obj))
 			{
@@ -78,6 +89,7 @@ void CTail::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				{
 					koopas->SetState(KOOPAS_STATE_KICKOUT);
 					koopas->SetSpeed(0, -0.2f);
+					CGame::GetInstance()->SetScores(CGame::GetInstance()->GetScores() + 100);
 				}
 			}
 			else if (dynamic_cast<CSpecialBrick*>(e->obj))
@@ -128,7 +140,18 @@ void CTail::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					}
 					fireflower->SetPosition(fireflower->GetStartx(), fireflower->GetStarty());
 					fireflower->StartFinish();
-				}					
+				}	
+				CGame::GetInstance()->SetScores(CGame::GetInstance()->GetScores() + 100);
+			}
+			else if (dynamic_cast<CPiranha*>(e->obj))
+			{
+				CPiranha* piranha = dynamic_cast<CPiranha*>(e->obj);
+				if (piranha->isFinish != true)
+				{
+					piranha->SetPosition(piranha->GetStartx(), piranha->GetStarty());
+					piranha->StartFinish();
+				}
+				CGame::GetInstance()->SetScores(CGame::GetInstance()->GetScores() + 100);
 			}
 		}
 	}

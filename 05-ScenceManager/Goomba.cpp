@@ -2,17 +2,27 @@
 CGoomba::CGoomba()
 {
 	SetState(GOOMBA_STATE_WALKING);
+	level = 0;
 }
 
 void CGoomba::GetBoundingBox(float &left, float &top, float &right, float &bottom)
 {
 	left = x;
 	top = y;
-	right = x + GOOMBA_BBOX_WIDTH;
-	if (state == GOOMBA_STATE_DIE)
-		bottom = y + GOOMBA_BBOX_HEIGHT_DIE;
-	else 	
-		bottom = y + GOOMBA_BBOX_HEIGHT;
+	if (level == GOOMBA_LEVEL_FLY)
+	{
+		right = x + GOOMBA_FLY_BBOX_WIDTH;
+		bottom = y + GOOMBA_FLY_BBOX_HEIGHT;
+	}
+	else
+	{
+		right = x + GOOMBA_BBOX_WIDTH;
+		if (state == GOOMBA_STATE_DIE)
+			bottom = y + GOOMBA_BBOX_HEIGHT_DIE;
+		else
+			bottom = y + GOOMBA_BBOX_HEIGHT;
+	}
+	
 }
 
 void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
@@ -23,29 +33,49 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		return;
 	if (Mario->isTransform == true)
 		return;
-
+	float Mario_x, Mario_y;
+	Mario->GetPosition(Mario_x, Mario_y);
 	if (GetTickCount64() - untouchable_start > GOOMBA_UNTOUCHABLE_TIME)
 	{
 		untouchable_start = 0;
 		untouchable = false;
 		//SetPosition(x, y + 320.00f);
+		if (level == GOOMBA_LEVEL_FLY)
+		{
+			if (abs(x - start_x) >= GOOMBA_DX_LIMIT_TOFLY)
+			{
+				vy = -GOOMBA_FLY_JUMP_SPEED;
+				if (Mario_x < x)
+					vx = -GOOMBA_WALKING_SPEED;
+				start_x = x;
+			}
+		}
 		CGameObject::Update(dt, coObjects);
 		vy += GOOMBA_GRAVITY * dt;
 		if (state != GOOMBA_STATE_DIE)
 		{
 			if (AABBCheck(Mario) == true)
 			{
-				//if (Mario->isAttacking == true)
-				//{
-				//	if (state != GOOMBA_STATE_DIE)
-				//	{
-				//		state = GOOMBA_STATE_DIE;
-				//		SetPosition(x, y - GOOMBA_BBOX_HEIGHT_DIE + GOOMBA_BBOX_HEIGHT);
-				//		CGame::GetInstance()->SetScores(CGame::GetInstance()->GetScores() + 100);
-				//		vx = 0;
-				//		vy = 0;
-				//	}
-				//}
+				if (Mario->isAttacking == true)
+				{
+					if (level == GOOMBA_LEVEL_FLY)
+					{
+						level = GOOMBA_LEVEL_NORMAL;
+						state = GOOMBA_STATE_WALKING;
+						CGame::GetInstance()->SetScores(CGame::GetInstance()->GetScores() + 100);
+					}
+					else
+					{
+						if (state != GOOMBA_STATE_DIE)
+						{
+							state = GOOMBA_STATE_DIE;
+							SetPosition(x, y - GOOMBA_BBOX_HEIGHT_DIE + GOOMBA_BBOX_HEIGHT);
+							CGame::GetInstance()->SetScores(CGame::GetInstance()->GetScores() + 100);
+							vx = 0;
+							vy = 0;
+						}
+					}				
+				}
 				if (Mario->untouchable == false)
 				{
 					SetPosition(x, y - 1);
@@ -107,20 +137,7 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 					{
 						if (nx != 0)
 						{
-							if (Mario->GetLevel() == MARIO_LEVEL_TAIL)
-							{
-								if (Mario->isAttacking == true)
-								{
-									if (state != GOOMBA_STATE_DIE)
-									{
-										StartUntouchable();
-										state = GOOMBA_STATE_DIE;
-										CGame::GetInstance()->SetScores(CGame::GetInstance()->GetScores() + 100);
-										vx = 0;
-										vy = 0;
-									}
-								}
-							}
+						
 							if (Mario->untouchable == false)
 							{
 								if (Mario->GetLevel() == MARIO_LEVEL_SMALL)
@@ -138,14 +155,23 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 							float Mario_vx, Mario_vy;
 							Mario->GetSpeed(Mario_vx, Mario_vy);
 							Mario->SetSpeed(Mario_vx, -MARIO_JUMP_DEFLECT_SPEED);
-							if (state != GOOMBA_STATE_DIE)
+							if (level == GOOMBA_LEVEL_FLY)
 							{
-								StartUntouchable();
-								state = GOOMBA_STATE_DIE;
+								level = GOOMBA_LEVEL_NORMAL;
+								state = GOOMBA_STATE_WALKING;
 								CGame::GetInstance()->SetScores(CGame::GetInstance()->GetScores() + 100);
-								SetPosition(x, y - GOOMBA_BBOX_HEIGHT_DIE + GOOMBA_BBOX_HEIGHT);
-								vx = 0;
-								vy = 0;
+							}
+							else
+							{
+								if (state != GOOMBA_STATE_DIE)
+								{
+									StartUntouchable();
+									state = GOOMBA_STATE_DIE;
+									CGame::GetInstance()->SetScores(CGame::GetInstance()->GetScores() + 100);
+									SetPosition(x, y - GOOMBA_BBOX_HEIGHT_DIE + GOOMBA_BBOX_HEIGHT);
+									vx = 0;
+									vy = 0;
+								}
 							}
 						}
 					}
@@ -168,6 +194,8 @@ void CGoomba::Render()
 	{
 		ani = GOOMBA_ANI_KICKOUT;
 	}
+	if (level == GOOMBA_LEVEL_FLY)
+		ani = GOOMBA_FLY_ANI_WALKING;
 
 	animation_set->at(ani)->Render(round(x),round(y));
 
