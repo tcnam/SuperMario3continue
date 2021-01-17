@@ -7,6 +7,7 @@ CKoopas::CKoopas()
 	SetState(KOOPAS_STATE_WALKING);
 	isWaiting = false;
 	wait_start = 0;
+	isOnGround = false;
 }
 
 void CKoopas::GetBoundingBox(float &left, float &top, float &right, float &bottom)
@@ -29,6 +30,8 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		return;
 	if (MarioMain->isTransform == true)
 		return;
+	if (vy > 0.03f)
+		isOnGround = false;
 	float Mario_x, Mario_y;
 	MarioMain->GetPosition(Mario_x, Mario_y);
 	if (state == KOOPAS_STATE_DEFENSE_STATIC || state == KOOPAS_STATE_KICKOUT_2||state==KOOPAS_STATE_ISHOLD)
@@ -88,7 +91,28 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 				vx = KOOPAS_WALKING_SPEED;
 			start_x = x;
 		}
-	}	
+	}
+	else
+	{
+		if (isOnGround == false)
+		{
+			if (state == KOOPAS_STATE_WALKING)
+			{
+				if (vx > 0)
+				{
+					SetPosition(x - 2, y - 1);
+					vx = -KOOPAS_WALKING_SPEED;
+				}
+				else
+				{
+					SetPosition(x + 2, y - 1);
+					vx = KOOPAS_WALKING_SPEED;
+				}
+			}
+			
+				
+		}			
+	}
 	CGameObject::Update(dt, coObjects);
 	if (isHold==true)
 	{
@@ -242,6 +266,7 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 			if (ny != 0)
 			{
 				vy = 0;
+				isOnGround = true;
 			}
 			for (UINT i = 0; i < coEventsResult.size(); i++)
 			{
