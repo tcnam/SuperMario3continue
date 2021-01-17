@@ -11,8 +11,8 @@
 #define MARIO_RUNNING_SPEED		0.15f
 #define MARIO_RUNNINGFAST_SPEED	0.22f
 //0.1f
-#define MARIO_JUMP_SPEED_Y		0.33f
-#define MARIO_JUMPHIGH_SPEED_Y	0.7f
+#define MARIO_JUMP_SPEED_Y		0.24f				//0.33f
+#define MARIO_JUMPHIGH_SPEED_Y	0.245f
 #define MARIO_FLY_SPEED_Y		0.13f
 #define MARIO_JUMP_DEFLECT_SPEED 0.23f
 #define MARIO_GRAVITY			0.0008f
@@ -190,12 +190,12 @@ class CMario : public CGameObject
 	DWORD StartFly;
 	DWORD untouchable_start;
 	DWORD FlyFall_start;
-	DWORD Attack_start;
-	DWORD Slide_start;
+	DWORD Attack_start;	
 	DWORD Transform_start;
 
 	
 public:
+	DWORD Jump_start;
 
 	bool untouchable;
 	bool isOnGround;
@@ -213,7 +213,7 @@ public:
 	bool isFlyFall;						//for choosing the right sprites for jump and fall fly state	
 	bool isAttacking;
 	bool isHoldingKoopas;
-	bool isSliding;
+	bool isJumping;
 
 	bool isClearingCourse;
 	bool isInsidePlayScence;
@@ -267,7 +267,7 @@ public:
 	void StartUntouchable() { untouchable = true; untouchable_start = (DWORD)GetTickCount64(); }
 	void StartFlyFall() { isFlyFall = true; FlyFall_start = (DWORD)GetTickCount64(); }
 	void StartAttack();
-	void StartSlide() { isSliding = true; Slide_start = (DWORD)GetTickCount64(); }
+	void StartJump() { isJumping = true; Jump_start = (DWORD)GetTickCount64(); }
 
 	void ResetFire();
 	void ResetBig();

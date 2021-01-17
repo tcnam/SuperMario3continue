@@ -21,7 +21,7 @@ CMario::CMario(float x, float y) : CGameObject()
 	isFlyFall = false;
 	isFlying = false;
 	isAttacking = false;
-	isSliding = false;
+	isJumping = false;
 	isDucking = false;
 	isCrossingPipe = false;
 
@@ -32,6 +32,8 @@ CMario::CMario(float x, float y) : CGameObject()
 
 	isClearingCourse = false;
 	isInsidePlayScence = false;
+
+	Jump_start = 0;
 	//allowJump = true;
 	start_x = x; 
 	start_y = y; 
@@ -76,6 +78,16 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	{
 		vx = MARIO_AUTO_WALKING_SPEED;
 	}
+	if (Jump_start != 0)
+	{
+		if (GetTickCount64() - Jump_start > 100)
+		{
+			vy = -MARIO_JUMPHIGH_SPEED_Y;
+			Jump_start = 0;
+			isJumping = false;
+		}
+	}
+	
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
 

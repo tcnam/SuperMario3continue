@@ -838,7 +838,11 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 				else
 				{
 					if (mario->isOnGround == true)
+					{
 						mario->SetState(MARIO_STATE_JUMP);
+						mario->StartJump();
+					}
+						
 					else
 					{
 						mario->StartFlyFall();
@@ -848,6 +852,7 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 			else
 			{
 				mario->SetState(MARIO_STATE_JUMP);
+				mario->StartJump();
 			}
 		}
 		
@@ -927,6 +932,15 @@ void CPlayScenceKeyHandler::OnKeyUp(int KeyCode)
 		float current_x, current_y;
 		mario->GetPosition(current_x, current_y);
 		mario->SetPosition(current_x, current_y - 10);
+	}
+	break;
+	case DIK_S:
+	{
+		if (mario->isJumping == true)
+		{
+			mario->isJumping = false;
+			mario->Jump_start = 0;
+		}
 	}
 	break;
 	
