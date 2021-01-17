@@ -236,7 +236,7 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 							}
 						}
 					}
-					if (ny > 0)
+					if (ny > 0&&nx==0)
 					{
 						SetPosition(x, y - 1);
 						float Mario_vx, Mario_vy;
@@ -270,7 +270,7 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 						}
 						
 					}
-					if (ny < 0)
+					if (ny < 0&&nx==0)
 					{
 						if (MarioMain->untouchable == false)
 						{
