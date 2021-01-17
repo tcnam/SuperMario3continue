@@ -89,6 +89,7 @@ void CTail::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					koopas->Setlevel(KOOPAS_LEVEL_NORMAL);
 				koopas->SetState(KOOPAS_STATE_KICKOUT_2);
 				koopas->SetSpeed(0, -0.24f);
+				koopas->StartWait();
 				CGame::GetInstance()->SetScores(CGame::GetInstance()->GetScores() + 100);
 			}
 			else if (dynamic_cast<CSpecialBrick*>(e->obj))

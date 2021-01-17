@@ -38,6 +38,8 @@
 #define KOOPAS_ANI_FLY_WALKING_RIGHT	5
 #define KOOPAS_ANI_KICKOUT				6
 
+#define KOOPAS_TIME_WAIT_TO_TRANSFORM	15000
+
 class CKoopas : public CGameObject
 {
 private:
@@ -45,12 +47,14 @@ private:
 	float start_y;
 	int level;
 public:
+	DWORD wait_start;
 	CMario* MarioMain;
 	CMario* MarioForHold;
 	bool isHold;
+	bool isWaiting;
 	CKoopas();
-	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom);
-	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects);
+	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
+	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	virtual void Render();
 	virtual void SetState(int state);
 
@@ -58,7 +62,7 @@ public:
 	void Setlevel(int l) { level = l; }
 	int GetLevel() { return level; }
 	void SetInitPosition(float x, float y) { start_x = x; start_y = y; }
-
+	void StartWait();
 	void left();
 	void right();
 	void walk();

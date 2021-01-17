@@ -4,8 +4,9 @@ CKoopas::CKoopas()
 {
 	vy = 0;
 	right();
-	SetState(KOOPAS_STATE_DEFENSE_STATIC);
-
+	SetState(KOOPAS_STATE_WALKING);
+	isWaiting = false;
+	wait_start = 0;
 }
 
 void CKoopas::GetBoundingBox(float &left, float &top, float &right, float &bottom)
@@ -34,7 +35,27 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	{
 		if (level == KOOPAS_LEVEL_FLY)
 			level = KOOPAS_LEVEL_NORMAL;
+		if (wait_start != 0)
+		{
+			if (GetTickCount64() - wait_start > KOOPAS_TIME_WAIT_TO_TRANSFORM)
+			{
+				level = KOOPAS_LEVEL_NORMAL;
+				state = KOOPAS_STATE_WALKING;
+				vx = -KOOPAS_WALKING_SPEED;
+				SetPosition(x, y - KOOPAS_BBOX_HEIGHT + KOOPAS_BBOX_HEIGHT_DIE);
+			}
+
+		}
 	}
+	else
+	{
+		if (wait_start != 0)
+		{
+			wait_start = 0;
+			isWaiting = false;
+		}
+	}
+	
 	if (level == KOOPAS_LEVEL_FLY)
 	{		
 		if (abs(x - start_x) >= KOOPAS_DX_LIMIT_TOFLY)
@@ -315,6 +336,7 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 							}
 							else
 							{
+								StartWait();
 								CGame::GetInstance()->SetScores(CGame::GetInstance()->GetScores() + 100);
 								state = KOOPAS_STATE_DEFENSE_STATIC;
 								vx = 0;
@@ -398,7 +420,11 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	
 	
 }
-
+void CKoopas::StartWait()
+{
+	isWaiting = true; 
+	wait_start = (DWORD)GetTickCount64();
+}
 void CKoopas::Render()
 {
 	int ani = -1;
