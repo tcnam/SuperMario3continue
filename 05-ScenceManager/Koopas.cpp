@@ -31,7 +31,7 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		return;
 	float Mario_x, Mario_y;
 	MarioMain->GetPosition(Mario_x, Mario_y);
-	if (state == KOOPAS_STATE_DEFENSE_STATIC || state == KOOPAS_STATE_KICKOUT_2)
+	if (state == KOOPAS_STATE_DEFENSE_STATIC || state == KOOPAS_STATE_KICKOUT_2||state==KOOPAS_STATE_ISHOLD)
 	{
 		if (level == KOOPAS_LEVEL_FLY)
 			level = KOOPAS_LEVEL_NORMAL;
@@ -39,12 +39,33 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		{
 			if (GetTickCount64() - wait_start > KOOPAS_TIME_WAIT_TO_TRANSFORM)
 			{
+				if (isHold == true)
+				{
+					MarioForHold = NULL;
+					isHold = false;
+					MarioMain->isHoldingKoopas = false;
+					if (AABBCheck(MarioMain) == true)
+					{
+						if (MarioMain->GetLevel() == MARIO_LEVEL_SMALL)
+							MarioMain->SetState(MARIO_STATE_DIE);
+						else
+						{
+							MarioMain->StartUntouchable();
+							if (MarioMain->GetEffect() != NULL)
+							{
+								MarioMain->GetEffect()->SetState(EFFECT_CLOUND);
+								MarioMain->GetEffect()->SetPosition(Mario_x, Mario_y);
+								MarioMain->StartTransForm();
+							}
+							MarioMain->SetLevel(MarioMain->GetLevel() - 1);
+						}
+					}
+				}
 				level = KOOPAS_LEVEL_NORMAL;
 				state = KOOPAS_STATE_WALKING;
 				vx = -KOOPAS_WALKING_SPEED;
 				SetPosition(x, y - KOOPAS_BBOX_HEIGHT + KOOPAS_BBOX_HEIGHT_DIE);
 			}
-
 		}
 	}
 	else
@@ -149,7 +170,7 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 			{
 				if (MarioMain->GetLevel() == MARIO_LEVEL_TAIL)
 				{
-					if (Mario_x > x - 32)
+					if (Mario_x > x - 32&&Mario_x<x)
 					{
 						MarioForHold = MarioMain;
 						if (MarioForHold->isHoldingKoopas == false)
@@ -161,7 +182,7 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 				}
 				else
 				{
-					if (Mario_x > x - 20)
+					if (Mario_x > x - 20&&Mario_x<x)
 					{
 						MarioForHold = MarioMain;
 						if (MarioForHold->isHoldingKoopas == false)
@@ -174,7 +195,7 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 			}
 			else
 			{
-				if (Mario_x < x + 20)
+				if (Mario_x < x + 20&&Mario_x>x)
 				{
 					MarioForHold = MarioMain;
 					if (MarioForHold->isHoldingKoopas == false)
