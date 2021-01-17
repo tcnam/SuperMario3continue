@@ -7,6 +7,7 @@
 #include "Game.h"
 #include "WeakBrick.h"
 #include "BountyBrick.h"
+#include "SpecialBrick.h"
 
 
 CMario::CMario(float x, float y) : CGameObject()
@@ -244,6 +245,29 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 						isOnGround = true;
 						vy = 0;
 					}
+					if (ny > 0 && nx == 0)
+					{
+						CWeakBrick* weakbrick = dynamic_cast<CWeakBrick*>(e->obj);
+						if (weakbrick->GetState() == WEAKBRICK_STATE_NORMAL)
+						{
+							weakbrick->SetState(WEAKBRICK_STATE_DISAPPEAR);
+							weakbrick->ActivateFragment();
+							weakbrick->MoveWeakBrickToHorizon();
+
+						}
+					}
+				}
+				else if (dynamic_cast<CSpecialBrick*>(e->obj))
+				{
+					if (ny > 0 && nx == 0)
+					{
+						CSpecialBrick* spB = dynamic_cast<CSpecialBrick*>(e->obj);
+						if (spB->GetState() != SPECIALBRICK_STATE_EMPTY)
+						{
+							spB->SetState(SPECIALBRICK_STATE_EMPTY);
+							spB->ActivateBountyButton();
+						}
+					}
 				}
 				else if (dynamic_cast<CBountyBrick*>(e->obj))
 				{
@@ -272,6 +296,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 						vy = 0;
 					}
 				}
+				
 			}
 		}
 		else
