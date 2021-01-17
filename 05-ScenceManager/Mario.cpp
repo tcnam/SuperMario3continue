@@ -77,13 +77,14 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	{
 		vx = MARIO_AUTO_WALKING_SPEED;
 	}
-	if (Jump_start != 0)
+	if (Jump_start != 0&&isJumping==true)
 	{
 		if (GetTickCount64() - Jump_start > 100)
 		{
 			vy = -MARIO_JUMPHIGH_SPEED_Y;
 			Jump_start = 0;
 			isJumping = false;
+			//isOnGround = false;
 		}
 	}
 	
@@ -956,6 +957,7 @@ void CMario::Jump()
 		return;
 	vy =- MARIO_JUMP_SPEED_Y;
 	isOnGround = false;
+	StartJump();
 }
 void CMario::Fly()
 {
@@ -1018,6 +1020,14 @@ void CMario::Attack()
 	}
 	
 	DebugOut(L"Fire ball was created\n");
+}
+void CMario::StartJump()
+{
+	if (Jump_start == 0&&isJumping==false)
+	{
+		isJumping = true;
+		Jump_start = (DWORD)GetTickCount64();
+	}
 }
 
 

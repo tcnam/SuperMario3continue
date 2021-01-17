@@ -268,7 +268,7 @@ public:
 	void StartUntouchable() { untouchable = true; untouchable_start = (DWORD)GetTickCount64(); }
 	void StartFlyFall() { isFlyFall = true; FlyFall_start = (DWORD)GetTickCount64(); }
 	void StartAttack();
-	void StartJump() { isJumping = true; Jump_start = (DWORD)GetTickCount64(); }
+	void StartJump();
 
 	void ResetFire();
 	void ResetBig();

@@ -842,7 +842,7 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 					if (mario->isOnGround == true)
 					{
 						mario->SetState(MARIO_STATE_JUMP);
-						mario->StartJump();
+						//mario->StartJump();
 					}
 						
 					else
@@ -855,7 +855,7 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 			else
 			{
 				mario->SetState(MARIO_STATE_JUMP);
-				mario->StartJump();
+				//mario->StartJump();
 			}
 		}
 		
