@@ -59,18 +59,15 @@ void CFireBall::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 				if (goomba->GetState() != GOOMBA_STATE_DIE)
 				{
-					goomba->SetState(GOOMBA_STATE_DIE);
+					goomba->SetState(GOOMBA_STATE_KICKED_OUT);
 					isFinished = true;
 				}				
 			} // if Goomba
 			else if (dynamic_cast<CKoopas*>(e->obj))
 			{
 				CKoopas* koopas = dynamic_cast<CKoopas*>(e->obj);
-				if (koopas->GetState() != KOOPAS_STATE_DEFENSE_STATIC)
-				{
-					koopas->SetState(KOOPAS_STATE_DEFENSE_STATIC);
-					isFinished = true;
-				}
+				koopas->SetState(KOOPAS_STATE_KICKOUT);
+				isFinished = true;
 			}
 		}
 	}

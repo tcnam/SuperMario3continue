@@ -4,7 +4,7 @@ CKoopas::CKoopas()
 {
 	vy = 0;
 	right();
-	SetState(KOOPAS_STATE_WALKING);
+	SetState(KOOPAS_STATE_DEFENSE_STATIC);
 	isWaiting = false;
 	wait_start = 0;
 	isOnGround = false;
@@ -443,7 +443,8 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 								float goomba_vx, goomba_vy;
 								goomba->GetPosition(goomba_x, goomba_y);
 								goomba->SetPosition(goomba_x, goomba_y - 1);
-
+								if (goomba->GetLevel() == GOOMBA_LEVEL_FLY)
+									goomba->Setlevel(GOOMBA_LEVEL_NORMAL);
 								goomba->SetState(GOOMBA_STATE_KICKED_OUT);
 
 								goomba->GetSpeed(goomba_vx, goomba_vy);

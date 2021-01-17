@@ -909,14 +909,14 @@ void CPlayScenceKeyHandler::OnKeyUp(int KeyCode)
 		return;
 	switch (KeyCode)
 	{
-	/*case DIK_RIGHT:
-		mario->StartSlide();
-		mario->SetState(MARIO_STATE_SLIDE_RIGHT);
+	case DIK_RIGHT:
+		if (mario->isRunningRight == true)
+			mario->isRunningRight = false;
 		break;
 	case DIK_LEFT:
-		mario->StartSlide();
-		mario->SetState(MARIO_STATE_SLIDE_LEFT);
-		break;*/
+		if (mario->isRunningLeft == true)
+			mario->isRunningLeft = false;
+		break;
 	case DIK_A:
 	{
 		if (mario->isHoldingKoopas == true)
@@ -1049,8 +1049,12 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 	else if (game->IsKeyDown(DIK_A)&&!game->IsKeyDown(DIK_LEFT)&&!game->IsKeyDown(DIK_RIGHT)&&!game->IsKeyDown(DIK_DOWN))
 	{
 		mario->isReadyToHold = true;
+		if (mario->isRunningLeft == true)
+			mario->isRunningLeft = false;
+		if (mario->isRunningRight == true)
+			mario->isRunningRight = false;
 	}
-	else
+	else if(!game->IsKeyDown(DIK_S))
 	{
 		mario->isReadyToHold = false;
 		mario->isDucking = false;

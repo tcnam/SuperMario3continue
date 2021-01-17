@@ -67,7 +67,8 @@ void CTail::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				if (goomba->GetLevel() == GOOMBA_LEVEL_FLY)
 				{
 					goomba->Setlevel(GOOMBA_LEVEL_NORMAL);
-					goomba->SetState(GOOMBA_STATE_WALKING);
+					goomba->SetState(GOOMBA_STATE_KICKED_OUT);
+					goomba->SetSpeed(0, -0.2f);
 					CGame::GetInstance()->SetScores(CGame::GetInstance()->GetScores() + 100);
 				}
 				else
