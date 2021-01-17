@@ -12,7 +12,7 @@
 
 CMario::CMario(float x, float y) : CGameObject()
 {
-	level = MARIO_LEVEL_SMALL;
+	level = MARIO_LEVEL_TAIL;
 	untouchable = 0;
 	SetState(MARIO_STATE_IDLE);
 	isOnGround = false;
@@ -46,9 +46,7 @@ CMario::CMario(float x, float y) : CGameObject()
 
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
-{
-	
-	
+{	
 	if (vy > 0.04f)
 		isOnGround = false;
 	if (GetTickCount64() - Transform_start > MARIO_TRANSFORM_TIME)

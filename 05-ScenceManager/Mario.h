@@ -200,6 +200,7 @@ public:
 	bool untouchable;
 	bool isOnGround;
 	bool isTransform;
+	bool isReadyToHold;
 	//bool allowJump;
 	bool isRunningRight;
 	bool isRunningLeft;

@@ -85,12 +85,11 @@ void CTail::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			{
 				isUsed = false;
 				CKoopas* koopas = dynamic_cast<CKoopas*>(e->obj);
-				if (koopas->GetState() != KOOPAS_STATE_DEFENSE_STATIC)
-				{
-					koopas->SetState(KOOPAS_STATE_KICKOUT);
-					koopas->SetSpeed(0, -0.2f);
-					CGame::GetInstance()->SetScores(CGame::GetInstance()->GetScores() + 100);
-				}
+				if (koopas->GetLevel() == KOOPAS_LEVEL_FLY)
+					koopas->Setlevel(KOOPAS_LEVEL_NORMAL);
+				koopas->SetState(KOOPAS_STATE_KICKOUT_2);
+				koopas->SetSpeed(0, -0.24f);
+				CGame::GetInstance()->SetScores(CGame::GetInstance()->GetScores() + 100);
 			}
 			else if (dynamic_cast<CSpecialBrick*>(e->obj))
 			{

@@ -4,7 +4,7 @@ CKoopas::CKoopas()
 {
 	vy = 0;
 	right();
-	SetState(KOOPAS_STATE_WALKING);
+	SetState(KOOPAS_STATE_DEFENSE_STATIC);
 
 }
 
@@ -30,8 +30,13 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		return;
 	float Mario_x, Mario_y;
 	MarioMain->GetPosition(Mario_x, Mario_y);
-	if (level == KOOPAS_LEVEL_FLY)
+	if (state == KOOPAS_STATE_DEFENSE_STATIC || state == KOOPAS_STATE_KICKOUT_2)
 	{
+		if (level == KOOPAS_LEVEL_FLY)
+			level = KOOPAS_LEVEL_NORMAL;
+	}
+	if (level == KOOPAS_LEVEL_FLY)
+	{		
 		if (abs(x - start_x) >= KOOPAS_DX_LIMIT_TOFLY)
 		{
 			vy = -KOOPAS_FLY_JUMP_SPEED;
@@ -43,8 +48,6 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		}
 	}	
 	CGameObject::Update(dt, coObjects);
-	
-
 	if (isHold==true)
 	{
 		vx = 0;
@@ -104,6 +107,8 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		}
 		else
 		{
+			if (level == KOOPAS_LEVEL_FLY)
+				level = KOOPAS_LEVEL_NORMAL;
 			state = KOOPAS_STATE_DEFENSE_DYNAMIC;
 			if (MarioForHold->Getnx() > 0)
 				vx = KOOPAS_DYNAMIC_SPEED;
@@ -115,7 +120,52 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		}
 
 	}
-
+	else if (MarioMain->isReadyToHold == true&&state==KOOPAS_STATE_DEFENSE_STATIC&&MarioMain->isHoldingKoopas==false&&isHold==false)
+	{
+		if (Mario_y<y + MARIO_SMALL_BBOX_HEIGHT + 1 && Mario_y>y - MARIO_SMALL_BBOX_HEIGHT)
+		{
+			if (MarioMain->nx > 0)
+			{
+				if (MarioMain->GetLevel() == MARIO_LEVEL_TAIL)
+				{
+					if (Mario_x > x - 32)
+					{
+						MarioForHold = MarioMain;
+						if (MarioForHold->isHoldingKoopas == false)
+							MarioForHold->isHoldingKoopas = true;
+						if (isHold == false)
+							isHold = true;
+						state = KOOPAS_STATE_ISHOLD;
+					}
+				}
+				else
+				{
+					if (Mario_x > x - 20)
+					{
+						MarioForHold = MarioMain;
+						if (MarioForHold->isHoldingKoopas == false)
+							MarioForHold->isHoldingKoopas = true;
+						if (isHold == false)
+							isHold = true;
+						state = KOOPAS_STATE_ISHOLD;
+					}
+				}				
+			}
+			else
+			{
+				if (Mario_x < x + 20)
+				{
+					MarioForHold = MarioMain;
+					if (MarioForHold->isHoldingKoopas == false)
+						MarioForHold->isHoldingKoopas = true;
+					if (isHold == false)
+						isHold = true;
+					state = KOOPAS_STATE_ISHOLD;
+				}
+			}
+		}
+		
+	}
 	else
 	{
 		vy += KOOPAS_GRAVITY * dt;
@@ -153,29 +203,21 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 			}
 			for (UINT i = 0; i < coEventsResult.size(); i++)
 			{
+				
 				LPCOLLISIONEVENT e = coEventsResult[i];
 				if (dynamic_cast<CMario*>(e->obj))
 				{
+					SetPosition(x, y - 1);
 					MarioForHold = MarioMain;
-					if (nx != 0&&ny==0)
+					if (nx != 0)
 					{
 						if (MarioForHold->untouchable == false)
 						{
 							if (state != KOOPAS_STATE_ISHOLD)
 							{
-								if (state != KOOPAS_STATE_DEFENSE_STATIC)
+								if (state == KOOPAS_STATE_DEFENSE_STATIC||state==KOOPAS_STATE_KICKOUT_2)
 								{
-									if (MarioForHold->GetLevel() > MARIO_LEVEL_SMALL)
-									{
-										MarioForHold->StartUntouchable();
-										MarioForHold->SetLevel(MarioForHold->GetLevel() - 1);
-									}
-									else
-										MarioForHold->SetState(MARIO_STATE_DIE);
-								}
-								else
-								{
-									if (MarioForHold->GetState() == MARIO_STATE_RUNNING_RIGHT|| MarioForHold->GetState() == MARIO_STATE_RUNNINGFAST_RIGHT)
+									if (MarioForHold->GetState() == MARIO_STATE_RUNNING_RIGHT || MarioForHold->GetState() == MARIO_STATE_RUNNINGFAST_RIGHT)
 									{
 										if (MarioForHold->isHoldingKoopas == true)
 											return;
@@ -183,7 +225,7 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 										state = KOOPAS_STATE_ISHOLD;
 										MarioForHold->isHoldingKoopas = true;
 									}
-									else if (MarioForHold->GetState() == MARIO_STATE_RUNNING_LEFT|| MarioForHold->GetState() == MARIO_STATE_RUNNINGFAST_LEFT)
+									else if (MarioForHold->GetState() == MARIO_STATE_RUNNING_LEFT || MarioForHold->GetState() == MARIO_STATE_RUNNINGFAST_LEFT)
 									{
 										if (MarioForHold->isHoldingKoopas == true)
 											return;
@@ -199,6 +241,17 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 										else
 											vx = -KOOPAS_DYNAMIC_SPEED;
 									}
+									
+								}
+								else
+								{
+									if (MarioForHold->GetLevel() > MARIO_LEVEL_SMALL)
+									{
+										MarioForHold->StartUntouchable();
+										MarioForHold->SetLevel(MarioForHold->GetLevel() - 1);
+									}
+									else
+										MarioForHold->SetState(MARIO_STATE_DIE);
 								}
 							}
 							else
@@ -251,21 +304,21 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 						else
 						{
 							MarioMain->SetSpeed(Mario_vx, -MARIO_JUMP_DEFLECT_SPEED);
-							if (state != KOOPAS_STATE_DEFENSE_STATIC)
-							{
-								CGame::GetInstance()->SetScores(CGame::GetInstance()->GetScores() + 100);
-								state = KOOPAS_STATE_DEFENSE_STATIC;
-								vx = 0;
-								vy = 0;								
-							}
-							else
+							if (state == KOOPAS_STATE_DEFENSE_STATIC||state==KOOPAS_STATE_KICKOUT_2)
 							{
 								CGame::GetInstance()->SetScores(CGame::GetInstance()->GetScores() + 100);
 								state = KOOPAS_STATE_DEFENSE_DYNAMIC;
 								if (MarioMain->Getnx() > 0)
 									vx = KOOPAS_DYNAMIC_SPEED;
 								else
-									vx = -KOOPAS_DYNAMIC_SPEED;
+									vx = -KOOPAS_DYNAMIC_SPEED;													
+							}
+							else
+							{
+								CGame::GetInstance()->SetScores(CGame::GetInstance()->GetScores() + 100);
+								state = KOOPAS_STATE_DEFENSE_STATIC;
+								vx = 0;
+								vy = 0;
 							}
 						}
 						
@@ -274,7 +327,7 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 					{
 						if (MarioMain->untouchable == false)
 						{
-							if (state != KOOPAS_STATE_DEFENSE_STATIC)
+							if (state == KOOPAS_STATE_DEFENSE_DYNAMIC||state==KOOPAS_STATE_WALKING)
 							{
 								if (MarioMain->GetLevel() > MARIO_LEVEL_SMALL)
 								{
@@ -311,7 +364,7 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 				{
 					if (nx != 0)
 					{
-						if (state != KOOPAS_STATE_WALKING)
+						if (state == KOOPAS_STATE_DEFENSE_DYNAMIC)
 						{
 							x += dx;
 							//y += dy;
@@ -326,7 +379,7 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 								goomba->SetState(GOOMBA_STATE_KICKED_OUT);
 
 								goomba->GetSpeed(goomba_vx, goomba_vy);
-								goomba->SetSpeed(goomba_vx, -0.4f);
+								goomba->SetSpeed(goomba_vx, -0.24f);
 
 								CGame::GetInstance()->SetScores(CGame::GetInstance()->GetScores() + 100);
 								
@@ -379,7 +432,7 @@ void CKoopas::Render()
 		else
 			ani = KOOPAS_ANI_DEFENSE_DYNAMIC;
 	}
-	if (state == KOOPAS_STATE_KICKOUT)
+	if (state == KOOPAS_STATE_KICKOUT||state==KOOPAS_STATE_KICKOUT_2)
 		ani = KOOPAS_ANI_KICKOUT;
 	animation_set->at(ani)->Render(round(x), round(y));
 

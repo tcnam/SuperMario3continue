@@ -816,7 +816,8 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 					}
 					else
 					{
-						mario->StartFlyFall();
+						if(mario->isDucking==false)
+							mario->StartFlyFall();
 					}
 				}
 				else if (mario->isRunningFastRight == true)
@@ -832,7 +833,8 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 					}
 					else
 					{
-						mario->StartFlyFall();
+						if (mario->isDucking == false)
+							mario->StartFlyFall();
 					}
 				}
 				else
@@ -845,7 +847,8 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 						
 					else
 					{
-						mario->StartFlyFall();
+						if (mario->isDucking == false)
+							mario->StartFlyFall();
 					}
 				}
 			}
@@ -922,6 +925,8 @@ void CPlayScenceKeyHandler::OnKeyUp(int KeyCode)
 			mario->isRunningLeft = false;
 		if (mario->isRunningRight == true)
 			mario->isRunningRight = false;
+		if (mario->isReadyToHold == true)
+			mario->isReadyToHold = false;
 	}
 		
 		break;
@@ -963,7 +968,7 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 		mario->SetTimeMovingLeft(DWORD(GetTickCount64()));
 		if (DWORD(GetTickCount64()) - mario->GetTimeMovingRight() > MARIO_TIME_CHANGE_DIRECTION)
 		{
-			if (game->IsKeyDown(DIK_A)&&game->IsKeyDown(DIK_LEFT))
+			if (game->IsKeyDown(DIK_A)&&game->IsKeyDown(DIK_LEFT)&&mario->isHoldingKoopas==false)
 			{
 				if (mario->isRunningLeft == false)
 					mario->SetTimeRunningLeft((DWORD)GetTickCount64());
@@ -1005,7 +1010,7 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 		
 		if (DWORD(GetTickCount64()) - mario->GetTimeMovingLeft() > MARIO_TIME_CHANGE_DIRECTION)
 		{
-			if (game->IsKeyDown(DIK_A)&&game->IsKeyDown(DIK_RIGHT))
+			if (game->IsKeyDown(DIK_A)&&game->IsKeyDown(DIK_RIGHT)&&mario->isHoldingKoopas==false)
 			{
 				if (mario->isRunningRight == false)
 					mario->SetTimeRunningRight((DWORD)GetTickCount64());
@@ -1041,8 +1046,13 @@ void CPlayScenceKeyHandler::KeyState(BYTE *states)
 		mario->SetState(MARIO_STATE_DUCK);
 		mario->isDucking = true;
 	}
-	else if(!game->IsKeyDown(DIK_SPACE))
+	else if (game->IsKeyDown(DIK_A)&&!game->IsKeyDown(DIK_LEFT)&&!game->IsKeyDown(DIK_RIGHT)&&!game->IsKeyDown(DIK_DOWN))
 	{
+		mario->isReadyToHold = true;
+	}
+	else
+	{
+		mario->isReadyToHold = false;
 		mario->isDucking = false;
 		mario->SetState(MARIO_STATE_IDLE);
 	}		

@@ -90,13 +90,16 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 				}
 				if (Mario->untouchable == false)
 				{
-					SetPosition(x, y - 1);
-					if (Mario->GetLevel() == MARIO_LEVEL_SMALL)
-						Mario->SetState(MARIO_STATE_DIE);
-					else
+					if (state == GOOMBA_STATE_JUMP || state == GOOMBA_STATE_WALKING)
 					{
-						Mario->StartUntouchable();
-						Mario->SetLevel(Mario->GetLevel() - 1);
+						SetPosition(x, y - 1);
+						if (Mario->GetLevel() == MARIO_LEVEL_SMALL)
+							Mario->SetState(MARIO_STATE_DIE);
+						else
+						{
+							Mario->StartUntouchable();
+							Mario->SetLevel(Mario->GetLevel() - 1);
+						}
 					}
 				}
 				else 
@@ -110,7 +113,7 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		vector<LPCOLLISIONEVENT> coEvents;
 		vector<LPCOLLISIONEVENT> coEventsResult;
 		coEvents.clear();
-		if(state==GOOMBA_STATE_WALKING)
+		if(state==GOOMBA_STATE_WALKING||state==GOOMBA_STATE_JUMP)
 			CalcPotentialCollisions(coObjects, coEvents);
 
 		if (coEvents.size() == 0)
@@ -144,6 +147,7 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 				}
 				else if (dynamic_cast<CMario*>(e->obj))
 				{
+					SetPosition(x, y - 1);
 					if (untouchable == false)
 					{
 						if (nx != 0&&ny==0)
