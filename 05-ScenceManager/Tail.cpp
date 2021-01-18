@@ -107,11 +107,20 @@ void CTail::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			{
 				isUsed = false;
 				CBountyBrick* bountybrick = dynamic_cast<CBountyBrick*>(e->obj);
-				if (bountybrick->GetState()!= BOUNTYBRICK_STATE_EMPTY)
+				if (bountybrick->GetState()== BOUNTYBRICK_STATE_NORMAL)
 				{
-					bountybrick->SetState(BOUNTYBRICK_STATE_EMPTY);
-					bountybrick->GetBounty()->isLeaf = true;
-					bountybrick->ActivateBounty();					
+					bountybrick->SetSpeed(0, -BOUNTYBRICK_SPEED_Y);
+					if (bountybrick->GetBounty() != NULL)
+					{
+						if (bountybrick->GetBounty()->isFinised == true)
+							bountybrick->GetBounty()->isFinised = false;
+						if (bountybrick->GetBounty()->GetState() == BOUNTY_STATE_POWERUP)
+							bountybrick->GetBounty()->isLeaf = true;
+						bountybrick->ActivateBounty();
+					}
+					bountybrick->SetCount(bountybrick->GetCount() - 1);
+					if (bountybrick->GetCount() <= 0)
+						bountybrick->SetState(BOUNTYBRICK_STATE_EMPTY);
 				}
 			}
 			else if (dynamic_cast<CWeakBrick*>(e->obj))

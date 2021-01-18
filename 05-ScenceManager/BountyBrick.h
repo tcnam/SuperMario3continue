@@ -20,14 +20,18 @@ protected:
 	float start_y;
 	CBounty* Bounty;
 	CMario* Mario;
+	int count;
 public:
 	CBountyBrick();
-
+	
 	CBounty* GetBounty() { return Bounty; }
 	CMario* GetMario() { return Mario; }
 
 	void SetBounty(CBounty* bounty) { this->Bounty = bounty; }
 	void SetMario(CMario* mario) { this->Mario = mario; }
+
+	void SetCount(int n) { count = n; }
+	int GetCount() { return count; }
 
 	void SetStateBounty(int statebounty) { Bounty->SetState(statebounty); }
 	void ActivateBounty() { Bounty->isUsed = true;  }

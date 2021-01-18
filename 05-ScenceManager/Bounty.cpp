@@ -35,6 +35,7 @@ void CBounty::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	{
 		SetPosition(start_x, start_y);
 		isUsed = false;
+		isCrossBoundary = false;
 	}
 	CGameObject::Update(dt, coObjects);
 	if (state == BOUNTY_STATE_POWERUP)				//powerup include red mushroom and super leaf

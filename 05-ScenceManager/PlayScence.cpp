@@ -171,7 +171,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			obj = new CFragment();
 			((CFragment*)obj)->SetInitPosition(x, y);
 			int index_Of_WeakBrick = atoi(tokens[4].c_str());
-			if (index_Of_WeakBrick == 18)//Special Brick
+			if (index_Of_WeakBrick == 18&&CGame::GetInstance()->GetSceneNumber()==2)//Special Brick
 				SpecialBrick->PushFragment((CFragment*)obj);
 			else
 				WeakBricks[index_Of_WeakBrick]->PushFragment((CFragment*)obj);
@@ -247,6 +247,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			obj = new CBountyBrick();
 			((CBountyBrick*)obj)->SetInitPosition(x, y);
 			((CBountyBrick*)obj)->SetMario(player);
+			int countdown = atoi(tokens[4].c_str());
+			((CBountyBrick*)obj)->SetCount(countdown);
 			bountybricks.push_back((CBountyBrick*)obj);
 		}		
 		break;
@@ -280,22 +282,40 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			obj = new CBounty();
 			((CBounty*)obj)->SetMario(player);
 			bountybricks[BountyBrickIndex]->SetBounty((CBounty*)obj);
-			if (BountyBrickIndex == 3 || BountyBrickIndex == 5 || BountyBrickIndex == 7)
+			if (CGame::GetInstance()->GetSceneNumber() == 2)
 			{
-				DebugOut(L"State of powerup%i\n", BOUNTY_STATE_POWERUP);
-				bountybricks[BountyBrickIndex]->SetStateBounty(BOUNTY_STATE_POWERUP);
-				DebugOut(L"Bounty was added to bountybrick:%i with state:%i\n", BountyBrickIndex, obj->GetState());
+				if (BountyBrickIndex == 3 || BountyBrickIndex == 5 || BountyBrickIndex == 7)
+				{
+					DebugOut(L"State of powerup%i\n", BOUNTY_STATE_POWERUP);
+					bountybricks[BountyBrickIndex]->SetStateBounty(BOUNTY_STATE_POWERUP);
+					DebugOut(L"Bounty was added to bountybrick:%i with state:%i\n", BountyBrickIndex, obj->GetState());
+				}
+				else if (BountyBrickIndex == 8)
+				{
+					DebugOut(L"State of lifeup%i\n", BOUNTY_STATE_LIFEUP);
+					bountybricks[BountyBrickIndex]->SetStateBounty(BOUNTY_STATE_LIFEUP);
+					DebugOut(L"Bounty was added to bountybrick:%i with state:%i\n", BountyBrickIndex, obj->GetState());
+				}
+				else
+					bountybricks[BountyBrickIndex]->SetStateBounty(BOUNTY_STATE_COIN);
+				
 			}
-			else if (BountyBrickIndex == 8)
+			else if (CGame::GetInstance()->GetSceneNumber() == 3)
 			{
-				DebugOut(L"State of lifeup%i\n", BOUNTY_STATE_LIFEUP);
-				bountybricks[BountyBrickIndex]->SetStateBounty(BOUNTY_STATE_LIFEUP);
-				DebugOut(L"Bounty was added to bountybrick:%i with state:%i\n", BountyBrickIndex, obj->GetState());
+				if (BountyBrickIndex == 0 || BountyBrickIndex == 3)
+				{
+					bountybricks[BountyBrickIndex]->SetStateBounty(BOUNTY_STATE_LIFEUP);
+				}
+				else if (BountyBrickIndex == 1)
+				{
+					bountybricks[BountyBrickIndex]->SetStateBounty(BOUNTY_STATE_POWERUP);
+				}
+				else
+					bountybricks[BountyBrickIndex]->SetStateBounty(BOUNTY_STATE_COIN);
 			}
-			else
-				bountybricks[BountyBrickIndex]->SetStateBounty(BOUNTY_STATE_COIN);
 			bountybricks[BountyBrickIndex]->GetBounty()->SetInitPosition(x, y);
 			BountyBrickIndex++;
+			
 		}		
 		break;
 	case OBJECT_TYPE_FIREBALL:

@@ -5,6 +5,11 @@ CBountyBrick::CBountyBrick() :CGameObject()
 	vx = 0;
 	vy = 0;
 	SetState(BOUNTYBRICK_STATE_NORMAL);
+	count = 1;
+	Mario = NULL;
+	Bounty = NULL;
+	start_x = 0;
+	start_y = 0;
 }
 void CBountyBrick::Render()
 {
@@ -69,10 +74,12 @@ void CBountyBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					Mario->SetSpeed(mario_vx, 0);
 					if (state == BOUNTYBRICK_STATE_NORMAL)
 					{
-						state = BOUNTYBRICK_STATE_EMPTY;
 						vy = -BOUNTYBRICK_SPEED_Y;
 						if (Bounty != NULL)
 						{
+							if (Bounty->isFinised == true)
+								Bounty->isFinised = false;
+							//Bounty->isCrossBoundary = false;
 							if (Mario->GetLevel() > MARIO_LEVEL_SMALL)
 								Bounty->isLeaf = true;
 							else
@@ -83,14 +90,17 @@ void CBountyBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 								Bounty->isRightDirection = false;
 							Bounty->isUsed = true;
 							ActivateBounty();
-						}						
+						}
+						count--;
+						if (count <= 0)
+							state = BOUNTYBRICK_STATE_EMPTY;
 					}
 				}
 				if (ny > 0)
 				{
 					Mario->isOnGround = true;
 				}
-				if (nx != 0)
+				/*if (nx != 0)
 				{
 					if (Mario->GetLevel() == MARIO_LEVEL_TAIL)
 					{
@@ -118,7 +128,7 @@ void CBountyBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 							
 						}
 					}
-				}
+				}*/
 			}
 			else if (dynamic_cast<CKoopas*>(e->obj))
 			{
@@ -132,18 +142,26 @@ void CBountyBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						{							
 							koopas->GetSpeed(koopas_vx, koopas_vy);
 							koopas->SetSpeed(-koopas_vx, koopas_vy);
-							state = BOUNTYBRICK_STATE_EMPTY;
 							vy = -BOUNTYBRICK_SPEED_Y;
-							if (Mario->GetLevel() > MARIO_LEVEL_SMALL)
-								Bounty->isLeaf = true;
-							else
-								Bounty->isLeaf = false;
-							if (vx > 0)
-								Bounty->isRightDirection = true;
-							else
-								Bounty->isRightDirection = false;
-							Bounty->isUsed = true;
-							ActivateBounty();
+							if (Bounty != NULL)
+							{
+								if (Bounty->isFinised == true)
+									Bounty->isFinised = false;
+								//Bounty->isCrossBoundary = false;
+								if (Mario->GetLevel() > MARIO_LEVEL_SMALL)
+									Bounty->isLeaf = true;
+								else
+									Bounty->isLeaf = false;
+								if (vx > 0)
+									Bounty->isRightDirection = true;
+								else
+									Bounty->isRightDirection = false;
+								Bounty->isUsed = true;
+								ActivateBounty();
+							}
+							count--;
+							if (count <= 0)
+								state = BOUNTYBRICK_STATE_EMPTY;
 						}
 						else
 						{

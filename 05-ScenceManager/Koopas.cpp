@@ -4,7 +4,7 @@ CKoopas::CKoopas()
 {
 	vy = 0;
 	right();
-	SetState(KOOPAS_STATE_DEFENSE_STATIC);
+	SetState(KOOPAS_STATE_WALKING);
 	isWaiting = false;
 	wait_start = 0;
 	isOnGround = false;
