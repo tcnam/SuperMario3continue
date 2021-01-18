@@ -60,7 +60,10 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 								MarioMain->GetEffect()->SetPosition(Mario_x, Mario_y);
 								MarioMain->StartTransForm();
 							}
-							MarioMain->SetLevel(MarioMain->GetLevel() - 1);
+							if (MarioMain->GetLevel() == MARIO_LEVEL_FIRE || MarioMain->GetLevel() == MARIO_LEVEL_TAIL)
+								MarioMain->SetLevel(MARIO_LEVEL_BIG);
+							else
+								MarioMain->SetLevel(MARIO_LEVEL_SMALL);
 						}
 					}
 				}
@@ -206,7 +209,7 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 				}
 				else
 				{
-					if (Mario_x > x - 20&&Mario_x<x)
+					if (Mario_x > x - 24&&Mario_x<x)
 					{
 						MarioForHold = MarioMain;
 						if (MarioForHold->isHoldingKoopas == false)
@@ -219,7 +222,7 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 			}
 			else
 			{
-				if (Mario_x < x + 20&&Mario_x>x)
+				if (Mario_x < x + 24&&Mario_x>x)
 				{
 					MarioForHold = MarioMain;
 					if (MarioForHold->isHoldingKoopas == false)
@@ -315,7 +318,10 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 									if (MarioForHold->GetLevel() > MARIO_LEVEL_SMALL)
 									{
 										MarioForHold->StartUntouchable();
-										MarioForHold->SetLevel(MarioForHold->GetLevel() - 1);
+										if (MarioMain->GetLevel() == MARIO_LEVEL_FIRE || MarioMain->GetLevel() == MARIO_LEVEL_TAIL)
+											MarioMain->SetLevel(MARIO_LEVEL_BIG);
+										else
+											MarioMain->SetLevel(MARIO_LEVEL_SMALL);
 									}
 									else
 										MarioForHold->SetState(MARIO_STATE_DIE);
@@ -400,7 +406,10 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 								if (MarioMain->GetLevel() > MARIO_LEVEL_SMALL)
 								{
 									MarioMain->StartUntouchable();
-									MarioMain->SetLevel(MarioMain->GetLevel() - 1);
+									if (MarioMain->GetLevel() == MARIO_LEVEL_FIRE || MarioMain->GetLevel() == MARIO_LEVEL_TAIL)
+										MarioMain->SetLevel(MARIO_LEVEL_BIG);
+									else
+										MarioMain->SetLevel(MARIO_LEVEL_SMALL);
 								}
 								else
 									MarioMain->SetState(MARIO_STATE_DIE);

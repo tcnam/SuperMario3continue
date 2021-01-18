@@ -7,6 +7,9 @@ CPiranha::CPiranha()
 	start_x = 0;
 	start_y = 0;
 	Finish_Start = 0;
+	isShooting = false;
+	Shoot_Start = 0;
+	Mario = NULL;
 }
 void CPiranha::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
@@ -64,7 +67,10 @@ void CPiranha::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			else
 			{
 				Mario->StartUntouchable();
-				Mario->SetLevel(Mario->GetLevel() - 1);
+				if (Mario->GetLevel() == MARIO_LEVEL_FIRE || Mario->GetLevel() == MARIO_LEVEL_TAIL)
+					Mario->SetLevel(MARIO_LEVEL_BIG);
+				else
+					Mario->SetLevel(MARIO_LEVEL_SMALL);
 			}
 		}
 	}

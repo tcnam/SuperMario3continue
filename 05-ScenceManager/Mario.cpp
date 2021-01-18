@@ -953,8 +953,8 @@ void CMario::Jump()
 {
 	//if (allowJump == false)
 		//return;
-	if (isOnGround ==false)//allow mario to jump only when on ground
-		return;
+	//if (isOnGround ==false)//allow mario to jump only when on ground
+	//	return;
 	if (isRunningFastLeft == true)
 	{
 		vy = -MARIO_JUMP_MAXPOWER_SPEED_Y;
@@ -1011,6 +1011,8 @@ void CMario::Attack()
 	}
 	else if (level == MARIO_LEVEL_TAIL)
 	{
+		if (tail == NULL)
+			return;
 		tail->isUsed = true;
 		
 		if (nx > 0)

@@ -71,16 +71,19 @@ void CBountyBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					{
 						state = BOUNTYBRICK_STATE_EMPTY;
 						vy = -BOUNTYBRICK_SPEED_Y;
-						if (Mario->GetLevel() > MARIO_LEVEL_SMALL)
-							Bounty->isLeaf = true;
-						else
-							Bounty->isLeaf = false;
-						if (vx > 0)
-							Bounty->isRightDirection = true;
-						else
-							Bounty->isRightDirection = false;
-						Bounty->isUsed = true;
-						ActivateBounty();
+						if (Bounty != NULL)
+						{
+							if (Mario->GetLevel() > MARIO_LEVEL_SMALL)
+								Bounty->isLeaf = true;
+							else
+								Bounty->isLeaf = false;
+							if (vx > 0)
+								Bounty->isRightDirection = true;
+							else
+								Bounty->isRightDirection = false;
+							Bounty->isUsed = true;
+							ActivateBounty();
+						}						
 					}
 				}
 				if (ny > 0)

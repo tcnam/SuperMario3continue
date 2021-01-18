@@ -15,7 +15,8 @@ void CWeakBrick::Render()
 }
 void CWeakBrick::ActivateFragment()
 {
-	Coin->isFinished = true;
+	if(Coin!=NULL)
+		Coin->isFinished = true;
 	for (UINT i = 0; i < fragments.size(); i++)
 	{
 		fragments[i]->isUsed = true;

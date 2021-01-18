@@ -1,8 +1,9 @@
 [SETTINGS]
-start	0
+start	3
 #scene list
 [SCENES]
 0	intro.txt
 1	sceneworld.txt
 2	scence1.txt
+3	scence4.txt
 

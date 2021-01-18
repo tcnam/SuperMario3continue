@@ -103,7 +103,10 @@ void CFireFlower::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			else
 			{
 				Mario->StartUntouchable();
-				Mario->SetLevel(Mario->GetLevel() - 1);
+				if (Mario->GetLevel() == MARIO_LEVEL_FIRE || Mario->GetLevel() == MARIO_LEVEL_TAIL)
+					Mario->SetLevel(MARIO_LEVEL_BIG);
+				else
+					Mario->SetLevel(MARIO_LEVEL_SMALL);
 			}
 		}		
 	}

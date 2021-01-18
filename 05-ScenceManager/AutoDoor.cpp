@@ -20,9 +20,13 @@ void CAutoDoor::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		return;
 	CGameObject::Update(dt);
 	if (AABBCheck(Mario) == true)
-	{		
-		Mario->SetPosition(destination_x, destination_y);
-		Mario->isCrossingPipe = false;
+	{	
+		if (Mario->isCrossingPipe == true)
+		{
+			Mario->SetPosition(destination_x, destination_y);
+			Mario->isCrossingPipe = false;
+		}
+		
 		//Mario->GoUnderGround();
 		//CGame::GetInstance()->SetCamPos(2128.0f, 64.0f);
 	}
