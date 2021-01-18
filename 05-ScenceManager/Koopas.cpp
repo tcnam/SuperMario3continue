@@ -95,6 +95,20 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 			start_x = x;
 		}
 	}
+	else if (level == KOOPAS_LEVEL_FLY2)
+	{
+		vx = 0;
+		if(vy==0)
+			vy = -KOOPAS_FLY2_MOVING_SPEED;
+		if (y < start_y- KOOPAS_DY_LIMIT_TOCHANGE_VY)
+		{
+			vy = KOOPAS_FLY2_MOVING_SPEED;
+		}
+		else if (y >= start_y+ KOOPAS_DY_LIMIT_TOCHANGE_VY)
+		{
+			vy = -KOOPAS_FLY2_MOVING_SPEED;
+		}
+	}
 	else
 	{
 		if (isOnGround == false)
@@ -237,7 +251,8 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	}
 	else
 	{
-		vy += KOOPAS_GRAVITY * dt;
+		if(level!=KOOPAS_LEVEL_FLY2)
+			vy += KOOPAS_GRAVITY * dt;
 		vector<LPCOLLISIONEVENT> coEvents;
 		vector<LPCOLLISIONEVENT> coEventsResult;
 
@@ -367,7 +382,7 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 						SetPosition(x, y - 1);
 						float Mario_vx, Mario_vy;
 						MarioMain->GetSpeed(Mario_vx, Mario_vy);
-						if (level == KOOPAS_LEVEL_FLY)
+						if (level == KOOPAS_LEVEL_FLY||level==KOOPAS_LEVEL_FLY2)
 						{
 							MarioMain->SetSpeed(Mario_vx, -MARIO_JUMP_DEFLECT_SPEED);
 							level = KOOPAS_LEVEL_NORMAL;
@@ -488,13 +503,13 @@ void CKoopas::Render()
 		ani = KOOPAS_ANI_DIE;
 	}*/
 		
-	if (vx == 0)
+	if (vx == 0&&level!=KOOPAS_LEVEL_FLY2)
 		ani = KOOPAS_ANI_DEFENSE_STATIC;
 	else if(vx>0)
 	{
 		if (state == KOOPAS_STATE_WALKING)
 		{
-			if (level == KOOPAS_LEVEL_FLY)
+			if (level == KOOPAS_LEVEL_FLY||level==KOOPAS_LEVEL_FLY2)
 				ani = KOOPAS_ANI_FLY_WALKING_RIGHT;
 			else
 				ani = KOOPAS_ANI_WALKING_RIGHT;
@@ -506,7 +521,7 @@ void CKoopas::Render()
 	{
 		if (state == KOOPAS_STATE_WALKING)
 		{
-			if (level == KOOPAS_LEVEL_FLY)
+			if (level == KOOPAS_LEVEL_FLY || level == KOOPAS_LEVEL_FLY2)
 				ani = KOOPAS_ANI_FLY_WALKING_LEFT;
 			else
 				ani = KOOPAS_ANI_WALKING_LEFT;

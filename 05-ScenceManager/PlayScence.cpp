@@ -624,6 +624,8 @@ void CPlayScene::Update(DWORD dt)
 			coObjects_Of_Koopas.push_back(objects[i]);
 			coObbjects_Of_FireBall.push_back(objects[i]);
 			coObjects_Of_BountyBrick_WeakBrick.push_back(objects[i]);
+			if(objects[i]->GetState()==KOOPAS_STATE_WALKING)
+				coObjects_Of_Bounty.push_back(objects[i]);
 			if (player->untouchable == false)
 				coObjects_Of_Mario.push_back(objects[i]);
 		}

@@ -1,4 +1,6 @@
+#pragma once
 #include"Bounty.h"
+#include "Koopas.h"
 CBounty::CBounty()
 {
 	start_x = start_y = 0;
@@ -281,6 +283,23 @@ void CBounty::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					y += dy;
 				}
 				
+			}
+			if (dynamic_cast<CKoopas*>(e->obj))
+			{
+				CKoopas* koopas = dynamic_cast<CKoopas*>(e->obj);
+				if (state == BOUNTY_STATE_COIN)
+				{
+					if (koopas->GetLevel() == KOOPAS_LEVEL_FLY || koopas->GetLevel() == KOOPAS_LEVEL_FLY2)
+					{
+						koopas->Setlevel(KOOPAS_LEVEL_NORMAL);
+					}
+					if (koopas->GetState() == KOOPAS_STATE_WALKING)
+					{
+						koopas->SetState(KOOPAS_STATE_KICKOUT_2);
+						koopas->SetSpeed(0, -0.24f);
+						koopas->StartWait();
+					}
+				}			
 			}
 		}
 	}

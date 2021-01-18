@@ -132,9 +132,10 @@ void CBountyBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			}
 			else if (dynamic_cast<CKoopas*>(e->obj))
 			{
+				CKoopas* koopas = dynamic_cast<CKoopas*>(e->obj);
 				if (nx != 0)
 				{
-					CKoopas* koopas = dynamic_cast<CKoopas*>(e->obj);
+					
 					float koopas_vx, koopas_vy;
 					if (state == BOUNTYBRICK_STATE_NORMAL)
 					{
