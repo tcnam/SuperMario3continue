@@ -483,6 +483,24 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 							vx = -vx;
 					}
 				}
+				else if (dynamic_cast<CKoopas*>(e->obj))
+				{
+					if (nx != 0)
+					{
+						if (state == KOOPAS_STATE_DEFENSE_DYNAMIC)
+						{
+							SetPosition(x, y - 1);
+							CKoopas* koopas = dynamic_cast<CKoopas*>(e->obj);
+							if (koopas->GetLevel() == KOOPAS_LEVEL_FLY || koopas->GetLevel() == KOOPAS_LEVEL_FLY2)
+								koopas->Setlevel(KOOPAS_LEVEL_NORMAL);
+							if (koopas->GetState() != KOOPAS_STATE_DEFENSE_DYNAMIC)
+							{
+								koopas->SetState(KOOPAS_STATE_KICKOUT);
+								koopas->SetSpeed(0, -0.24f);
+							}
+						}
+					}
+				}
 			}
 		}
 		

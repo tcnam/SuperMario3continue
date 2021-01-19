@@ -127,6 +127,9 @@
     <Filter Include="Object\GameObject\Brick\FlyBrick">
       <UniqueIdentifier>{77beadc2-f065-4336-a87f-9c6c86b92477}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Object\GameObject\Enemy\BoomerangBro">
+      <UniqueIdentifier>{b1ffec55-7390-45c0-b2ce-2143e55aade6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animations.cpp">
@@ -261,6 +264,9 @@
     <ClCompile Include="FlyBrick.cpp">
       <Filter>Object\GameObject\Brick\FlyBrick</Filter>
     </ClCompile>
+    <ClCompile Include="BoomerangBro.cpp">
+      <Filter>Object\GameObject\Enemy\BoomerangBro</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animations.h">
@@ -394,6 +400,9 @@
     </ClInclude>
     <ClInclude Include="FlyBrick.h">
       <Filter>Object\GameObject\Brick\FlyBrick</Filter>
+    </ClInclude>
+    <ClInclude Include="BoomerangBro.h">
+      <Filter>Object\GameObject\Enemy\BoomerangBro</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -353,12 +353,10 @@ void CMario::Render()
 					}
 					else
 					{
-						if (state == MARIO_STATE_CHANGELEFT)
-							ani = MARIO_ANI_BIG_CHANGE_LEFT;
-						else if (state == MARIO_STATE_CHANGERIGHT)
-							ani = MARIO_ANI_BIG_CHANGE_RIGHT;
+						
+						
 
-						else if (state == MARIO_STATE_WALKING_RIGHT)
+						if (state == MARIO_STATE_WALKING_RIGHT)
 							ani = MARIO_ANI_BIG_WALKING_RIGHT;
 						else if (state == MARIO_STATE_RUNNING_RIGHT)
 							ani = MARIO_ANI_BIG_WALKING_RIGHT;
@@ -389,8 +387,11 @@ void CMario::Render()
 					}
 					else
 					{
+						
 						if (state == MARIO_STATE_RUNNINGFAST_RIGHT)
 							ani = MARIO_ANI_BIG_RUNNING_RIGHT;
+						else if (state == MARIO_STATE_CHANGELEFT)
+							ani = MARIO_ANI_BIG_CHANGE_LEFT;
 						else
 							ani = MARIO_ANI_BIG_WALKING_RIGHT;
 					}
@@ -405,6 +406,8 @@ void CMario::Render()
 					{
 						if (state == MARIO_STATE_RUNNINGFAST_LEFT)
 							ani = MARIO_ANI_BIG_RUNNING_LEFT;
+						else if(state== MARIO_STATE_CHANGERIGHT)
+							ani = MARIO_ANI_BIG_CHANGE_RIGHT;
 						else
 							ani = MARIO_ANI_BIG_WALKING_LEFT;
 					}
@@ -443,12 +446,10 @@ void CMario::Render()
 					}
 					else
 					{
-						if (state == MARIO_STATE_CHANGELEFT)
-							ani = MARIO_ANI_SMALL_CHANGE_LEFT;
-						else if (state == MARIO_STATE_CHANGERIGHT)
-							ani = MARIO_ANI_SMALL_CHANGE_RIGHT;
+						
+						
 
-						else if (state == MARIO_STATE_WALKING_RIGHT)
+						if (state == MARIO_STATE_WALKING_RIGHT)
 							ani = MARIO_ANI_SMALL_WALKING_RIGHT;
 						else if (state == MARIO_STATE_RUNNING_RIGHT)
 							ani = MARIO_ANI_SMALL_WALKING_RIGHT;
@@ -481,6 +482,8 @@ void CMario::Render()
 					{
 						if (state == MARIO_STATE_RUNNINGFAST_RIGHT)
 							ani = MARIO_ANI_SMALL_RUNNING_RIGHT;
+						else if (state == MARIO_STATE_CHANGELEFT)
+							ani = MARIO_ANI_SMALL_CHANGE_LEFT;
 						else
 							ani = MARIO_ANI_SMALL_WALKING_RIGHT;
 					}
@@ -497,6 +500,8 @@ void CMario::Render()
 					{
 						if (state == MARIO_STATE_RUNNINGFAST_LEFT)
 							ani = MARIO_ANI_SMALL_RUNNING_LEFT;
+						else if (state == MARIO_STATE_CHANGERIGHT)
+							ani = MARIO_ANI_SMALL_CHANGE_RIGHT;
 						else
 							ani = MARIO_ANI_SMALL_WALKING_LEFT;
 					}
@@ -542,10 +547,8 @@ void CMario::Render()
 							else
 								ani = MARIO_ANI_TAIL_FALL_FLYLEFT;
 						}
-						else if (state == MARIO_STATE_CHANGELEFT)
-							ani = MARIO_ANI_TAIL_CHANGE_LEFT;
-						else if (state == MARIO_STATE_CHANGERIGHT)
-							ani = MARIO_ANI_TAIL_CHANGE_RIGHT;
+						
+						
 
 						else if (state == MARIO_STATE_WALKING_RIGHT)
 							ani = MARIO_ANI_TAIL_WALKING_RIGHT;
@@ -590,6 +593,8 @@ void CMario::Render()
 					{
 						if (state == MARIO_STATE_RUNNINGFAST_RIGHT)
 							ani = MARIO_ANI_TAIL_RUNNING_RIGHT;
+						else if (state == MARIO_STATE_CHANGELEFT)
+							ani = MARIO_ANI_TAIL_CHANGE_LEFT;
 						else
 							ani = MARIO_ANI_TAIL_WALKING_RIGHT;
 					}
@@ -608,6 +613,8 @@ void CMario::Render()
 					{
 						if (state == MARIO_STATE_RUNNINGFAST_LEFT)
 							ani = MARIO_ANI_TAIL_RUNNING_LEFT;
+						else if (state == MARIO_STATE_CHANGERIGHT)
+							ani = MARIO_ANI_TAIL_CHANGE_RIGHT;
 						else
 							ani = MARIO_ANI_TAIL_WALKING_LEFT;
 					}
@@ -644,12 +651,7 @@ void CMario::Render()
 			{
 				if (vx == 0)
 				{
-					if (state == MARIO_STATE_CHANGELEFT)
-						ani = MARIO_ANI_FIRE_CHANGE_LEFT;
-					else if (state == MARIO_STATE_CHANGERIGHT)
-						ani = MARIO_ANI_FIRE_CHANGE_RIGHT;
-
-					else if (state == MARIO_STATE_WALKING_RIGHT)
+					if (state == MARIO_STATE_WALKING_RIGHT)
 						ani = MARIO_ANI_FIRE_WALKING_RIGHT;
 					else if (state == MARIO_STATE_RUNNING_RIGHT)
 						ani = MARIO_ANI_FIRE_WALKING_RIGHT;
@@ -682,6 +684,8 @@ void CMario::Render()
 				{
 					if (state == MARIO_STATE_RUNNINGFAST_RIGHT)
 						ani = MARIO_ANI_FIRE_RUNNING_RIGHT;
+					else if (state == MARIO_STATE_CHANGELEFT)
+						ani = MARIO_ANI_FIRE_CHANGE_LEFT;
 					else
 						ani = MARIO_ANI_FIRE_WALKING_RIGHT;
 
@@ -690,6 +694,8 @@ void CMario::Render()
 				{
 					if (state == MARIO_STATE_RUNNINGFAST_LEFT)
 						ani = MARIO_ANI_FIRE_RUNNING_LEFT;
+					else if (state == MARIO_STATE_CHANGERIGHT)
+						ani = MARIO_ANI_FIRE_CHANGE_RIGHT;
 					else
 						ani = MARIO_ANI_FIRE_WALKING_LEFT;
 				}

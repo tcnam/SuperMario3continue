@@ -71,7 +71,7 @@ void CFireFlower::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	else
 	{
 
-		if (Mario_x > x + 50)
+		if (Mario_x > x + 30)
 		{
 			SetSpeed(0, -0.015f);
 			if (y < FIREFLOWER_UPPER_Y)
@@ -79,13 +79,21 @@ void CFireFlower::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			else
 				state=FIREFLOWER_STATE_RIGHT_LOWER;
 		}
-		else if (Mario_x < x - 30)
+		else if (Mario_x < x - 30&&Mario->GetLevel()!=MARIO_LEVEL_TAIL)
 		{
 			SetSpeed(0, -0.015f);
 			if (y < FIREFLOWER_UPPER_Y)
 				state=FIREFLOWER_STATE_LEFT_UPPER;
 			else
 				state=FIREFLOWER_STATE_LEFT_LOWER;
+		}
+		else if (Mario_x < x - 40 && Mario->GetLevel() == MARIO_LEVEL_TAIL)
+		{
+			SetSpeed(0, -0.015f);
+			if (y < FIREFLOWER_UPPER_Y)
+				state = FIREFLOWER_STATE_LEFT_UPPER;
+			else
+				state = FIREFLOWER_STATE_LEFT_LOWER;
 		}
 		else
 		{

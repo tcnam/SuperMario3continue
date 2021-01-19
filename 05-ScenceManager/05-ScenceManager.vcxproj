@@ -127,6 +127,7 @@
   <ItemGroup>
     <ClCompile Include="Animations.cpp" />
     <ClCompile Include="AutoDoor.cpp" />
+    <ClCompile Include="BoomerangBro.cpp" />
     <ClCompile Include="Bounty.cpp" />
     <ClCompile Include="BountyBrick.cpp" />
     <ClCompile Include="BountyButton.cpp" />
@@ -173,6 +174,7 @@
   <ItemGroup>
     <ClInclude Include="Animations.h" />
     <ClInclude Include="AutoDoor.h" />
+    <ClInclude Include="BoomerangBro.h" />
     <ClInclude Include="Bounty.h" />
     <ClInclude Include="BountyBrick.h" />
     <ClInclude Include="BountyButton.h" />
