@@ -182,7 +182,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 						//	vy = -MARIO_JUMP_SPEED_Y;
 						y += dy;
 					}
-					if (ny < 0)
+					if (ny < 0&&nx==0)
 					{
 						isOnGround = true;
 						vy = 0;
@@ -212,7 +212,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 						}
 						vx = 0;
 					}
-					if (ny < 0)
+					if (ny < 0&&nx==0)
 					{
 						isOnGround = true;
 						vy = 0;
@@ -239,7 +239,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 							
 						vx = 0;
 					}
-					if (ny < 0)
+					if (ny < 0&&nx==0)
 					{
 						isOnGround = true;
 						vy = 0;
@@ -289,12 +289,23 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 
 						vx = 0;
 					}
-					if (ny < 0)
+					if (ny < 0&&nx==0)
 					{
 						isOnGround = true;
 						vy = 0;
 					}
 				}
+				else if (dynamic_cast<CFlyBrick*>(e->obj))
+				{
+					if (ny < 0&&nx==0)
+					{
+						isOnGround = true;
+						CFlyBrick* flybrick = dynamic_cast<CFlyBrick*>(e->obj);
+						flybrick->SetState(FLYBRICK_STATE_VY);
+						//flybrick->SetSpeed(0, FLYBRICK_VY);
+					}
+				}
+
 				
 			}
 		}
@@ -953,8 +964,8 @@ void CMario::Jump()
 {
 	//if (allowJump == false)
 		//return;
-	//if (isOnGround ==false)//allow mario to jump only when on ground
-	//	return;
+	if (isOnGround ==false)//allow mario to jump only when on ground
+		return;
 	if (isRunningFastLeft == true)
 	{
 		vy = -MARIO_JUMP_MAXPOWER_SPEED_Y;

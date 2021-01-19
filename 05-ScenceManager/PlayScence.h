@@ -31,6 +31,7 @@
 #include "AutoDoor.h"
 #include "Tail.h"
 #include "Piranha.h"
+#include "FlyBrick.h"
 
 class CPlayScene: public CScene
 {

@@ -4,8 +4,11 @@ Camera::Camera()
 	cam_x = 0.00f;
 	cam_y = (float)-SCREEN_HEIGHT;
 	Mario = NULL;
+	vx = 0;
+	vy = 0;
+	dt = 0;
 }
-void Camera::Update()
+void Camera::Update(DWORD t)
 {
 	if (Mario == NULL)
 		return;
@@ -16,6 +19,7 @@ void Camera::Update()
 		CGame::GetInstance()->SetCamPos(round(cam_x), round(cam_y));
 		return;
 	}
+	dt = t;
 	float cx, cy;
 	Mario->GetPosition(cx, cy);
 	if (CGame::GetInstance()->GetSceneNumber() == 2)
@@ -53,12 +57,13 @@ void Camera::Update()
 	{
 		if (cx > (float)SCREEN_WIDTH / 2 && cy <= 0&&cx<=2032.0f)
 		{
-			cx -= (float)SCREEN_WIDTH / 2;
-			cy = (float)-SCREEN_HEIGHT + 64.0f;
-			cam_x = cx;
-			if (cam_x > 1776.0f)
+			vx = CAM_SPEED_VX_SCENCE_1_4;
+			cam_x += vx*dt;
+			if (cx < cam_x)
+				Mario->SetPosition(cam_x, cy);
+			if (cam_x > 1776.0f||cx>1776.0f)
 				cam_x = 1776.0f;
-			cam_y = cy;
+			cam_y = (float)-SCREEN_HEIGHT + 64.0f;
 		}
 		else if (cx > 2032.0f)
 		{
@@ -101,6 +106,11 @@ bool Camera::checkifMarioInside()
 	float cx, cy;
 	Mario->GetPosition(cx, cy);
 	bool result = CGame::GetInstance()->AABBCheck(cx, cy, cx + 30.0f, cy + 30.0f, cam_x, cam_y, cam_x + SCREEN_WIDTH, cam_y + SCREEN_HEIGHT-32.0f);
+	return result;
+}
+bool Camera::CheckIfObjectInside(float x, float y)
+{
+	bool result = CGame::GetInstance()->AABBCheck(x, y, x + 16.0f, y + 16.0f, cam_x, cam_y, cam_x + SCREEN_WIDTH, cam_y + SCREEN_HEIGHT - 32.0f);
 	return result;
 }
 Camera::~Camera()

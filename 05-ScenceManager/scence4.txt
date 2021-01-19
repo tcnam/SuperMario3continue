@@ -7,6 +7,7 @@
 25	textures\GreenBrick.png	255	255	255
 26	textures\brick4.png	255	255	255
 27	textures\Green4.png	255	255	255
+28	textures\map4.png	156	252	240
 30	textures\tile.png	255	128	192
 40	textures\enemiesl.png	0	128	128
 45	textures\enemiesr.png	0	130	130
@@ -447,7 +448,9 @@
 #GREEN BRICK LOWER
 50022	1	137	17	153	20
 50023	18	137	34	153	20
-50024	35	137	51	153	20	
+50024	35	137	51	153	20
+#fly brick
+50025	576	128	624	144	28	
 #LEFT UPPER PINK BOX
 40011	1	52	17	68	30
 #CENTER UPPER PINK BOX
@@ -851,7 +854,9 @@
 676	50021	100
 677	50022	100	
 678	50023	100
-679	50024	100	
+679	50024	100
+#fly brick
+680	50025	100	
 #
 # id	ani1	ani2	ani3
 #
@@ -936,11 +941,17 @@
 52	677
 53	678
 54	679
+#fly brick
+55	680
 [OBJECTS]
 # type	x	y	ani_set_id	extra_settings per object type
 # type: 0 = Mario , 1 = Brick, 2 = Goomba, 3 = Koopas, 4 = Bounty Brick, 5=Hidden Object, 6=Fire Ball of Mario, 7=Fire Flower, 8=Fire Ball of Flower, 9=Bounty, 10=Coin, 11=Fragment, 12=Weak Brick, 13=Bounty Button, 14=Special Brick, 15=Mystery Piece
 # MARIO
 0	17	-128	1
+# TAIL OF MARIO
+19	17	-50	0
+#FIRE BALL
+6	0	48	5
 # HIDDEN OBJECT
 5	0	-80	0	160	80
 5	1920	-32	0	128	32
@@ -1009,6 +1020,7 @@
 1	2048	-160	27
 1	2048	-176	27
 1	2048	-192	27
+
 #bounty brick
 4	640	-144	28	1
 4	960	-80	28	1			
@@ -1458,6 +1470,21 @@
 3	1984	-96	4	0
 3	1040	-112	4	0
 3	1856	-128	4	2
+#fly brick
+25	368	-112	55
+25	592	-128	55
+25	560	-96	55
+25	624	-32	55
+25	752	-96	55
+25	1072	-48	55
+25	1200	-112	55
+25	1376	-80	55
+25	1408	-96	55
+25	1552	-128	55
+25	1744	-48	55
+25	1776	-96	55
+25	1792	-16	55
+
 #Portal
 50	2592	-196	0	2608	-16	1
 #------Mystery piece --------
@@ -2042,7 +2069,6 @@
 2560	-400	60007
 2560	-416	60007
 2560	-432	60007
-
 [SCOREBOARD]
 #ScoreBoard
 0	22000

@@ -390,7 +390,7 @@ void CWorldScence::Update(DWORD dt)
 	if (player == NULL) return;
 
 	// Update camera to follow mario
-	camera->Update();
+	camera->Update(dt);
 	Hud->Update();
 }
 

@@ -36,6 +36,7 @@ using namespace std;
 #define OBJECT_TYPE_PIRANHA			22
 #define OBJECT_TYPE_BOOMBROTHER		23
 #define OBJECT_TYPE_CURTAIN			24
+#define OBJECT_TYPE_FLYBRICK		25
 
 class CGameObject; 
 typedef CGameObject * LPGAMEOBJECT;

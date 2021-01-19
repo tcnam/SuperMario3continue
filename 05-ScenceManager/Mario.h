@@ -5,6 +5,7 @@
 #include "FireBall.h"
 #include "Effect.h"
 #include "Tail.h"
+#include "FlyBrick.h"
 
 #define MARIO_AUTO_WALKING_SPEED	0.05f
 #define MARIO_WALKING_SPEED		0.1f 

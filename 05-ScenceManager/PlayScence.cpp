@@ -166,6 +166,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		}		
 		break;
 	case OBJECT_TYPE_BRICK: obj = new CBrick(); break;
+	case OBJECT_TYPE_FLYBRICK: obj = new CFlyBrick(); break;
 	case OBJECT_TYPE_FRAGMENT: 
 		{
 			obj = new CFragment();
@@ -683,6 +684,10 @@ void CPlayScene::Update(DWORD dt)
 		{
 			coObjects_Of_Tail.push_back(objects[i]);
 		}
+		else if (objects[i]->type == OBJECT_TYPE_FLYBRICK)
+		{
+			coObjects_Of_Mario.push_back(objects[i]);
+		}
 		//else if (objects[i]->type == OBJECT_TYPE_PORTAL)
 		//{
 		//	coObjects_Of_Mario.push_back(objects[i]);
@@ -730,7 +735,7 @@ void CPlayScene::Update(DWORD dt)
 		effects[i]->Update(dt);
 	}
 	// Update camera to follow mario
-	camera->Update();
+	camera->Update(dt);
 	//when mario dropping out from camera vision will triggers unload scence
 	if (player == NULL)				
 		return;

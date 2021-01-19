@@ -414,6 +414,7 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 					}
 					if (ny < 0&&nx==0)
 					{
+						MarioMain->SetPosition(Mario_x, Mario_y - 1);
 						if (MarioMain->untouchable == false)
 						{
 							if (state == KOOPAS_STATE_DEFENSE_DYNAMIC||state==KOOPAS_STATE_WALKING)

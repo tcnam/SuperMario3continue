@@ -124,6 +124,9 @@
     <Filter Include="Object\GameObject\Enemy\Piranha">
       <UniqueIdentifier>{b1f14f97-463d-4b98-82ba-1713c7ca6220}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Object\GameObject\Brick\FlyBrick">
+      <UniqueIdentifier>{77beadc2-f065-4336-a87f-9c6c86b92477}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animations.cpp">
@@ -255,6 +258,9 @@
     <ClCompile Include="Curtain.cpp">
       <Filter>Framework\Scene\Scene_Intro\IntroObject</Filter>
     </ClCompile>
+    <ClCompile Include="FlyBrick.cpp">
+      <Filter>Object\GameObject\Brick\FlyBrick</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animations.h">
@@ -385,6 +391,9 @@
     </ClInclude>
     <ClInclude Include="Curtain.h">
       <Filter>Framework\Scene\Scene_Intro\IntroObject</Filter>
+    </ClInclude>
+    <ClInclude Include="FlyBrick.h">
+      <Filter>Object\GameObject\Brick\FlyBrick</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

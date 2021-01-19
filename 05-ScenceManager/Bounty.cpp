@@ -287,6 +287,10 @@ void CBounty::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			if (dynamic_cast<CKoopas*>(e->obj))
 			{
 				CKoopas* koopas = dynamic_cast<CKoopas*>(e->obj);
+				float koopas_x;
+				float koopas_y;
+				koopas->GetPosition(koopas_x, koopas_y);
+				koopas->SetPosition(koopas_x, koopas_y - 1);
 				if (state == BOUNTY_STATE_COIN)
 				{
 					if (koopas->GetLevel() == KOOPAS_LEVEL_FLY || koopas->GetLevel() == KOOPAS_LEVEL_FLY2)
