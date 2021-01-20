@@ -32,6 +32,8 @@
 #include "Tail.h"
 #include "Piranha.h"
 #include "FlyBrick.h"
+#include "BoomerangBro.h"
+#include "Boomerang.h"
 
 class CPlayScene: public CScene
 {
@@ -51,6 +53,7 @@ protected:
 
 	CSpecialBrick* SpecialBrick;
 	CMysteryPiece* MysteryPiece;
+	CBoomerangBro* bro;
 
 	vector<LPGAMEOBJECT> objects;
 	vector<LPTERRAIN> terrains;

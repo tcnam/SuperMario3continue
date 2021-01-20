@@ -267,6 +267,9 @@
     <ClCompile Include="BoomerangBro.cpp">
       <Filter>Object\GameObject\Enemy\BoomerangBro</Filter>
     </ClCompile>
+    <ClCompile Include="Boomerang.cpp">
+      <Filter>Object\GameObject\Enemy\BoomerangBro</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animations.h">
@@ -402,6 +405,9 @@
       <Filter>Object\GameObject\Brick\FlyBrick</Filter>
     </ClInclude>
     <ClInclude Include="BoomerangBro.h">
+      <Filter>Object\GameObject\Enemy\BoomerangBro</Filter>
+    </ClInclude>
+    <ClInclude Include="Boomerang.h">
       <Filter>Object\GameObject\Enemy\BoomerangBro</Filter>
     </ClInclude>
   </ItemGroup>

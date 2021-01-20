@@ -361,6 +361,24 @@
 70011	314	115	330	124	45
 #goomba	red kick out
 70012	331	292	347	308	48
+
+
+#BOOMERANG BROTHER
+#hold boomerang
+70101	447	120	463	144	45
+70102	464	120	480	144	45
+#don't hold boomerang
+70103	481	120	497	144	45
+70104	498	120	514	144	45
+#die
+70105	447	272	463	296	48
+#boomerang
+70111	464	103	480	118	45
+70112	448	102	464	118	45
+70113	498	102	514	118	45
+70114	481	103	497	118	45
+
+
 #KOOPAS
 #level normal
 #walk left
@@ -387,6 +405,8 @@
 80042	279	249	295	276	45
 80043	296	250	312	276	45
 80044	313	248	329	276	45
+
+
 #FIRE FLOWER 
 #right upper
 90001	222	126	238	158	50
@@ -403,6 +423,8 @@
 #PIRANHA
 90011	38	101	54	124	60
 90012	57	100	72	124	60
+
+
 # UPPER LEFT PLANT
 50000	137	1	153	17	30
 #UPPER RIGHT PLANT
@@ -856,7 +878,15 @@
 678	50023	100
 679	50024	100
 #fly brick
-680	50025	100	
+680	50025	100
+#Boomerang brother
+681	70101	100	70102	100
+682	70103	100	70104	100
+683	70105	100
+#Boomerang
+684	70111	100
+685	70111	100	70112	100	70113	100	70114	100
+	
 #
 # id	ani1	ani2	ani3
 #
@@ -943,6 +973,10 @@
 54	679
 #fly brick
 55	680
+#brother boomerang
+56	681	682	683	
+#boomerang
+57	684	685
 [OBJECTS]
 # type	x	y	ani_set_id	extra_settings per object type
 # type: 0 = Mario , 1 = Brick, 2 = Goomba, 3 = Koopas, 4 = Bounty Brick, 5=Hidden Object, 6=Fire Ball of Mario, 7=Fire Flower, 8=Fire Ball of Flower, 9=Bounty, 10=Coin, 11=Fragment, 12=Weak Brick, 13=Bounty Button, 14=Special Brick, 15=Mystery Piece
@@ -1470,6 +1504,10 @@
 3	1984	-96	4	0
 3	1040	-112	4	0
 3	1856	-128	4	2
+#BOOMERANG BROTHER
+23	2112	-48	56
+#boomerang
+26	2112	-48	57
 #fly brick
 25	368	-112	55
 25	592	-128	55

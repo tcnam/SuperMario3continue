@@ -23,6 +23,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath):CScene(id, filePath)
 	camera = NULL;
 	tCount = 0;
 	MysteryPiece = NULL;
+	bro = NULL;
 }
 
 /*
@@ -228,7 +229,21 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	{
 		obj = new CMessage();
 		MysteryPiece->SetMessage((CMessage*)obj);
-
+	}
+	break;
+	case OBJECT_TYPE_BOOMERANGBRO:
+	{
+		obj = new CBoomerangBro();
+		((CBoomerangBro*)obj)->SetInitPosition(x, y);
+		((CBoomerangBro*)obj)->SetMario(player);
+		bro = (CBoomerangBro*)obj;
+	}
+	break;
+	case OBJECT_TYPE_BOOMERANG:
+	{
+		obj = new CBoomerang();
+		((CBoomerang*)obj)->SetMario(player);
+		bro->SetBoomerang((CBoomerang*)obj);
 	}
 	break;
 	case OBJECT_TYPE_BOUNTYBUTTON:
@@ -688,6 +703,10 @@ void CPlayScene::Update(DWORD dt)
 		{
 			coObjects_Of_Mario.push_back(objects[i]);
 		}
+		else if (objects[i]->type == OBJECT_TYPE_BOOMERANGBRO)
+		{
+			coObjects_Of_Mario.push_back(objects[i]);
+		}
 		//else if (objects[i]->type == OBJECT_TYPE_PORTAL)
 		//{
 		//	coObjects_Of_Mario.push_back(objects[i]);
@@ -705,7 +724,7 @@ void CPlayScene::Update(DWORD dt)
 		else if (objects[i]->type == OBJECT_TYPE_BOUNTY)
 			objects[i]->Update(dt, &coObjects_Of_Bounty);
 
-		else if (objects[i]->type == OBJECT_TYPE_GOOMBA)
+		else if (objects[i]->type == OBJECT_TYPE_GOOMBA||objects[i]->type==OBJECT_TYPE_BOOMERANGBRO)
 			objects[i]->Update(dt, &coObjects_Of_Goomba);
 
 		else if (objects[i]->type == OBJECT_TYPE_KOOPAS)
@@ -773,6 +792,7 @@ void CPlayScene::Unload()
 	Hud = NULL;
 	tCount = 0;	
 	MysteryPiece = NULL;
+	bro = NULL;
 	BountyBrickIndex = 0;
 	FlowerIndex = 0;
 	WeaKBrickIndex = 0;
