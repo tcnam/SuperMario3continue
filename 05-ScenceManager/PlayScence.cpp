@@ -337,7 +337,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_FIREBALL:
 		{	
 			obj = new CFireBall();
-			player->SetFireBall((CFireBall*)obj);
+			player->PushFireBall((CFireBall*)obj);
 		}
 		break;
 	case OBJECT_TYPE_TAIL:

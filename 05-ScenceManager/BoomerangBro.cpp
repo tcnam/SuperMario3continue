@@ -20,7 +20,7 @@ void CBoomerangBro::ThrowBoomerang()
 		return;
 	if(Boomerang->isUsed==false)
 		Boomerang->isUsed = true;	
-	Boomerang->SetSpeed(0.05f, 0);
+	Boomerang->SetSpeed(0.05f, -0.025f);
 }
 void CBoomerangBro::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {

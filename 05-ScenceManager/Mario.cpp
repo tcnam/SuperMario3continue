@@ -35,6 +35,7 @@ CMario::CMario(float x, float y) : CGameObject()
 	isInsidePlayScence = false;
 
 	Jump_start = 0;
+	fireballindex = -1;
 	//allowJump = true;
 	start_x = x; 
 	start_y = y; 
@@ -998,40 +999,47 @@ void CMario::Attack()
 {
 	if (level == MARIO_LEVEL_FIRE)
 	{
-		if (fireballs == NULL)
+		if (fireballs[0] == NULL)
 		{
 			DebugOut(L"There arn't no fire ball");
 			return;
 		}
 		else
 		{
-			if (fireballs->isFinished == true)
+			fireballindex = -1;
+			for (unsigned int i = 0; i < fireballs.size(); i++)
 			{
+				if (fireballs[i]->isFinished == true)
+				{
+					fireballindex = i;
+					break;
+				}
+			}
+			if(fireballindex!=-1)
+			{
+
 				if (nx > 0)
 				{
-					fireballs->SetPosition(x + FIREBALL_RELATIVE_POSITION_X, y + FIREBALL_RELATIVE_POSITION_Y);
-					fireballs->SetSpeed(FIREBALL_SPEED, -FIREBALL_GRAVITY);
+					fireballs[fireballindex]->SetPosition(x + FIREBALL_RELATIVE_POSITION_X, y + FIREBALL_RELATIVE_POSITION_Y);
+					fireballs[fireballindex]->SetSpeed(FIREBALL_SPEED, -FIREBALL_GRAVITY);
 					//fireballs->SetDirectionnx(1);
 				}
 				else
 				{
-					fireballs->SetPosition(x - FIREBALL_RELATIVE_POSITION_X, y + FIREBALL_RELATIVE_POSITION_Y);
-					fireballs->SetSpeed(-FIREBALL_SPEED, -FIREBALL_GRAVITY);
+					fireballs[fireballindex]->SetPosition(x - FIREBALL_RELATIVE_POSITION_X, y + FIREBALL_RELATIVE_POSITION_Y);
+					fireballs[fireballindex]->SetSpeed(-FIREBALL_SPEED, -FIREBALL_GRAVITY);
 					//fireballs->SetDirectionnx(-1);
 				}
-
-				fireballs->isUsed = true;
-				fireballs->isFinished = false;
+				fireballs[fireballindex]->isUsed = true;
+				fireballs[fireballindex]->isFinished = false;
 			}
-			
-		}
+		}		
 	}
 	else if (level == MARIO_LEVEL_TAIL)
 	{
 		if (tail == NULL)
 			return;
-		tail->isUsed = true;
-		
+		tail->isUsed = true;		
 		if (nx > 0)
 		{
 			tail->SetStartPosition(x, y + 20.0f);
@@ -1050,7 +1058,7 @@ void CMario::Attack()
 		DebugOut(L"can't attack");
 	}
 	
-	DebugOut(L"Fire ball was created\n");
+	//DebugOut(L"Fire ball was created\n");
 }
 void CMario::StartJump()
 {

@@ -4,6 +4,7 @@
 #include"Goomba.h"
 #include"HiddenObject.h"
 #include"Koopas.h"
+#include"FireFlower.h"
 
 CFireBall::CFireBall()
 {
@@ -18,6 +19,13 @@ void CFireBall::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	if (isFinished == true)
 		return;
+	float cam_x;
+	float cam_y;
+	CGame::GetInstance()->GetCamPos(cam_x, cam_y);
+	if (x > cam_x + SCREEN_WIDTH || x < cam_x)
+	{
+		isFinished = true;
+	}		
 	CGameObject::Update(dt);
 	if(isUsed==true)
 		vy += FIREBALL_GRAVITY*dt;
@@ -56,7 +64,8 @@ void CFireBall::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			if (dynamic_cast<CGoomba*>(e->obj)) // if e->obj is Goomba 
 			{
 				CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
-
+				if (goomba->GetLevel() == GOOMBA_LEVEL_FLY)
+					goomba->Setlevel(GOOMBA_LEVEL_NORMAL);
 				if (goomba->GetState() != GOOMBA_STATE_DIE)
 				{
 					goomba->SetState(GOOMBA_STATE_KICKED_OUT);
@@ -66,8 +75,28 @@ void CFireBall::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			else if (dynamic_cast<CKoopas*>(e->obj))
 			{
 				CKoopas* koopas = dynamic_cast<CKoopas*>(e->obj);
+				if (koopas->GetLevel() == KOOPAS_LEVEL_FLY || koopas->GetLevel() == KOOPAS_LEVEL_FLY2)
+					koopas->Setlevel(KOOPAS_LEVEL_NORMAL);
 				koopas->SetState(KOOPAS_STATE_KICKOUT);
 				isFinished = true;
+			}
+			else if (dynamic_cast<CFireFlower*>(e->obj))
+			{
+				CFireFlower* fireflower = dynamic_cast<CFireFlower*>(e->obj);
+				float flower_x, flower_y;
+				fireflower->GetPosition(flower_x, flower_y);
+				if (fireflower->isFinish != true)
+				{
+					if (fireflower->GetEffect() != NULL)
+					{
+						fireflower->GetEffect()->SetPosition(flower_x, flower_y);
+						fireflower->GetEffect()->SetState(EFFECT_CLOUND);
+					}
+					fireflower->SetPosition(fireflower->GetStartx(), fireflower->GetStarty());
+					fireflower->StartFinish();
+				}
+				isFinished = true;
+				CGame::GetInstance()->SetScores(CGame::GetInstance()->GetScores() + 100);
 			}
 		}
 	}

@@ -177,7 +177,8 @@ class CMario : public CGameObject
 	float tempy_attack;	//store location y when mario attack in tail level
 	
 	CEffect* effect;
-	CFireBall* fireballs;
+	vector<CFireBall*> fireballs;
+	int fireballindex;
 	CTail* tail;
 	
 	DWORD StartMovingLeft;
@@ -255,7 +256,7 @@ public:
 	void SetTimeFly(DWORD t) { this->StartFly = t; }
 	DWORD GetTimeFly() { return StartFly; }
 
-	void SetFireBall(CFireBall* FireBall) { fireballs = FireBall; }
+	void PushFireBall(CFireBall* FireBall) { fireballs.push_back(FireBall); }
 	void SetTail(CTail* t) { tail = t; }
 	CTail* GetTail() { return tail; }
 	void SetEffect(CEffect* ef) { effect = ef; }

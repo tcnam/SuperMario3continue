@@ -8,6 +8,7 @@
 #define BOOMERANG_BBOX_WIDTH		16
 #define BOOMERANG_BBOX_HEIGHT		16
 #define DISTANCE_DX_TOCHANGE_VX		144.0f
+#define DISTANCE_DY_TOCHANGE_VY		48.0f
 class CBoomerang :public CGameObject
 {
 	float start_x;

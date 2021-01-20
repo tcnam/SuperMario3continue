@@ -25,9 +25,21 @@ void CBoomerang::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	{
 		if(isUsed==true)
 			isUsed = false;
-	}		
+	}
+	else if (y < start_y - DISTANCE_DY_TOCHANGE_VY)
+	{
+		vy = -vy;
+	}
 	else if (x >= start_x + DISTANCE_DX_TOCHANGE_VX)
+	{
 		vx = -vx;
+		//vy = -vy;
+	}
+	else if (y >= start_y + DISTANCE_DY_TOCHANGE_VY)
+	{
+		vy = -vy;
+	}
+		
 	CGameObject::Update(dt, coObjects);
 	y += dy;
 	x += dx;
