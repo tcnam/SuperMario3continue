@@ -185,8 +185,6 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			obj = new CWeakBrick();
 			((CWeakBrick*)obj)->SetInitPosition(x, y);
 			WeakBricks.push_back((CWeakBrick*)obj);
-			DebugOut(L"Weak Brick with index:%i has been pushed to list weakBricks\n", WeaKBrickIndex);
-			WeaKBrickIndex++;
 		}
 		break;
 	case OBJECT_TYPE_SPECIALBRICK:
@@ -287,51 +285,58 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		{
 			obj = new CFireBallFlower();
 			((CFireBallFlower*)obj)->SetMario(player);
-			DebugOut(L"flower index: %i\n", FlowerIndex);
-			FireFlowers[FlowerIndex]->SetFireBallFlower((CFireBallFlower*)obj);
-			DebugOut(L"flower fire ball was loaded\n");
-			FlowerIndex++;
+			for (unsigned int i = 0; i < FireFlowers.size(); i++)
+			{
+				if (FireFlowers[i]->FireBallFlower == NULL)
+				{
+					FireFlowers[i]->SetFireBallFlower((CFireBallFlower*)obj);
+					break;
+				}
+			}
 		}		
 		break;
 	case OBJECT_TYPE_BOUNTY:
 		{
 			obj = new CBounty();
 			((CBounty*)obj)->SetMario(player);
-			bountybricks[BountyBrickIndex]->SetBounty((CBounty*)obj);
-			if (CGame::GetInstance()->GetSceneNumber() == 2)
+			for (unsigned int i = 0; i < bountybricks.size(); i++)
 			{
-				if (BountyBrickIndex == 3 || BountyBrickIndex == 5 || BountyBrickIndex == 7)
+				if (bountybricks[i]->GetBounty() == NULL)
 				{
-					DebugOut(L"State of powerup%i\n", BOUNTY_STATE_POWERUP);
-					bountybricks[BountyBrickIndex]->SetStateBounty(BOUNTY_STATE_POWERUP);
-					DebugOut(L"Bounty was added to bountybrick:%i with state:%i\n", BountyBrickIndex, obj->GetState());
-				}
-				else if (BountyBrickIndex == 8)
-				{
-					DebugOut(L"State of lifeup%i\n", BOUNTY_STATE_LIFEUP);
-					bountybricks[BountyBrickIndex]->SetStateBounty(BOUNTY_STATE_LIFEUP);
-					DebugOut(L"Bounty was added to bountybrick:%i with state:%i\n", BountyBrickIndex, obj->GetState());
-				}
-				else
-					bountybricks[BountyBrickIndex]->SetStateBounty(BOUNTY_STATE_COIN);
-				
-			}
-			else if (CGame::GetInstance()->GetSceneNumber() == 3)
-			{
-				if (BountyBrickIndex == 0 || BountyBrickIndex == 3)
-				{
-					bountybricks[BountyBrickIndex]->SetStateBounty(BOUNTY_STATE_LIFEUP);
-				}
-				else if (BountyBrickIndex == 1)
-				{
-					bountybricks[BountyBrickIndex]->SetStateBounty(BOUNTY_STATE_POWERUP);
-				}
-				else
-					bountybricks[BountyBrickIndex]->SetStateBounty(BOUNTY_STATE_COIN);
-			}
-			bountybricks[BountyBrickIndex]->GetBounty()->SetInitPosition(x, y);
-			BountyBrickIndex++;
-			
+					bountybricks[i]->SetBounty((CBounty*)obj);
+					if (CGame::GetInstance()->GetSceneNumber() == 2)
+					{
+						if (i == 3 || i == 5 || i == 7)
+						{
+							DebugOut(L"State of powerup%i\n", BOUNTY_STATE_POWERUP);
+							bountybricks[i]->SetStateBounty(BOUNTY_STATE_POWERUP);
+						}
+						else if (i == 8)
+						{
+							DebugOut(L"State of lifeup%i\n", BOUNTY_STATE_LIFEUP);
+							bountybricks[i]->SetStateBounty(BOUNTY_STATE_LIFEUP);
+						}
+						else
+							bountybricks[i]->SetStateBounty(BOUNTY_STATE_COIN);
+
+					}
+					else if (CGame::GetInstance()->GetSceneNumber() == 3)
+					{
+						if (i == 0 || i == 3)
+						{
+							bountybricks[i]->SetStateBounty(BOUNTY_STATE_LIFEUP);
+						}
+						else if (i== 1)
+						{
+							bountybricks[i]->SetStateBounty(BOUNTY_STATE_POWERUP);
+						}
+						else
+							bountybricks[i]->SetStateBounty(BOUNTY_STATE_COIN);
+					}
+					bountybricks[i]->GetBounty()->SetInitPosition(x, y);
+					break;
+				}				
+			}			
 		}		
 		break;
 	case OBJECT_TYPE_FIREBALL:
@@ -439,13 +444,16 @@ void CPlayScene::_ParseSection_EFFECT(string line)
 		player->SetEffect(effect);
 	else if (owner_id == EFFECT_OWNER_ID_FIREFLOWER)
 	{
-		if (FlowerIndex >= FireFlowers.size())
-			FlowerIndex = 0;
-		FireFlowers[FlowerIndex]->SetEffect(effect);
-		FlowerIndex++;		
+		for (unsigned int i = 0; i < FireFlowers.size(); i++)
+		{
+			if (FireFlowers[i]->GetEffect() == NULL)
+			{
+				FireFlowers[i]->SetEffect(effect);
+				break;
+			}
+		}
 	}
 	effects.push_back(effect);
-
 }
 void CPlayScene::_ParseSection_HUD(string line)
 {
@@ -793,9 +801,6 @@ void CPlayScene::Unload()
 	tCount = 0;	
 	MysteryPiece = NULL;
 	bro = NULL;
-	BountyBrickIndex = 0;
-	FlowerIndex = 0;
-	WeaKBrickIndex = 0;
 	for (unsigned int i = 0; i < objects.size(); i++)
 	{
 		if (objects[i] != NULL)

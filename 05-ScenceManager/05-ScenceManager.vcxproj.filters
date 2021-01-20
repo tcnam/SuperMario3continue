@@ -133,6 +133,9 @@
     <Filter Include="Framework\Grid">
       <UniqueIdentifier>{f76fe9b4-f446-4fe7-98b5-cef822984f2c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Framework\Grid\Cell">
+      <UniqueIdentifier>{49e8784d-97df-4556-8ae1-3682342adeec}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animations.cpp">
@@ -272,6 +275,12 @@
     </ClCompile>
     <ClCompile Include="Boomerang.cpp">
       <Filter>Object\GameObject\Enemy\BoomerangBro</Filter>
+    </ClCompile>
+    <ClCompile Include="Grid.cpp">
+      <Filter>Framework\Grid</Filter>
+    </ClCompile>
+    <ClCompile Include="Cell.cpp">
+      <Filter>Framework\Grid\Cell</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -415,6 +424,9 @@
     </ClInclude>
     <ClInclude Include="Grid.h">
       <Filter>Framework\Grid</Filter>
+    </ClInclude>
+    <ClInclude Include="Cell.h">
+      <Filter>Framework\Grid\Cell</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

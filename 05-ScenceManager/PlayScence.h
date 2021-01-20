@@ -41,13 +41,8 @@ protected:
 	CMario *player;					// A play scene has to have player, right? 
 	
 	vector<CFireFlower*>FireFlowers;
-	unsigned int FlowerIndex = 0;
-
 	vector <CBountyBrick*> bountybricks;
-	unsigned int BountyBrickIndex = 0;
-
 	vector <CWeakBrick*> WeakBricks;
-	unsigned int WeaKBrickIndex = 0;
 
 	vector<CMysteryPiece*> PiecesOfSquare;
 

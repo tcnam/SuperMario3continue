@@ -322,6 +322,14 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		if (tail->isUsed == false)
 			tail->SetPosition(x, y);
 	}
+	if (fireballs.size() != 0)
+	{
+		for (unsigned int i = 0; i < fireballs.size(); i++)
+		{
+			if (fireballs[i]->isUsed == false)
+				fireballs[i]->SetPosition(x, y);
+		}
+	}
 }
 
 void CMario::Render()
@@ -803,6 +811,8 @@ void CMario::Render()
 		{
 			ani = MARIO_ANI_CROSS_PIPE;
 		}
+		if (ani == -1)
+			ani = MARIO_ANI_DIE;
 		animation_set->at(ani)->Render(round(x), round(y), alpha);
 	}
 	//RenderBoundingBox();

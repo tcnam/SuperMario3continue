@@ -2,7 +2,7 @@
 Camera::Camera()
 {
 	cam_x = 0.00f;
-	cam_y = (float)-SCREEN_HEIGHT;
+	cam_y = (float)-SCREEN_HEIGHT + 64.0f;
 	Mario = NULL;
 	vx = 0;
 	vy = 0;
