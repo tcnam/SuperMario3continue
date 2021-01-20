@@ -103,7 +103,7 @@ void CFireFlower::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	CGameObject::Update(dt, coObjects);	
 	if (AABBCheck(Mario) == true)
 	{
-		if (Mario->untouchable == false)
+		if (Mario->untouchable == false&&Mario->isHoldingKoopas==false)
 		{
 			SetPosition(x, y - 1);
 			if (Mario->GetLevel() == MARIO_LEVEL_SMALL)
@@ -116,7 +116,17 @@ void CFireFlower::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				else
 					Mario->SetLevel(MARIO_LEVEL_SMALL);
 			}
-		}		
+		}
+		else if (Mario->isHoldingKoopas == true)
+		{
+			if (effect != NULL)
+			{
+				effect->SetPosition(x, y);
+				effect->SetState(EFFECT_CLOUND);
+			}
+			SetPosition(start_x, start_y);
+			StartFinish();
+		}
 	}
 	y += dy;	
 	if (y <= FIREFLOWR_APPEAR_Y)

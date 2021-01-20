@@ -249,6 +249,52 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		}
 		
 	}
+	else if (MarioMain->isReadyToHold == true && state == KOOPAS_STATE_KICKOUT_2 && MarioMain->isHoldingKoopas == false && isHold == false)
+	{
+		if (Mario_y<y + MARIO_SMALL_BBOX_HEIGHT + 1 && Mario_y>y - MARIO_SMALL_BBOX_HEIGHT)
+		{
+			if (MarioMain->nx > 0)
+			{
+				if (MarioMain->GetLevel() == MARIO_LEVEL_TAIL)
+				{
+					if (Mario_x > x - 32 && Mario_x < x)
+					{
+						MarioForHold = MarioMain;
+						if (MarioForHold->isHoldingKoopas == false)
+							MarioForHold->isHoldingKoopas = true;
+						if (isHold == false)
+							isHold = true;
+						state = KOOPAS_STATE_ISHOLD;
+					}
+				}
+				else
+				{
+					if (Mario_x > x - 24 && Mario_x < x)
+					{
+						MarioForHold = MarioMain;
+						if (MarioForHold->isHoldingKoopas == false)
+							MarioForHold->isHoldingKoopas = true;
+						if (isHold == false)
+							isHold = true;
+						state = KOOPAS_STATE_ISHOLD;
+					}
+				}
+			}
+			else
+			{
+				if (Mario_x < x + 24 && Mario_x>x)
+				{
+					MarioForHold = MarioMain;
+					if (MarioForHold->isHoldingKoopas == false)
+						MarioForHold->isHoldingKoopas = true;
+					if (isHold == false)
+						isHold = true;
+					state = KOOPAS_STATE_ISHOLD;
+				}
+			}
+		}
+
+	}
 	else
 	{
 		if(level!=KOOPAS_LEVEL_FLY2)
@@ -455,6 +501,7 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 				}
 				else if (dynamic_cast<CGoomba*>(e->obj))
 				{
+					SetPosition(x, y - 1);
 					if (nx != 0)
 					{
 						if (state == KOOPAS_STATE_DEFENSE_DYNAMIC)

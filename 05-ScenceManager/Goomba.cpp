@@ -68,7 +68,7 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		{
 			if (AABBCheck(Mario) == true)
 			{
-				if (Mario->isAttacking == true)
+				if (Mario->isAttacking == true||Mario->isHoldingKoopas==true)
 				{
 					if (level == GOOMBA_LEVEL_FLY)
 					{
@@ -154,8 +154,7 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 					if (untouchable == false)
 					{
 						if (nx != 0&&ny==0)
-						{
-						
+						{						
 							if (Mario->untouchable == false)
 							{
 								if (Mario->GetLevel() == MARIO_LEVEL_SMALL)

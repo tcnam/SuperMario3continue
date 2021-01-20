@@ -130,6 +130,9 @@
     <Filter Include="Object\GameObject\Enemy\BoomerangBro">
       <UniqueIdentifier>{b1ffec55-7390-45c0-b2ce-2143e55aade6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Framework\Grid">
+      <UniqueIdentifier>{f76fe9b4-f446-4fe7-98b5-cef822984f2c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animations.cpp">
@@ -409,6 +412,9 @@
     </ClInclude>
     <ClInclude Include="Boomerang.h">
       <Filter>Object\GameObject\Enemy\BoomerangBro</Filter>
+    </ClInclude>
+    <ClInclude Include="Grid.h">
+      <Filter>Framework\Grid</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

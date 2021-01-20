@@ -354,9 +354,6 @@ void CMario::Render()
 					}
 					else
 					{
-						
-						
-
 						if (state == MARIO_STATE_WALKING_RIGHT)
 							ani = MARIO_ANI_BIG_WALKING_RIGHT;
 						else if (state == MARIO_STATE_RUNNING_RIGHT)
@@ -384,7 +381,10 @@ void CMario::Render()
 				{
 					if (isHoldingKoopas == true)
 					{
-						ani = MARIO_ANI_BIG_HOLDKOOPAS_WALK_RIGHT;
+						if(state==MARIO_STATE_CHANGELEFT)
+							ani = MARIO_ANI_BIG_HOLDKOOPAS_WALK_LEFT;
+						else
+							ani = MARIO_ANI_BIG_HOLDKOOPAS_WALK_RIGHT;
 					}
 					else
 					{
@@ -401,7 +401,10 @@ void CMario::Render()
 				{
 					if (isHoldingKoopas == true)
 					{
-						ani = MARIO_ANI_BIG_HOLDKOOPAS_WALK_LEFT;
+						if (state == MARIO_STATE_CHANGERIGHT)
+							ani = MARIO_ANI_BIG_HOLDKOOPAS_WALK_RIGHT;
+						else
+							ani = MARIO_ANI_BIG_HOLDKOOPAS_WALK_LEFT;
 					}
 					else
 					{
@@ -477,7 +480,10 @@ void CMario::Render()
 				{
 					if (isHoldingKoopas == true)
 					{
-						ani = MARIO_ANI_SMALL_HOLDKOOPAS_WALK_RIGHT;
+						if (state == MARIO_STATE_CHANGELEFT)
+							ani = MARIO_ANI_SMALL_HOLDKOOPAS_WALK_LEFT;
+						else
+							ani = MARIO_ANI_SMALL_HOLDKOOPAS_WALK_RIGHT;
 					}
 					else
 					{
@@ -495,7 +501,10 @@ void CMario::Render()
 				{
 					if (isHoldingKoopas == true)
 					{
-						ani = MARIO_ANI_SMALL_HOLDKOOPAS_WALK_LEFT;
+						if (state == MARIO_STATE_CHANGERIGHT)
+							ani = MARIO_ANI_SMALL_HOLDKOOPAS_WALK_RIGHT;
+						else
+							ani = MARIO_ANI_SMALL_HOLDKOOPAS_WALK_LEFT;
 					}
 					else
 					{
@@ -584,7 +593,10 @@ void CMario::Render()
 				{
 					if (isHoldingKoopas == true)
 					{
-						ani = MARIO_ANI_TAIL_HOLDKOOPAS_WALK_RIGHT;
+						if (state == MARIO_STATE_CHANGELEFT)
+							ani = MARIO_ANI_TAIL_HOLDKOOPAS_WALK_LEFT;
+						else
+							ani = MARIO_ANI_TAIL_HOLDKOOPAS_WALK_RIGHT;
 					}
 					else if (isFlyFall == true)
 					{
@@ -608,7 +620,10 @@ void CMario::Render()
 					}
 					else if (isHoldingKoopas == true)
 					{
-						ani = MARIO_ANI_TAIL_HOLDKOOPAS_WALK_LEFT;
+						if (state == MARIO_STATE_CHANGERIGHT)
+							ani = MARIO_ANI_TAIL_HOLDKOOPAS_WALK_RIGHT;
+						else
+							ani = MARIO_ANI_TAIL_HOLDKOOPAS_WALK_LEFT;
 					}
 					else
 					{
@@ -652,61 +667,102 @@ void CMario::Render()
 			{
 				if (vx == 0)
 				{
-					if (state == MARIO_STATE_WALKING_RIGHT)
-						ani = MARIO_ANI_FIRE_WALKING_RIGHT;
-					else if (state == MARIO_STATE_RUNNING_RIGHT)
-						ani = MARIO_ANI_FIRE_WALKING_RIGHT;
-					else if (state == MARIO_STATE_RUNNINGFAST_RIGHT)
-						ani = MARIO_ANI_FIRE_WALKING_RIGHT;
-
-					else if (state == MARIO_STATE_WALKING_LEFT)
-						ani = MARIO_ANI_FIRE_WALKING_LEFT;
-					else if (state == MARIO_STATE_RUNNING_LEFT)
-						ani = MARIO_ANI_FIRE_WALKING_LEFT;
-					else if (state == MARIO_STATE_RUNNINGFAST_LEFT)
-						ani = MARIO_ANI_FIRE_WALKING_LEFT;
-
-					else if (isAttacking == true)
+					if (isHoldingKoopas == true)
 					{
 						if (nx > 0)
-							ani = MARIO_ANI_FIRE_ATTACK_RIGHT;
+							ani = MARIO_ANI_FIRE_HOLDKOOPAS_IDLE_RIGHT;
 						else
-							ani = MARIO_ANI_FIRE_ATTACK_LEFT;
+							ani = MARIO_ANI_FIRE_HOLDKOOPAS_IDLE_LEFT;
 					}
 					else
 					{
-						if (nx > 0)
-							ani = MARIO_ANI_FIRE_IDLE_RIGHT;
+						if (state == MARIO_STATE_WALKING_RIGHT)
+							ani = MARIO_ANI_FIRE_WALKING_RIGHT;
+						else if (state == MARIO_STATE_RUNNING_RIGHT)
+							ani = MARIO_ANI_FIRE_WALKING_RIGHT;
+						else if (state == MARIO_STATE_RUNNINGFAST_RIGHT)
+							ani = MARIO_ANI_FIRE_WALKING_RIGHT;
+
+						else if (state == MARIO_STATE_WALKING_LEFT)
+							ani = MARIO_ANI_FIRE_WALKING_LEFT;
+						else if (state == MARIO_STATE_RUNNING_LEFT)
+							ani = MARIO_ANI_FIRE_WALKING_LEFT;
+						else if (state == MARIO_STATE_RUNNINGFAST_LEFT)
+							ani = MARIO_ANI_FIRE_WALKING_LEFT;
+
+						else if (isAttacking == true)
+						{
+							if (nx > 0)
+								ani = MARIO_ANI_FIRE_ATTACK_RIGHT;
+							else
+								ani = MARIO_ANI_FIRE_ATTACK_LEFT;
+						}
 						else
-							ani = MARIO_ANI_FIRE_IDLE_LEFT;
-					}
+						{
+							if (nx > 0)
+								ani = MARIO_ANI_FIRE_IDLE_RIGHT;
+							else
+								ani = MARIO_ANI_FIRE_IDLE_LEFT;
+						}
+					}				
 				}
 				else if (vx > 0)
 				{
-					if (state == MARIO_STATE_RUNNINGFAST_RIGHT)
-						ani = MARIO_ANI_FIRE_RUNNING_RIGHT;
-					else if (state == MARIO_STATE_CHANGELEFT)
-						ani = MARIO_ANI_FIRE_CHANGE_LEFT;
+					if (isHoldingKoopas == true)
+					{
+						if (state == MARIO_STATE_CHANGELEFT)
+							ani = MARIO_ANI_FIRE_HOLDKOOPAS_WALK_LEFT;
+						else
+							ani = MARIO_ANI_FIRE_HOLDKOOPAS_WALK_RIGHT;
+					}
 					else
-						ani = MARIO_ANI_FIRE_WALKING_RIGHT;
-
+					{
+						if (state == MARIO_STATE_RUNNINGFAST_RIGHT)
+							ani = MARIO_ANI_FIRE_RUNNING_RIGHT;
+						else if (state == MARIO_STATE_CHANGELEFT)
+							ani = MARIO_ANI_FIRE_CHANGE_LEFT;
+						else
+							ani = MARIO_ANI_FIRE_WALKING_RIGHT;
+					}
 				}
 				else
 				{
-					if (state == MARIO_STATE_RUNNINGFAST_LEFT)
-						ani = MARIO_ANI_FIRE_RUNNING_LEFT;
-					else if (state == MARIO_STATE_CHANGERIGHT)
-						ani = MARIO_ANI_FIRE_CHANGE_RIGHT;
+					if (isHoldingKoopas == true)
+					{
+						if (state == MARIO_STATE_CHANGERIGHT)
+							ani = MARIO_ANI_FIRE_HOLDKOOPAS_WALK_RIGHT;
+						else
+							ani = MARIO_ANI_FIRE_HOLDKOOPAS_WALK_LEFT;
+					}
 					else
-						ani = MARIO_ANI_FIRE_WALKING_LEFT;
+					{
+						if (state == MARIO_STATE_RUNNINGFAST_LEFT)
+							ani = MARIO_ANI_FIRE_RUNNING_LEFT;
+						else if (state == MARIO_STATE_CHANGERIGHT)
+							ani = MARIO_ANI_FIRE_CHANGE_RIGHT;
+						else
+							ani = MARIO_ANI_FIRE_WALKING_LEFT;
+					}
+					
 				}
 			}
 			else
 			{
-				if (nx > 0)
-					ani = MARIO_ANI_FIRE_JUMP_RIGHT;
+				if (isHoldingKoopas == true)
+				{
+					if (nx > 0)
+						ani = MARIO_ANI_FIRE_HOLDKOOPAS_IDLE_RIGHT;
+					else
+						ani = MARIO_ANI_FIRE_HOLDKOOPAS_IDLE_LEFT;
+				}
 				else
-					ani = MARIO_ANI_FIRE_JUMP_LEFT;
+				{
+					if (nx > 0)
+						ani = MARIO_ANI_FIRE_JUMP_RIGHT;
+					else
+						ani = MARIO_ANI_FIRE_JUMP_LEFT;
+				}
+				
 			}
 		}
 		
@@ -999,7 +1055,7 @@ void CMario::Attack()
 {
 	if (level == MARIO_LEVEL_FIRE)
 	{
-		if (fireballs[0] == NULL)
+		if (fireballs.size() == 0)
 		{
 			DebugOut(L"There arn't no fire ball");
 			return;
