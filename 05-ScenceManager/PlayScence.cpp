@@ -605,10 +605,12 @@ void CPlayScene::_ParseSection_GRID(string line)
 	if (tokens.size() < 1)return;
 	wstring file_path = ToWSTR(tokens[0]);
 	Grid = new CGrid(file_path.c_str());
+	Grid->Load(file_path.c_str(),objects);
 }
 bool CPlayScene::IsInUseArea(float x, float y)
 {
-	float camX, camY;
+	float camX = 0;
+	float camY = -SCREEN_HEIGHT + 64.0f;
 	if (camera != NULL)
 		camera->GetPosition(camX, camY);
 	if ((x < camX) && (x < camX + CAM_X_IN_USE) && (camY < y) && (y < camY + CAM_Y_IN_USE))
@@ -678,8 +680,9 @@ void CPlayScene::Load()
 	camera = new Camera();
 	camera->SetMario(player);	
 	Hud->SetCamera(camera);
+	DebugOut(L"number of objects:%i\n", objects.size());
 	/*if(Grid!=NULL)*/
-	Grid->Load(objects);
+	
 	CGame::GetInstance()->SetTime(300);
 	tCount = DWORD(0);
 }
@@ -694,6 +697,7 @@ void CPlayScene::Update(DWORD dt)
 		return;
 	if (tCount == 0)
 		tCount = (DWORD)GetTickCount64();
+	
 	vector<LPGAMEOBJECT> coObjects;
 	vector<LPGAMEOBJECT> coObjects_Of_FireFlower_Coin_FireBallFlower_MysteryPiece;			//1: List of collidable Objects of FireFlower(or Coin, or FireBallFlower)
 	vector<LPGAMEOBJECT> coObjects_Of_Bounty;									//2: List of collidable Objects of Bounty
@@ -703,100 +707,101 @@ void CPlayScene::Update(DWORD dt)
 	vector<LPGAMEOBJECT> coObjects_Of_Mario;									//6: List of collidable Objects of Mario
 	vector<LPGAMEOBJECT> coObjects_Of_BountyBrick_WeakBrick;								//7: List of collidable Objects of BountyBrick
 	vector<LPGAMEOBJECT> coObjects_Of_Tail;
+	listObjects.clear();
 	if(Grid!=NULL)
-		Grid->GetListObject(objects, camera);
-
-	for (size_t i = 0; i < objects.size(); i++)
+		Grid->GetListObject(listObjects, camera);
+	DebugOut(L"size of grid:%i\n", listObjects.size());
+	for (size_t i = 0; i < listObjects.size(); i++)
 	{
-		if (objects[i]->type == OBJECT_TYPE_MARIO)				//1,2,3,4,7
+		if (listObjects[i]->type == OBJECT_TYPE_MARIO)				//1,2,3,4,7
 		{
-			if (((CMario*)objects[i])->untouchable == true)
+			if (((CMario*)listObjects[i])->untouchable == true)
 			{
-				coObjects_Of_FireFlower_Coin_FireBallFlower_MysteryPiece.push_back(objects[i]);
-				coObjects_Of_Bounty.push_back(objects[i]);
-				coObjects_Of_BountyBrick_WeakBrick.push_back(objects[i]);
+				coObjects_Of_FireFlower_Coin_FireBallFlower_MysteryPiece.push_back(listObjects[i]);
+				coObjects_Of_Bounty.push_back(listObjects[i]);
+				coObjects_Of_BountyBrick_WeakBrick.push_back(listObjects[i]);
 			}
 			else
 			{
-				coObjects_Of_FireFlower_Coin_FireBallFlower_MysteryPiece.push_back(objects[i]);
-				coObjects_Of_Bounty.push_back(objects[i]);
-				coObjects_Of_BountyBrick_WeakBrick.push_back(objects[i]);
-				coObjects_Of_Goomba.push_back(objects[i]);
-				coObjects_Of_Koopas.push_back(objects[i]);
+				coObjects_Of_FireFlower_Coin_FireBallFlower_MysteryPiece.push_back(listObjects[i]);
+				coObjects_Of_Bounty.push_back(listObjects[i]);
+				coObjects_Of_BountyBrick_WeakBrick.push_back(listObjects[i]);
+				coObjects_Of_Goomba.push_back(listObjects[i]);
+				coObjects_Of_Koopas.push_back(listObjects[i]);
 			}
 		}
-		else if (objects[i]->type == OBJECT_TYPE_KOOPAS)			//4,5,7
+		else if (listObjects[i]->type == OBJECT_TYPE_KOOPAS)			//4,5,7
 		{
-			coObjects_Of_Tail.push_back(objects[i]);
-			coObjects_Of_Koopas.push_back(objects[i]);
-			coObbjects_Of_FireBall.push_back(objects[i]);
-			coObjects_Of_BountyBrick_WeakBrick.push_back(objects[i]);
-			if(objects[i]->GetState()==KOOPAS_STATE_WALKING)
-				coObjects_Of_Bounty.push_back(objects[i]);
+			coObjects_Of_Tail.push_back(listObjects[i]);
+			coObjects_Of_Koopas.push_back(listObjects[i]);
+			coObbjects_Of_FireBall.push_back(listObjects[i]);
+			coObjects_Of_BountyBrick_WeakBrick.push_back(listObjects[i]);
+			if(listObjects[i]->GetState()==KOOPAS_STATE_WALKING)
+				coObjects_Of_Bounty.push_back(listObjects[i]);
 			if (player->untouchable == false)
-				coObjects_Of_Mario.push_back(objects[i]);
+				coObjects_Of_Mario.push_back(listObjects[i]);
 		}
-		else if (objects[i]->type == OBJECT_TYPE_GOOMBA)		//3,4,5
+		else if (listObjects[i]->type == OBJECT_TYPE_GOOMBA)		//3,4,5
 		{
-			coObjects_Of_Tail.push_back(objects[i]);
-			coObjects_Of_Goomba.push_back(objects[i]);
-			coObjects_Of_Koopas.push_back(objects[i]);
-			coObbjects_Of_FireBall.push_back(objects[i]);
+			coObjects_Of_Tail.push_back(listObjects[i]);
+			coObjects_Of_Goomba.push_back(listObjects[i]);
+			coObjects_Of_Koopas.push_back(listObjects[i]);
+			coObbjects_Of_FireBall.push_back(listObjects[i]);
 			if (player->untouchable == false)
-				coObjects_Of_Mario.push_back(objects[i]);
+				coObjects_Of_Mario.push_back(listObjects[i]);
 		}
-		else if (objects[i]->type == OBJECT_TYPE_FIREFLOWER)	//4,5
+		else if (listObjects[i]->type == OBJECT_TYPE_FIREFLOWER)	//4,5
 		{
-			coObjects_Of_Tail.push_back(objects[i]);
-			coObjects_Of_Koopas.push_back(objects[i]);
-			coObbjects_Of_FireBall.push_back(objects[i]);
+			coObjects_Of_Tail.push_back(listObjects[i]);
+			coObjects_Of_Koopas.push_back(listObjects[i]);
+			coObbjects_Of_FireBall.push_back(listObjects[i]);
 		}
-		else if (objects[i]->type == OBJECT_TYPE_BRICK || objects[i]->type == OBJECT_TYPE_HIDDENOBJECT)		//2,3,4,5,6
+		else if (listObjects[i]->type == OBJECT_TYPE_BRICK || listObjects[i]->type == OBJECT_TYPE_HIDDENOBJECT)		//2,3,4,5,6
 		{
-			coObjects_Of_Bounty.push_back(objects[i]);
-			coObjects_Of_Goomba.push_back(objects[i]);
-			coObjects_Of_Koopas.push_back(objects[i]);
-			coObbjects_Of_FireBall.push_back(objects[i]);
-			coObjects_Of_Mario.push_back(objects[i]);
+			coObjects_Of_Bounty.push_back(listObjects[i]);
+			coObjects_Of_Goomba.push_back(listObjects[i]);
+			coObjects_Of_Koopas.push_back(listObjects[i]);
+			coObbjects_Of_FireBall.push_back(listObjects[i]);
+			coObjects_Of_Mario.push_back(listObjects[i]);
 		}
-		else if (objects[i]->type == OBJECT_TYPE_BOUNTYBRICK)					//2,3,5
+		else if (listObjects[i]->type == OBJECT_TYPE_BOUNTYBRICK)					//2,3,5
 		{
-			coObjects_Of_Tail.push_back(objects[i]);
-			coObjects_Of_Bounty.push_back(objects[i]);
-			coObjects_Of_Goomba.push_back(objects[i]);
-			coObbjects_Of_FireBall.push_back(objects[i]);
-			coObjects_Of_Mario.push_back(objects[i]);					//add bountybrick to coOjects of Mario to block mario
-			coObjects_Of_Koopas.push_back(objects[i]);					//add bountybrick to coOjects of Koopas to block Koopas
+			coObjects_Of_Tail.push_back(listObjects[i]);
+			coObjects_Of_Bounty.push_back(listObjects[i]);
+			coObjects_Of_Goomba.push_back(listObjects[i]);
+			coObbjects_Of_FireBall.push_back(listObjects[i]);
+			coObjects_Of_Mario.push_back(listObjects[i]);					//add bountybrick to coOjects of Mario to block mario
+			coObjects_Of_Koopas.push_back(listObjects[i]);					//add bountybrick to coOjects of Koopas to block Koopas
 		}
-		else if (objects[i]->type == OBJECT_TYPE_WEAKBRICK)						//2,3,5
+		else if (listObjects[i]->type == OBJECT_TYPE_WEAKBRICK)						//2,3,5
 		{
-			coObjects_Of_Tail.push_back(objects[i]);
-			coObjects_Of_Bounty.push_back(objects[i]);
-			coObjects_Of_Goomba.push_back(objects[i]);
-			coObbjects_Of_FireBall.push_back(objects[i]);
-			coObjects_Of_Mario.push_back(objects[i]);					//add weakbrick to coOjects of Mario to block mario
-			coObjects_Of_Koopas.push_back(objects[i]);					//add weakbrick to coOjects of Koopas to block Koopas
+			coObjects_Of_Tail.push_back(listObjects[i]);
+			coObjects_Of_Bounty.push_back(listObjects[i]);
+			coObjects_Of_Goomba.push_back(listObjects[i]);
+			coObbjects_Of_FireBall.push_back(listObjects[i]);
+			coObjects_Of_Mario.push_back(listObjects[i]);					//add weakbrick to coOjects of Mario to block mario
+			coObjects_Of_Koopas.push_back(listObjects[i]);					//add weakbrick to coOjects of Koopas to block Koopas
 		}
-		else if (objects[i]->type == OBJECT_TYPE_SPECIALBRICK)						//2,3,5
+		else if (listObjects[i]->type == OBJECT_TYPE_SPECIALBRICK)						//2,3,5
 		{
-			coObjects_Of_Tail.push_back(objects[i]);
-			coObjects_Of_Bounty.push_back(objects[i]);
-			coObjects_Of_Goomba.push_back(objects[i]);
-			coObbjects_Of_FireBall.push_back(objects[i]);
-			coObjects_Of_Mario.push_back(objects[i]);					//add specialbrick to coOjects of Mario to block mario
-			coObjects_Of_Koopas.push_back(objects[i]);					//add specialbrick to coOjects of Koopas to block Koopas
+			coObjects_Of_Tail.push_back(listObjects[i]);
+			coObjects_Of_Bounty.push_back(listObjects[i]);
+			coObjects_Of_Goomba.push_back(listObjects[i]);
+			coObbjects_Of_FireBall.push_back(listObjects[i]);
+			coObjects_Of_Mario.push_back(listObjects[i]);					//add specialbrick to coOjects of Mario to block mario
+			coObjects_Of_Koopas.push_back(listObjects[i]);					//add specialbrick to coOjects of Koopas to block Koopas
 		}
-		else if (objects[i]->type == OBJECT_TYPE_PIRANHA)
+		else if (listObjects[i]->type == OBJECT_TYPE_PIRANHA)
 		{
-			coObjects_Of_Tail.push_back(objects[i]);
+			coObjects_Of_Tail.push_back(listObjects[i]);
 		}
-		else if (objects[i]->type == OBJECT_TYPE_FLYBRICK)
+		else if (listObjects[i]->type == OBJECT_TYPE_FLYBRICK)
 		{
-			coObjects_Of_Mario.push_back(objects[i]);
+			coObjects_Of_Mario.push_back(listObjects[i]);
 		}
-		else if (objects[i]->type == OBJECT_TYPE_BOOMERANGBRO)
+		else if (listObjects[i]->type == OBJECT_TYPE_BOOMERANGBRO)
 		{
-			coObjects_Of_Mario.push_back(objects[i]);
+			coObjects_Of_Mario.push_back(listObjects[i]);
 		}
 		//else if (objects[i]->type == OBJECT_TYPE_PORTAL)
 		//{
@@ -806,38 +811,38 @@ void CPlayScene::Update(DWORD dt)
 	player->Update(dt, &coObjects_Of_Mario);
 	if (player == NULL)
 		return;
-	for (size_t i = 0; i < objects.size(); i++)
+	for (size_t i = 0; i < listObjects.size(); i++)
 	{
-		if (objects[i]->type == OBJECT_TYPE_FLOWER_FIREBALL
-			|| objects[i]->type == OBJECT_TYPE_COIN
-			|| objects[i]->type == OBJECT_TYPE_FIREFLOWER
-			|| objects[i]->type == OBJECT_TYPE_BOUNTYBUTTON
-			|| objects[i]->type == OBJECT_TYPE_MYSTERYPIECE)
-			objects[i]->Update(dt, &coObjects_Of_FireFlower_Coin_FireBallFlower_MysteryPiece);
+		if (listObjects[i]->type == OBJECT_TYPE_FLOWER_FIREBALL
+			|| listObjects[i]->type == OBJECT_TYPE_COIN
+			|| listObjects[i]->type == OBJECT_TYPE_FIREFLOWER
+			|| listObjects[i]->type == OBJECT_TYPE_BOUNTYBUTTON
+			|| listObjects[i]->type == OBJECT_TYPE_MYSTERYPIECE)
+			listObjects[i]->Update(dt, &coObjects_Of_FireFlower_Coin_FireBallFlower_MysteryPiece);
 
-		else if (objects[i]->type == OBJECT_TYPE_BOUNTY)
-			objects[i]->Update(dt, &coObjects_Of_Bounty);
+		else if (listObjects[i]->type == OBJECT_TYPE_BOUNTY)
+			listObjects[i]->Update(dt, &coObjects_Of_Bounty);
 
-		else if (objects[i]->type == OBJECT_TYPE_GOOMBA || objects[i]->type == OBJECT_TYPE_BOOMERANGBRO)
-			objects[i]->Update(dt, &coObjects_Of_Goomba);
+		else if (listObjects[i]->type == OBJECT_TYPE_GOOMBA || listObjects[i]->type == OBJECT_TYPE_BOOMERANGBRO)
+			listObjects[i]->Update(dt, &coObjects_Of_Goomba);
 
-		else if (objects[i]->type == OBJECT_TYPE_KOOPAS)
-			objects[i]->Update(dt, &coObjects_Of_Koopas);
+		else if (listObjects[i]->type == OBJECT_TYPE_KOOPAS)
+			listObjects[i]->Update(dt, &coObjects_Of_Koopas);
 
-		else if (objects[i]->type == OBJECT_TYPE_FIREBALL)
-			objects[i]->Update(dt, &coObbjects_Of_FireBall);
+		else if (listObjects[i]->type == OBJECT_TYPE_FIREBALL)
+			listObjects[i]->Update(dt, &coObbjects_Of_FireBall);
 
 		/*else if (objects[i]->type == OBJECT_TYPE_MARIO)
 			objects[i]->Update(dt, &coObjects_Of_Mario);*/
-		else if (objects[i]->type == OBJECT_TYPE_MARIO)
+		else if (listObjects[i]->type == OBJECT_TYPE_MARIO)
 			continue;
-		else if (objects[i]->type == OBJECT_TYPE_BOUNTYBRICK || objects[i]->type == OBJECT_TYPE_WEAKBRICK || objects[i]->type == OBJECT_TYPE_SPECIALBRICK)
-			objects[i]->Update(dt, &coObjects_Of_BountyBrick_WeakBrick);
-		else if (objects[i]->type == OBJECT_TYPE_TAIL)
-			objects[i]->Update(dt, &coObjects_Of_Tail);
+		else if (listObjects[i]->type == OBJECT_TYPE_BOUNTYBRICK || listObjects[i]->type == OBJECT_TYPE_WEAKBRICK || listObjects[i]->type == OBJECT_TYPE_SPECIALBRICK)
+			listObjects[i]->Update(dt, &coObjects_Of_BountyBrick_WeakBrick);
+		else if (listObjects[i]->type == OBJECT_TYPE_TAIL)
+			listObjects[i]->Update(dt, &coObjects_Of_Tail);
 		else
 		{
-			objects[i]->Update(dt, &coObjects);			
+			listObjects[i]->Update(dt, &coObjects);
 		}
 	}
 	if (player == NULL)

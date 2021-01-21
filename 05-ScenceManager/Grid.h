@@ -39,7 +39,7 @@ public:
 	CGrid();
 	CGrid(LPCWSTR filePath);
 	~CGrid();
-	void GetListObject(vector<CGameObject*>&listObj, Camera* camera);
-	void Load(vector<LPGAMEOBJECT> &Objects);
+	void GetListObject(vector<CGameObject*>&Obj, Camera* camera);
+	void Load(LPCWSTR filePath,vector<LPGAMEOBJECT> &Objects);
 	void Unload();
 };

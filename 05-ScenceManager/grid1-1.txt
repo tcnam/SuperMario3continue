@@ -1,3 +1,8 @@
+[SETTINGS]
+#cell_size(width)	cell_size(height)	num_col_cells	num_row_cells
+150	100	20	20
+[OBJECTS]
+0	0	17	-50
 1	19	17	-50
 2	5	240	-64
 3	5	272	-96

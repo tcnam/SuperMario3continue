@@ -52,6 +52,7 @@ protected:
 	CBoomerangBro* bro;
 
 	vector<LPGAMEOBJECT> objects;
+	vector<LPGAMEOBJECT> listObjects;
 	vector<LPTERRAIN> terrains;
 	vector<CEffect*> effects;
 	Camera* camera;

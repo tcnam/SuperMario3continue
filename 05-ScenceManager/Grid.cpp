@@ -41,13 +41,15 @@ void CGrid::_ParseSection_OBJECTS(string line, vector<CGameObject*> &Objects)
 	int cellX = abs(x) / cellWidth;
 	int cellY = abs(y) / cellHeight;
 	Objects[id]->SetOrigin(x, y);
-	cells[cellX][cellY].Add(Objects[id]);
+	if(id!=0)
+		cells[cellX][cellY].Add(Objects[id]);
 
 }
-void CGrid::Load(vector<LPGAMEOBJECT> &Objects)
+void CGrid::Load(LPCWSTR filePath,vector<LPGAMEOBJECT> &Objects)
 {
 	ifstream f;
-	f.open(filepath);
+	filePath = this->filepath;
+	f.open(filePath);
 	int section;
 
 	char str[MAX_GRID_LINE];
@@ -75,15 +77,15 @@ void CGrid::Load(vector<LPGAMEOBJECT> &Objects)
 
 	f.close();
 }
-void CGrid::GetListObject(vector<LPGAMEOBJECT>&listObject, Camera* camera)
+void CGrid::GetListObject(vector<LPGAMEOBJECT>&Object, Camera* camera)
 {
 	int left, top, right, bottom;
 	int i, j, k;
 	float cam_x, cam_y;
 	camera->GetPosition(cam_x, cam_y);
 	left = cam_x / cellWidth;
-	right = (cam_x + CAM_X_IN_USE+1) / cellWidth;
-	top = abs(cam_y) / cellHeight;
+	right = (cam_x + CAM_X_IN_USE) / cellWidth+1;
+	top = abs(cam_y) / cellHeight+1;
 	bottom = abs(cam_y + CAM_Y_IN_USE) / cellHeight;
 	if (right<0 || left>Collums || bottom<0 && top>Rows)
 	{
@@ -105,19 +107,23 @@ void CGrid::GetListObject(vector<LPGAMEOBJECT>&listObject, Camera* camera)
 	{
 		top = Rows;
 	}
+	DebugOut(L"value of left:%i\n", left);
+	DebugOut(L"value of right:%i\n", right);
+	DebugOut(L"value of bottom:%i\n", bottom);
+	DebugOut(L"value of top:%i\n", top);
 	for (i = left; i < right; i++)
 	{
-		for (j = bottom; j < bottom; j++)
+		for (j = bottom; j < top; j++)
 		{
 			if (!cells[i][j].GetListObjects().empty())
 			{
 				for (k = 0; k < cells[i][j].GetListObjects().size(); k++)
 				{
-					if (!cells[i][j].GetListObjects().at(k)->isActived)
-					{
+					//if (!cells[i][j].GetListObjects().at(k)->isActived)
+					//{
 						float Ix, Iy;
 						cells[i][j].GetListObjects().at(k)->GetOrigin(Ix, Iy);
-						if (!((CPlayScene*)(CGame::GetInstance()->GetCurrentScene()))->IsInUseArea(Ix, Iy))
+			/*			if (!((CPlayScene*)(CGame::GetInstance()->GetCurrentScene()))->IsInUseArea(Ix, Iy))
 						{
 							if (cells[i][j].GetListObjects().at(k)->GetType() == OBJECT_TYPE_KOOPAS
 								&& cells[i][j].GetListObjects().at(k)->GetState() != KOOPAS_STATE_KICKOUT)
@@ -128,15 +134,17 @@ void CGrid::GetListObject(vector<LPGAMEOBJECT>&listObject, Camera* camera)
 								&& cells[i][j].GetListObjects().at(k)->GetState() == GOOMBA_STATE_WALKING)
 							{
 								cells[i][j].GetListObjects().at(k)->Reset();
-							}
-							listObject.push_back(cells[i][j].GetListObjects().at(k));
+							}*/
+							Object.push_back(cells[i][j].GetListObjects().at(k));
 							cells[i][j].GetListObjects().at(k)->SetIsActived(true);
-						}
-					}
+						//}
+					//}
 				}
 			}
 		}
 	}
+	CMario* mario = ((CPlayScene*)(CGame::GetInstance()->GetCurrentScene()))->GetPlayer();
+	Object.push_back(mario);
 }
 void CGrid::Unload()
 {
