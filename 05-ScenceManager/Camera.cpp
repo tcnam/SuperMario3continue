@@ -111,7 +111,7 @@ bool Camera::checkifMarioInside()
 }
 bool Camera::CheckIfObjectInside(float x, float y)
 {
-	bool result = CGame::GetInstance()->AABBCheck(x, y, x + 16.0f, y + 16.0f, cam_x, cam_y, cam_x + SCREEN_WIDTH, cam_y + SCREEN_HEIGHT - 32.0f);
+	bool result = CGame::GetInstance()->AABBCheck(x, y, x + 16.0f, y + 16.0f, cam_x, cam_y, cam_x + SCREEN_WIDTH, cam_y + SCREEN_HEIGHT - 64.0f);
 	return result;
 }
 Camera::~Camera()

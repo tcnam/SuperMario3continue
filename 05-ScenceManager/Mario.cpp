@@ -308,6 +308,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 				}
 				else if (dynamic_cast<CGoomba*>(e->obj))
 				{
+					SetPosition(x, y - 1);
 					CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
 					if (ny < 0 && nx == 0)
 					{
@@ -325,7 +326,9 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 								goomba->SetState(GOOMBA_STATE_DIE);
 								goomba->StartUntouchable();
 								CGame::GetInstance()->SetScores(CGame::GetInstance()->GetScores() + 100);
-								goomba->SetPosition(x, y - GOOMBA_BBOX_HEIGHT_DIE + GOOMBA_BBOX_HEIGHT);
+								float goomba_x, goomba_y;
+								goomba->GetPosition(goomba_x, goomba_y);
+								goomba->SetPosition(goomba_x,goomba_y - GOOMBA_BBOX_HEIGHT_DIE + GOOMBA_BBOX_HEIGHT);
 								goomba->SetSpeed(0, 0);
 							}
 						}					
@@ -333,7 +336,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 				}
 				else if (dynamic_cast<CKoopas*>(e->obj))
 				{
-					
+					SetPosition(x, y - 1);
 					CKoopas* koopas = dynamic_cast<CKoopas*>(e->obj);
 					if (ny < 0 && nx == 0)
 					{
@@ -364,6 +367,19 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 									koopas->SetSpeed(-KOOPAS_DYNAMIC_SPEED, 0);
 							}
 
+						}
+					}
+					else if (nx != 0 && ny == 0)
+					{
+						if (untouchable == false)
+						{
+							StartUntouchable();
+							if (level == MARIO_LEVEL_TAIL || level == MARIO_LEVEL_FIRE)
+								level = MARIO_LEVEL_BIG;
+							else if (level == MARIO_LEVEL_BIG)
+								level = MARIO_LEVEL_SMALL;
+							else if (level == MARIO_LEVEL_SMALL)
+								state = MARIO_STATE_DIE;
 						}
 					}
 				}

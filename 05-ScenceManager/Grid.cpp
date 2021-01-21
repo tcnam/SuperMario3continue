@@ -34,7 +34,7 @@ void CGrid::_ParseSection_SETTINGS(string line)
 		cells[i] = new CCell[Rows];
 	}
 }
-void CGrid::_ParseSection_OBJECTS(string line, vector<CGameObject*> &Objects)
+void CGrid::_ParseSection_OBJECTS(string line, vector<CGameObject*>& Objects)
 {
 	vector<string> tokens = split(line);
 	if (tokens.size() < 4) return;
@@ -46,14 +46,17 @@ void CGrid::_ParseSection_OBJECTS(string line, vector<CGameObject*> &Objects)
 	int cellX = abs(x) / cellWidth;
 	int cellY = abs(y) / cellHeight;
 	Objects[id]->SetOrigin(x, y);
-	if(id!=0)
+	if (id != 0)
 		cells[cellX][cellY].Add(Objects[id]);
-	if (Objects[id]->GetType() == OBJECT_TYPE_FIREFLOWER 
+	if (Objects[id]->GetType() == OBJECT_TYPE_FIREFLOWER
 		|| Objects[id]->GetType() == OBJECT_TYPE_FLOWER_FIREBALL
-		||Objects[id]->GetType()==OBJECT_TYPE_PIRANHA
-		||Objects[id]->GetType()==OBJECT_TYPE_MESSAGE)
+		|| Objects[id]->GetType() == OBJECT_TYPE_PIRANHA
+		|| Objects[id]->GetType() == OBJECT_TYPE_MESSAGE
+		||Objects[id]->GetType()==OBJECT_TYPE_BOOMERANG
+		|| Objects[id]->GetType()==OBJECT_TYPE_BOOMERANGBRO)
 	{
 		permanentObjects.push_back(Objects[id]);
+		//Objects[id]->isActived = true;
 	}
 
 }
@@ -125,7 +128,25 @@ void CGrid::GetListObject(vector<LPGAMEOBJECT>&Object, Camera* camera)
 	DebugOut(L"value of top:%i\n", top);
 	for (unsigned int i = 0; i < permanentObjects.size(); i++)
 	{
-		Object.push_back(permanentObjects[i]);
+		if (permanentObjects[i]->isActived == false)
+		{
+			Object.push_back(permanentObjects[i]);
+			permanentObjects[i]->isActived = true;
+		}
+			
+	}
+	CMario* mario = ((CPlayScene*)(CGame::GetInstance()->GetCurrentScene()))->GetPlayer();
+	if (mario == NULL)
+		return;
+	if (mario->isActived == false)
+	{
+		Object.push_back(mario);
+		mario->isActived = true;
+	}
+	if (mario->GetTail()->isActived == false)
+	{
+		Object.push_back(mario->GetTail());
+		mario->GetTail()->isActived = true;
 	}
 	for (i = left; i <= right; i++)
 	{
@@ -135,35 +156,20 @@ void CGrid::GetListObject(vector<LPGAMEOBJECT>&Object, Camera* camera)
 			{
 				for (k = 0; k < cells[i][j].GetListObjects().size(); k++)
 				{
-					//if (!cells[i][j].GetListObjects().at(k)->isActived)
-					//{
+					if (cells[i][j].GetListObjects().at(k)->isActived == false)
+					{
 						float Ix, Iy;
 						cells[i][j].GetListObjects().at(k)->GetOrigin(Ix, Iy);
-			/*if (!((CPlayScene*)(CGame::GetInstance()->GetCurrentScene()))->IsInUseArea(Ix, Iy))
-						{
-							if (cells[i][j].GetListObjects().at(k)->GetType() == OBJECT_TYPE_KOOPAS
-								&& cells[i][j].GetListObjects().at(k)->GetState() != KOOPAS_STATE_KICKOUT)
-							{
-								cells[i][j].GetListObjects().at(k)->Reset();
-							}
-							else if (cells[i][j].GetListObjects().at(k)->GetType() == OBJECT_TYPE_GOOMBA
-								&& cells[i][j].GetListObjects().at(k)->GetState() == GOOMBA_STATE_WALKING)
-							{
-								cells[i][j].GetListObjects().at(k)->Reset();
-							}*/
-							Object.push_back(cells[i][j].GetListObjects().at(k));
-							cells[i][j].GetListObjects().at(k)->SetIsActived(true);
-						//}
-					//}
+						Object.push_back(cells[i][j].GetListObjects().at(k));
+						cells[i][j].GetListObjects().at(k)->SetIsActived(true);
+					}
+					
 				}
 			}
 		}
 	}
-	CMario* mario = ((CPlayScene*)(CGame::GetInstance()->GetCurrentScene()))->GetPlayer();
-	if (mario == NULL)
-		return;
-	Object.push_back(mario);
-	Object.push_back(mario->GetTail());
+	
+
 	
 }
 void CGrid::Unload()

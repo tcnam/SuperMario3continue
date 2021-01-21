@@ -629,6 +629,7 @@ void CPlayScene::Load()
 
 	char str[MAX_SCENE_LINE];
 	Hud = new CHud();
+
 	//Grid = new CGrid();
 	//Hud = NULL;
 	while (f.getline(str, MAX_SCENE_LINE))
@@ -707,10 +708,32 @@ void CPlayScene::Update(DWORD dt)
 	vector<LPGAMEOBJECT> coObjects_Of_Mario;									//6: List of collidable Objects of Mario
 	vector<LPGAMEOBJECT> coObjects_Of_BountyBrick_WeakBrick;								//7: List of collidable Objects of BountyBrick
 	vector<LPGAMEOBJECT> coObjects_Of_Tail;
-	listObjects.clear();
+	for (unsigned int i = 0; i < listObjects.size(); i++)
+	{
+		float tempx, tempy;
+		listObjects[i]->GetPosition(tempx, tempy);
+		if (camera->CheckIfObjectInside(tempx,tempy) == false)
+		{
+			listObjects[i]->SetIsActived(false);
+			listObjects.erase(listObjects.begin() + i);
+		}
+		//if (listObjects[i]->GetType() == OBJECT_TYPE_MARIO
+		//	|| listObjects[i]->GetType() == OBJECT_TYPE_FIREBALL
+		//	|| listObjects[i]->GetType() == OBJECT_TYPE_FIREFLOWER
+		//	|| listObjects[i]->GetType() == OBJECT_TYPE_FLOWER_FIREBALL
+		//	|| listObjects[i]->GetType() == OBJECT_TYPE_PIRANHA
+		//	|| listObjects[i]->GetType() == OBJECT_TYPE_MESSAGE
+		//	|| listObjects[i]->GetType() == OBJECT_TYPE_BOOMERANG
+		//	|| listObjects[i]->GetType() == OBJECT_TYPE_BOOMERANGBRO)
+		//{
+		//	listObjects.erase(listObjects.begin() + i);
+		//}
+	}
+	//listObjects.clear();
 	if(Grid!=NULL)
 		Grid->GetListObject(listObjects, camera);
 	DebugOut(L"size of grid:%i\n", listObjects.size());
+
 	for (size_t i = 0; i < listObjects.size(); i++)
 	{
 		if (listObjects[i]->type == OBJECT_TYPE_MARIO)				//1,2,3,4,7
@@ -738,7 +761,7 @@ void CPlayScene::Update(DWORD dt)
 			coObjects_Of_BountyBrick_WeakBrick.push_back(listObjects[i]);
 			if(listObjects[i]->GetState()==KOOPAS_STATE_WALKING)
 				coObjects_Of_Bounty.push_back(listObjects[i]);
-			if (player->untouchable == false)
+			if (listObjects[i]->GetState()!=KOOPAS_STATE_KICKOUT)
 				coObjects_Of_Mario.push_back(listObjects[i]);
 		}
 		else if (listObjects[i]->type == OBJECT_TYPE_GOOMBA)		//3,4,5
@@ -747,7 +770,7 @@ void CPlayScene::Update(DWORD dt)
 			coObjects_Of_Goomba.push_back(listObjects[i]);
 			coObjects_Of_Koopas.push_back(listObjects[i]);
 			coObbjects_Of_FireBall.push_back(listObjects[i]);
-			if (player->untouchable == false)
+			if (listObjects[i]->GetState()==GOOMBA_STATE_WALKING)
 				coObjects_Of_Mario.push_back(listObjects[i]);
 		}
 		else if (listObjects[i]->type == OBJECT_TYPE_FIREFLOWER)	//4,5
