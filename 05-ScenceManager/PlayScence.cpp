@@ -24,6 +24,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath):CScene(id, filePath)
 	tCount = 0;
 	MysteryPiece = NULL;
 	bro = NULL;
+	Grid = NULL;
 }
 
 /*
@@ -170,6 +171,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			obj = new CGoomba();
 			((CGoomba*)obj)->SetMario(player);
 			((CGoomba*)obj)->Setlevel(goomba_level);
+			((CGoomba*)obj)->SetInitLevel(goomba_level);
 			((CGoomba*)obj)->SetInitPosition(x, y);
 			((CGoomba*)obj)->SetId(id);
 		}		
@@ -411,6 +413,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			((CKoopas*)obj)->SetId(id);
 			((CKoopas*)obj)->SetMario(player);
 			((CKoopas*)obj)->Setlevel(koopas_level);
+			((CKoopas*)obj)->SetInitLevel(koopas_level);
 			((CKoopas*)obj)->SetInitPosition(x, y);
 		}		
 		break;
@@ -715,21 +718,30 @@ void CPlayScene::Update(DWORD dt)
 		if (camera->CheckIfObjectInside(tempx,tempy) == false)
 		{
 			listObjects[i]->SetIsActived(false);
+			float Init_x, Init_y;
+			listObjects[i]->GetOrigin(Init_x, Init_y);
+			if (listObjects[i]->GetType() == OBJECT_TYPE_GOOMBA && ((CGoomba*)listObjects[i])->GetState()==GOOMBA_STATE_WALKING )
+			{				
+				if (Init_x != tempx && Init_y != tempy)
+				{
+					listObjects[i]->SetPosition(Init_x, Init_y);
+					((CGoomba*)listObjects[i])->SetState(GOOMBA_STATE_WALKING);
+					((CGoomba*)listObjects[i])->Setlevel(((CGoomba*)listObjects[i])->GetInitLevel());
+				}
+					
+			}
+			else if (listObjects[i]->GetType() == OBJECT_TYPE_KOOPAS && ((CKoopas*)listObjects[i])->GetState() != KOOPAS_STATE_KICKOUT)
+			{
+				if (Init_x != tempx && Init_y != tempy)
+				{
+					listObjects[i]->SetPosition(Init_x, Init_y);
+					((CKoopas*)listObjects[i])->SetState(KOOPAS_STATE_WALKING);
+					((CKoopas*)listObjects[i])->Setlevel(((CKoopas*)listObjects[i])->GetInitLevel());
+				}					
+			}
 			listObjects.erase(listObjects.begin() + i);
 		}
-		//if (listObjects[i]->GetType() == OBJECT_TYPE_MARIO
-		//	|| listObjects[i]->GetType() == OBJECT_TYPE_FIREBALL
-		//	|| listObjects[i]->GetType() == OBJECT_TYPE_FIREFLOWER
-		//	|| listObjects[i]->GetType() == OBJECT_TYPE_FLOWER_FIREBALL
-		//	|| listObjects[i]->GetType() == OBJECT_TYPE_PIRANHA
-		//	|| listObjects[i]->GetType() == OBJECT_TYPE_MESSAGE
-		//	|| listObjects[i]->GetType() == OBJECT_TYPE_BOOMERANG
-		//	|| listObjects[i]->GetType() == OBJECT_TYPE_BOOMERANGBRO)
-		//{
-		//	listObjects.erase(listObjects.begin() + i);
-		//}
 	}
-	//listObjects.clear();
 	if(Grid!=NULL)
 		Grid->GetListObject(listObjects, camera);
 	DebugOut(L"size of grid:%i\n", listObjects.size());

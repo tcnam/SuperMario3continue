@@ -15,6 +15,7 @@
 #define KOOPAS_GRAVITY			0.0008f	
 #define KOOPAS_FLY_JUMP_SPEED	0.2f
 #define KOOPAS_FLY2_MOVING_SPEED	0.035f
+#define KOOPAS_DIE_DEFLECT			0.24f
 
 #define KOOPAS_BBOX_WIDTH 16
 #define KOOPAS_BBOX_HEIGHT 26
@@ -49,6 +50,7 @@ private:
 	float start_x;
 	float start_y;
 	int level;
+	int init_level;
 public:
 	DWORD wait_start;
 	CMario* MarioMain;
@@ -63,8 +65,13 @@ public:
 	virtual void SetState(int state);
 
 	void SetMario(CMario* mario) { MarioMain = mario; }
+
 	void Setlevel(int l) { level = l; }
 	int GetLevel() { return level; }
+
+	void SetInitLevel(int il) { init_level = il; }
+	int GetInitLevel() { return init_level; }
+
 	void SetInitPosition(float x, float y) { start_x = x; start_y = y; }
 	void StartWait();
 	void left();

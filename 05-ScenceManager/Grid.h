@@ -23,6 +23,7 @@ using namespace std;
 
 #define GRID_SECTION_SETTINGS	1
 #define GRID_SECTION_OBJECTS	2
+#define GRID_SECTION_UNKNOWN	-1
 #define MAX_GRID_LINE			1024
 
 

@@ -8,6 +8,7 @@ CKoopas::CKoopas()
 	isWaiting = false;
 	wait_start = 0;
 	isOnGround = false;
+	init_level = 0;
 }
 
 void CKoopas::GetBoundingBox(float &left, float &top, float &right, float &bottom)

@@ -68,9 +68,10 @@ void CFireBall::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					goomba->Setlevel(GOOMBA_LEVEL_NORMAL);
 				if (goomba->GetState() != GOOMBA_STATE_DIE)
 				{
-					goomba->SetState(GOOMBA_STATE_KICKED_OUT);
-					isFinished = true;
-				}				
+					goomba->SetState(GOOMBA_STATE_KICKED_OUT);					
+				}
+				goomba->SetSpeed(0, -GOOMBA_DIE_DEFLECT);
+				isFinished = true;
 			} // if Goomba
 			else if (dynamic_cast<CKoopas*>(e->obj))
 			{
@@ -78,6 +79,7 @@ void CFireBall::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				if (koopas->GetLevel() == KOOPAS_LEVEL_FLY || koopas->GetLevel() == KOOPAS_LEVEL_FLY2)
 					koopas->Setlevel(KOOPAS_LEVEL_NORMAL);
 				koopas->SetState(KOOPAS_STATE_KICKOUT);
+				koopas->SetSpeed(0, -KOOPAS_DIE_DEFLECT);
 				isFinished = true;
 			}
 			else if (dynamic_cast<CFireFlower*>(e->obj))

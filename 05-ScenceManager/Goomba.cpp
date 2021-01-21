@@ -3,6 +3,7 @@ CGoomba::CGoomba()
 {
 	SetState(GOOMBA_STATE_WALKING);
 	level = 0;
+	init_level = 0;
 }
 
 void CGoomba::GetBoundingBox(float &left, float &top, float &right, float &bottom)

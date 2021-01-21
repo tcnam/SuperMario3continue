@@ -264,6 +264,7 @@ public:
 	void PushFireBall(CFireBall* FireBall) { fireballs.push_back(FireBall); }
 	void SetTail(CTail* t) { tail = t; }
 	CTail* GetTail() { return tail; }
+	vector<CFireBall*> GetFireBalls() { return fireballs; }
 	void SetEffect(CEffect* ef) { effect = ef; }
 	CEffect* GetEffect() { return effect; }
 

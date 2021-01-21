@@ -8,6 +8,7 @@
 #define GOOMBA_WALKING_SPEED 0.05f;
 #define GOOMBA_GRAVITY			0.0008f	
 #define	GOOMBA_FLY_JUMP_SPEED	0.24f
+#define	GOOMBA_DIE_DEFLECT      0.24f
 
 #define GOOMBA_BBOX_WIDTH 16
 #define GOOMBA_BBOX_HEIGHT 16
@@ -41,6 +42,7 @@ class CGoomba : public CGameObject
 	float start_x;
 	float start_y;
 	int level;
+	int init_level;
 public:
 	CMario* Mario;
 	bool untouchable;
@@ -51,6 +53,10 @@ public:
 
 	void Setlevel(int l) { level = l; }
 	int GetLevel() { return level; }
+
+	void SetInitLevel(int il) { init_level = il; }
+	int GetInitLevel() { return init_level; }
+
 	void SetInitPosition(float x, float y) { start_x = x; start_y = y; }
 
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom);

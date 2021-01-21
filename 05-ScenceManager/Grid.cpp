@@ -43,17 +43,15 @@ void CGrid::_ParseSection_OBJECTS(string line, vector<CGameObject*>& Objects)
 	float x = (float)atof(tokens[2].c_str());
 	float y = (float)atof(tokens[3].c_str());
 
-	int cellX = abs(x) / cellWidth;
-	int cellY = abs(y) / cellHeight;
+	int cellX = (int)(abs(x) / cellWidth);
+	int cellY = (int)(abs(y) / cellHeight);
 	Objects[id]->SetOrigin(x, y);
 	if (id != 0)
 		cells[cellX][cellY].Add(Objects[id]);
 	if (Objects[id]->GetType() == OBJECT_TYPE_FIREFLOWER
 		|| Objects[id]->GetType() == OBJECT_TYPE_FLOWER_FIREBALL
 		|| Objects[id]->GetType() == OBJECT_TYPE_PIRANHA
-		|| Objects[id]->GetType() == OBJECT_TYPE_MESSAGE
-		||Objects[id]->GetType()==OBJECT_TYPE_BOOMERANG
-		|| Objects[id]->GetType()==OBJECT_TYPE_BOOMERANGBRO)
+		|| Objects[id]->GetType() == OBJECT_TYPE_MESSAGE)
 	{
 		permanentObjects.push_back(Objects[id]);
 		//Objects[id]->isActived = true;
@@ -65,7 +63,7 @@ void CGrid::Load(LPCWSTR filePath,vector<LPGAMEOBJECT> &Objects)
 	ifstream f;
 	filePath = this->filepath;
 	f.open(filePath);
-	int section;
+	int section = GRID_SECTION_UNKNOWN;
 
 	char str[MAX_GRID_LINE];
 	while (f.getline(str, MAX_GRID_LINE))
@@ -80,6 +78,7 @@ void CGrid::Load(LPCWSTR filePath,vector<LPGAMEOBJECT> &Objects)
 		if (line == "[OBJECTS]") {
 			section = GRID_SECTION_OBJECTS; continue;
 		}
+		if (line[0] == '[') { section = GRID_SECTION_UNKNOWN; continue; }
 		//
 		// data section
 		//
@@ -95,13 +94,14 @@ void CGrid::Load(LPCWSTR filePath,vector<LPGAMEOBJECT> &Objects)
 void CGrid::GetListObject(vector<LPGAMEOBJECT>&Object, Camera* camera)
 {
 	int left, top, right, bottom;
-	int i, j, k;
+	int i, j;
+	unsigned int k;
 	float cam_x, cam_y;
 	camera->GetPosition(cam_x, cam_y);
-	left = cam_x / cellWidth;
-	right = (cam_x + CAM_X_IN_USE) / cellWidth;
-	top = abs(cam_y) / cellHeight;
-	bottom = abs(cam_y + CAM_Y_IN_USE) / cellHeight;
+	left = (int)cam_x / cellWidth;
+	right = (int)((cam_x + CAM_X_IN_USE) / cellWidth);
+	top = (int)(abs(cam_y) / cellHeight);
+	bottom = (int)(abs(cam_y + CAM_Y_IN_USE) / cellHeight);
 	if (right<0 || left>Collums || bottom<0 && top>Rows)
 	{
 		return;
@@ -147,6 +147,17 @@ void CGrid::GetListObject(vector<LPGAMEOBJECT>&Object, Camera* camera)
 	{
 		Object.push_back(mario->GetTail());
 		mario->GetTail()->isActived = true;
+	}
+	if (mario->GetFireBalls().size() != 0)
+	{
+		for (unsigned int i = 0; i < mario->GetFireBalls().size(); i++)
+		{
+			if (mario->GetFireBalls().at(i)->isActived == false)
+			{
+				Object.push_back(mario->GetFireBalls().at(i));
+				mario->GetFireBalls().at(i)->isActived = true;
+			}
+		}
 	}
 	for (i = left; i <= right; i++)
 	{
