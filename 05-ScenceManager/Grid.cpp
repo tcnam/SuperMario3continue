@@ -4,11 +4,16 @@
 CGrid::CGrid(LPCWSTR filePath)
 {
 	this->filepath = filePath;
+	Rows = Collums = 0;
+	cellWidth = cellHeight = 0;
+	cells = NULL;
 }
 CGrid::CGrid()
 {
 	Rows = Collums = 0;
 	cellWidth = cellHeight = 0;
+	cells = NULL;
+	filepath = NULL;
 }
 CGrid::~CGrid()
 {
@@ -43,6 +48,13 @@ void CGrid::_ParseSection_OBJECTS(string line, vector<CGameObject*> &Objects)
 	Objects[id]->SetOrigin(x, y);
 	if(id!=0)
 		cells[cellX][cellY].Add(Objects[id]);
+	if (Objects[id]->GetType() == OBJECT_TYPE_FIREFLOWER 
+		|| Objects[id]->GetType() == OBJECT_TYPE_FLOWER_FIREBALL
+		||Objects[id]->GetType()==OBJECT_TYPE_PIRANHA
+		||Objects[id]->GetType()==OBJECT_TYPE_MESSAGE)
+	{
+		permanentObjects.push_back(Objects[id]);
+	}
 
 }
 void CGrid::Load(LPCWSTR filePath,vector<LPGAMEOBJECT> &Objects)
@@ -84,8 +96,8 @@ void CGrid::GetListObject(vector<LPGAMEOBJECT>&Object, Camera* camera)
 	float cam_x, cam_y;
 	camera->GetPosition(cam_x, cam_y);
 	left = cam_x / cellWidth;
-	right = (cam_x + CAM_X_IN_USE) / cellWidth+1;
-	top = abs(cam_y) / cellHeight+1;
+	right = (cam_x + CAM_X_IN_USE) / cellWidth;
+	top = abs(cam_y) / cellHeight;
 	bottom = abs(cam_y + CAM_Y_IN_USE) / cellHeight;
 	if (right<0 || left>Collums || bottom<0 && top>Rows)
 	{
@@ -111,9 +123,13 @@ void CGrid::GetListObject(vector<LPGAMEOBJECT>&Object, Camera* camera)
 	DebugOut(L"value of right:%i\n", right);
 	DebugOut(L"value of bottom:%i\n", bottom);
 	DebugOut(L"value of top:%i\n", top);
-	for (i = left; i < right; i++)
+	for (unsigned int i = 0; i < permanentObjects.size(); i++)
 	{
-		for (j = bottom; j < top; j++)
+		Object.push_back(permanentObjects[i]);
+	}
+	for (i = left; i <= right; i++)
+	{
+		for (j = bottom; j <= top; j++)
 		{
 			if (!cells[i][j].GetListObjects().empty())
 			{
@@ -123,7 +139,7 @@ void CGrid::GetListObject(vector<LPGAMEOBJECT>&Object, Camera* camera)
 					//{
 						float Ix, Iy;
 						cells[i][j].GetListObjects().at(k)->GetOrigin(Ix, Iy);
-			/*			if (!((CPlayScene*)(CGame::GetInstance()->GetCurrentScene()))->IsInUseArea(Ix, Iy))
+			/*if (!((CPlayScene*)(CGame::GetInstance()->GetCurrentScene()))->IsInUseArea(Ix, Iy))
 						{
 							if (cells[i][j].GetListObjects().at(k)->GetType() == OBJECT_TYPE_KOOPAS
 								&& cells[i][j].GetListObjects().at(k)->GetState() != KOOPAS_STATE_KICKOUT)
@@ -144,7 +160,11 @@ void CGrid::GetListObject(vector<LPGAMEOBJECT>&Object, Camera* camera)
 		}
 	}
 	CMario* mario = ((CPlayScene*)(CGame::GetInstance()->GetCurrentScene()))->GetPlayer();
+	if (mario == NULL)
+		return;
 	Object.push_back(mario);
+	Object.push_back(mario->GetTail());
+	
 }
 void CGrid::Unload()
 {

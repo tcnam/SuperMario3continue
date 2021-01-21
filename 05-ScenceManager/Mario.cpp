@@ -306,8 +306,67 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 						//flybrick->SetSpeed(0, FLYBRICK_VY);
 					}
 				}
+				else if (dynamic_cast<CGoomba*>(e->obj))
+				{
+					CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
+					if (ny < 0 && nx == 0)
+					{
+						SetSpeed(0, -MARIO_JUMP_DEFLECT_SPEED);
+						if (goomba->GetLevel() == GOOMBA_LEVEL_FLY)
+						{
+							goomba->Setlevel(GOOMBA_LEVEL_NORMAL);
+							goomba->SetState(GOOMBA_STATE_WALKING);
+							CGame::GetInstance()->SetScores(CGame::GetInstance()->GetScores() + 100);
+						}
+						else
+						{
+							if (goomba->GetState() != GOOMBA_STATE_DIE)
+							{
+								goomba->SetState(GOOMBA_STATE_DIE);
+								goomba->StartUntouchable();
+								CGame::GetInstance()->SetScores(CGame::GetInstance()->GetScores() + 100);
+								goomba->SetPosition(x, y - GOOMBA_BBOX_HEIGHT_DIE + GOOMBA_BBOX_HEIGHT);
+								goomba->SetSpeed(0, 0);
+							}
+						}					
+					}
+				}
+				else if (dynamic_cast<CKoopas*>(e->obj))
+				{
+					
+					CKoopas* koopas = dynamic_cast<CKoopas*>(e->obj);
+					if (ny < 0 && nx == 0)
+					{
+						
+						if (koopas->GetLevel() == KOOPAS_LEVEL_FLY || koopas->GetLevel() == KOOPAS_LEVEL_FLY2)
+						{
+							SetSpeed(0, -MARIO_JUMP_DEFLECT_SPEED);
+							koopas->Setlevel(KOOPAS_LEVEL_NORMAL);
+							koopas->SetState(KOOPAS_STATE_WALKING);
+							CGame::GetInstance()->SetScores(CGame::GetInstance()->GetScores() + 100);
+						}
+						else
+						{
+							CGame::GetInstance()->SetScores(CGame::GetInstance()->GetScores() + 100);
+							if (koopas->GetState() == KOOPAS_STATE_WALKING || koopas->GetState() == KOOPAS_STATE_DEFENSE_DYNAMIC)
+							{
+								SetSpeed(0, -MARIO_JUMP_DEFLECT_SPEED);
+								koopas->SetState(KOOPAS_STATE_DEFENSE_STATIC);
+								koopas->SetSpeed(0, 0);
+							}
+							else if (koopas->GetState() == KOOPAS_STATE_DEFENSE_STATIC||koopas->GetState()==KOOPAS_STATE_KICKOUT_2)
+							{
+								SetSpeed(0, -MARIO_JUMP_DEFLECT_SPEED);
+								koopas->SetState(KOOPAS_STATE_DEFENSE_DYNAMIC);
+								if (this->nx >= 0)
+									koopas->SetSpeed(KOOPAS_DYNAMIC_SPEED, 0);
+								else
+									koopas->SetSpeed(-KOOPAS_DYNAMIC_SPEED, 0);
+							}
 
-				
+						}
+					}
+				}
 			}
 		}
 		else
@@ -1105,7 +1164,8 @@ void CMario::Attack()
 	{
 		if (tail == NULL)
 			return;
-		tail->isUsed = true;		
+		if(tail->isUsed==false)
+			tail->isUsed = true;		
 		if (nx > 0)
 		{
 			tail->SetStartPosition(x, y + 20.0f);

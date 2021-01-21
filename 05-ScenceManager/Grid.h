@@ -33,6 +33,8 @@ class CGrid
 	int cellWidth, cellHeight;
 	LPCWSTR filepath;
 	
+	vector<LPGAMEOBJECT> permanentObjects;
+	
 	void _ParseSection_SETTINGS(string line);
 	void _ParseSection_OBJECTS(string line, vector<CGameObject*>& Objects);
 public:

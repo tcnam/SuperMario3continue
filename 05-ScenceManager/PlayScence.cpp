@@ -607,7 +607,7 @@ void CPlayScene::_ParseSection_GRID(string line)
 	Grid = new CGrid(file_path.c_str());
 	Grid->Load(file_path.c_str(),objects);
 }
-bool CPlayScene::IsInUseArea(float x, float y)
+bool CPlayScene::IsInCamera(float x, float y)
 {
 	float camX = 0;
 	float camY = -SCREEN_HEIGHT + 64.0f;
@@ -842,11 +842,12 @@ void CPlayScene::Update(DWORD dt)
 			listObjects[i]->Update(dt, &coObjects_Of_Tail);
 		else
 		{
-			listObjects[i]->Update(dt, &coObjects);
+			listObjects[i]->Update(dt, &coObjects);			//in this else statement include portal which will trigger 
+			if (player == NULL)
+				return;
 		}
 	}
-	if (player == NULL)
-		return;
+	
 	for (unsigned int i = 0; i < effects.size(); i++)
 	{
 		if (effects[i] == NULL)
@@ -867,9 +868,9 @@ void CPlayScene::Render()
 {
 	for (unsigned int i = 0; i < terrains.size(); i++)
 		terrains[i]->Draw(terrains[i]->GetPositionX(),terrains[i]->GetPositionY(),255);
-	for (unsigned int i = 0; i < objects.size(); i++)
+	for (unsigned int i = 0; i < listObjects.size(); i++)
 	{
-		objects[i]->Render();
+		listObjects[i]->Render();
 	}
 	for (unsigned int i = 0; i < effects.size(); i++)
 	{
@@ -912,7 +913,7 @@ void CPlayScene::Unload()
 	bountybricks.clear();
 	objects.clear();
 	terrains.clear();
-	
+	listObjects.clear();
 	PiecesOfSquare.clear();
 	DebugOut(L"[INFO] Scene %s unloaded! \n", sceneFilePath);
 }

@@ -53,6 +53,8 @@ protected:
 
 	vector<LPGAMEOBJECT> objects;
 	vector<LPGAMEOBJECT> listObjects;
+	vector<LPGAMEOBJECT> temporaryObjects;
+
 	vector<LPTERRAIN> terrains;
 	vector<CEffect*> effects;
 	Camera* camera;
@@ -73,7 +75,7 @@ protected:
 public: 
 	CPlayScene(int id, LPCWSTR filePath);
 	void TimeCount();
-	bool IsInUseArea(float x, float y);
+	bool IsInCamera(float x, float y);
 	virtual void Load();
 	virtual void Update(DWORD dt);
 	virtual void Render();
