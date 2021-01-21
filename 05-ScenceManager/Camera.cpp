@@ -25,7 +25,7 @@ void Camera::Update(DWORD t)
 	Mario->GetPosition(cx, cy);
 	if (CGame::GetInstance()->GetSceneNumber() == 2)
 	{
-		if (cx > (float)SCREEN_WIDTH / 2 && cy <= 0)
+		if (cx > (float)SCREEN_WIDTH / 2 && cy <= 0&&cx< CAM_X_MAX_WHEN_Y_NEGATIVE+SCREEN_WIDTH)
 		{
 			cx -= (float)SCREEN_WIDTH / 2;
 			if (abs(cy) > SCREEN_HEIGHT - 16.0f)
@@ -39,7 +39,16 @@ void Camera::Update(DWORD t)
 			if (cam_x > CAM_X_MAX_WHEN_Y_NEGATIVE)
 				cam_x = CAM_X_MAX_WHEN_Y_NEGATIVE;
 		}
-		else if (cy > 0)
+		else if (cx > CAM_X_MAX_WHEN_Y_NEGATIVE + SCREEN_WIDTH && cy <= 0)
+		{
+			cx -= (float)SCREEN_WIDTH / 2;
+			if (cx >= CAM_X_MAX_WHEN_Y_NEGATIVE + SCREEN_WIDTH + BONUS_SCENCE_1_1 && cx <= CAM_X_MAX_WHEN_Y_NEGATIVE+2*SCREEN_WIDTH)
+			{
+				cam_x = cx;
+			}		
+			cam_y= (float)-SCREEN_HEIGHT + 64.0f;
+		}
+		/*else if (cy > 0)
 		{
 			cx -= (float)SCREEN_WIDTH / 2;
 			if (cx >= CAM_X_MIN_WHEN_UNDERGROUND && cx <= CAM_X_MAX_WHEN_UNDERGROUND)
@@ -47,7 +56,7 @@ void Camera::Update(DWORD t)
 				cam_x = cx;
 				cam_y = CAM_Y_WHEN_UNDERGROUND;
 			}
-		}
+		}*/
 		else
 		{
 			cam_x = 0.0f;

@@ -373,13 +373,17 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 					{
 						if (untouchable == false)
 						{
-							StartUntouchable();
-							if (level == MARIO_LEVEL_TAIL || level == MARIO_LEVEL_FIRE)
-								level = MARIO_LEVEL_BIG;
-							else if (level == MARIO_LEVEL_BIG)
-								level = MARIO_LEVEL_SMALL;
-							else if (level == MARIO_LEVEL_SMALL)
-								state = MARIO_STATE_DIE;
+							if (koopas->GetState() == KOOPAS_STATE_DEFENSE_DYNAMIC || koopas->GetState() == KOOPAS_STATE_WALKING)
+							{
+								StartUntouchable();
+								if (level == MARIO_LEVEL_TAIL || level == MARIO_LEVEL_FIRE)
+									level = MARIO_LEVEL_BIG;
+								else if (level == MARIO_LEVEL_BIG)
+									level = MARIO_LEVEL_SMALL;
+								else if (level == MARIO_LEVEL_SMALL)
+									state = MARIO_STATE_DIE;
+							}
+							
 						}
 					}
 				}

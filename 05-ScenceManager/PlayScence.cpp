@@ -863,6 +863,8 @@ void CPlayScene::Update(DWORD dt)
 			listObjects[i]->Update(dt, &coObjects_Of_BountyBrick_WeakBrick);
 		else if (listObjects[i]->type == OBJECT_TYPE_TAIL)
 			listObjects[i]->Update(dt, &coObjects_Of_Tail);
+		//else if (listObjects[i]->type == OBJECT_TYPE_PORTAL)
+		//	continue;
 		else
 		{
 			listObjects[i]->Update(dt, &coObjects);			//in this else statement include portal which will trigger 
@@ -938,6 +940,7 @@ void CPlayScene::Unload()
 	terrains.clear();
 	listObjects.clear();
 	PiecesOfSquare.clear();
+	Grid->Unload();
 	DebugOut(L"[INFO] Scene %s unloaded! \n", sceneFilePath);
 }
 void CPlayScene::TimeCount()

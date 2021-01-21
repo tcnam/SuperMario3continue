@@ -10,6 +10,7 @@
 #define CAM_X_IN_USE				272.0f
 #define CAM_Y_IN_USE				192.0f
 
+#define BONUS_SCENCE_1_1			48.0f
 #define CAM_SPEED_VX_SCENCE_1_4		0.04f
 class Camera
 {
