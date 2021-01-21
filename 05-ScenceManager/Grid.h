@@ -31,23 +31,15 @@ class CGrid
 	CCell** cells;
 	int Rows, Collums;
 	int cellWidth, cellHeight;
+	LPCWSTR filepath;
 	
 	void _ParseSection_SETTINGS(string line);
-	void _ParseSection_OBJECTS(string line, 
-		CMario* player,
-		vector<CBountyBrick*>& BBrick,
-		vector<CWeakBrick*>&WBrick,
-		vector<CFireFlower*>& flowers,
-		vector<CMysteryPiece*>& pieces,
-		CSpecialBrick* spBrick,
-		CBoomerangBro* bro,
-		CMysteryPiece* lastpiece
-	);
+	void _ParseSection_OBJECTS(string line, vector<CGameObject*>& Objects);
 public:
-	CGrid(){}
+	CGrid();
 	CGrid(LPCWSTR filePath);
-	~CGrid(){}
-	void GetListObject(vector<CGameObject*>& listObj, Camera* camera);
-	void Load(LPCWSTR filePath);
+	~CGrid();
+	void GetListObject(vector<CGameObject*>&listObj, Camera* camera);
+	void Load(vector<LPGAMEOBJECT> &Objects);
 	void Unload();
 };

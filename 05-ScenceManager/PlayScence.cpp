@@ -40,6 +40,8 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath):CScene(id, filePath)
 #define SCENE_SECTION_TERRAIN	7
 #define SCENE_SECTION_HUD	8
 #define SCENE_SECTION_EFFECT	9
+#define SCENE_SECTION_GRID		10
+
 #define OBJECT_TYPE_PORTAL	50
 
 #define MAX_SCENE_LINE 1024
@@ -147,32 +149,52 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	switch (object_type)
 	{
 	case OBJECT_TYPE_MARIO:
-		if (player!=NULL) 
 		{
-			DebugOut(L"[ERROR] MARIO object was created before!\n");
-			return;
+			if (player != NULL)
+			{
+				DebugOut(L"[ERROR] MARIO object was created before!\n");
+				return;
+			}
+			obj = new CMario(x, y);
+			player = (CMario*)obj;
+			int id = atoi(tokens[4].c_str());
+			((CMario*)obj)->SetId(id);
+			player->isInsidePlayScence = true;
+			DebugOut(L"[INFO] Player object created!\n");
 		}
-		obj = new CMario(x,y); 
-		player = (CMario*)obj; 
-		player->isInsidePlayScence = true;
-		DebugOut(L"[INFO] Player object created!\n");
 		break;
 	case OBJECT_TYPE_GOOMBA:
 		{
 			int goomba_level = atoi(tokens[4].c_str());
+			int id = atoi(tokens[5].c_str());
 			obj = new CGoomba();
 			((CGoomba*)obj)->SetMario(player);
 			((CGoomba*)obj)->Setlevel(goomba_level);
 			((CGoomba*)obj)->SetInitPosition(x, y);
+			((CGoomba*)obj)->SetId(id);
 		}		
 		break;
-	case OBJECT_TYPE_BRICK: obj = new CBrick(); break;
-	case OBJECT_TYPE_FLYBRICK: obj = new CFlyBrick(); break;
+	case OBJECT_TYPE_BRICK: 
+		{
+			int id = atoi(tokens[4].c_str());
+			obj = new CBrick();
+			((CBrick*)obj)->SetId(id);
+		}	
+		break;
+	case OBJECT_TYPE_FLYBRICK: 
+		{
+			int id = atoi(tokens[4].c_str());
+			obj = new CFlyBrick();
+			((CFlyBrick*)obj)->SetId(id);
+		}
+		break;
 	case OBJECT_TYPE_FRAGMENT: 
 		{
 			obj = new CFragment();
 			((CFragment*)obj)->SetInitPosition(x, y);
 			int index_Of_WeakBrick = atoi(tokens[4].c_str());
+			int id = atoi(tokens[5].c_str());
+			((CFragment*)obj)->SetId(id);
 			if (index_Of_WeakBrick == 18&&CGame::GetInstance()->GetSceneNumber()==2)//Special Brick
 				SpecialBrick->PushFragment((CFragment*)obj);
 			else
@@ -182,15 +204,19 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	case OBJECT_TYPE_WEAKBRICK: 
 		{
+			int id = atoi(tokens[4].c_str());
 			obj = new CWeakBrick();
 			((CWeakBrick*)obj)->SetInitPosition(x, y);
+			((CWeakBrick*)obj)->SetId(id);
 			WeakBricks.push_back((CWeakBrick*)obj);
 		}
 		break;
 	case OBJECT_TYPE_SPECIALBRICK:
 		{
+			int id = atoi(tokens[4].c_str());
 			obj = new CSpecialBrick();
 			((CSpecialBrick*)obj)->SetInitPosition(x, y);
+			((CSpecialBrick*)obj)->SetId(id);
 			SpecialBrick = (CSpecialBrick*)obj;
 		}
 		break;
@@ -199,6 +225,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			obj = new CCoin();
 			((CCoin*)obj)->SetMario(player);
 			int index_Of_WeakBrick = atoi(tokens[4].c_str());
+			int id = atoi(tokens[5].c_str());
+			((CCoin*)obj)->SetId(id);
 			if (index_Of_WeakBrick != -1)
 			{
 				WeakBricks[index_Of_WeakBrick]->PushCoin((CCoin*)obj);
@@ -209,6 +237,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_MYSTERYPIECE:
 		{
 			obj = new CMysteryPiece();
+			int id = atoi(tokens[4].c_str());
+			((CMysteryPiece*)obj)->SetId(id);
 			((CMysteryPiece*)obj)->SetMario(player);			
 			if (x == 0)
 			{
@@ -226,12 +256,16 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_MESSAGE:
 	{
 		obj = new CMessage();
+		int id = atoi(tokens[4].c_str());
+		((CMessage*)obj)->SetId(id);
 		MysteryPiece->SetMessage((CMessage*)obj);
 	}
 	break;
 	case OBJECT_TYPE_BOOMERANGBRO:
 	{
 		obj = new CBoomerangBro();
+		int id = atoi(tokens[4].c_str());
+		((CBoomerangBro*)obj)->SetId(id);
 		((CBoomerangBro*)obj)->SetInitPosition(x, y);
 		((CBoomerangBro*)obj)->SetMario(player);
 		bro = (CBoomerangBro*)obj;
@@ -240,6 +274,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_BOOMERANG:
 	{
 		obj = new CBoomerang();
+		int id = atoi(tokens[4].c_str());
+		((CBoomerang*)obj)->SetId(id);
 		((CBoomerang*)obj)->SetMario(player);
 		bro->SetBoomerang((CBoomerang*)obj);
 	}
@@ -247,6 +283,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_BOUNTYBUTTON:
 		{
 			obj = new CBountyButton();
+			int id = atoi(tokens[4].c_str());
+			((CBountyButton*)obj)->SetId(id);
 			((CBountyButton*)obj)->SetMario(player);			
 			SpecialBrick->SetBountyButton((CBountyButton*)obj);
 			((CBountyButton*)obj)->isInsideSpecialBrick = true;
@@ -262,6 +300,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			((CBountyBrick*)obj)->SetInitPosition(x, y);
 			((CBountyBrick*)obj)->SetMario(player);
 			int countdown = atoi(tokens[4].c_str());
+			int id = atoi(tokens[5].c_str());
+			((CBountyBrick*)obj)->SetId(id);
 			((CBountyBrick*)obj)->SetCount(countdown);
 			bountybricks.push_back((CBountyBrick*)obj);
 		}		
@@ -269,6 +309,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_FIREFLOWER:
 		{
 			obj = new CFireFlower();
+			int id = atoi(tokens[4].c_str());
+			((CFireFlower*)obj)->SetId(id);
 			((CFireFlower*)obj)->SetMario(player);
 			((CFireFlower*)obj)->SetInitPosition(x,y);
 			FireFlowers.push_back((CFireFlower*)obj);
@@ -277,6 +319,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_PIRANHA:
 		{
 			obj = new CPiranha();
+			int id = atoi(tokens[4].c_str());
+			((CPiranha*)obj)->SetId(id);
 			((CPiranha*)obj)->SetMario(player);
 			((CPiranha*)obj)->SetInitPosition(x, y);
 		}
@@ -284,6 +328,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_FLOWER_FIREBALL:
 		{
 			obj = new CFireBallFlower();
+			int id = atoi(tokens[4].c_str());
+			((CFireBallFlower*)obj)->SetId(id);
 			((CFireBallFlower*)obj)->SetMario(player);
 			for (unsigned int i = 0; i < FireFlowers.size(); i++)
 			{
@@ -298,6 +344,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_BOUNTY:
 		{
 			obj = new CBounty();
+			int id = atoi(tokens[4].c_str());
+			((CBounty*)obj)->SetId(id);
 			((CBounty*)obj)->SetMario(player);
 			for (unsigned int i = 0; i < bountybricks.size(); i++)
 			{
@@ -342,12 +390,16 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_FIREBALL:
 		{	
 			obj = new CFireBall();
+			int id = atoi(tokens[4].c_str());
+			((CFireBall*)obj)->SetId(id);
 			player->PushFireBall((CFireBall*)obj);
 		}
 		break;
 	case OBJECT_TYPE_TAIL:
 		{
 			obj = new CTail();
+			int id = atoi(tokens[4].c_str());
+			((CTail*)obj)->SetId(id);
 			player->SetTail((CTail*)obj);
 		}
 		break;
@@ -355,6 +407,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		{
 			int koopas_level = atoi(tokens[4].c_str());
 			obj = new CKoopas();
+			int id = atoi(tokens[5].c_str());
+			((CKoopas*)obj)->SetId(id);
 			((CKoopas*)obj)->SetMario(player);
 			((CKoopas*)obj)->Setlevel(koopas_level);
 			((CKoopas*)obj)->SetInitPosition(x, y);
@@ -363,8 +417,10 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_HIDDENOBJECT: 
 		{
 			int width = atoi(tokens[4].c_str());
-			int height = atoi(tokens[5].c_str());
+			int height = atoi(tokens[5].c_str());			
 			obj = new CHiddenObject(x, y, width, height);
+			int id = atoi(tokens[6].c_str());
+			((CHiddenObject*)obj)->SetId(id);
 		}
 		break;
 	case OBJECT_TYPE_HIDDENDOOR:
@@ -373,6 +429,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		int height = atoi(tokens[5].c_str());
 		int upOrdown = atoi(tokens[6].c_str());
 		obj = new CHiddenDoor(x, y, width, height);
+		int id = atoi(tokens[7].c_str());
+		((CHiddenDoor*)obj)->SetId(id);
 		DebugOut(L"Hidden door was loaded\n");
 		((CHiddenDoor*)obj)->SetMario(player);
 		if(upOrdown==0)
@@ -388,6 +446,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		float des_x = (float)atof(tokens[6].c_str());
 		float des_y = (float)atof(tokens[7].c_str());
 		obj = new CAutoDoor(x, y, width, height,des_x,des_y);
+		int id = atoi(tokens[8].c_str());
+		((CAutoDoor*)obj)->SetId(id);
 		DebugOut(L"Hidden door was loaded\n");
 		((CAutoDoor*)obj)->SetMario(player);
 	}
@@ -398,6 +458,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			float b = (float)atof(tokens[5].c_str());
 			int scene_id = atoi(tokens[6].c_str());
 			obj = new CPortal(x, y, r, b, scene_id);
+			int id = atoi(tokens[7].c_str());
+			((CPortal*)obj)->SetId(id);
 			((CPortal*)obj)->SetMario(player);	
 		}
 		break;
@@ -537,7 +599,22 @@ void CPlayScene::_ParseSection_HUD(string line)
 		break;
 	}
 }
-
+void CPlayScene::_ParseSection_GRID(string line)
+{
+	vector<string> tokens = split(line);
+	if (tokens.size() < 1)return;
+	wstring file_path = ToWSTR(tokens[0]);
+	Grid = new CGrid(file_path.c_str());
+}
+bool CPlayScene::IsInUseArea(float x, float y)
+{
+	float camX, camY;
+	if (camera != NULL)
+		camera->GetPosition(camX, camY);
+	if ((x < camX) && (x < camX + CAM_X_IN_USE) && (camY < y) && (y < camY + CAM_Y_IN_USE))
+		return true;
+	return false;
+}
 void CPlayScene::Load()
 {
 	DebugOut(L"[INFO] Start loading scene resources from : %s \n", sceneFilePath);
@@ -550,6 +627,7 @@ void CPlayScene::Load()
 
 	char str[MAX_SCENE_LINE];
 	Hud = new CHud();
+	//Grid = new CGrid();
 	//Hud = NULL;
 	while (f.getline(str, MAX_SCENE_LINE))
 	{
@@ -572,6 +650,8 @@ void CPlayScene::Load()
 			section = SCENE_SECTION_HUD; continue;}
 		if (line == "[EFFECT]") {
 			section = SCENE_SECTION_EFFECT; continue;}
+		if (line == "[GRID]") {
+			section = SCENE_SECTION_GRID; continue;}
 		if (line[0] == '[') { section = SCENE_SECTION_UNKNOWN; continue; }	
 
 		//
@@ -587,6 +667,7 @@ void CPlayScene::Load()
 			case SCENE_SECTION_TERRAIN: _ParseSection_TERRAIN(line); break;
 			case SCENE_SECTION_HUD: _ParseSection_HUD(line); break;
 			case SCENE_SECTION_EFFECT: _ParseSection_EFFECT(line); break;
+			case SCENE_SECTION_GRID: _ParseSection_GRID(line); break;
 		}
 	}
 
@@ -597,6 +678,8 @@ void CPlayScene::Load()
 	camera = new Camera();
 	camera->SetMario(player);	
 	Hud->SetCamera(camera);
+	/*if(Grid!=NULL)*/
+	Grid->Load(objects);
 	CGame::GetInstance()->SetTime(300);
 	tCount = DWORD(0);
 }
@@ -620,8 +703,8 @@ void CPlayScene::Update(DWORD dt)
 	vector<LPGAMEOBJECT> coObjects_Of_Mario;									//6: List of collidable Objects of Mario
 	vector<LPGAMEOBJECT> coObjects_Of_BountyBrick_WeakBrick;								//7: List of collidable Objects of BountyBrick
 	vector<LPGAMEOBJECT> coObjects_Of_Tail;
-
-
+	if(Grid!=NULL)
+		Grid->GetListObject(objects, camera);
 
 	for (size_t i = 0; i < objects.size(); i++)
 	{
@@ -720,6 +803,9 @@ void CPlayScene::Update(DWORD dt)
 		//	coObjects_Of_Mario.push_back(objects[i]);
 		//}
 	}
+	player->Update(dt, &coObjects_Of_Mario);
+	if (player == NULL)
+		return;
 	for (size_t i = 0; i < objects.size(); i++)
 	{
 		if (objects[i]->type == OBJECT_TYPE_FLOWER_FIREBALL
@@ -732,7 +818,7 @@ void CPlayScene::Update(DWORD dt)
 		else if (objects[i]->type == OBJECT_TYPE_BOUNTY)
 			objects[i]->Update(dt, &coObjects_Of_Bounty);
 
-		else if (objects[i]->type == OBJECT_TYPE_GOOMBA||objects[i]->type==OBJECT_TYPE_BOOMERANGBRO)
+		else if (objects[i]->type == OBJECT_TYPE_GOOMBA || objects[i]->type == OBJECT_TYPE_BOOMERANGBRO)
 			objects[i]->Update(dt, &coObjects_Of_Goomba);
 
 		else if (objects[i]->type == OBJECT_TYPE_KOOPAS)
@@ -741,9 +827,10 @@ void CPlayScene::Update(DWORD dt)
 		else if (objects[i]->type == OBJECT_TYPE_FIREBALL)
 			objects[i]->Update(dt, &coObbjects_Of_FireBall);
 
+		/*else if (objects[i]->type == OBJECT_TYPE_MARIO)
+			objects[i]->Update(dt, &coObjects_Of_Mario);*/
 		else if (objects[i]->type == OBJECT_TYPE_MARIO)
-			objects[i]->Update(dt, &coObjects_Of_Mario);
-
+			continue;
 		else if (objects[i]->type == OBJECT_TYPE_BOUNTYBRICK || objects[i]->type == OBJECT_TYPE_WEAKBRICK || objects[i]->type == OBJECT_TYPE_SPECIALBRICK)
 			objects[i]->Update(dt, &coObjects_Of_BountyBrick_WeakBrick);
 		else if (objects[i]->type == OBJECT_TYPE_TAIL)

@@ -1,3 +1,4 @@
+#pragma once
 #include"Piranha.h"
 #include"Utils.h"
 CPiranha::CPiranha()

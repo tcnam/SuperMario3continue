@@ -34,6 +34,7 @@
 #include "FlyBrick.h"
 #include "BoomerangBro.h"
 #include "Boomerang.h"
+#include "Grid.h"
 
 class CPlayScene: public CScene
 {
@@ -55,6 +56,7 @@ protected:
 	vector<CEffect*> effects;
 	Camera* camera;
 	CHud* Hud;
+	CGrid* Grid;
 
 	DWORD tCount;
 
@@ -66,15 +68,17 @@ protected:
 	void _ParseSection_TERRAIN(string line);
 	void _ParseSection_HUD(string line);
 	void _ParseSection_EFFECT(string line);
-	
+	void _ParseSection_GRID(string line);
 public: 
 	CPlayScene(int id, LPCWSTR filePath);
 	void TimeCount();
+	bool IsInUseArea(float x, float y);
 	virtual void Load();
 	virtual void Update(DWORD dt);
 	virtual void Render();
 	virtual void Unload();
 
+	//vector<LPGAMEOBJECT>	GetObjects() { return objects; }
 	CMario * GetPlayer() { return player; } 
 
 	//friend class CPlayScenceKeyHandler;

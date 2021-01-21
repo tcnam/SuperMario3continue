@@ -53,8 +53,9 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		{
 			if (abs(x - start_x) >= GOOMBA_DX_LIMIT_TOFLY)
 			{
+				SetPosition(x, y - GOOMBA_FLY_JUMP_BBOX_WIDTH);
 				vy = -GOOMBA_FLY_JUMP_SPEED;
-				state = GOOMBA_STATE_JUMP;
+				//state = GOOMBA_STATE_JUMP;
 				if (Mario_x < x)
 					vx = -GOOMBA_WALKING_SPEED;
 				start_x = x;
@@ -90,7 +91,7 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 				}
 				if (Mario->untouchable == false)
 				{
-					if (state == GOOMBA_STATE_JUMP || state == GOOMBA_STATE_WALKING)
+					if (/*state == GOOMBA_STATE_JUMP || */state == GOOMBA_STATE_WALKING)
 					{
 						SetPosition(x, y - 1);
 						if (Mario->GetLevel() == MARIO_LEVEL_SMALL)
@@ -116,7 +117,7 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		vector<LPCOLLISIONEVENT> coEvents;
 		vector<LPCOLLISIONEVENT> coEventsResult;
 		coEvents.clear();
-		if(state==GOOMBA_STATE_WALKING||state==GOOMBA_STATE_JUMP)
+		if(state==GOOMBA_STATE_WALKING/*||state==GOOMBA_STATE_JUMP*/)
 			CalcPotentialCollisions(coObjects, coEvents);
 
 		if (coEvents.size() == 0)
@@ -263,12 +264,12 @@ void CGoomba::SetState(int state)
 		case GOOMBA_STATE_WALKING:
 			vx = -GOOMBA_WALKING_SPEED;
 			break;
-		case GOOMBA_STATE_JUMP:
+		/*case GOOMBA_STATE_JUMP:
 		{
 			
 			SetPosition(x, y - GOOMBA_FLY_JUMP_BBOX_WIDTH);
 			
-		}
+		}*/
 			
 			break;
 	}

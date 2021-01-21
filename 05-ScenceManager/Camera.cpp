@@ -7,6 +7,7 @@ Camera::Camera()
 	vx = 0;
 	vy = 0;
 	dt = 0;
+	DebugOut(L"cam_y min:%f\n", cam_y);
 }
 void Camera::Update(DWORD t)
 {
@@ -55,7 +56,7 @@ void Camera::Update(DWORD t)
 	}
 	else if (CGame::GetInstance()->GetSceneNumber() == 3)
 	{
-		if (cx > (float)SCREEN_WIDTH / 2 && cy <= 0&&cx<=2032.0f)
+		if (cx > 0 && cy <= 0&&cx<=2032.0f)
 		{
 			vx = CAM_SPEED_VX_SCENCE_1_4;
 			cam_x += vx*dt;

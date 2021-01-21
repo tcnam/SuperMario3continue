@@ -72,10 +72,14 @@ class CGameObject
 {
 public:
 
+	int id;
 	int type;
 
 	float x; 
 	float y;
+
+	float init_x;
+	float init_y;
 
 	float dx;	// dx = vx*dt
 	float dy;	// dy = vy*dt
@@ -90,11 +94,15 @@ public:
 
 	int state;
 
+	
+
 	DWORD dt; 
 
 	LPANIMATION_SET animation_set;
 
 public: 
+	bool isActived;
+
 	void SetPosition(float x, float y) { this->x = x, this->y = y; }
 	void SetSpeed(float vx, float vy) { this->vx = vx, this->vy = vy; }
 	void GetPosition(float &x, float &y) { x = this->x; y = this->y; }
@@ -102,6 +110,17 @@ public:
 	void SetType(int type) { this->type = type; }
 	int GetType() { return this->type; }
 	int GetState() { return this->state; }
+
+	void SetId(int n) { id = n; }
+	int GetId() { return id; }
+
+	void SetOrigin(float x, float y) { init_x = x; init_y = y; }
+	void GetOrigin(float& x, float& y) { x = init_x; y = init_y; }
+
+	void SetIsActived(bool result) { isActived = result; }
+
+	void Reset();
+
 	void SetDirectionnx(int nx) { this->nx = nx; }
 
 	void RenderBoundingBox();

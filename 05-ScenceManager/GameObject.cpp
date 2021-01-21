@@ -20,6 +20,10 @@ CGameObject::CGameObject()
 	dy = 0.0f;
 	ax = 0;
 	animation_set = NULL;
+	id = 0;
+	init_x = 0.0f;
+	init_y = 0.0f;
+	isActived = false;
 	//ny = -1;
 }
 
@@ -159,7 +163,11 @@ void CGameObject::RenderBoundingBox()
 
 	CGame::GetInstance()->Draw(x, y, bbox, rect.left, rect.top, rect.right, rect.bottom, 32);
 }
-
+void CGameObject::Reset()
+{
+	x = init_x;
+	y = init_y;
+}
 
 CGameObject::~CGameObject()
 {
