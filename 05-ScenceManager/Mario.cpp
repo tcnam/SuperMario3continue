@@ -48,7 +48,7 @@ CMario::CMario(float x, float y) : CGameObject()
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {	
-	if (vy > 0.04f)
+	if (vy > 0.03f)
 		isOnGround = false;
 	if (GetTickCount64() - Transform_start > MARIO_TRANSFORM_TIME)
 	{

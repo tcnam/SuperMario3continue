@@ -80,7 +80,7 @@ void CBountyBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 							if (Bounty->isFinised == true)
 								Bounty->isFinised = false;
 							//Bounty->isCrossBoundary = false;
-							if (Mario->GetLevel() > MARIO_LEVEL_SMALL)
+							if (Mario->GetLevel() != MARIO_LEVEL_SMALL)
 								Bounty->isLeaf = true;
 							else
 								Bounty->isLeaf = false;
