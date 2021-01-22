@@ -156,6 +156,18 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 					if (nx != 0)
 						vx = -vx;
 				}
+				else if (dynamic_cast<CGoomba*>(e->obj))
+				{
+					SetPosition(x, y - 1);
+					if (nx != 0)
+					{
+						
+						CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
+						goomba->SetSpeed(vx, 0);
+						vx = -vx;
+					}
+						
+				}
 				else if (dynamic_cast<CMario*>(e->obj))
 				{
 					SetPosition(x, y - 1);

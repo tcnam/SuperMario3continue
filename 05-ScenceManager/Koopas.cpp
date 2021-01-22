@@ -472,7 +472,7 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 						{
 							if (state == KOOPAS_STATE_DEFENSE_DYNAMIC||state==KOOPAS_STATE_WALKING)
 							{
-								if (MarioMain->GetLevel() > MARIO_LEVEL_SMALL)
+								if (MarioMain->GetLevel() != MARIO_LEVEL_SMALL)
 								{
 									MarioMain->StartUntouchable();
 									if (MarioMain->GetLevel() == MARIO_LEVEL_FIRE || MarioMain->GetLevel() == MARIO_LEVEL_TAIL)
@@ -545,6 +545,7 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 				}
 				else if (dynamic_cast<CKoopas*>(e->obj))
 				{
+					SetPosition(x, y - 1);
 					if (nx != 0)
 					{
 						if (state == KOOPAS_STATE_DEFENSE_DYNAMIC)

@@ -507,6 +507,13 @@ void CPlayScene::_ParseSection_EFFECT(string line)
 	effect->SetAnimationSet(ani_set);
 	if (owner_id == EFFECT_OWNER_ID_MARIO)
 		player->SetEffect(effect);
+	/*else if (owner_id == EFFECT_OWNER_ID_TAIL)
+	{
+		if (player->GetTail() != NULL)
+		{
+			player->GetTail()->SetEffect(effect);
+		}
+	}*/
 	else if (owner_id == EFFECT_OWNER_ID_FIREFLOWER)
 	{
 		for (unsigned int i = 0; i < FireFlowers.size(); i++)

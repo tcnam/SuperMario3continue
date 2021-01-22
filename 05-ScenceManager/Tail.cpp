@@ -5,6 +5,7 @@
 #include"Koopas.h"
 #include"FireFlower.h"
 #include"Piranha.h"
+#include"BoomerangBro.h"
 
 CTail::CTail()
 {
@@ -150,8 +151,9 @@ void CTail::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					}
 					fireflower->SetPosition(fireflower->GetStartx(), fireflower->GetStarty());
 					fireflower->StartFinish();
+					CGame::GetInstance()->SetScores(CGame::GetInstance()->GetScores() + 100);
 				}	
-				CGame::GetInstance()->SetScores(CGame::GetInstance()->GetScores() + 100);
+				
 			}
 			else if (dynamic_cast<CPiranha*>(e->obj))
 			{
@@ -160,8 +162,18 @@ void CTail::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				{
 					piranha->SetPosition(piranha->GetStartx(), piranha->GetStarty());
 					piranha->StartFinish();
+					CGame::GetInstance()->SetScores(CGame::GetInstance()->GetScores() + 100);
+				}				
+			}
+			else if (dynamic_cast<CBoomerangBro*>(e->obj))
+			{
+				CBoomerangBro* bro = dynamic_cast<CBoomerangBro*>(e->obj);
+				if (bro->GetState() != BOOMERANGBRO_STATE_DIE)
+				{
+					bro->SetState(BOOMERANGBRO_STATE_DIE);
+					CGame::GetInstance()->SetScores(CGame::GetInstance()->GetScores() + 100);
 				}
-				CGame::GetInstance()->SetScores(CGame::GetInstance()->GetScores() + 100);
+
 			}
 		}
 	}

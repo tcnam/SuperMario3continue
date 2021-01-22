@@ -8,6 +8,7 @@
 #include "WeakBrick.h"
 #include "BountyBrick.h"
 #include "SpecialBrick.h"
+#include "BoomerangBro.h"
 
 
 CMario::CMario(float x, float y) : CGameObject()
@@ -334,6 +335,19 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 						}					
 					}
 				}
+				else if (dynamic_cast<CBoomerangBro*>(e->obj))
+				{
+					SetPosition(x, y - 1);
+					CBoomerangBro* bro = dynamic_cast<CBoomerangBro*>(e->obj);
+					if (ny < 0 && nx == 0)
+					{
+						if (bro->GetState() != BOOMERANGBRO_STATE_DIE)
+						{
+							bro->SetState(BOOMERANGBRO_STATE_DIE);
+							CGame::GetInstance()->SetScores(CGame::GetInstance()->GetScores() + 100);
+						}
+					}
+				}
 				else if (dynamic_cast<CKoopas*>(e->obj))
 				{
 					SetPosition(x, y - 1);
@@ -375,11 +389,29 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 						{
 							if (koopas->GetState() == KOOPAS_STATE_DEFENSE_DYNAMIC || koopas->GetState() == KOOPAS_STATE_WALKING)
 							{
-								StartUntouchable();
+								
 								if (level == MARIO_LEVEL_TAIL || level == MARIO_LEVEL_FIRE)
+								{
+									StartUntouchable();
 									level = MARIO_LEVEL_BIG;
+									if (effect != NULL)
+									{
+										effect->SetState(EFFECT_CLOUND);
+										effect->SetPosition(x, x);
+										StartTransForm();
+									}
+								}	
 								else if (level == MARIO_LEVEL_BIG)
+								{
+									StartUntouchable();
 									level = MARIO_LEVEL_SMALL;
+									if (effect != NULL)
+									{
+										effect->SetState(EFFECT_CLOUND);
+										effect->SetPosition(x, x);
+										StartTransForm();
+									}
+								}									
 								else if (level == MARIO_LEVEL_SMALL)
 									state = MARIO_STATE_DIE;
 							}

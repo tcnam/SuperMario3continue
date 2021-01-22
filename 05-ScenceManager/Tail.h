@@ -15,6 +15,7 @@ class CTail :public CGameObject
 	float start_x;
 	float start_y;
 public:
+	
 	bool isUsed;
 	CTail();
 	void SetStartPosition(float lo_x, float lo_y) { start_x = lo_x; start_y = lo_y; }
