@@ -7,7 +7,7 @@ CBounty::CBounty()
 	Mario = NULL;
 	isRightDirection = false;
 	isUsed = false;
-	isLeaf = false;
+	powerindex = 0;
 	isCrossBoundary = false;
 	isFinised = false;
 }
@@ -42,7 +42,7 @@ void CBounty::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	CGameObject::Update(dt, coObjects);
 	if (state == BOUNTY_STATE_POWERUP)				//powerup include red mushroom and super leaf
 	{
-		if (isLeaf == false)						//red mushroom 
+		if (powerindex == 0)						//red mushroom 
 		{
 			if (start_y - BOUNTY_MUSHROOM_DISTANCE_DY_TOHAVE_VX < y)
 			{
@@ -66,6 +66,13 @@ void CBounty::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					vx = -BOUNTY_MUSHROOM_VX;
 				vy += BOUNTY_GRAVITY * dt;
 			}						
+		}
+		else if (powerindex == 1)//fire flower
+		{
+			if (start_y - BOUNTY_MUSHROOM_DISTANCE_DY_TOHAVE_VX <= y)
+				vy = 0;
+			else
+				vy=-BOUNTY_MUSHROOM_VY;
 		}
 		else//super leaf
 		{
@@ -180,7 +187,10 @@ void CBounty::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						Mario->GetEffect()->SetPosition(Mario_current_x, Mario_current_y);
 						Mario->StartTransForm();
 					}
-					Mario->SetLevel(MARIO_LEVEL_TAIL);
+					if (powerindex == 2)
+						Mario->SetLevel(MARIO_LEVEL_TAIL);
+					else
+						Mario->SetLevel(MARIO_LEVEL_FIRE);
 				}					
 			}
 			else if (state == BOUNTY_STATE_LIFEUP)
@@ -188,7 +198,7 @@ void CBounty::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				CGame::GetInstance()->SetLife(CGame::GetInstance()->GetLife() + 1);
 			}			
 		}
-		if (isLeaf == true && isCrossBoundary == true&&state==BOUNTY_STATE_POWERUP)
+		if (powerindex == 2 && isCrossBoundary == true&&state==BOUNTY_STATE_POWERUP)
 		{
 			x += dx;
 			y += dy;
@@ -220,7 +230,7 @@ void CBounty::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				isFinised = true;
 			}				
 		}
-		if(nx!=0&&isLeaf==false)
+		if(nx!=0&&powerindex!=2)
 			vx = -vx;
 		for (UINT i = 0; i < coEventsResult.size(); i++)
 		{
@@ -241,7 +251,7 @@ void CBounty::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					if (state == BOUNTY_STATE_POWERUP)
 					{
 						CGame::GetInstance()->SetScores(CGame::GetInstance()->GetScores() + 1000);
-						if (isLeaf == true)
+						if (powerindex == 2)
 						{
 							if (Mario->GetEffect() != NULL)
 							{
@@ -250,7 +260,11 @@ void CBounty::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 								Mario->StartTransForm();
 							}
 							Mario->SetLevel(MARIO_LEVEL_TAIL);
-						}							
+						}
+						else if (powerindex == 1)
+						{
+							Mario->SetLevel(MARIO_LEVEL_FIRE);
+						}
 						else
 						{
 							if (Mario->GetEffect() != NULL)
@@ -275,7 +289,7 @@ void CBounty::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			}
 			if (dynamic_cast<CBrick*>(e->obj))
 			{
-				if (isLeaf == true)
+				if (powerindex == 2)
 				{
 
 					vy = BOUNTY_GRAVITY;
@@ -321,10 +335,12 @@ void CBounty::Render()
 	int ani = -1;
 	if (state == BOUNTY_STATE_POWERUP)
 	{
-		if (isLeaf == true)
+		if (powerindex == 2)
 			ani = BOUNTY_LEAF_ANI;
-		else
+		else if (powerindex == 0)
 			ani = BOUNTY_RED_MUSHROOM_ANI;
+		else
+			ani = BOUNTY_FIRE_FLOWER_ANI;
 	}
 	else if (state == BOUNTY_STATE_LIFEUP)
 	{

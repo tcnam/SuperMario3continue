@@ -29,6 +29,7 @@
 #define BOUNTY_RED_MUSHROOM_ANI		1
 #define BOUNTY_LEAF_ANI				2
 #define BOUNTY_GREEN_MUSHROOM_ANI	3
+#define BOUNTY_FIRE_FLOWER_ANI		4
 
 #define BOUNTY_ACTIVE_TIME			300
 class CBounty : public CGameObject
@@ -38,7 +39,7 @@ private:
 	float start_y;
 public:
 	CMario* Mario;
-	bool isLeaf;						//determide powerup is Leaf or red mushroom
+	int powerindex;						//determide powerup is Leaf or red mushroom
 	bool isUsed;						//determide if bounty was activated by bounty brick
 	bool isCrossBoundary;				//determide if bounty crossed its limit boundary
 	bool isFinised;						//determide if bounty was finished or not

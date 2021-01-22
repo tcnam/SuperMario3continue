@@ -722,7 +722,7 @@ void CPlayScene::Update(DWORD dt)
 			listObjects[i]->GetOrigin(Init_x, Init_y);
 			if (listObjects[i]->GetType() == OBJECT_TYPE_GOOMBA && ((CGoomba*)listObjects[i])->GetState()==GOOMBA_STATE_WALKING )
 			{				
-				if (Init_x != tempx && Init_y != tempy)
+				if (Init_x != tempx && Init_y != tempy&&camera->CheckIfObjectInside(Init_x,Init_y)==false)
 				{
 					listObjects[i]->SetPosition(Init_x, Init_y);
 					((CGoomba*)listObjects[i])->SetState(GOOMBA_STATE_WALKING);
@@ -732,7 +732,7 @@ void CPlayScene::Update(DWORD dt)
 			}
 			else if (listObjects[i]->GetType() == OBJECT_TYPE_KOOPAS && ((CKoopas*)listObjects[i])->GetState() != KOOPAS_STATE_KICKOUT)
 			{
-				if (Init_x != tempx && Init_y != tempy)
+				if (Init_x != tempx && Init_y != tempy && camera->CheckIfObjectInside(Init_x, Init_y) == false)
 				{
 					listObjects[i]->SetPosition(Init_x, Init_y);
 					((CKoopas*)listObjects[i])->SetState(KOOPAS_STATE_WALKING);

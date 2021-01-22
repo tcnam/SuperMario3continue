@@ -115,7 +115,7 @@ void CTail::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						if (bountybrick->GetBounty()->isFinised == true)
 							bountybrick->GetBounty()->isFinised = false;
 						if (bountybrick->GetBounty()->GetState() == BOUNTY_STATE_POWERUP)
-							bountybrick->GetBounty()->isLeaf = true;
+							bountybrick->GetBounty()->powerindex = 1;
 						bountybrick->ActivateBounty();
 					}
 					bountybrick->SetCount(bountybrick->GetCount() - 1);
