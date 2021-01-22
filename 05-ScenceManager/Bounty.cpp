@@ -69,10 +69,7 @@ void CBounty::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		}
 		else if (powerindex == 1)//fire flower
 		{
-			if (start_y - BOUNTY_MUSHROOM_DISTANCE_DY_TOHAVE_VX <= y)
-				vy = 0;
-			else
-				vy=-BOUNTY_MUSHROOM_VY;
+			SetPosition(start_x, start_y - BOUNTY_MUSHROOM_DISTANCE_DY_TOHAVE_VX);
 		}
 		else//super leaf
 		{

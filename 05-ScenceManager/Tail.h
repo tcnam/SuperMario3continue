@@ -3,6 +3,7 @@
 #include"GameObject.h"
 
 #define TAIL_SPEED		0.15f
+#define TAIL_RELATIVE_POSITION_WITH_MARIO 20.0f
 
 #define TAIL_DX_MOVE	24.0f
 

@@ -136,6 +136,9 @@
     <Filter Include="Framework\Grid\Cell">
       <UniqueIdentifier>{49e8784d-97df-4556-8ae1-3682342adeec}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Object\GameObject\Node">
+      <UniqueIdentifier>{fa5556bb-9cf2-4eac-b55b-4bbc3845e8af}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animations.cpp">
@@ -282,6 +285,9 @@
     <ClCompile Include="Cell.cpp">
       <Filter>Framework\Grid\Cell</Filter>
     </ClCompile>
+    <ClCompile Include="Node.cpp">
+      <Filter>Object\GameObject\Node</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animations.h">
@@ -427,6 +433,9 @@
     </ClInclude>
     <ClInclude Include="Cell.h">
       <Filter>Framework\Grid\Cell</Filter>
+    </ClInclude>
+    <ClInclude Include="Node.h">
+      <Filter>Object\GameObject\Node</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

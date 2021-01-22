@@ -20,6 +20,7 @@ CWorldScence::CWorldScence(int id, LPCWSTR filePath) :CScene(id, filePath)
 	player = NULL;
 	Hud = NULL;
 	camera = NULL;
+	current_node = NULL;
 }
 #define SCENE_SECTION_UNKNOWN -1
 #define SCENE_SECTION_TEXTURES 2
@@ -153,6 +154,19 @@ void CWorldScence::_ParseSection_OBJECTS(string line)
 			obj = new CHiddenObject(x, y, width, height);
 		}
 	break;
+	case OBJECT_TYPE_NODE:
+		{
+			int node_id = atoi(tokens[4].c_str());
+			int l = atoi(tokens[5].c_str());
+			int r = atoi(tokens[6].c_str());
+			int t = atoi(tokens[7].c_str());
+			int b = atoi(tokens[8].c_str());
+			int typenode = atoi(tokens[9].c_str());
+			obj = new CNode(node_id, l, r, t, b, typenode);
+			Nodes.push_back((CNode*)obj);
+			current_node = Nodes.at(0);
+		}
+		break;
 	case OBJECT_TYPE_MYSTERYPIECE:
 	{
 		obj = new CMysteryPiece();
@@ -427,6 +441,8 @@ void CWorldScence::Unload()
 	objects.clear();
 	terrains.clear();
 	PiecesOfSquare.clear();
+	current_node = NULL;
+	Nodes.clear();
 	PiecesIndex = 0;
 	DebugOut(L"[INFO] Scene %s unloaded! \n", sceneFilePath);
 }

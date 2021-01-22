@@ -11,6 +11,7 @@
 #include "Font.h"
 #include "Square.h"
 #include "Portal.h"
+#include "Node.h"
 
 class CWorldScence : public CScene
 {
@@ -23,6 +24,9 @@ protected:
 	int PiecesIndex = 0;
 	Camera* camera;
 	CHud* Hud;
+
+	CNode* current_node;
+	vector<CNode*> Nodes;
 
 	void _ParseSection_TEXTURES(string line);
 	void _ParseSection_SPRITES(string line);
@@ -38,6 +42,7 @@ public:
 	virtual void Render();
 	virtual void Unload();
 
+	vector<CNode*> GetNodes() { return Nodes; }
 	CMario* GetPlayer() { return player; }
 
 	//friend class CWorldScenceKeyHandler;

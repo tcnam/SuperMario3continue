@@ -152,6 +152,7 @@
     <ClCompile Include="Koopas.cpp" />
     <ClCompile Include="Message.cpp" />
     <ClCompile Include="MysteryPiece.cpp" />
+    <ClCompile Include="Node.cpp" />
     <ClCompile Include="Piranha.cpp" />
     <ClCompile Include="Pointer.cpp" />
     <ClCompile Include="Portal.cpp" />
@@ -202,6 +203,7 @@
     <ClInclude Include="Koopas.h" />
     <ClInclude Include="Message.h" />
     <ClInclude Include="MysteryPiece.h" />
+    <ClInclude Include="Node.h" />
     <ClInclude Include="Piranha.h" />
     <ClInclude Include="Pointer.h" />
     <ClInclude Include="Portal.h" />

@@ -68,7 +68,7 @@ void CTail::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				{
 					goomba->Setlevel(GOOMBA_LEVEL_NORMAL);
 					goomba->SetState(GOOMBA_STATE_KICKED_OUT);
-					goomba->SetSpeed(0, -0.2f);
+					goomba->SetSpeed(0, -GOOMBA_DIE_DEFLECT);
 					CGame::GetInstance()->SetScores(CGame::GetInstance()->GetScores() + 100);
 				}
 				else
@@ -76,7 +76,7 @@ void CTail::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					if (goomba->GetState() != GOOMBA_STATE_DIE)
 					{
 						goomba->SetState(GOOMBA_STATE_KICKED_OUT);
-						goomba->SetSpeed(0, -0.2f);
+						goomba->SetSpeed(0, -GOOMBA_DIE_DEFLECT);
 					}
 					CGame::GetInstance()->SetScores(CGame::GetInstance()->GetScores() + 100);
 				}
@@ -89,7 +89,7 @@ void CTail::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				if (koopas->GetLevel() == KOOPAS_LEVEL_FLY)
 					koopas->Setlevel(KOOPAS_LEVEL_NORMAL);
 				koopas->SetState(KOOPAS_STATE_KICKOUT_2);
-				koopas->SetSpeed(0, -0.24f);
+				koopas->SetSpeed(0, -KOOPAS_DIE_DEFLECT);
 				koopas->StartWait();
 				CGame::GetInstance()->SetScores(CGame::GetInstance()->GetScores() + 100);
 			}
@@ -178,7 +178,7 @@ void CTail::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 }
 void CTail::Render()
 {
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 CTail::~CTail()
 {

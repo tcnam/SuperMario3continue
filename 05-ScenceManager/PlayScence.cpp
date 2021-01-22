@@ -711,7 +711,7 @@ void CPlayScene::Update(DWORD dt)
 	vector<LPGAMEOBJECT> coObjects_Of_Mario;									//6: List of collidable Objects of Mario
 	vector<LPGAMEOBJECT> coObjects_Of_BountyBrick_WeakBrick;								//7: List of collidable Objects of BountyBrick
 	vector<LPGAMEOBJECT> coObjects_Of_Tail;
-	for (unsigned int i = 0; i < listObjects.size(); i++)
+	for (unsigned int i = 0; i < listObjects.size(); i++)						
 	{
 		float tempx, tempy;
 		listObjects[i]->GetPosition(tempx, tempy);
@@ -738,6 +738,14 @@ void CPlayScene::Update(DWORD dt)
 					((CKoopas*)listObjects[i])->SetState(KOOPAS_STATE_WALKING);
 					((CKoopas*)listObjects[i])->Setlevel(((CKoopas*)listObjects[i])->GetInitLevel());
 				}					
+			}
+			else if (listObjects[i]->GetType() == OBJECT_TYPE_BOOMERANGBRO && ((CBoomerangBro*)listObjects[i])->GetState() != BOOMERANGBRO_STATE_DIE)
+			{
+				if (Init_x != tempx && Init_y != tempy && camera->CheckIfObjectInside(Init_x, Init_y) == false)
+				{
+					listObjects[i]->SetPosition(Init_x, Init_y);
+					((CBoomerangBro*)listObjects[i])->SetState(BOOMERANGBRO_STATE_HOLD);
+				}
 			}
 			listObjects.erase(listObjects.begin() + i);
 		}

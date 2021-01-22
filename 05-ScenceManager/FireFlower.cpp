@@ -26,7 +26,7 @@ void CFireFlower::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		return;
 	if (Finish_Start != 0)
 	{
-		if (GetTickCount64() - Finish_Start > 500)
+		if (GetTickCount64() - Finish_Start > FIREFLOWER_TIMEWAIT_FORSHOOT)
 		{
 			Finish_Start = 0;
 			effect->SetPosition(EFFECT_LOCATION_X_TO_HIDE, EFFECT_LOCATION_Y_TO_HIDE);
@@ -71,25 +71,25 @@ void CFireFlower::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	else
 	{
 
-		if (Mario_x > x + 30)
+		if (Mario_x > x + BONUS_DISTANCE_NOT_SHOWUP)
 		{
-			SetSpeed(0, -0.015f);
+			SetSpeed(0, -FIREFLOWER_FLY_SPEED);
 			if (y < FIREFLOWER_UPPER_Y)
 				state=FIREFLOWER_STATE_RIGHT_UPPER;
 			else
 				state=FIREFLOWER_STATE_RIGHT_LOWER;
 		}
-		else if (Mario_x < x - 30&&Mario->GetLevel()!=MARIO_LEVEL_TAIL)
+		else if (Mario_x < x - BONUS_DISTANCE_NOT_SHOWUP&&Mario->GetLevel()!=MARIO_LEVEL_TAIL)
 		{
-			SetSpeed(0, -0.015f);
+			SetSpeed(0, -FIREFLOWER_FLY_SPEED);
 			if (y < FIREFLOWER_UPPER_Y)
 				state=FIREFLOWER_STATE_LEFT_UPPER;
 			else
 				state=FIREFLOWER_STATE_LEFT_LOWER;
 		}
-		else if (Mario_x < x - 40 && Mario->GetLevel() == MARIO_LEVEL_TAIL)
+		else if (Mario_x < x - BONUS_DISTANCE_NOT_SHOWUP2 && Mario->GetLevel() == MARIO_LEVEL_TAIL)
 		{
-			SetSpeed(0, -0.015f);
+			SetSpeed(0, -FIREFLOWER_FLY_SPEED);
 			if (y < FIREFLOWER_UPPER_Y)
 				state = FIREFLOWER_STATE_LEFT_UPPER;
 			else
@@ -159,24 +159,24 @@ void CFireFlower::Shoot()
 	{
 		if (state==FIREFLOWER_STATE_RIGHT_LOWER)
 		{
-			FireBallFlower->SetPosition(x + 18, y + 5);
+			FireBallFlower->SetPosition(x + RELATIVE_POSITION_X_RIGHT_FIREBALL, y + RELATIVE_POSITION_Y_FIREBALL);
 			FireBallFlower->SetSpeed(FIREBALLFLOWER_SPEED_X, FIREBALLFLOWER_SPEED_Y);
 			//fireballs->SetDirectionnx(1);
 		}
 		else if (state == FIREFLOWER_STATE_RIGHT_UPPER)
 		{
-			FireBallFlower->SetPosition(x + 18, y + 5);
+			FireBallFlower->SetPosition(x + RELATIVE_POSITION_X_RIGHT_FIREBALL, y + RELATIVE_POSITION_Y_FIREBALL);
 			FireBallFlower->SetSpeed(FIREBALLFLOWER_SPEED_X, -FIREBALLFLOWER_SPEED_Y);
 		}
 		else if(state==FIREFLOWER_STATE_LEFT_LOWER)
 		{
-			FireBallFlower->SetPosition(x - 2, y + 5);
+			FireBallFlower->SetPosition(x - RELATIVE_POSITION_X_LEFT_FIREBALL, y + RELATIVE_POSITION_Y_FIREBALL);
 			FireBallFlower->SetSpeed(-FIREBALLFLOWER_SPEED_X, FIREBALLFLOWER_SPEED_Y);
 			//fireballs->SetDirectionnx(-1);
 		}
 		else if (state == FIREFLOWER_STATE_LEFT_UPPER)
 		{
-			FireBallFlower->SetPosition(x - 2, y + 5);
+			FireBallFlower->SetPosition(x - RELATIVE_POSITION_X_LEFT_FIREBALL, y + RELATIVE_POSITION_Y_FIREBALL);
 			FireBallFlower->SetSpeed(-FIREBALLFLOWER_SPEED_X, -FIREBALLFLOWER_SPEED_Y);
 		}
 

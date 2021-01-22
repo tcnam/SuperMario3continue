@@ -1188,14 +1188,14 @@ void CMario::Attack()
 			tail->isUsed = true;		
 		if (nx > 0)
 		{
-			tail->SetStartPosition(x, y + 20.0f);
-			tail->SetPosition(x, y+20.0f);
+			tail->SetStartPosition(x, y + TAIL_RELATIVE_POSITION_WITH_MARIO);
+			tail->SetPosition(x, y+ TAIL_RELATIVE_POSITION_WITH_MARIO);
 			tail->SetSpeed(TAIL_SPEED, 0);
 		}
 		else
 		{
-			tail->SetStartPosition(x + MARIO_BIG_BBOX_WIDTH, y + 20.0f);
-			tail->SetPosition(x+MARIO_BIG_BBOX_WIDTH, y + 20.0f);
+			tail->SetStartPosition(x + MARIO_BIG_BBOX_WIDTH, y + TAIL_RELATIVE_POSITION_WITH_MARIO);
+			tail->SetPosition(x+MARIO_BIG_BBOX_WIDTH, y + TAIL_RELATIVE_POSITION_WITH_MARIO);
 			tail->SetSpeed(-TAIL_SPEED, 0);
 		}
 	}
