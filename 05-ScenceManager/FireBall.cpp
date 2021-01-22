@@ -78,7 +78,7 @@ void CFireBall::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				CKoopas* koopas = dynamic_cast<CKoopas*>(e->obj);
 				if (koopas->GetLevel() == KOOPAS_LEVEL_FLY || koopas->GetLevel() == KOOPAS_LEVEL_FLY2)
 					koopas->Setlevel(KOOPAS_LEVEL_NORMAL);
-				koopas->SetState(KOOPAS_STATE_KICKOUT);
+				koopas->SetState(KOOPAS_STATE_KICKOUT_2);
 				koopas->SetSpeed(0, -KOOPAS_DIE_DEFLECT);
 				isFinished = true;
 			}
