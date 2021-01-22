@@ -43,8 +43,8 @@ void CGrid::_ParseSection_OBJECTS(string line, vector<CGameObject*>& Objects)
 	float x = (float)atof(tokens[2].c_str());
 	float y = (float)atof(tokens[3].c_str());
 
-	int cellX = (int)(abs(x) / cellWidth);
-	int cellY = (int)(abs(y) / cellHeight);
+	int cellX = atoi(tokens[4].c_str());
+	int cellY = atoi(tokens[5].c_str());
 	Objects[id]->SetOrigin(x, y);
 	if (id != 0)
 		cells[cellX][cellY].Add(Objects[id]);
