@@ -384,6 +384,12 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 											MarioMain->SetLevel(MARIO_LEVEL_BIG);
 										else
 											MarioMain->SetLevel(MARIO_LEVEL_SMALL);
+										if (MarioMain->GetEffect() != NULL)
+										{
+											MarioMain->GetEffect()->SetState(EFFECT_CLOUND);
+											MarioMain->GetEffect()->SetPosition(Mario_x, Mario_y);
+											MarioMain->StartTransForm();
+										}
 									}
 									else
 										MarioForHold->SetState(MARIO_STATE_DIE);
@@ -473,6 +479,12 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 										MarioMain->SetLevel(MARIO_LEVEL_BIG);
 									else
 										MarioMain->SetLevel(MARIO_LEVEL_SMALL);
+									if (MarioMain->GetEffect() != NULL)
+									{
+										MarioMain->GetEffect()->SetState(EFFECT_CLOUND);
+										MarioMain->GetEffect()->SetPosition(Mario_x, Mario_y);
+										MarioMain->StartTransForm();
+									}
 								}
 								else
 									MarioMain->SetState(MARIO_STATE_DIE);

@@ -104,6 +104,12 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 								Mario->SetLevel(MARIO_LEVEL_SMALL);
 							else
 								Mario->SetLevel(MARIO_LEVEL_SMALL);
+							if (Mario->GetEffect() != NULL)
+							{
+								Mario->GetEffect()->SetState(EFFECT_CLOUND);
+								Mario->GetEffect()->SetPosition(Mario_x, Mario_y);
+								Mario->StartTransForm();
+							}
 						}
 					}
 				}
@@ -168,6 +174,12 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 										Mario->SetLevel(MARIO_LEVEL_BIG);
 									else
 										Mario->SetLevel(MARIO_LEVEL_SMALL);
+									if (Mario->GetEffect() != NULL)
+									{
+										Mario->GetEffect()->SetState(EFFECT_CLOUND);
+										Mario->GetEffect()->SetPosition(Mario_x, Mario_y);
+										Mario->StartTransForm();
+									}
 								}
 							}
 						}

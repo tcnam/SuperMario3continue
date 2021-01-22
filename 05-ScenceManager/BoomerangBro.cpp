@@ -83,6 +83,12 @@ void CBoomerangBro::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 							else
 								Mario->SetLevel(MARIO_LEVEL_SMALL);
 						}
+						if (Mario->GetEffect() != NULL)
+						{
+							Mario->GetEffect()->SetState(EFFECT_CLOUND);
+							Mario->GetEffect()->SetPosition(Mario_x, Mario_y);
+							Mario->StartTransForm();
+						}
 					}
 				}
 				if (ny > 0 && nx == 0)
