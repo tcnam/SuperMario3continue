@@ -1050,9 +1050,9 @@ void CMario::GetBoundingBox(float &left, float &top, float &right, float &bottom
 			}
 			else
 			{
-				if (isAttacking == true || state == MARIO_STATE_CHANGERIGHT || state == MARIO_STATE_CHANGELEFT)
+				/*if (isAttacking == true || state == MARIO_STATE_CHANGERIGHT || state == MARIO_STATE_CHANGELEFT)
 					GetBoundingBoxTailWhileAttacking(left, top, right, bottom);
-				else
+				else*/
 					GetBoundingBoxTailLevel(left, top, right, bottom);
 			}	
 		}

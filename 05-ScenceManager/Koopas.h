@@ -5,6 +5,7 @@
 #include "HiddenObject.h"
 //#include "BountyBrick.h"
 #include "Goomba.h"
+#include "FireFlower.h"
 
 #define KOOPAS_LEVEL_NORMAL	0
 #define KOOPAS_LEVEL_FLY	1
